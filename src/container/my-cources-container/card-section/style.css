@@ -1,0 +1,38 @@
+/* style.css */
+
+.my-course-cards-main-section {
+  display: flex;
+  flex-wrap: wrap;
+  /* justify-content: space-evenly; */
+  margin: 20px 0 0 20px;
+}
+.my-course-cards-row {
+  display: flex;
+}
+.my-course-title-section {
+  width: 92%;
+  display: flex;
+  justify-content: space-between;
+  margin: 20px;
+}
+.my-course-heading-title-p-tag {
+  font-size: 24px;
+  font-weight: 500;
+  text-decoration: underline;
+  line-height: 28.18px;
+}
+.my-course-course-summary-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 15vw;
+  height: 46px;
+  border-radius: 8px;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 21.13px;
+  background: #fe81001a;
+  border: none;
+  cursor: pointer;
+  gap: 10px;
+}
