@@ -26,23 +26,23 @@ export const EmployeeNavbar: NavbarType[] = [
 
 export const AdminNavbar: NavbarType[] = [
   {
-    value: "AdminDashboard",
-    href: "/admin-dashboard",
+    value: "Dashboard",
+    href: "/admin/admin-dashboard",
   },
   {
-    value: "AdminCourseCategory",
-    href: "/Admin-course-category",
+    value: "Course Category",
+    href: "/admin/Admin-course-category",
   },
   {
-    value: "AdminCourses",
-    href: "/admin-courses",
+    value: "Course",
+    href: "/admin/admin-courses",
   },
   {
-    value: "AdminNotification",
+    value: "Notification",
     href: "/admin-notification",
   },
   {
-    value: "AdminSetting",
+    value: "Settings",
     href: "/admin-setting",
   },
 ];

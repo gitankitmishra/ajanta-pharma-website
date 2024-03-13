@@ -1,5 +1,6 @@
+import React from "react";
 
-export type NavbarType = {
-    value:string,
-    href:string
+export interface NavbarType {
+  value: string;
+  href: string;
 }
