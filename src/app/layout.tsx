@@ -12,10 +12,11 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const isAdmin = true;
   return (
     <html lang="en">
       <body className="main-body">
-        <Navbar  />
+      <Navbar isAdmin={isAdmin} />
         <main>{children}</main>
       </body>
     </html>

@@ -1,0 +1,52 @@
+/* style.css */
+
+.admin-course-list-table-main-container {
+  margin: 20px;
+}
+
+.admin-course-list-table {
+  width: 100%;
+  border-radius: 8px;
+  border-collapse: collapse;
+}
+
+.admin-course-list-table-head {
+  background-color: #fe81001a;
+  color: #1c1d1d;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 26px;
+  padding: 16px;
+  text-align: left;
+  border-right: 1px solid #e3e3e3;
+}
+.admin-course-list-table-head {
+  border-top: 1px solid #fe810080;
+}
+.admin-course-list-table-head:last-child {
+  border-right: 1px solid #fe810080;
+}
+.admin-course-list-table-head:first-child {
+  border-left: 1px solid #fe810080;
+}
+
+.admin-course-list-table-data:first-child {
+  border-left: 1px solid #fe810080;
+}
+.admin-course-list-table-data:last-child {
+  border-right: 1px solid #fe810080;
+}
+.admin-course-list-tbody tr:last-child {
+  border-bottom: 2px solid #fe810080;
+}
+
+.admin-course-list-table-data {
+  color: #1c1d1d;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 18px;
+  border-bottom: 1px solid #e3e3e3;
+  padding: 8px;
+  border-right: 1px solid #e3e3e3;
+  text-align: left;
+}

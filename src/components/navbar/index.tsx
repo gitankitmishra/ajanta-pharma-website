@@ -1,7 +1,7 @@
 "use client";
 import "./style.css";
 
-import { FunctionComponent } from "react";
+import { FunctionComponent, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -14,11 +14,13 @@ import { CertificateIcon } from "@/components/icons/certificate-icon";
 import { LogoutIcon } from "@/components/icons/logout-icon";
 import { AdminNavbar, EmployeeNavbar } from "./constants";
 // import { NavbarType } from "@/types/navbar";
-import HeaderNav from "@/types/sample";
 
-interface NavbarProps {}
+interface NavbarProps {
+  isAdmin: boolean;
+}
 
-const Navbar: FunctionComponent<NavbarProps> = ({}) => {
+const Navbar: FunctionComponent<NavbarProps> = ({ isAdmin }) => {
+  const navLinks = isAdmin ? AdminNavbar : EmployeeNavbar;
   const currentPath = usePathname().split("/").at(1);
 
   return (
@@ -30,11 +32,8 @@ const Navbar: FunctionComponent<NavbarProps> = ({}) => {
             Menu
           </button>
         </div>
-        {/* {EmployeeNavbar.map((el, i) => {
-          return <HeaderNav key={i} value={el.value} href={el.href} />;
-        })} */}
         <div className="navbar-links">
-          {EmployeeNavbar.map((el, i) => (
+          {navLinks.map((el, i) => (
             <Link
               key={i}
               href={el.href}
@@ -42,15 +41,23 @@ const Navbar: FunctionComponent<NavbarProps> = ({}) => {
                 currentPath === el.href.replace("/", "") ? "active" : ""
               }`}
             >
-              {el.value === "Home" && <HomeIcon />}
-              {el.value === "My Courses" && <GraduationCapIcon />}
-              {el.value === "Assessments" && <AssessmentIcon />}
-              {el.value === "Certification" && <CertificateIcon />}
-              {el.value === "Settings" && <SettingIcon />}
-
-              {el.value}
+              <div className="nav-icon">
+                {/* Render the appropriate icon based on the value */}
+                {el.value === "Home" && <HomeIcon />}
+                {el.value === "My-Courses" && <GraduationCapIcon />}
+                {el.value === "Assessments" && <AssessmentIcon />}
+                {el.value === "Certification" && <CertificateIcon />}
+                {el.value === "Setting" && <SettingIcon />}
+                {el.value === "Dashboard" && <HomeIcon />}
+                {el.value === "Course Category" && <GraduationCapIcon />}
+                {el.value === "Course" && <AssessmentIcon />}
+                {el.value === "Notification" && <CertificateIcon />}
+                {el.value === "Settings" && <SettingIcon />}
+              </div>
+              <div className="nav-text">{el.value}</div>
             </Link>
           ))}
+
           {/* <Link
             href="/home"
             className={`navbutton ${currentPath === "home" ? "active" : ""}`}
