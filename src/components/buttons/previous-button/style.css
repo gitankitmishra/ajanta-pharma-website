@@ -1,0 +1,13 @@
+.previous-btn {
+  width: 10.5rem;
+  height: 2.875rem;
+  flex-shrink: 0;
+  border-radius: 32px;
+  border: 1px solid #fe8100;
+  background: transparent;
+  /* text style */
+  color: #fe8100;
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 28px;
+}
