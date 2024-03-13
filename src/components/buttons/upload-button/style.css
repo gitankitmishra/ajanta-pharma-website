@@ -1,0 +1,13 @@
+.upload-btn{
+    width: 25rem;
+    height: 3.5rem;
+border-radius: 32px;
+background: #FE8100;
+border: none;
+box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.16);
+/* text styling */
+color: #FFF;
+font-size: 20px;
+font-weight: 600;
+line-height: 28px;
+}

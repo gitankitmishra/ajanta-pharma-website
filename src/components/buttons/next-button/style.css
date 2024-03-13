@@ -1,0 +1,12 @@
+.next-button {
+  width: 10.5rem;
+  height: 2.875rem;
+  border: none;
+  border-radius: 32px;
+  background: #fe8100;
+  /* text style */
+  color: #fff;
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 28px;
+}

@@ -1,0 +1,91 @@
+.module-main-section {
+  width: 90%;
+  height: 842px;
+  border-radius: 12px;
+  border: 1px solid rgba(254, 129, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.module-div-section1 {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+}
+
+.module-div-section1-div1,
+.module-div-section1-div2,
+.module-div-section1-div3 {
+  flex: 1;
+}
+
+.module-category-text {
+  font-weight: bold;
+}
+
+.module-category-type-text {
+  color: #787878;
+}
+
+.module-div-section2,
+.module-div-section3 {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.module-input {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+}
+
+.module-input-number,
+.module-input-name,
+.module-input-uplaod-btn {
+  flex: 1;
+}
+
+.module-input-number label,
+.module-input-name label {
+  font-weight: bold;
+}
+
+.module-radio-selction {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.module-course-assessment {
+  font-weight: bold;
+}
+
+.module-radio-btns {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
+
+.module-radio-btns label {
+  margin-right: 10px;
+}
+
+button {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+button svg {
+  margin-right: 5px;
+}
