@@ -1,0 +1,31 @@
+.start-date-input-field,
+.end-date-input-field {
+  width: 23.5rem;
+  height: 1.7rem;
+  border-radius: 8px;
+  background: rgba(254, 129, 0, 0.1);
+  border: none;
+  outline: none;
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.16);
+  padding: 1rem 1.5rem;
+  /* text styling */
+  color: #1c1d1d;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 24px;
+}
+.date-input-main-section {
+  display: flex;
+  gap: 3rem;
+}
+.start-date-container, .end-date-container{
+  display: flex;
+  gap: 10px;
+  flex-direction: column;
+}
+.date-label{
+  color: #000;
+font-size: 18px;
+font-weight: 400;
+line-height: 28px; 
+}

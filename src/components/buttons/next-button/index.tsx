@@ -1,14 +1,18 @@
 import { FC } from "react";
-import "./style.css"
+import "./style.css";
 
 interface NextButtonProps {
-    
+  text: string;
 }
- 
-const NextButton: FC<NextButtonProps> = () => {
-    return ( <div>
-        <button className="next-button">Next</button>
-    </div> );
-}
- 
+
+const NextButton: FC<NextButtonProps> = ({ text}) => {
+  return (
+    <div>
+      <button className="next-button" >
+        {text}
+      </button>
+    </div>
+  );
+};
+
 export default NextButton;

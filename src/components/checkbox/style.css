@@ -1,0 +1,30 @@
+.checkbox-input {
+  accent-color: #fe8100;
+}
+.checkbox-input {
+  /* appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none; */
+  width: 20px;
+  height: 20px;
+  border: 2px solid #fe8100;
+  border-radius: 4px;
+  outline: none;
+}
+
+.checkbox-input:checked::before {
+  content: "\2714";
+  display: block;
+  width: 20px;
+
+  height: 20px;
+  text-align: center;
+  line-height: 20px;
+  background-color: #fe8100;
+  color: white;
+  border-radius: 4px;
+}
+.checkbox-main-div{
+  display: flex;
+  gap: 8px;
+}
