@@ -1,8 +1,10 @@
-"use client"
+"use client";
 // import type { Metadata } from "next";
 import "./globals.css";
+import { Raleway } from "next/font/google";
 import Navbar from "@/components/navbar";
 import { usePathname, useRouter } from "next/navigation";
+const raleway = Raleway({ subsets: ["latin"] });
 
 // export const metadata: Metadata = {
 //   title: "Ajanta Pharma Limited",
@@ -19,8 +21,8 @@ export default function RootLayout({
   const hideNavbar = currentPath === "/admin/admin-add-course";
   return (
     <html lang="en">
-      <body className="main-body">
-      {!hideNavbar && <Navbar isAdmin={isAdmin} />}
+      <body className={`main-body ${raleway.className}`}>
+        {!hideNavbar && <Navbar isAdmin={isAdmin} />}
         <main>{children}</main>
       </body>
     </html>
