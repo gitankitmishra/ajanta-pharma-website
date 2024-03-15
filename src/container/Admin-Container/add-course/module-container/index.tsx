@@ -5,50 +5,17 @@ import UploadButton from "@/components/buttons/upload-button";
 import DropdownInputField from "@/components/fields/dropdown-input-field";
 import { PlusIcon } from "@/components/icons/plus-icon";
 import InputFieldNum from "@/components/fields/InputFieldNum";
+import InputFieldNameAssessment from "@/components/fields/InputFieldNameAssessment";
+import UploadButtonAssessment from "@/components/buttons/UploadButtonAssessment";
 
 interface ModuleQuizStepSectionProps {}
 
 const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
-  // const [moduleName,setModuleName] = useState<string[]>([]);
-  // const [moduleNo,setModuleNo] = useState<number[]>([]);
-  // const [files,setFiles] = useState<string[]>([]);
-  // const [courseCode,setCourseCode] = useState<string>("");
 
   const [moduleName, setModuleName] = useState<string[]>([]);
   const [moduleNo, setModuleNo] = useState<number[]>([]);
   const [files, setFiles] = useState<FileList | null>(null); 
   const [courseCode, setCourseCode] = useState<string>("");
-
-  // const uploadFile = async () => {
-  //   try {
-  //     if (!files) return; 
-
-  //     const formData = new FormData();
-  //     formData.append("moduleName", moduleName.toString());
-  //     formData.append("moduleNo", moduleNo.toString());
-  //     for (let i = 0; i < files.length; i++) {
-  //       formData.append("files", files[i]); 
-  //     }
-  //     formData.append("courseCode", courseCode);
-
-  //     const response = await fetch("http://localhost:8000/api/admin/dashboard/uploadFile/B01", {
-  //       method: "PUT",
-  //       headers: {
-  //         "Content-type": "multipart/form-data",
-  //       },
-  //       body: JSON.stringify({
-  //         formData
-  //       })
-  //     });
-
-  //     if (response.status === 200) {
-  //       const data = await response.json();
-  //       console.log(data);
-  //     }
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
 
   const uploadFile = async () => {
     try {
@@ -75,12 +42,6 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
       console.log(error);
     }
   };
-  
-  useEffect(() => {
-    console.log("moduleName:", moduleName);
-    console.log("moduleNo:", moduleNo);
-    console.log("files:", files);
-  }, [moduleName, moduleNo, files]);
 
   //to handle the module number
   const handleChangeModuleNum = (newModuleNum: number[]) => {
@@ -90,6 +51,59 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
   const handleChangeModuleName = (newModuleName: string[]) => {
     setModuleName(newModuleName);
   };
+
+  //api for assessment upload -> 
+  const [assessmentFileType,setassessmentFileType] = useState<string[]>([]);
+  const [assessmentFileName,setassessmentFileName] = useState<string[]>([]);
+  const[excelFile,setexcelFile] = useState<FileList | null>(null); 
+  const [courseCodeAss,setCourseCodeAss] = useState<string>("");
+
+  const uploadAssessment = async() => {
+    try{
+      if(!excelFile){
+        return;
+      }
+      const formAssData = new FormData();
+      formAssData.append("assessmentFileType",assessmentFileType.toString());
+      formAssData.append("assessmentFileName",assessmentFileName.toString());
+      for (let i = 0; i < excelFile.length; i++) {
+        formAssData.append("excelFile", excelFile[i]);
+      }
+      formAssData.append("courseCode", courseCode);
+
+      const response = await fetch(`http://localhost:8000/api/admin/dashboard/uploadAssessment/B01`, {
+        method:"POST",
+        body:formAssData
+      });
+
+      if(response.status == 200){
+        const data = await response.json();
+        console.log(data);
+      }
+    } catch(error){
+      console.log(error);
+    }
+  }
+
+  useEffect(() => {
+    console.log("assessmentFileName:", assessmentFileName);
+    console.log("assessmentFileType:", assessmentFileType);
+    console.log("excelFile:", excelFile);
+  }, [excelFile, assessmentFileName, assessmentFileType]);
+  
+
+  const handleChangeAssessmentType = (assessmentType: string[]) => {
+    setassessmentFileType(assessmentType);
+  };
+
+  const handleAssessmentName = (newAssessmentName:string[]) => {
+    setassessmentFileName(newAssessmentName)
+  }
+
+  const mergeApi = () => {
+    uploadFile();
+    uploadAssessment();
+  }
 
   return (
     <section className="module-main-section">
@@ -110,12 +124,12 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
       <div className="module-div-section2">
         <div className="module-input">
         <div className="module-input-number">
-  <label htmlFor="">Module Number</label>
-  <InputFieldNum
-      moduleNum={moduleNo}
-      onChange={(newModuleNum: number[]) => handleChangeModuleNum(newModuleNum)}
-    />
-</div>
+      <label htmlFor="">Module Number</label>
+      <InputFieldNum
+            moduleNum={moduleNo}
+            onChange={(newModuleNum: number[]) => handleChangeModuleNum(newModuleNum)}
+          />
+      </div>
           <div className="module-input-name">
             <label htmlFor="">Module Name</label>
             <InputField 
@@ -123,22 +137,30 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
                 onChange={(newModuleName: string[]) => handleChangeModuleName(newModuleName)}/>
           </div>
           <div className="module-input-uplaod-btn">
-        <UploadButton upload={"Upload Course Material"} onFileSelect={setFiles} uploadFile={uploadFile}/>
+        <UploadButton upload={"Upload Course Material"} onFileSelect={setFiles}/>
       </div>
         </div>
-        {/* <div className="module-input">
+        <div className="module-input">
           <div className="module-input-number">
             <label htmlFor="">Select Assessment Type</label>
-            <DropdownInputField />
+            <DropdownInputField
+              option1={"Multiple Choice Question"}
+              option2={"Single Choice Question"}
+              option3={"True or False"}
+              option4={"Short Answer"}
+              assessmentType={assessmentFileType}
+              onChange={(assessmentType: string[]) => handleChangeAssessmentType(assessmentType)}
+            />
           </div>
           <div className="module-input-name">
             <label htmlFor="">Module Name</label>
-            <InputField />
+            <InputFieldNameAssessment assessmentName={assessmentFileName}
+            onChange={(newAssessmentName:string[]) => handleAssessmentName(newAssessmentName)}/>
           </div>
           <div className="module-input-uplaod-btn">
-            <UploadButton upload={"Upload Assessment"}/>
+            <UploadButtonAssessment upload={"Upload Assessment"} onExcelFileSelect={setexcelFile} />
           </div>
-        </div> */}
+        </div>
         <button>
           <PlusIcon />
           Add Module
@@ -175,7 +197,7 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
           Add Module
         </button>
       </div>
-      <button>Save as Draft</button>
+      <button onClick={mergeApi}>Save as Draft</button>
     </section>
   );
 };
