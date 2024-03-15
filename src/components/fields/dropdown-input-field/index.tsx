@@ -8,6 +8,7 @@ interface DropdownInputFieldProps {
   option2: string;
   option3: string;
   option4: string;
+  option5:string;
 }
 
 const DropdownInputField: FC<DropdownInputFieldProps> = ({
@@ -17,6 +18,7 @@ const DropdownInputField: FC<DropdownInputFieldProps> = ({
   option2,
   option3,
   option4,
+  option5,
 }) => {
   const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     onValueChange(event.target.value);
@@ -41,6 +43,9 @@ const DropdownInputField: FC<DropdownInputFieldProps> = ({
         </option>
         <option value={option4} className="dropdown-option">
           {option4}
+        </option>
+        <option value={option5} className="dropdown-option">
+          {option5}
         </option>
       </select>
     </div>
