@@ -9,6 +9,7 @@ interface AdminCourseListTableProps {
   date: string;
   status: string;
   view: JSX.Element;
+  currentPage: number;
 }
 const data: AdminCourseListTableProps[] = [
   {
@@ -18,6 +19,7 @@ const data: AdminCourseListTableProps[] = [
     date: "31/01/2024",
     status: "Active",
     view: <ViewEyeIcon />,
+    currentPage: 0
   },
   {
     name: "Creative Thinking",
@@ -26,6 +28,7 @@ const data: AdminCourseListTableProps[] = [
     date: "31/01/2024",
     status: "Inactive",
     view: <ViewEyeIcon />,
+    currentPage: 0
   },
   {
     name: "Creative Thinking",
@@ -34,6 +37,7 @@ const data: AdminCourseListTableProps[] = [
     date: "31/01/2024",
     status: "Inactive",
     view: <ViewEyeIcon />,
+    currentPage: 0
   },
   {
     name: "Creative Thinking",
@@ -42,6 +46,7 @@ const data: AdminCourseListTableProps[] = [
     date: "31/01/2024",
     status: "Inactive",
     view: <ViewEyeIcon />,
+    currentPage: 0
   },
   {
     name: "Creative Thinking",
@@ -50,6 +55,7 @@ const data: AdminCourseListTableProps[] = [
     date: "31/01/2024",
     status: "Inactive",
     view: <ViewEyeIcon />,
+    currentPage: 1
   },
   {
     name: "Creative Thinking",
@@ -58,6 +64,7 @@ const data: AdminCourseListTableProps[] = [
     date: "31/01/2024",
     status: "Inactive",
     view: <ViewEyeIcon />,
+    currentPage: 2
   },
 ];
 const AdminCourseListTable: FC<AdminCourseListTableProps> = () => {

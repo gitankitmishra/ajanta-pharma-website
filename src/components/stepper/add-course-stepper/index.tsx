@@ -1,16 +1,10 @@
 "use client";
 import React, { useState } from "react";
 import "./style.css";
-import DropdownInputField from "@/components/fields/dropdown-input-field";
-import InputField from "@/components/fields/input-field";
-import UploadButton from "@/components/buttons/upload-button";
-import NextButton from "@/components/buttons/next-button";
-import PreviousButton from "@/components/buttons/previous-button";
 import ModuleQuizStepSection from "@/container/Admin-Container/add-course/module-container";
-// import StepComponent1 from "./StepComponent1";
-
-// import StepComponent3 from "./StepComponent3";
-// import StepComponent4 from "./StepComponent4";
+import BasicStepSection from "@/container/Admin-Container/add-course/basic-step-container";
+import DesignationStepSection from "@/container/Admin-Container/add-course/designation-step-container";
+import UploadStepSection from "@/container/Admin-Container/add-course/upload-step-container";
 
 type StepContent = {
   [key: string]: React.ReactNode;
@@ -20,10 +14,10 @@ const Stepper = () => {
   const [activeStep, setActiveStep] = useState(0);
   const steps = ["Basic", "Module/Quiz", "Designation", "Upload"];
   const [stepContent, setStepContent] = useState<StepContent>({
-    // Basic: <StepComponent1 />,
+    Basic: <BasicStepSection />,
     "Module/Quiz": <ModuleQuizStepSection />,
-    // Designation: <StepComponent3 />,
-    // Upload: <StepComponent4 />,
+    Designation: <DesignationStepSection />,
+    Upload: <UploadStepSection />,
   });
 
   const handleNext = () => {
@@ -53,9 +47,7 @@ const Stepper = () => {
           className={`${activeStep === 0 ? "active" : ""}`}
           onClick={handleBack}
           disabled={activeStep === 0}
-        >
-          Back
-        </button>
+        ></button>
         <button
           className={`${activeStep === steps.length - 1 ? "active" : ""}`}
           onClick={handleNext}
