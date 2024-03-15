@@ -1,22 +1,29 @@
-import { FC, SetStateAction, useState } from "react";
+import { FC, ChangeEvent, useEffect } from "react";
 import "./style.css";
 
-interface InputFieldProps {}
+interface InputFieldProps {
+  moduleName: string[];
+  onChange: (newModuleName: string[]) => void;
+}
 
-const InputField: FC<InputFieldProps> = () => {
-    const [inputValue, setInputValue] = useState('');
-    const handleChange = (event: { target: { value: SetStateAction<string>; }; }) => {
-      setInputValue(event.target.value);
+const InputField: FC<InputFieldProps> = ({ moduleName, onChange }) => {
+    const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+      const newValue = event.target.value;
+      onChange([newValue]); // Call the onChange callback with an array containing the new value
     };
-  return <div>
-    <input
-    className="input-field"
-        type="text"
-        value={inputValue}
-        onChange={handleChange}
-        placeholder=""
-      />
-  </div>;
+
+    return (
+      <div className="module-input-name">
+       
+        <input
+          className="input-field"
+          type="text"
+          value={moduleName[0]} 
+          onChange={handleChange}
+          placeholder=""
+        />
+      </div>
+    );
 };
 
 export default InputField;
