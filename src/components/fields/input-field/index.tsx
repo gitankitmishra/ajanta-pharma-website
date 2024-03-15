@@ -9,7 +9,7 @@ interface InputFieldProps {
 const InputField: FC<InputFieldProps> = ({ moduleName, onChange }) => {
     const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
       const newValue = event.target.value;
-      onChange([newValue]); // Call the onChange callback with an array containing the new value
+      onChange([newValue]);
     };
 
     return (
@@ -18,7 +18,7 @@ const InputField: FC<InputFieldProps> = ({ moduleName, onChange }) => {
         <input
           className="input-field"
           type="text"
-          value={moduleName[0]} 
+          value={moduleName?.length > 0 ? moduleName[0] : ''} 
           onChange={handleChange}
           placeholder=""
         />
