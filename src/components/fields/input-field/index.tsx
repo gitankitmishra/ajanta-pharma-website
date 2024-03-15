@@ -1,9 +1,11 @@
 import { FC, SetStateAction, useState } from "react";
 import "./style.css";
 
-interface InputFieldProps {}
+interface InputFieldProps {
+  readOnly?: boolean;
+}
 
-const InputField: FC<InputFieldProps> = () => {
+const InputField: FC<InputFieldProps> = ({readOnly = false}) => {
     const [inputValue, setInputValue] = useState('');
     const handleChange = (event: { target: { value: SetStateAction<string>; }; }) => {
       setInputValue(event.target.value);
@@ -15,6 +17,7 @@ const InputField: FC<InputFieldProps> = () => {
         value={inputValue}
         onChange={handleChange}
         placeholder=""
+        readOnly= {readOnly}
       />
   </div>;
 };

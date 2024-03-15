@@ -5,6 +5,8 @@ import ModuleQuizStepSection from "@/container/Admin-Container/add-course/module
 import BasicStepSection from "@/container/Admin-Container/add-course/basic-step-container";
 import DesignationStepSection from "@/container/Admin-Container/add-course/designation-step-container";
 import UploadStepSection from "@/container/Admin-Container/add-course/upload-step-container";
+import PreviousButton from "@/components/buttons/previous-button";
+import NextButton from "@/components/buttons/next-button";
 
 type StepContent = {
   [key: string]: React.ReactNode;
@@ -32,29 +34,49 @@ const Stepper = () => {
     <div className="stepper-container">
       <div className="step-labels-container">
         {steps.map((step, index) => (
-          <div
-            key={index}
-            className={`step-label ${activeStep === index ? "active" : ""}`}
-          >
-            <div className="step-text">{step}</div>
-          </div>
+          <>
+            <div className="steps-text-and-underline-combined-container">
+              <div
+                key={index}
+                className={`steps-title ${
+                  activeStep === index ? "active-step" : ""
+                }`}
+              >
+                {step}
+              </div>
+
+              <div
+                className={`${
+                  activeStep === index ? "active-step-underline" : ""
+                }`}
+              ></div>
+            </div>
+            {index < steps.length - 1 && (
+              <div className="steps-dashed-line"></div>
+            )}
+          </>
         ))}
       </div>
       <div className="step-separator"></div>
       <div className="step-content">{stepContent[steps[activeStep]]}</div>
       <div className="button-container">
-        <button
-          className={`${activeStep === 0 ? "active" : ""}`}
-          onClick={handleBack}
-          disabled={activeStep === 0}
-        ></button>
-        <button
-          className={`${activeStep === steps.length - 1 ? "active" : ""}`}
-          onClick={handleNext}
-          disabled={activeStep === steps.length - 1}
+        <div
+          className={`${activeStep === 0 ? "active" : ""} ${
+            activeStep === 0 ? "disabled" : ""
+          }`} // Add a 'disabled' class based on the condition
+          onClick={activeStep !== 0 ? handleBack : undefined} // Conditionally assign the onClick handler
         >
-          Next
-        </button>
+          <PreviousButton text="Discard" />
+        </div>
+
+        <div
+          className={`${activeStep === steps.length - 1 ? "active" : ""} ${
+            activeStep === steps.length - 1 ? "disabled" : ""
+          }`} // Add a 'disabled' class based on the condition
+          onClick={activeStep !== steps.length - 1 ? handleNext : undefined} // Conditionally assign the onClick handler
+        >
+          <NextButton text="Next" />
+        </div>
       </div>
     </div>
   );
