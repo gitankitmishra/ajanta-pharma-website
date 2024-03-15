@@ -3,4 +3,8 @@
   font-size: 24px;
   font-weight: 500;
   text-decoration: underline;
+  margin-top: 8px;
+}
+.add-course-breadcrumb-section{
+  padding: 0 40px;
 }
