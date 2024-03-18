@@ -1,3 +1,4 @@
+"use client"
 import React, { FC, useEffect, useState } from "react";
 import "./style.css";
 import DateInputField from "@/components/fields/start-date-input-field";
@@ -37,19 +38,29 @@ const BasicStepSection: FC<BasicStepSectionProps> = ({ onCategoryChange }) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
     if (field === "category") {
       onCategoryChange(value); 
-      
+      localStorage.setItem("category",value);
     }
   };
-
+  useEffect(() => {
+    localStorage.setItem("category", "Competency-Based Skills");
+  }, []);
   const handleCourseCodeAndNameChange = (value: string) => {
-    const [code, ...nameParts] = value.split(" ");
-
+    // Remove leading and trailing spaces from the input value
+    const trimmedValue = value;
+  
+    // Split the trimmed value into code and name parts
+    const [code, ...nameParts] = trimmedValue.split(" ");
+  
+    // Update the state with the trimmed code and the remaining name parts
     setFormData((prev) => ({
       ...prev,
       courseCode: code,
       courseName: nameParts.join(" "),
     }));
+  
+    
   };
+  
 
   const handleDraftSave = () => {
     // Call API to save form data as draft
@@ -65,7 +76,7 @@ const BasicStepSection: FC<BasicStepSectionProps> = ({ onCategoryChange }) => {
       .then((response) => response.json())
       .then((data) => {
         console.log("Draft saved:", data);
-        alert(data);
+        alert(data.message);
         // Optionally handle success response
       })
       .catch((error) => {
