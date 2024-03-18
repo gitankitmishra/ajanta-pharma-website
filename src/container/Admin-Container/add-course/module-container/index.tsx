@@ -2,7 +2,7 @@ import { FC, useEffect, useState } from "react";
 import "./style.css";
 import InputField from "@/components/fields/input-field";
 import UploadButton from "@/components/buttons/upload-button";
-import DropdownInputField from "@/components/fields/dropdown-input-field";
+import DropdownInputField from "@/components/fields/dropdown-sub-input-field";
 import { PlusIcon } from "@/components/icons/plus-icon";
 import InputFieldNum from "@/components/fields/InputFieldNum";
 

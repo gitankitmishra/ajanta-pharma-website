@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./style.css";
 import ModuleQuizStepSection from "@/container/Admin-Container/add-course/module-container";
 import BasicStepSection from "@/container/Admin-Container/add-course/basic-step-container";
@@ -15,10 +15,14 @@ type StepContent = {
 const Stepper = () => {
   const [activeStep, setActiveStep] = useState(0);
   const steps = ["Basic", "Module/Quiz", "Designation", "Upload"];
+  const [category, setCategory] = useState("");
+  const handleCategoryChange = (value: string) => {
+    setCategory(value);
+  };
   const [stepContent, setStepContent] = useState<StepContent>({
-    Basic: <BasicStepSection />,
+    Basic: <BasicStepSection  onCategoryChange={handleCategoryChange}/>,
     "Module/Quiz": <ModuleQuizStepSection />,
-    Designation: <DesignationStepSection />,
+    Designation: <DesignationStepSection category={category}/>,
     Upload: <UploadStepSection />,
   });
 
@@ -29,7 +33,10 @@ const Stepper = () => {
   const handleBack = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
+  useEffect(() => {
+        console.log("categoyyyyyyyyyyyyyyyyyyyyyyyyyy",category)
 
+  }, [category]);
   return (
     <div className="stepper-container">
       <div className="step-labels-container">
