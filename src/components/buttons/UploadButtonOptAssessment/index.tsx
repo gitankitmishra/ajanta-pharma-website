@@ -2,15 +2,15 @@
 import { FC } from "react";
 import "./style.css";
 
-interface UploadButtonProps {
+interface UploadButtonOptAssessmentProps {
   upload: string;
-  onFileSelect: (files: FileList | null) => void; 
+  onExcelFileSelectopt: (optexcelFile: FileList | null) => void; 
 }
 
-const UploadButton: FC<UploadButtonProps> = ({ upload, onFileSelect }) => {
+const UploadButtonOptAssessment: FC<UploadButtonOptAssessmentProps> = ({ upload, onExcelFileSelectopt }) => {
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFiles = event.target.files; 
-    onFileSelect(selectedFiles); 
+    onExcelFileSelectopt(selectedFiles); 
   };
 
   return (
@@ -21,4 +21,4 @@ const UploadButton: FC<UploadButtonProps> = ({ upload, onFileSelect }) => {
   );
 };
 
-export default UploadButton;
+export default UploadButtonOptAssessment;
