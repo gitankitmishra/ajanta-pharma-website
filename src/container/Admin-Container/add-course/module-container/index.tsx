@@ -7,6 +7,9 @@ import { PlusIcon } from "@/components/icons/plus-icon";
 import InputFieldNum from "@/components/fields/InputFieldNum";
 import InputFieldNameAssessment from "@/components/fields/InputFieldNameAssessment";
 import UploadButtonAssessment from "@/components/buttons/UploadButtonAssessment";
+import DropdownInputFieldAssOpt from "@/components/fields/DropdownInputFieldAssOpt";
+import InputFieldOptionalAssessment from "@/components/fields/InputFieldOptionalAssessment";
+import UploadButtonOptAssessment from "@/components/buttons/UploadButtonOptAssessment";
 
 interface ModuleQuizStepSectionProps {}
 
@@ -84,14 +87,7 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
       console.log(error);
     }
   }
-
-  useEffect(() => {
-    console.log("assessmentFileName:", assessmentFileName);
-    console.log("assessmentFileType:", assessmentFileType);
-    console.log("excelFile:", excelFile);
-  }, [excelFile, assessmentFileName, assessmentFileType]);
   
-
   const handleChangeAssessmentType = (assessmentType: string[]) => {
     setassessmentFileType(assessmentType);
   };
@@ -100,9 +96,113 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
     setassessmentFileName(newAssessmentName)
   }
 
+  //optional assessment api -> 
+  const [preAssessment, setPreAssessment] = useState<{ assessmentFileType: string[]; assessmentFileName: string[] }>({
+    assessmentFileType: [],
+    assessmentFileName: [],
+  });
+  
+  const [postAssessment, setPostAssessment] = useState<{ assessmentFileType: string[]; assessmentFileName: string[] }>({
+    assessmentFileType: [],
+    assessmentFileName: [],
+  });
+  
+  const [courseCodeAssopt,setCourseCodeAssopt] = useState("");
+  const [optexcelFile,setoptexcelFile] = useState<FileList | null>(null);
+
+  const [selectedAssessment,setSelectedAssessment]=useState("");
+
+  const optAssessmetApi = async() => {
+    try{
+      const formDetails = new FormData();
+      formDetails.append("assessmentType",selectedAssessment)
+      if(selectedAssessment === "pre"){
+        console.log("pre data:", preAssessment);
+        preAssessment.assessmentFileType.forEach((type) => {
+          formDetails.append('preAssessmentFileType', type);
+        });
+        preAssessment.assessmentFileName.forEach((name) => {
+          formDetails.append('preAssessmentFileName', name);
+        });
+      } else if(selectedAssessment === "post"){
+        console.log("post data:", postAssessment);
+        postAssessment.assessmentFileType.forEach((type) => {
+          formDetails.append('postAssessmentFileType', type);
+        });
+        postAssessment.assessmentFileName.forEach((name) => {
+          formDetails.append('postAssessmentFileName', name);
+        });
+      }
+      formDetails.append('courseCodeAssopt',courseCodeAssopt);
+      
+      if (optexcelFile) {
+        for (let i = 0; i < optexcelFile.length; i++) {
+          formDetails.append('optexcelFile', optexcelFile[i]);
+        }
+      }
+
+      const response = await fetch(`http://localhost:8000/api/admin/dashboard/optAssessment/B01`,{
+        method:"POST",
+        body:formDetails
+      })
+      if(response.status == 200){
+        const data = await response.json();
+        console.log(data);
+      }
+    } catch(error){
+      console.log(error);
+    }
+  }
+
+  const handleRadioChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSelectedAssessment(event.target.value);
+    console.log('Selected Assessment:', event.target.value); 
+};
+
+useEffect(() => {
+    console.log('Selected Assessment:', selectedAssessment); 
+}, [selectedAssessment]); 
+
+const handleFileNameChange = (fileName: string) => {
+  if (selectedAssessment === "pre") {
+      console.log("Selected Assessment Type: pre");
+      console.log("File Name:", fileName);
+      setPreAssessment(prevState => ({
+          ...prevState,
+          assessmentFileName: [fileName]
+      }));
+  } else if (selectedAssessment === "post") {
+      console.log("Selected Assessment Type: post");
+      console.log("File Name:", fileName);
+      setPostAssessment(prevState => ({
+          ...prevState,
+          assessmentFileName: [fileName]
+      }));
+  }
+};
+
+const handleFileTypeChange = (fileName: string) => {
+  if (selectedAssessment === "pre") {
+      console.log("Selected Assessment Type: pre");
+      console.log("File Name:", fileName);
+      setPreAssessment(prevState => ({
+          ...prevState,
+          assessmentFileType: [fileName]
+      }));
+  } else if (selectedAssessment === "post") {
+      console.log("Selected Assessment Type: post");
+      console.log("File Name:", fileName);
+      setPostAssessment(prevState => ({
+          ...prevState,
+          assessmentFileType: [fileName]
+      }));
+  }
+};
+
   const mergeApi = () => {
     uploadFile();
     uploadAssessment();
+    optAssessmetApi();
   }
 
   return (
@@ -170,28 +270,41 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
         <div className="module-radio-selction">
           <div className="module-course-assessment">Course Assessment</div>
           <div className="module-radio-btns">
-            <input type="radio" id="preAccessment" value="Pre Assessment" /> {" "}
-            <label htmlFor="preAccessment">Pre Assessment</label>
+            <input type="radio" id="preAssessment" value="pre" 
+            checked={selectedAssessment === "pre"} onChange={handleRadioChange}/> {" "}
+            <label htmlFor="preAssessment">Pre Assessment</label>
             <input
               type="radio"
-              id="postAccessment"
-              value="Post Assessment"
-            />  <label htmlFor="postAccessment">Post Assessment</label>
+              id="postAssessment"
+              value="post"
+              checked={selectedAssessment === "post"}
+              onChange={handleRadioChange}
+            /><label htmlFor="postAssessment">Post Assessment</label>
           </div>
         </div>
-        {/* <div className="module-input">
+        <div className="module-input">
           <div className="module-input-number">
             <label htmlFor="">Select Assessment Type</label>
-            <DropdownInputField />
+            <DropdownInputFieldAssOpt 
+            option1={"Multiple Choice Question"}
+            option2={"Single Choice Question"}
+            option3={"True or False"}
+            option4={"Short Answer"}
+            setSelectedAssessment={handleFileTypeChange} />
           </div>
-          <div className="module-input-name">
-            <label htmlFor="">Module Name</label>
-            <InputField />
-          </div>
+          <InputFieldOptionalAssessment
+            selectedAssessment={selectedAssessment}
+            assessmentFileName={
+              selectedAssessment === "pre"
+                ? preAssessment.assessmentFileName
+                : postAssessment.assessmentFileName
+            }
+            onFileNameChange={handleFileNameChange}
+          />
           <div className="module-input-uplaod-btn">
-            <UploadButton upload={"Upload Assessment"} />
+            <UploadButtonOptAssessment upload={"Upload Assessment"} onExcelFileSelectopt={setoptexcelFile}/>
           </div>
-        </div> */}
+        </div>
         <button>
           <PlusIcon />
           Add Module
