@@ -7,12 +7,14 @@ import DesignationStepSection from "@/container/Admin-Container/add-course/desig
 import UploadStepSection from "@/container/Admin-Container/add-course/upload-step-container";
 import PreviousButton from "@/components/buttons/previous-button";
 import NextButton from "@/components/buttons/next-button";
+import { useRouter } from "next/navigation";
 
 type StepContent = {
   [key: string]: React.ReactNode;
 };
 
 const Stepper = () => {
+  const router = useRouter();
   const [activeStep, setActiveStep] = useState(0);
   const steps = ["Basic", "Module/Quiz", "Designation", "Upload"];
   const [stepContent, setStepContent] = useState<StepContent>({
@@ -27,7 +29,11 @@ const Stepper = () => {
   };
 
   const handleBack = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep - 1);
+    if (activeStep === 0) {
+      router.push("/admin/admin-courses"); // Navigate to the course page
+    } else {
+      setActiveStep((prevActiveStep) => prevActiveStep - 1);
+    }
   };
 
   return (
@@ -63,17 +69,17 @@ const Stepper = () => {
         <div
           className={`${activeStep === 0 ? "active" : ""} ${
             activeStep === 0 ? "disabled" : ""
-          }`} // Add a 'disabled' class based on the condition
-          onClick={activeStep !== 0 ? handleBack : undefined} // Conditionally assign the onClick handler
+          }`}
+          onClick={handleBack}
         >
-          <PreviousButton text="Discard" />
+          <PreviousButton text={activeStep === 0 ? "Discard" : "Previous"} />
         </div>
 
         <div
           className={`${activeStep === steps.length - 1 ? "active" : ""} ${
             activeStep === steps.length - 1 ? "disabled" : ""
-          }`} // Add a 'disabled' class based on the condition
-          onClick={activeStep !== steps.length - 1 ? handleNext : undefined} // Conditionally assign the onClick handler
+          }`}
+          onClick={activeStep !== steps.length - 1 ? handleNext : undefined}
         >
           <NextButton text="Next" />
         </div>

@@ -57,10 +57,10 @@ const DesignationStepSection: FC<DesignationStepSectionProps> = () => {
           <Checkbox text={"DM"} />
           <Checkbox text={"SO"} />
         </div>
-      <div className="designation-btn-section">
+      {/* <div className="designation-btn-section">
         <PreviousButton text={"Previous"}/>
         <NextButton text={"Next"}/>
-      </div>
+      </div> */}
       </div>
     </section>
   );

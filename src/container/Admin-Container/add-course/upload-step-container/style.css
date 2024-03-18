@@ -14,6 +14,7 @@
   display: flex;
   gap: 10px;
   flex-direction: column;
+  width: 90%;
 }
 .upload-learning-objective-input {
   padding: 0 24px;
@@ -68,6 +69,9 @@
   align-items: center;
   gap: 12px;
 }
+.upload-section2-div-sections{
+  width: 30.5%;
+}
 .uploaded-video-file {
   width: 90px;
   height: 56px;
@@ -92,9 +96,12 @@
   line-height: 24px;
 }
 .upload-section2-course-assessment {
-  width: 41%;
-  display: flex;
-  justify-content: space-between;
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+.upload-assesment-radio-btn{
+  accent-color: #000;
 }
 .upload-selected-assessment {
   margin-left: 16px;
