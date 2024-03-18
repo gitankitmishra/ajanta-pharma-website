@@ -1,11 +1,11 @@
-import { FC } from "react";
+import React, { FC } from "react";
 import "./style.css";
 
 interface NextButtonProps {
   text: string;
 }
 
-const NextButton: FC<NextButtonProps> = ({ text}) => {
+const NextButton: FC<NextButtonProps> = ({ text }) => {
   return (
     <div>
       <button className="next-button" >

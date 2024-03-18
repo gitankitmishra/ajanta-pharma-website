@@ -35,11 +35,16 @@ const DesignationStepSection: FC<DesignationStepSectionProps> = ({
   };
 
   const publishDesignation = async () => {
-    let response;
     try {
+       // Check if at least one designation is selected
+    if (designation.length === 0) {
+      alert("Please select at least one designation.");
+      return; // Prevent further execution
+    }
+      let response;
       if (division.length > 0) {
         response = await fetch(
-          "http://localhost:8000/api/admin/dashboard/publishDesignation/B04",
+          "http://localhost:8000/api/admin/dashboard/publishDesignation/B111",
           {
             method: "PUT",
             headers: {
@@ -53,7 +58,7 @@ const DesignationStepSection: FC<DesignationStepSectionProps> = ({
         );
       } else {
         response = await fetch(
-          "http://localhost:8000/api/admin/dashboard/publishDesignation/B04",
+          "http://localhost:8000/api/admin/dashboard/publishDesignation/B111",
           {
             method: "PUT",
             headers: {
@@ -71,11 +76,13 @@ const DesignationStepSection: FC<DesignationStepSectionProps> = ({
       }
   
       const data = await response.json();
+      alert(data.message); // Displaying response message
       console.log("Response:", data);
-    } catch (error: any) {
+    } catch (error:any) {
       console.error("Error:", error.message);
     }
   };
+  
   
 
   useEffect(()=>{

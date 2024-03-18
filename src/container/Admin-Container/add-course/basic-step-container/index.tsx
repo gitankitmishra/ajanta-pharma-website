@@ -44,6 +44,28 @@ const BasicStepSection: FC<BasicStepSectionProps> = ({ onCategoryChange }) => {
   useEffect(() => {
     localStorage.setItem("category", "Competency-Based Skills");
   }, []);
+  useEffect(() => {
+    switch (formData.category) {
+      case "Competency-Based Skills":
+        setFormData((prev) => ({ ...prev, trainingType: "Business Orientation" }));
+        break;
+      case "Medical":
+        setFormData((prev) => ({ ...prev, trainingType: "Medical" }));
+        break;
+      case "Marketing":
+        setFormData((prev) => ({ ...prev, trainingType: "Brand Detailing" }));
+        break;
+      case "Personal Development":
+        setFormData((prev) => ({ ...prev, trainingType: "Communication" }));
+        break;
+      case "Classroom Training":
+        setFormData((prev) => ({ ...prev, trainingType: "Medical Representative" }));
+        break;
+      default:
+        break;
+    }
+  }, [formData.category]);
+  
   const handleCourseCodeAndNameChange = (value: string) => {
     // Remove leading and trailing spaces from the input value
     const trimmedValue = value;
@@ -73,9 +95,24 @@ const BasicStepSection: FC<BasicStepSectionProps> = ({ onCategoryChange }) => {
         basicInfo: { ...formData, isActive: false, publishDate: new Date() },
       }),
     })
-      .then((response) => response.json())
+      .then((response) => {
+        if (response.status === 200) {
+          // If response status is 200, reset the state to initial values
+          setFormData({
+            category: "Competency-Based Skills",
+            trainingType: "",
+            courseCode: "",
+            courseName: "",
+            learningObjectives: "",
+            startDate: "",
+            endDate: "",
+          });
+          console.log("Draft saved:", response);
+        }
+        return response.json();
+      })
       .then((data) => {
-        console.log("Draft saved:", data);
+        // Display alert with the appropriate message
         alert(data.message);
         // Optionally handle success response
       })
@@ -84,29 +121,8 @@ const BasicStepSection: FC<BasicStepSectionProps> = ({ onCategoryChange }) => {
         // Optionally handle error
       });
   };
+  
 
-  const handlePublish = () => {
-    // Call API to publish form data
-    fetch("http://localhost:8000/api/admin/dashboard/publishBasicInfo", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        basicInfo: { ...formData, isActive: true, publishDate: new Date() },
-      }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("Published:", data);
-        alert(data);
-        // Optionally handle success response
-      })
-      .catch((error) => {
-        console.error("Error publishing:", error);
-        // Optionally handle error
-      });
-  };
 
   useEffect(() => {
     console.log("Form Data:", formData);
@@ -175,10 +191,8 @@ const BasicStepSection: FC<BasicStepSectionProps> = ({ onCategoryChange }) => {
         <button className="draft-button" onClick={handleDraftSave}>
           Save as Draft
         </button>
-        <button className="publish-button" onClick={handlePublish}>
-          Publish
-        </button>
-        <NextButton text={"Next"} />
+        
+        <NextButton text={"Next"}   />
       </div>
     </section>
   );
