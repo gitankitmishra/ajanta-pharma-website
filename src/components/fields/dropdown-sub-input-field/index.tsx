@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useState } from "react";
-import "./style.css";
+// import "./style.css";
 
 interface DropdownInputFieldProps {
   value: string;
