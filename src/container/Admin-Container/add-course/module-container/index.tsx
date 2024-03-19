@@ -4,18 +4,13 @@ import InputField from "@/components/fields/input-field";
 import UploadButton from "@/components/buttons/upload-button";
 import DropdownInputField from "@/components/fields/dropdown-input-field";
 import { PlusIcon } from "@/components/icons/plus-icon";
-import InputFieldNum from "@/components/fields/InputFieldNum";
 
 interface ModuleQuizStepSectionProps {}
 
 const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
-  // const [moduleName,setModuleName] = useState<string[]>([]);
-  // const [moduleNo,setModuleNo] = useState<number[]>([]);
-  // const [files,setFiles] = useState<string[]>([]);
-  // const [courseCode,setCourseCode] = useState<string>("");
 
   const [moduleName, setModuleName] = useState<string[]>([]);
-  const [moduleNo, setModuleNo] = useState<number[]>([]);
+  const [moduleNo, setModuleNo] = useState<string[]>([]);
   const [files, setFiles] = useState<FileList | null>(null);
   const [courseCode, setCourseCode] = useState<string>("");
   const [modules, setModules] = useState([
@@ -33,37 +28,6 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
   const handleAddAssessment = () => {
     setAssessment([...assessment, { assessmentType: "", assessmentName: "" }]);
   };
-
-  // const uploadFile = async () => {
-  //   try {
-  //     if (!files) return;
-
-  //     const formData = new FormData();
-  //     formData.append("moduleName", moduleName.toString());
-  //     formData.append("moduleNo", moduleNo.toString());
-  //     for (let i = 0; i < files.length; i++) {
-  //       formData.append("files", files[i]);
-  //     }
-  //     formData.append("courseCode", courseCode);
-
-  //     const response = await fetch("http://localhost:8000/api/admin/dashboard/uploadFile/B01", {
-  //       method: "PUT",
-  //       headers: {
-  //         "Content-type": "multipart/form-data",
-  //       },
-  //       body: JSON.stringify({
-  //         formData
-  //       })
-  //     });
-
-  //     if (response.status === 200) {
-  //       const data = await response.json();
-  //       console.log(data);
-  //     }
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
 
   const uploadFile = async () => {
     try {
@@ -101,13 +65,183 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
   }, [moduleName, moduleNo, files]);
 
   //to handle the module number
-  const handleChangeModuleNum = (newModuleNum: number[]) => {
+  const handleChangeModuleNum = (newModuleNum: string[]) => {
     setModuleNo(newModuleNum);
   };
 
   const handleChangeModuleName = (newModuleName: string[]) => {
     setModuleName(newModuleName);
   };
+
+  //assessment upload 
+  const [assessmentFileType,setassessmentFileType] = useState<string[]>([]);
+  const [assessmentFileName,setassessmentFileName] = useState<string[]>([]);
+  const[excelFile,setexcelFile] = useState<FileList | null>(null); 
+  const [courseCodeAss,setCourseCodeAss] = useState<string>("");
+
+  const uploadAssessment = async() => {
+    try{
+      if(!excelFile){
+        return;
+      }
+      const formAssData = new FormData();
+      formAssData.append("assessmentFileType",assessmentFileType.toString());
+      formAssData.append("assessmentFileName",assessmentFileName.toString());
+      for (let i = 0; i < excelFile.length; i++) {
+        formAssData.append("excelFile", excelFile[i]);
+      }
+      formAssData.append("courseCode", courseCode);
+
+      const response = await fetch(`http://localhost:8000/api/admin/dashboard/uploadAssessment/B01`, {
+        method:"POST",
+        body:formAssData
+      });
+
+      if(response.status == 200){
+        const data = await response.json();
+        console.log(data);
+      }
+    } catch(error:any){
+      console.log(error);
+    }
+  }
+  
+  const handleChangeAssessmentType = (assessmentType: string[]) => {
+    setassessmentFileType(assessmentType);
+  };
+
+  const handleAssessmentName = (newAssessmentName:string[]) => {
+    setassessmentFileName(newAssessmentName)
+  }
+
+  //optional assessment upload
+  const [preAssessment, setPreAssessment] = useState<{ assessmentFileType: string[]; assessmentFileName: string[] }>({
+    assessmentFileType: [],
+    assessmentFileName: [],
+  });
+  
+  const [postAssessment, setPostAssessment] = useState<{ assessmentFileType: string[]; assessmentFileName: string[] }>({
+    assessmentFileType: [],
+    assessmentFileName: [],
+  });
+  
+  const [courseCodeAssopt,setCourseCodeAssopt] = useState("");
+  const [optexcelFile,setoptexcelFile] = useState<FileList | null>(null);
+
+  const [selectedAssessment,setSelectedAssessment]=useState("");
+
+  const optAssessmetApi = async() => {
+    try{
+      const formDetails = new FormData();
+      formDetails.append("assessmentType",selectedAssessment)
+      if(selectedAssessment === "pre"){
+        console.log("pre data:", preAssessment);
+        preAssessment.assessmentFileType.forEach((type) => {
+          formDetails.append('assessmentFileType', type);
+        });
+        preAssessment.assessmentFileName.forEach((name) => {
+          formDetails.append('assessmentFileName', name);
+        });
+      } else if(selectedAssessment === "post"){
+        console.log("post data:", postAssessment);
+        postAssessment.assessmentFileType.forEach((type) => {
+          formDetails.append('assessmentFileType', type);
+        });
+        postAssessment.assessmentFileName.forEach((name) => {
+          formDetails.append('assessmentFileName', name);
+        });
+      }
+      formDetails.append('courseCodeAssopt',courseCodeAssopt);
+      
+      if (optexcelFile) {
+        for (let i = 0; i < optexcelFile.length; i++) {
+          formDetails.append('optexcelFile', optexcelFile[i]);
+        }
+      }
+
+      const response = await fetch(`http://localhost:8000/api/admin/dashboard/optAssessment/B01`,{
+        method:"POST",
+        body:formDetails
+      })
+      if(response.status == 200){
+        const data = await response.json();
+        console.log(data);
+      }
+    } catch(error:any){
+      console.log(error);
+    }
+  }
+
+  const handleRadioChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSelectedAssessment(event.target.value);
+    console.log('Selected Assessment:', event.target.value); 
+};
+
+useEffect(() => {
+    console.log('Selected Assessment:', selectedAssessment); 
+}, [selectedAssessment]); 
+
+const handleFileNameChange = (fileName: string) => {
+  if (selectedAssessment === "pre") {
+      console.log("Selected Assessment Type: pre");
+      console.log("File Name:", fileName);
+      setPreAssessment(prevState => ({
+          ...prevState,
+          assessmentFileName: [fileName]
+      }));
+  } else if (selectedAssessment === "post") {
+      console.log("Selected Assessment Type: post");
+      console.log("File Name:", fileName);
+      setPostAssessment(prevState => ({
+          ...prevState,
+          assessmentFileName: [fileName]
+      }));
+  }
+};
+
+const handleFileTypeChange = (value: string) => {
+  if (selectedAssessment === "pre") {
+      console.log("Selected Assessment Type: pre");
+      console.log("File Name:", value);
+      setPreAssessment(prevState => ({
+          ...prevState,
+          assessmentFileType: [value]
+      }));
+  } else if (selectedAssessment === "post") {
+      console.log("Selected Assessment Type: post");
+      console.log("File Name:", value);
+      setPostAssessment(prevState => ({
+          ...prevState,
+          assessmentFileType: [value]
+      }));
+  }
+};
+
+ // Modify mergeApi function to pass a callback to each function
+ const mergeApi = () => {
+  console.log("calling the 1st");
+  setTimeout(() => {
+    uploadFile().then(checkCompletion);
+  }, 2000);
+
+  // setTimeout(() => {
+  //   uploadAssessment().then(checkCompletion);
+  // }, 4000);
+
+  // setTimeout(() => {
+  //   optAssessmetApi().then(checkCompletion);
+  // }, 6000);
+};
+
+
+let completedTasks = 0;
+
+const checkCompletion = () => {
+  completedTasks++;
+  if (completedTasks === 3) {
+    alert("All functions have been successfully executed.");
+  }
+};
 
   return (
     <section className="module-main-section">
@@ -133,11 +267,11 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
                 <label htmlFor="" className="module-container-labels">
                   Module Number
                 </label>
-                <InputFieldNum
-                  moduleNum={moduleNo}
-                  onChange={(newModuleNum: number[]) =>
-                    handleChangeModuleNum(newModuleNum)
-                  }
+                <InputField
+                   moduleName={moduleNo}
+                   onChange={(newModuleNo: string[]) =>
+                    handleChangeModuleNum(newModuleNo)
+                   }
                 />
               </div>
               <div className="module-input-name">
@@ -175,7 +309,9 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
                   option2={"Medical"}
                   option3={"Marketing"}
                   option4={"Personal Development"}
-                  option5={"Classroom Training"}           />
+                  option5={"Classroom Training"}
+                        
+                  />
               </div>
               <div className="module-input-name">
                 <label htmlFor="" className="module-container-labels">
@@ -290,7 +426,7 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
           Add Assessment
         </button>
       </div>
-      <button className="module-save-as-draft-btn">Save as Draft</button>
+      <button className="module-save-as-draft-btn" onClick={uploadFile}>Save as Draft</button>
     </section>
   );
 };
