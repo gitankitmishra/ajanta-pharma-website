@@ -241,25 +241,31 @@ const BasicStepSection: FC<BasicStepSectionProps> = ({ onCategoryChange }) => {
           onChange={(value) => handleChange("learningObjectives", value)}
         />
       </div>
-
+      
       <div className="basic-div-section3">
         <DateInputField
           startDate={formData.startDate}
           endDate={formData.endDate}
           onStartDateChange={(value) => handleChange("startDate", value)}
           onEndDateChange={(value) => handleChange("endDate", value)}
+          
         />
-      </div>
+        <div className="draft-button-placement">
+          <button className="basic-draft-button" onClick={handleDraftSave}>
+            Draft
+          </button>
+          </div>
+        </div>
 
       {/* <div className="basic-div-section4">
         <Link href="/admin/admin-courses">
         <PreviousButton text={"Discard"} />
         </Link> */}
-        
-        <button className="basic-draft-button" onClick={handleDraftSave}>
+
+      {/* <button className="basic-draft-button" onClick={handleDraftSave}>
             Save as Draft
-          </button>
-{/* 
+          </button> */}
+      {/* 
         <NextButton text={"Next"} />
       </div> */}
     </section>

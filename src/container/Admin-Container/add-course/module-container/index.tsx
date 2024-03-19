@@ -4,7 +4,6 @@ import InputField from "@/components/fields/input-field";
 import UploadButton from "@/components/buttons/upload-button";
 import DropdownInputField from "@/components/fields/dropdown-input-field";
 import { PlusIcon } from "@/components/icons/plus-icon";
-import InputFieldNum from "@/components/fields/InputFieldNum";
 
 interface ModuleQuizStepSectionProps {}
 
@@ -14,22 +13,25 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
   // const [files,setFiles] = useState<string[]>([]);
   // const [courseCode,setCourseCode] = useState<string>("");
 
+  interface ModuleData {
+    moduleName: string;
+    moduleNo: string;
+    files: FileList | null;
+  }
   const [moduleName, setModuleName] = useState<string[]>([]);
-  const [moduleNo, setModuleNo] = useState<number[]>([]);
+  const [moduleNo, setModuleNo] = useState<string[]>([]);
   const [files, setFiles] = useState<FileList | null>(null);
   const [courseCode, setCourseCode] = useState<string>("");
-  const [modules, setModules] = useState([
-    { moduleNo: "", moduleName: "", assessmentType: "", assessmentName: "" },
+  const [modules, setModules] = useState<ModuleData[]>([
+    { moduleName: "", moduleNo: "", files: null },
   ]);
   const [assessment, setAssessment] = useState([
     { assessmentType: "", assessmentName: "" },
   ]);
   const handleAddModule = () => {
-    setModules([
-      ...modules,
-      { moduleNo: "", moduleName: "", assessmentType: "", assessmentName: "" },
-    ]);
+    setModules([...modules, { moduleName: "", moduleNo: "", files: null }]);
   };
+
   const handleAddAssessment = () => {
     setAssessment([...assessment, { assessmentType: "", assessmentName: "" }]);
   };
@@ -64,17 +66,33 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
   //     console.log(error);
   //   }
   // };
-
   const uploadFile = async () => {
     try {
-      if (!files) return;
+      if (!modules || !modules.length) {
+        console.error("Module data is missing.");
+        return;
+      }
 
       const formData = new FormData();
-      formData.append("moduleName", moduleName.toString());
-      formData.append("moduleNo", moduleNo.toString());
-      for (let i = 0; i < files.length; i++) {
-        formData.append("files", files[i]);
+
+      // Append files from the 'files' variable
+      if (files) {
+        for (let i = 0; i < files.length; i++) {
+          formData.append("files", files[i]);
+        }
       }
+
+      // Append module data files
+      modules.forEach((moduleData) => {
+        formData.append("moduleName", moduleData.moduleName);
+        formData.append("moduleNo", moduleData.moduleNo);
+        if (moduleData.files) {
+          for (let i = 0; i < moduleData.files.length; i++) {
+            formData.append("files", moduleData.files[i]);
+          }
+        }
+      });
+
       formData.append("courseCode", courseCode);
 
       const response = await fetch(
@@ -87,10 +105,10 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
 
       if (response.status === 200) {
         const data = await response.json();
-        console.log(data);
+        console.log("Upload successful:", data);
       }
     } catch (error) {
-      console.log(error);
+      console.error("Error uploading files:", error);
     }
   };
 
@@ -99,14 +117,34 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
     console.log("moduleNo:", moduleNo);
     console.log("files:", files);
   }, [moduleName, moduleNo, files]);
-
-  //to handle the module number
-  const handleChangeModuleNum = (newModuleNum: number[]) => {
-    setModuleNo(newModuleNum);
+  useEffect(() => {
+    console.log("Modules data", modules);
+  }, [modules]);
+  const handleChangeModuleNum = (newModuleNum: string[], index: number) => {
+    setModules((prevModules) => {
+      const updatedModules = [...prevModules];
+      updatedModules[index].moduleNo = newModuleNum[0];
+      return updatedModules;
+    });
   };
 
-  const handleChangeModuleName = (newModuleName: string[]) => {
-    setModuleName(newModuleName);
+  const handleChangeModuleName = (newModuleName: string[], index: number) => {
+    setModules((prevModules) => {
+      const updatedModules = [...prevModules];
+      updatedModules[index].moduleName = newModuleName[0];
+      return updatedModules;
+    });
+  };
+
+  const handleFileSelect = (selectedFiles: FileList | null, index: number) => {
+    setModules((prevModules) => {
+      const updatedModules = [...prevModules];
+      if (selectedFiles) {
+        // Update the files for the specific module at the given index
+        updatedModules[index].files = selectedFiles;
+      }
+      return updatedModules;
+    });
   };
 
   return (
@@ -116,6 +154,9 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
           <p className="module-category-text">Category</p>
           <p className="module-category-type-text">Competency Based Skills</p>
         </div>
+        <button className="module-save-as-draft-btn" onClick={uploadFile}>
+          Save as Draft
+        </button>
         <div className="module-div-section1-div2">
           <p className="module-category-text">Training</p>
           <p className="module-category-type-text">Business Orientation</p>
@@ -133,10 +174,11 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
                 <label htmlFor="" className="module-container-labels">
                   Module Number
                 </label>
-                <InputFieldNum
-                  moduleNum={moduleNo}
-                  onChange={(newModuleNum: number[]) =>
-                    handleChangeModuleNum(newModuleNum)
+                <InputField
+                  moduleValue={[module.moduleNo]} // Pass moduleNo as an array
+                  onChange={
+                    (newModuleNum: string[]) =>
+                      handleChangeModuleNum(newModuleNum, index) // Pass index
                   }
                 />
               </div>
@@ -145,16 +187,19 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
                   Module Name
                 </label>
                 <InputField
-                  moduleName={moduleName}
-                  onChange={(newModuleName: string[]) =>
-                    handleChangeModuleName(newModuleName)
+                  moduleValue={[module.moduleName]} // Pass moduleName as an array
+                  onChange={
+                    (newModuleName: string[]) =>
+                      handleChangeModuleName(newModuleName, index) // Pass index
                   }
                 />
               </div>
               <div className="module-input-uplaod-btn">
                 <UploadButton
                   upload={"Upload Course Material"}
-                  onFileSelect={setFiles}
+                  onFileSelect={(selectedFiles) =>
+                    handleFileSelect(selectedFiles, index)
+                  }
                   uploadFile={uploadFile}
                   acceptedTypes=".mp4,.ppt,.pdf"
                   formatText={"File Format: mp4, ppt, pdf "}
@@ -170,19 +215,20 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
                   value={""}
                   onValueChange={function (selectedCategory: string): void {
                     throw new Error("Function not implemented.");
-                  } }
+                  }}
                   option1={"Competency-Based Skills"}
                   option2={"Medical"}
                   option3={"Marketing"}
                   option4={"Personal Development"}
-                  option5={"Classroom Training"}           />
+                  option5={"Classroom Training"}
+                />
               </div>
               <div className="module-input-name">
                 <label htmlFor="" className="module-container-labels">
                   Module Name
                 </label>
                 <InputField
-                  moduleName={[]}
+                  moduleValue={[]}
                   onChange={function (newModuleName: string[]): void {
                     throw new Error("Function not implemented.");
                   }}
@@ -251,18 +297,20 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
                   value={""}
                   onValueChange={function (selectedCategory: string): void {
                     throw new Error("Function not implemented.");
-                  } }
+                  }}
                   option1={""}
                   option2={""}
                   option3={""}
-                  option4={""} option5={""}                />
+                  option4={""}
+                  option5={""}
+                />
               </div>
               <div className="module-input-name">
                 <label htmlFor="" className="module-container-labels">
                   Module Name
                 </label>
                 <InputField
-                  moduleName={[]}
+                  moduleValue={[]}
                   onChange={function (newModuleName: string[]): void {
                     throw new Error("Function not implemented.");
                   }}
@@ -270,13 +318,13 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
               </div>
               <div className="module-input-uplaod-btn">
                 <UploadButton
-                  upload={"Upload Assessment"}
-                  onFileSelect={function (files: FileList | null): void {
-                    throw new Error("Function not implemented.");
-                  }}
-                  uploadFile={undefined}
-                  acceptedTypes=".xls"
-                  formatText={"File Format: xls"}
+                  upload={"Upload Course Material"}
+                  onFileSelect={(selectedFiles) =>
+                    handleFileSelect(selectedFiles, index)
+                  }
+                  uploadFile={uploadFile}
+                  acceptedTypes=".mp4,.ppt,.pdf"
+                  formatText={"File Format: mp4, ppt, pdf "}
                 />
               </div>
             </div>
@@ -290,7 +338,6 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
           Add Assessment
         </button>
       </div>
-      <button className="module-save-as-draft-btn">Save as Draft</button>
     </section>
   );
 };

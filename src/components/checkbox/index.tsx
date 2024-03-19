@@ -1,17 +1,16 @@
-import { FC, useState, ChangeEvent } from "react";
+// Checkbox.tsx
+import React, { FC, useState, ChangeEvent } from "react";
 import "./style.css";
 
 interface CheckboxProps {
   text: string;
   onChange: (value: string, isChecked: boolean) => void;
+  isChecked: boolean; // Add isChecked prop
 }
 
-const Checkbox: FC<CheckboxProps> = ({ text, onChange }) => {
-  const [isChecked, setIsChecked] = useState(false);
-
+const Checkbox: FC<CheckboxProps> = ({ text, onChange, isChecked }) => {
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const checked = event.target.checked;
-    setIsChecked(checked);
     onChange(text, checked);
   };
 
