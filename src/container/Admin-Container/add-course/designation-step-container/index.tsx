@@ -149,7 +149,7 @@ const DesignationStepSection: FC<DesignationStepSectionProps> = ({
         </div>
         {/* <div className="designation-btn-section">
           <PreviousButton text={"Previous"} /> */}
-          <button className="designation-public-btn" onClick={publishDesignation}>Publish</button>
+          <button className="designation-public-btn" onClick={publishDesignation}>Draft</button>
           {/* <NextButton text={"Next"} />
         </div> */}
 
