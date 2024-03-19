@@ -45,14 +45,14 @@
   font-weight: 400;
   line-height: 28px;
 }
-.basic-div-section4{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 24px;
-    margin-top: 12px;
+.basic-div-section4 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 24px;
+  margin-top: 12px;
 }
-.basic-draft-button{
+.basic-draft-button {
   position: relative;
   top: 9px;
   left: 22.5vw;
