@@ -1,13 +1,24 @@
-.upload-btn{
-    width: 25rem;
-    height: 3.5rem;
-border-radius: 32px;
-background: #FE8100;
-border: none;
-box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.16);
-/* text styling */
-color: #FFF;
-font-size: 20px;
-font-weight: 600;
-line-height: 28px;
+.upload-btn {
+  width: 100%;
+  height: 3.5rem;
+  border-radius: 32px;
+  background: #fe8100;
+  border: none;
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.16);
+  /* text styling */
+  color: #fff;
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 28px;
+  cursor: pointer;
+}
+.upload-btn-format-type-text {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #7a7a7a;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  letter-spacing: 0.014px;
 }

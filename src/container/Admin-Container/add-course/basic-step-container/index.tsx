@@ -168,18 +168,23 @@ const BasicStepSection: FC<BasicStepSectionProps> = ({ onCategoryChange }) => {
           onEndDateChange={(value) => handleChange("endDate", value)}
         />
       </div>
-      <div className="basic-div-section4">
+      {/* <div className="basic-div-section4">
         <Link href="/admin/admin-courses">
           <PreviousButton text={"Discard"} />
-        </Link>
-        <button className="draft-button" onClick={handleDraftSave}>
+        </Link> */}
+        <button className="basic-draft-button" onClick={handleDraftSave}>
           Save as Draft
         </button>
+
+        {/* <NextButton text={"Next"} />
+      </div> */}
+
         <button className="publish-button" onClick={handlePublish}>
           Publish
         </button>
         <NextButton text={"Next"} />
       </div>
+
     </section>
   );
 };

@@ -1,6 +1,6 @@
 .start-date-input-field,
 .end-date-input-field {
-  width: 23.5rem;
+  width: 87%;
   height: 1.7rem;
   border-radius: 8px;
   background: rgba(254, 129, 0, 0.1);
@@ -20,6 +20,7 @@
 }
 .start-date-container, .end-date-container{
   display: flex;
+  width: 30%;
   gap: 10px;
   flex-direction: column;
 }
