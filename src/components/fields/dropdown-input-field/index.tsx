@@ -1,6 +1,7 @@
 import { FC, useState } from "react";
 import "./style.css";
 
+
 interface DropdownInputFieldProps {
   value: string;
   onValueChange: (selectedCategory: string) => void;
@@ -10,6 +11,7 @@ interface DropdownInputFieldProps {
   option4: string;
   option5:string;
 }
+
 
 const DropdownInputField: FC<DropdownInputFieldProps> = ({
   value,
@@ -23,6 +25,7 @@ const DropdownInputField: FC<DropdownInputFieldProps> = ({
   const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     onValueChange(event.target.value);
   };
+
 
   return (
     <div>
@@ -52,5 +55,5 @@ const DropdownInputField: FC<DropdownInputFieldProps> = ({
   );
 };
 
-export default DropdownInputField;
 
+export default DropdownInputField;

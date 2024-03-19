@@ -2,7 +2,7 @@ import { FC, useEffect, useState } from "react";
 import "./style.css";
 import InputField from "@/components/fields/input-field";
 import UploadButton from "@/components/buttons/upload-button";
-import DropdownInputField from "@/components/fields/dropdown-sub-input-field";
+import DropdownInputField from "@/components/fields/dropdown-input-field";
 import { PlusIcon } from "@/components/icons/plus-icon";
 import InputFieldNum from "@/components/fields/InputFieldNum";
 
@@ -16,18 +16,33 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
 
   const [moduleName, setModuleName] = useState<string[]>([]);
   const [moduleNo, setModuleNo] = useState<number[]>([]);
-  const [files, setFiles] = useState<FileList | null>(null); 
+  const [files, setFiles] = useState<FileList | null>(null);
   const [courseCode, setCourseCode] = useState<string>("");
+  const [modules, setModules] = useState([
+    { moduleNo: "", moduleName: "", assessmentType: "", assessmentName: "" },
+  ]);
+  const [assessment, setAssessment] = useState([
+    { assessmentType: "", assessmentName: "" },
+  ]);
+  const handleAddModule = () => {
+    setModules([
+      ...modules,
+      { moduleNo: "", moduleName: "", assessmentType: "", assessmentName: "" },
+    ]);
+  };
+  const handleAddAssessment = () => {
+    setAssessment([...assessment, { assessmentType: "", assessmentName: "" }]);
+  };
 
   // const uploadFile = async () => {
   //   try {
-  //     if (!files) return; 
+  //     if (!files) return;
 
   //     const formData = new FormData();
   //     formData.append("moduleName", moduleName.toString());
   //     formData.append("moduleNo", moduleNo.toString());
   //     for (let i = 0; i < files.length; i++) {
-  //       formData.append("files", files[i]); 
+  //       formData.append("files", files[i]);
   //     }
   //     formData.append("courseCode", courseCode);
 
@@ -53,7 +68,7 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
   const uploadFile = async () => {
     try {
       if (!files) return;
-  
+
       const formData = new FormData();
       formData.append("moduleName", moduleName.toString());
       formData.append("moduleNo", moduleNo.toString());
@@ -61,12 +76,15 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
         formData.append("files", files[i]);
       }
       formData.append("courseCode", courseCode);
-  
-      const response = await fetch("http://localhost:8000/api/admin/dashboard/uploadFile/B01", {
-        method: "PUT",
-        body: formData, 
-      });
-  
+
+      const response = await fetch(
+        "http://localhost:8000/api/admin/dashboard/uploadFile/B01",
+        {
+          method: "PUT",
+          body: formData,
+        }
+      );
+
       if (response.status === 200) {
         const data = await response.json();
         console.log(data);
@@ -75,7 +93,7 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
       console.log(error);
     }
   };
-  
+
   useEffect(() => {
     console.log("moduleName:", moduleName);
     console.log("moduleNo:", moduleNo);
@@ -108,74 +126,171 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
         </div>
       </div>
       <div className="module-div-section2">
-        <div className="module-input">
-        <div className="module-input-number">
-  <label htmlFor="">Module Number</label>
-  <InputFieldNum
-      moduleNum={moduleNo}
-      onChange={(newModuleNum: number[]) => handleChangeModuleNum(newModuleNum)}
-    />
-</div>
-          <div className="module-input-name">
-            <label htmlFor="">Module Name</label>
-            <InputField 
-                moduleName={moduleName}
-                onChange={(newModuleName: string[]) => handleChangeModuleName(newModuleName)}/>
-          </div>
-          <div className="module-input-uplaod-btn">
-        <UploadButton upload={"Upload Course Material"} onFileSelect={setFiles} uploadFile={uploadFile}/>
-      </div>
-        </div>
-        {/* <div className="module-input">
-          <div className="module-input-number">
-            <label htmlFor="">Select Assessment Type</label>
-            <DropdownInputField />
-          </div>
-          <div className="module-input-name">
-            <label htmlFor="">Module Name</label>
-            <InputField />
-          </div>
-          <div className="module-input-uplaod-btn">
-            <UploadButton upload={"Upload Assessment"}/>
-          </div>
-        </div> */}
-        <button>
+        {modules.map((module, index) => (
+          <>
+            <div className="module-input">
+              <div className="module-input-number">
+                <label htmlFor="" className="module-container-labels">
+                  Module Number
+                </label>
+                <InputFieldNum
+                  moduleNum={moduleNo}
+                  onChange={(newModuleNum: number[]) =>
+                    handleChangeModuleNum(newModuleNum)
+                  }
+                />
+              </div>
+              <div className="module-input-name">
+                <label htmlFor="" className="module-container-labels">
+                  Module Name
+                </label>
+                <InputField
+                  moduleName={moduleName}
+                  onChange={(newModuleName: string[]) =>
+                    handleChangeModuleName(newModuleName)
+                  }
+                />
+              </div>
+              <div className="module-input-uplaod-btn">
+                <UploadButton
+                  upload={"Upload Course Material"}
+                  onFileSelect={setFiles}
+                  uploadFile={uploadFile}
+                  acceptedTypes=".mp4,.ppt,.pdf"
+                  formatText={"File Format: mp4, ppt, pdf "}
+                />
+              </div>
+            </div>
+            <div className="module-input">
+              <div className="module-input-number">
+                <label htmlFor="" className="module-container-labels">
+                  Select Assessment Type
+                </label>
+                <DropdownInputField
+                  value={""}
+                  onValueChange={function (selectedCategory: string): void {
+                    throw new Error("Function not implemented.");
+                  } }
+                  option1={"Competency-Based Skills"}
+                  option2={"Medical"}
+                  option3={"Marketing"}
+                  option4={"Personal Development"}
+                  option5={"Classroom Training"}           />
+              </div>
+              <div className="module-input-name">
+                <label htmlFor="" className="module-container-labels">
+                  Module Name
+                </label>
+                <InputField
+                  moduleName={[]}
+                  onChange={function (newModuleName: string[]): void {
+                    throw new Error("Function not implemented.");
+                  }}
+                />
+              </div>
+              <div className="module-input-uplaod-btn">
+                <UploadButton
+                  upload={"Upload Assessment"}
+                  onFileSelect={function (files: FileList | null): void {
+                    throw new Error("Function not implemented.");
+                  }}
+                  uploadFile={undefined}
+                  acceptedTypes=".xls"
+                  formatText={"File Format: xls"}
+                />
+              </div>
+            </div>
+          </>
+        ))}
+        <button className="module-sec-add-module-btn" onClick={handleAddModule}>
           <PlusIcon />
           Add Module
         </button>
       </div>
       <div className="module-div-section3">
-        <div className="module-radio-selction">
-          <div className="module-course-assessment">Course Assessment</div>
-          <div className="module-radio-btns">
-            <input type="radio" id="preAccessment" value="Pre Assessment" /> {" "}
-            <label htmlFor="preAccessment">Pre Assessment</label>
-            <input
-              type="radio"
-              id="postAccessment"
-              value="Post Assessment"
-            />  <label htmlFor="postAccessment">Post Assessment</label>
-          </div>
-        </div>
-        {/* <div className="module-input">
-          <div className="module-input-number">
-            <label htmlFor="">Select Assessment Type</label>
-            <DropdownInputField />
-          </div>
-          <div className="module-input-name">
-            <label htmlFor="">Module Name</label>
-            <InputField />
-          </div>
-          <div className="module-input-uplaod-btn">
-            <UploadButton upload={"Upload Assessment"} />
-          </div>
-        </div> */}
-        <button>
+        {assessment.map((assessment, index) => (
+          <>
+            <div className="module-radio-selction">
+              <div className="module-course-assessment">Course Assessment</div>
+              <div className="module-radio-btns">
+                <input
+                  type="radio"
+                  className="module-assessment-radio-btn"
+                  id="preAccessment"
+                  value="Pre Assessment"
+                />
+                <label
+                  htmlFor="preAccessment"
+                  className="module-container-labels"
+                >
+                  Pre Assessment
+                </label>
+              </div>
+              <div className="module-radio-btns">
+                <input
+                  type="radio"
+                  className="module-assessment-radio-btn"
+                  id="postAccessment"
+                  value="Post Assessment"
+                />
+
+                <label
+                  htmlFor="postAccessment"
+                  className="module-container-labels"
+                >
+                  Post Assessment
+                </label>
+              </div>
+            </div>
+            <div className="module-input">
+              <div className="module-input-number">
+                <label htmlFor="" className="module-container-labels">
+                  Select Assessment Type
+                </label>
+                <DropdownInputField
+                  value={""}
+                  onValueChange={function (selectedCategory: string): void {
+                    throw new Error("Function not implemented.");
+                  } }
+                  option1={""}
+                  option2={""}
+                  option3={""}
+                  option4={""} option5={""}                />
+              </div>
+              <div className="module-input-name">
+                <label htmlFor="" className="module-container-labels">
+                  Module Name
+                </label>
+                <InputField
+                  moduleName={[]}
+                  onChange={function (newModuleName: string[]): void {
+                    throw new Error("Function not implemented.");
+                  }}
+                />
+              </div>
+              <div className="module-input-uplaod-btn">
+                <UploadButton
+                  upload={"Upload Assessment"}
+                  onFileSelect={function (files: FileList | null): void {
+                    throw new Error("Function not implemented.");
+                  }}
+                  uploadFile={undefined}
+                  acceptedTypes=".xls"
+                  formatText={"File Format: xls"}
+                />
+              </div>
+            </div>
+          </>
+        ))}
+        <button
+          className="module-sec-add-module-btn"
+          onClick={handleAddAssessment}
+        >
           <PlusIcon />
-          Add Module
+          Add Assessment
         </button>
       </div>
-      <button>Save as Draft</button>
+      <button className="module-save-as-draft-btn">Save as Draft</button>
     </section>
   );
 };

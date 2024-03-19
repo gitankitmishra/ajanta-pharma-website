@@ -29,19 +29,25 @@ const UploadStepSection: FC<UploadStepSectionProps> = () => {
             <label htmlFor="" className="upload-section-labels">
               Category
             </label>
-            <InputField readOnly />
+            <InputField readOnly moduleName={[]} onChange={function (newModuleName: string[]): void {
+              throw new Error("Function not implemented.");
+            } } />
           </div>
           <div className="upload-section1-div-sections">
             <label htmlFor="" className="upload-section-labels">
               Training
             </label>
-            <InputField readOnly />
+            <InputField readOnly moduleName={[]} onChange={function (newModuleName: string[]): void {
+              throw new Error("Function not implemented.");
+            } } />
           </div>
           <div className="upload-section1-div-sections">
             <label htmlFor="" className="upload-section-labels">
               Course Code & Name
             </label>
-            <InputField readOnly />
+            <InputField readOnly moduleName={[]} onChange={function (newModuleName: string[]): void {
+              throw new Error("Function not implemented.");
+            } } />
           </div>
         </div>
         <div className="upload-div-section2">
@@ -51,7 +57,11 @@ const UploadStepSection: FC<UploadStepSectionProps> = () => {
           <input type="text" className="upload-learning-objective-input" />
         </div>
         <div className="upload-div-section3">
-          <DateInputField />
+          <DateInputField startDate={""} endDate={""} onStartDateChange={function (value: string): void {
+            throw new Error("Function not implemented.");
+          } } onEndDateChange={function (value: string): void {
+            throw new Error("Function not implemented.");
+          } } />
         </div>
       </div>
       <div className="upload-div-section">
@@ -60,13 +70,17 @@ const UploadStepSection: FC<UploadStepSectionProps> = () => {
             <label htmlFor="" className="upload-section-labels">
               Module Number
             </label>
-            <InputField readOnly />
+            <InputField readOnly moduleName={[]} onChange={function (newModuleName: string[]): void {
+              throw new Error("Function not implemented.");
+            } } />
           </div>
           <div className="upload-section2-div-sections">
             <label htmlFor="" className="upload-section-labels">
               Module Name
             </label>
-            <InputField readOnly />
+            <InputField readOnly moduleName={[]} onChange={function (newModuleName: string[]): void {
+              throw new Error("Function not implemented.");
+            } } />
           </div>
           <div className="upload-section2-uploaded-file">
             <div className="uploaded-video-file">
@@ -84,13 +98,17 @@ const UploadStepSection: FC<UploadStepSectionProps> = () => {
             <label htmlFor="" className="upload-section-labels">
               Module Number
             </label>
-            <InputField readOnly />
+            <InputField readOnly moduleName={[]} onChange={function (newModuleName: string[]): void {
+              throw new Error("Function not implemented.");
+            } } />
           </div>
           <div className="upload-section2-div-sections">
             <label htmlFor="" className="upload-section-labels">
               Module Name
             </label>
-            <InputField readOnly />
+            <InputField readOnly moduleName={[]} onChange={function (newModuleName: string[]): void {
+              throw new Error("Function not implemented.");
+            } } />
           </div>
           <div className="upload-section2-uploaded-file">
             <div className="uploaded-video-file">
@@ -106,7 +124,7 @@ const UploadStepSection: FC<UploadStepSectionProps> = () => {
         <div className="upload-section2-course-assessment">
           <p className="upload-course-assessment-text">Course Assessment </p>
           <div>
-            <input type="radio" id="assessment" />
+            <input type="radio" id="assessment" className="upload-assesment-radio-btn"/>
             <label htmlFor="assessment" className="upload-selected-assessment">
               Post Assessment
             </label>
@@ -117,13 +135,17 @@ const UploadStepSection: FC<UploadStepSectionProps> = () => {
             <label htmlFor="" className="upload-section-labels">
               Assessment Number
             </label>
-            <InputField readOnly />
+            <InputField readOnly moduleName={[]} onChange={function (newModuleName: string[]): void {
+              throw new Error("Function not implemented.");
+            } } />
           </div>
           <div className="upload-section2-div-sections">
             <label htmlFor="" className="upload-section-labels">
               Assessment Name
             </label>
-            <InputField readOnly />
+            <InputField readOnly moduleName={[]} onChange={function (newModuleName: string[]): void {
+              throw new Error("Function not implemented.");
+            } } />
           </div>
         </div>
       </div>
@@ -152,12 +174,12 @@ const UploadStepSection: FC<UploadStepSectionProps> = () => {
 
             <Checkbox text={"SO"} />
           </div>
-          <div className="upload-btn-section">
+          {/* <div className="upload-btn-section">
             <PreviousButton text={"Previous"} />
             <div onClick={handleUploadClick}>
               <NextButton text={"Upload"} />
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
      

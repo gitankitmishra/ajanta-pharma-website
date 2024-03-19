@@ -1,12 +1,21 @@
-"use client"
+"use client";
+
 import React, { FC, useEffect, useState } from "react";
+
 import "./style.css";
+
 import DateInputField from "@/components/fields/start-date-input-field";
+
 import PreviousButton from "@/components/buttons/previous-button";
+
 import NextButton from "@/components/buttons/next-button";
+
 import Link from "next/link";
+
 import InputFieldString from "@/components/fields/string-input-field";
+
 import DropdownInputField from "@/components/fields/dropdown-input-field";
+
 import DropdownSubInputField from "@/components/fields/dropdown-sub-input-field";
 
 interface BasicStepSectionProps {
@@ -15,82 +24,119 @@ interface BasicStepSectionProps {
 
 interface FormData {
   category: string;
+
   trainingType: string;
+
   courseCode: string;
+
   courseName: string;
+
   learningObjectives: string;
+
   startDate: string;
+
   endDate: string;
 }
 
 const BasicStepSection: FC<BasicStepSectionProps> = ({ onCategoryChange }) => {
   const [formData, setFormData] = useState<FormData>({
     category: "Competency-Based Skills",
+
     trainingType: "",
+
     courseCode: "",
+
     courseName: "",
+
     learningObjectives: "",
+
     startDate: "",
+
     endDate: "",
   });
 
   const handleChange = (field: keyof FormData, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
+
     if (field === "category") {
-      onCategoryChange(value); 
-      localStorage.setItem("category",value);
+      onCategoryChange(value);
+
+      localStorage.setItem("category", value);
     }
   };
+
   useEffect(() => {
     localStorage.setItem("category", "Competency-Based Skills");
   }, []);
+
   useEffect(() => {
     switch (formData.category) {
       case "Competency-Based Skills":
-        setFormData((prev) => ({ ...prev, trainingType: "Business Orientation" }));
+        setFormData((prev) => ({
+          ...prev,
+          trainingType: "Business Orientation",
+        }));
+
         break;
+
       case "Medical":
         setFormData((prev) => ({ ...prev, trainingType: "Medical" }));
+
         break;
+
       case "Marketing":
         setFormData((prev) => ({ ...prev, trainingType: "Brand Detailing" }));
+
         break;
+
       case "Personal Development":
         setFormData((prev) => ({ ...prev, trainingType: "Communication" }));
+
         break;
+
       case "Classroom Training":
-        setFormData((prev) => ({ ...prev, trainingType: "Medical Representative" }));
+        setFormData((prev) => ({
+          ...prev,
+          trainingType: "Medical Representative",
+        }));
+
         break;
+
       default:
         break;
     }
   }, [formData.category]);
-  
+
   const handleCourseCodeAndNameChange = (value: string) => {
     // Remove leading and trailing spaces from the input value
+
     const trimmedValue = value;
-  
+
     // Split the trimmed value into code and name parts
+
     const [code, ...nameParts] = trimmedValue.split(" ");
-  
+
     // Update the state with the trimmed code and the remaining name parts
+
     setFormData((prev) => ({
       ...prev,
+
       courseCode: code,
+
       courseName: nameParts.join(" "),
     }));
-  
-    
   };
-  
 
   const handleDraftSave = () => {
     // Call API to save form data as draft
+
     fetch("http://localhost:8000/api/admin/dashboard/publishBasicInfo", {
       method: "POST",
+
       headers: {
         "Content-Type": "application/json",
       },
+
       body: JSON.stringify({
         basicInfo: { ...formData, isActive: false, publishDate: new Date() },
       }),
@@ -98,31 +144,43 @@ const BasicStepSection: FC<BasicStepSectionProps> = ({ onCategoryChange }) => {
       .then((response) => {
         if (response.status === 200) {
           // If response status is 200, reset the state to initial values
+
           setFormData({
             category: "Competency-Based Skills",
+
             trainingType: "",
+
             courseCode: "",
+
             courseName: "",
+
             learningObjectives: "",
+
             startDate: "",
+
             endDate: "",
           });
+
           console.log("Draft saved:", response);
         }
+
         return response.json();
       })
+
       .then((data) => {
         // Display alert with the appropriate message
+
         alert(data.message);
+
         // Optionally handle success response
       })
+
       .catch((error) => {
         console.error("Error saving draft:", error);
+
         // Optionally handle error
       });
   };
-  
-
 
   useEffect(() => {
     console.log("Form Data:", formData);
@@ -135,6 +193,7 @@ const BasicStepSection: FC<BasicStepSectionProps> = ({ onCategoryChange }) => {
           <label htmlFor="" className="basic-section-labels">
             Select Category
           </label>
+
           <DropdownInputField
             value={formData.category}
             onValueChange={(value) => handleChange("category", value)}
@@ -145,20 +204,24 @@ const BasicStepSection: FC<BasicStepSectionProps> = ({ onCategoryChange }) => {
             option5={"Classroom Training"}
           />
         </div>
+
         <div className="basic-section1-div-sections">
           <label htmlFor="" className="basic-section-labels">
             Select trainingType
           </label>
+
           <DropdownSubInputField
             value={formData.trainingType}
             onValueChange={(value) => handleChange("trainingType", value)}
             selectedCategory={formData.category} // Pass the selected category
           />
         </div>
+
         <div className="basic-section1-div-sections">
           <label htmlFor="" className="basic-section-labels">
             Course Code & Name
           </label>
+
           <InputFieldString
             className="input-field"
             value={formData.courseCode + " " + formData.courseName}
@@ -166,16 +229,19 @@ const BasicStepSection: FC<BasicStepSectionProps> = ({ onCategoryChange }) => {
           />
         </div>
       </div>
+
       <div className="basic-div-section2">
         <label htmlFor="" className="basic-section-labels">
           Learning Objective
         </label>
+
         <InputFieldString
           className="basic-learning-objective-input"
           value={formData.learningObjectives}
           onChange={(value) => handleChange("learningObjectives", value)}
         />
       </div>
+
       <div className="basic-div-section3">
         <DateInputField
           startDate={formData.startDate}
@@ -184,16 +250,18 @@ const BasicStepSection: FC<BasicStepSectionProps> = ({ onCategoryChange }) => {
           onEndDateChange={(value) => handleChange("endDate", value)}
         />
       </div>
-      <div className="basic-div-section4">
+
+      {/* <div className="basic-div-section4">
         <Link href="/admin/admin-courses">
-          <PreviousButton text={"Discard"} />
-        </Link>
-        <button className="draft-button" onClick={handleDraftSave}>
-          Save as Draft
-        </button>
+        <PreviousButton text={"Discard"} />
+        </Link> */}
         
-        <NextButton text={"Next"}   />
-      </div>
+        <button className="basic-draft-button" onClick={handleDraftSave}>
+            Save as Draft
+          </button>
+{/* 
+        <NextButton text={"Next"} />
+      </div> */}
     </section>
   );
 };
