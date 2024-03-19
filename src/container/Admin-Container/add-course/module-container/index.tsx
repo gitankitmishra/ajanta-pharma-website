@@ -6,6 +6,11 @@ import DropdownInputField from "@/components/fields/dropdown-input-field";
 import { PlusIcon } from "@/components/icons/plus-icon";
 
 interface ModuleQuizStepSectionProps {}
+interface ModuleData {
+  moduleName: string;
+  moduleNo: string;
+  files: FileList | null;
+}
 
 const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
 
@@ -13,34 +18,50 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
   const [moduleNo, setModuleNo] = useState<string[]>([]);
   const [files, setFiles] = useState<FileList | null>(null);
   const [courseCode, setCourseCode] = useState<string>("");
-  const [modules, setModules] = useState([
-    { moduleNo: "", moduleName: "", assessmentType: "", assessmentName: "" },
+  const [moduleData, setModuleData] = useState<ModuleData[]>([
+    { moduleName: "", moduleNo: "", files: null }
   ]);
   const [assessment, setAssessment] = useState([
     { assessmentType: "", assessmentName: "" },
   ]);
+  const handleChange = (newModuleData: ModuleData[]) => {
+    console.log("--------------------g",moduleData);
+    setModuleData(newModuleData);
+  };
+
   const handleAddModule = () => {
-    setModules([
-      ...modules,
-      { moduleNo: "", moduleName: "", assessmentType: "", assessmentName: "" },
-    ]);
+    setModuleData([...moduleData, { moduleName: "", moduleNo: "", files: null }]);
   };
   const handleAddAssessment = () => {
     setAssessment([...assessment, { assessmentType: "", assessmentName: "" }]);
   };
 
   const uploadFile = async () => {
+    console.log("----------------");
+    
     try {
       if (!files) return;
-
+  
       const formData = new FormData();
-      formData.append("moduleName", moduleName.toString());
-      formData.append("moduleNo", moduleNo.toString());
-      for (let i = 0; i < files.length; i++) {
-        formData.append("files", files[i]);
-      }
+      
+      moduleData.forEach((module) => {
+        console.log("Adding module data:", module);
+        formData.append("moduleName", module.moduleName);
+        formData.append("moduleNo", module.moduleNo);
+        if (module.files) {
+          for (let i = 0; i < module.files.length; i++) {
+            console.log("Adding file:", module.files[i]);
+            formData.append("files", module.files[i]); // Incorrect
+            formData.append("files", module.files[i], module.files[i].name); // Correct way to append file
+          }
+        }
+        
+        
+      });
+      
       formData.append("courseCode", courseCode);
-
+      console.log("form data",formData);
+  
       const response = await fetch(
         "http://localhost:8000/api/admin/dashboard/uploadFile/B01",
         {
@@ -48,15 +69,17 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
           body: formData,
         }
       );
-
+  
       if (response.status === 200) {
         const data = await response.json();
+        console.log("Upload successful:", data);
         console.log(data);
       }
     } catch (error) {
       console.log(error);
     }
   };
+  
 
   useEffect(() => {
     console.log("moduleName:", moduleName);
@@ -105,6 +128,11 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
       console.log(error);
     }
   }
+
+
+  useEffect(() => {
+    console.log("Module Data ->", moduleData);
+  },[moduleData])
   
   const handleChangeAssessmentType = (assessmentType: string[]) => {
     setassessmentFileType(assessmentType);
@@ -220,9 +248,7 @@ const handleFileTypeChange = (value: string) => {
  // Modify mergeApi function to pass a callback to each function
  const mergeApi = () => {
   console.log("calling the 1st");
-  setTimeout(() => {
-    uploadFile().then(checkCompletion);
-  }, 2000);
+  uploadFile()
 
   // setTimeout(() => {
   //   uploadAssessment().then(checkCompletion);
@@ -259,31 +285,28 @@ const checkCompletion = () => {
           <p className="module-category-type-text">BO1 - Problem Solving</p>
         </div>
       </div>
+      <button className="module-save-as-draft-btn" onClick={uploadFile}>Save as Draft</button>
+
       <div className="module-div-section2">
-        {modules.map((module, index) => (
+        {moduleData.map((module, index) => (
           <>
             <div className="module-input">
               <div className="module-input-number">
                 <label htmlFor="" className="module-container-labels">
                   Module Number
                 </label>
-                <InputField
-                   moduleName={moduleNo}
-                   onChange={(newModuleNo: string[]) =>
-                    handleChangeModuleNum(newModuleNo)
-                   }
-                />
+                <InputField moduleData={moduleData} onChange={handleChange} />
               </div>
               <div className="module-input-name">
                 <label htmlFor="" className="module-container-labels">
                   Module Name
                 </label>
-                <InputField
+                {/* <InputField
                   moduleName={moduleName}
                   onChange={(newModuleName: string[]) =>
                     handleChangeModuleName(newModuleName)
                   }
-                />
+                /> */}
               </div>
               <div className="module-input-uplaod-btn">
                 <UploadButton
@@ -317,12 +340,12 @@ const checkCompletion = () => {
                 <label htmlFor="" className="module-container-labels">
                   Module Name
                 </label>
-                <InputField
+                {/* <InputField
                   moduleName={[]}
                   onChange={function (newModuleName: string[]): void {
                     throw new Error("Function not implemented.");
                   }}
-                />
+                /> */}
               </div>
               <div className="module-input-uplaod-btn">
                 <UploadButton
@@ -397,12 +420,12 @@ const checkCompletion = () => {
                 <label htmlFor="" className="module-container-labels">
                   Module Name
                 </label>
-                <InputField
+                {/* <InputField
                   moduleName={[]}
                   onChange={function (newModuleName: string[]): void {
                     throw new Error("Function not implemented.");
                   }}
-                />
+                /> */}
               </div>
               <div className="module-input-uplaod-btn">
                 <UploadButton
@@ -415,6 +438,7 @@ const checkCompletion = () => {
                   formatText={"File Format: xls"}
                 />
               </div>
+              
             </div>
           </>
         ))}
@@ -425,8 +449,8 @@ const checkCompletion = () => {
           <PlusIcon />
           Add Assessment
         </button>
+
       </div>
-      <button className="module-save-as-draft-btn" onClick={uploadFile}>Save as Draft</button>
     </section>
   );
 };
