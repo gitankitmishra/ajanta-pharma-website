@@ -140,11 +140,11 @@ const DesignationStepSection: FC<DesignationStepSectionProps> = ({
           <Checkbox text={"DM"} onChange={handleDesignation} />
           <Checkbox text={"SO"} onChange={handleDesignation} />
         </div>
-        <div className="designation-btn-section">
-          <PreviousButton text={"Previous"} />
-          <button onClick={publishDesignation}>Publish</button>
-          <NextButton text={"Next"} />
-        </div>
+        {/* <div className="designation-btn-section">
+          <PreviousButton text={"Previous"} /> */}
+          <button className="designation-public-btn" onClick={publishDesignation}>Publish</button>
+          {/* <NextButton text={"Next"} />
+        </div> */}
 
       {/* <div className="designation-btn-section">
         <PreviousButton text={"Previous"}/>
