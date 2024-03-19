@@ -52,9 +52,25 @@
   gap: 24px;
   margin-top: 12px;
 }
+
+
+/* Jugaaaaaaaaaaad started */
+/* Temporay jugad needed to be correct */
+.basic-div-section3{
+  position: relative;
+}
+/* Temporay jugad needed to be correct */
+
+.draft-button-placement{
+  position: absolute;
+  top: 10px;
+  left: 700px;
+}
+/* Jugaaaaaaaaaad ended */
+
 .basic-draft-button {
   position: relative;
-  top: 9px;
+  top: 38px;
   left: 20.5vw;
   width: 10.5rem;
   height: 2.875rem;
