@@ -2,8 +2,9 @@
   display: none;
   position: fixed;
   z-index: 9999;
-  left: 30%;
-  top: 25%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   width: 676px;
   height: 409px;
   border-radius: 12px;

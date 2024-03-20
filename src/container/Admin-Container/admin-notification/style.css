@@ -62,3 +62,8 @@
 .notification-section-date-and-time {
   text-align: center;
 }
+.admin-notification-pagination{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

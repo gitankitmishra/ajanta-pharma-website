@@ -1,7 +1,9 @@
-import { FC } from "react";
+"use client";
+import { FC, useState } from "react";
 import "./style.css";
 import Link from "next/link";
 import AddButton from "@/components/buttons/add-button";
+import CustomPagination from "@/components/pagination";
 
 interface AdminNotificationContainerProps {}
 interface Notification {
@@ -12,6 +14,12 @@ interface Notification {
 }
 
 const AdminNotificationContainer: FC<AdminNotificationContainerProps> = () => {
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+    // Add logic here to fetch data for the new page, etc.
+  };
   // Array of notifications
   const notifications: Notification[] = [
     {
@@ -28,13 +36,8 @@ const AdminNotificationContainer: FC<AdminNotificationContainerProps> = () => {
       date: "Yesterday",
       time: "16:14",
     },
-    {
-      boldText: "Lorem ipsum dolor sit amet, consectetu",
-      summaryText:
-        "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quod sit nisi est facere dignissimos hic, nobis sapiente architecto totam sunt!",
-      date: "21/2/24",
-      time: "18:14",
-    },
+    
+    
   ];
 
   // Function to get the current date in the format "Today" -------Ankita
@@ -92,6 +95,13 @@ const AdminNotificationContainer: FC<AdminNotificationContainerProps> = () => {
           </div>
         </div>
       ))}
+      <div className="admin-notification-pagination">
+        {" "}
+        <CustomPagination
+          currentPage={currentPage}
+          onPageChange={handlePageChange}
+        />
+      </div>
     </section>
   );
 };
