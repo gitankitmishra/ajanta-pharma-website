@@ -4,13 +4,16 @@ import UncoloredAjantaLogo from "@/public/images/uncoloured-logo.svg";
 import SuccessPng from "@/components/icons/successIcon.svg";
 
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 interface SuccessPopupProps {
   open: boolean;
   onClose: () => void;
+  text:string;
 }
 
-const SuccessPopup: FC<SuccessPopupProps> = ({ open, onClose }) => {
+const SuccessPopup: FC<SuccessPopupProps> = ({ open, onClose,text }) => {
+  const router = useRouter();
   useEffect(() => {
     let timer: NodeJS.Timeout;
 
@@ -18,6 +21,7 @@ const SuccessPopup: FC<SuccessPopupProps> = ({ open, onClose }) => {
       // Set a timer to close the popup after 2 seconds
       timer = setTimeout(() => {
         onClose();
+        router.push("/admin/admin-notification");
       }, 2000);
     }
 
@@ -35,7 +39,7 @@ const SuccessPopup: FC<SuccessPopupProps> = ({ open, onClose }) => {
       </div>
       <div className="success-popup-texts">
         <p className="success-popup-text">
-          Course has been updated successfully{" "}
+         {text}
         </p>
         <p className="success-popup-second-text">Thank You!</p>
       </div>
