@@ -1,6 +1,4 @@
 "use client";
-import Pagination from "@/components/pagination";
-import AdminCourseList from "@/components/tables/courseListTable";
 import AdminCoursesHeroSection from "@/container/Admin-Container/admin-courses-container/admin-courses-hero-section";
 import AdminCoursesTableSection from "@/container/Admin-Container/admin-courses-container/admin-courses-table-section";
 import { FC, useState } from "react";

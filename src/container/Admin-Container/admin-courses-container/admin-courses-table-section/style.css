@@ -1,0 +1,20 @@
+.admin-courses-text-btn-section {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 40px;
+}
+.admin-courses-add-course-btn a {
+  text-decoration: none;
+}
+.admin-courses-course-list-text {
+  color: #1c1d1d;
+  font-size: 24px;
+  font-weight: 500;
+  text-decoration: underline;
+}
+.admin-courses-pagination-section {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
