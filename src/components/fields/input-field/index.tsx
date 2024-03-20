@@ -1,11 +1,12 @@
-import { FC, ChangeEvent } from "react";
+import { FC, ChangeEvent, useEffect, useState } from "react";
 import "./style.css";
 
 interface InputFieldProps {
-  moduleData: { moduleName: string; moduleNo: string; files: FileList | null }[];
-  index: number;
-  onChange: (newModuleData: { moduleName: string; moduleNo: string; files: FileList | null }[]) => void;
+  moduleValue: string[];
+  onChange: (newModuleName: string[]) => void;
+  readOnly?: boolean;
 }
+
 
 const InputField: FC<InputFieldProps> = ({ moduleData, index, onChange}) => {
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -37,9 +38,24 @@ const InputField: FC<InputFieldProps> = ({ moduleData, index, onChange}) => {
           type="text"
           name={`moduleName-${index}`}
           value={moduleData[index]?.moduleName}
+
+const InputField: FC<InputFieldProps> = ({readOnly = false, moduleValue, onChange}) => {
+    
+    const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+      const newValue = event.target.value;
+      onChange([newValue]);
+    };
+  return <div>
+     <input
+          className="input-field"
+          type="text"
+          value={moduleValue?.length > 0 ? moduleValue[0] : ''} 
+
           onChange={handleChange}
-          placeholder="Module Name"
+          placeholder=""
+          readOnly={readOnly}
         />
+
         <input
           className="input-field"
           type="text"
@@ -59,5 +75,12 @@ const InputField: FC<InputFieldProps> = ({ moduleData, index, onChange}) => {
     </div>
   );
 };
+
+  </div>;
+
+  
+}
+
+
 
 export default InputField;
