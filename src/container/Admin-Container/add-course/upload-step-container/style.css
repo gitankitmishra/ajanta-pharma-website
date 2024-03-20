@@ -137,12 +137,38 @@
   font-weight: 400;
   line-height: 28px;
 }
+.input-field-1 {
+  width: 87% !important;
+  height: 1.7rem;
+  border-radius: 8px;
+  background: rgba(254, 129, 0, 0.1);
+  border: none;
+  outline: none;
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.16);
+  padding: 1rem 1.5rem;
+  /* text styling */
+  color: #1c1d1d;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 24px;
+}
 
-/* .upload-checkbox {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  } */
+.input-field-2 {
+  width: 139% !important;
+  height: 1.7rem;
+  border-radius: 8px;
+  background: rgba(254, 129, 0, 0.1);
+  border: none;
+  outline: none;
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.16);
+  padding: 1rem 1.5rem;
+  /* text styling */
+  color: #1c1d1d;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 24px;
+}
+
 .upload-checkbox-section {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
@@ -161,4 +187,13 @@
   justify-content: center;
   gap: 24px;
   margin-top: 46px;
+}
+
+.upload-div-section3 {
+  display: flex;
+  align-items: center;
+}
+
+.date-input-row {
+  margin-right: 191px; 
 }

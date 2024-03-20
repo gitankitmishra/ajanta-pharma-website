@@ -7,29 +7,25 @@ interface InputFieldProps {
   onChange: (newModuleData: { moduleName: string; moduleNo: string; files: FileList | null }[]) => void;
 }
 
-const InputField: FC<InputFieldProps> = ({ moduleData, index, onChange }) => {
+const InputField: FC<InputFieldProps> = ({ moduleData, index, onChange}) => {
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
-    const newData = [...moduleData]; // Copy existing data array
+    const newData = [...moduleData];
 
-    // Update the corresponding field based on input name
     if (name.includes("moduleName")) {
       newData[index].moduleName = value;
     } else if (name.includes("moduleNo")) {
       newData[index].moduleNo = value;
     }
 
-    // Update the state with the new data
     onChange(newData);
   };
 
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const newData = [...moduleData]; // Copy existing data array
+    const newData = [...moduleData]; 
 
-    // Update files for the corresponding module
     newData[index].files = event.target.files;
 
-    // Update the state with the new data
     onChange(newData);
   };
 
@@ -40,7 +36,7 @@ const InputField: FC<InputFieldProps> = ({ moduleData, index, onChange }) => {
           className="input-field"
           type="text"
           name={`moduleName-${index}`}
-          value={moduleData[index].moduleName}
+          value={moduleData[index]?.moduleName}
           onChange={handleChange}
           placeholder="Module Name"
         />
@@ -48,7 +44,7 @@ const InputField: FC<InputFieldProps> = ({ moduleData, index, onChange }) => {
           className="input-field"
           type="text"
           name={`moduleNo-${index}`}
-          value={moduleData[index].moduleNo}
+          value={moduleData[index]?.moduleNo}
           onChange={handleChange}
           placeholder="Module Number"
         />

@@ -6,7 +6,7 @@ interface UploadButtonProps {
   upload: string;
   onFileSelect: (files: FileList | null) => void;
   uploadFile: any;
-  acceptedTypes?: string; // New prop for accepted file types
+  acceptedTypes?: string; 
   formatText: string
 }
 
@@ -14,7 +14,7 @@ const UploadButton: React.FC<UploadButtonProps> = ({ upload, onFileSelect, uploa
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleClick = () => {
-    fileInputRef.current?.click(); // Programmatically trigger file input click
+    fileInputRef.current?.click(); 
   };
 
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -27,9 +27,9 @@ const UploadButton: React.FC<UploadButtonProps> = ({ upload, onFileSelect, uploa
       <input
         type="file"
         ref={fileInputRef}
-        accept={acceptedTypes || ".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"} // Use custom accepted types if provided, otherwise default to ".xlsx"
+        accept={acceptedTypes || ".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"} 
         onChange={handleFileSelect}
-        style={{ display: "none" }} // Hide the file input
+        style={{ display: "none" }} 
       />
       <button className="upload-btn" onClick={handleClick}>{upload}</button>
       <span className="upload-btn-format-type-text">{formatText} </span>

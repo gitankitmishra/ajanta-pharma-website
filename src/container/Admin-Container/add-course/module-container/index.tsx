@@ -79,11 +79,6 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
     }
   };
 
-  // useEffect(() => {
-  //   console.log("moduleName:", moduleName);
-  //   console.log("moduleNo:", moduleNo);
-  //   console.log("files:", files);
-  // }, [moduleName, moduleNo, files]);
 
   useEffect(() => {
     console.log("Module Data ->", moduleData);
