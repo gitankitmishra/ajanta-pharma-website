@@ -4,18 +4,96 @@ import Link from "next/link";
 import AddButton from "@/components/buttons/add-button";
 
 interface AdminNotificationContainerProps {}
+interface Notification {
+  boldText: string;
+  summaryText: string;
+  date: string;
+  time: string;
+}
 
 const AdminNotificationContainer: FC<AdminNotificationContainerProps> = () => {
-  return <section className="admin-notification-main-container">
-     <div className="admin-notification-text-btn-section">
-        <p className="admin-notification-notification-list-text">Notification List</p>
+  // Array of notifications
+  const notifications: Notification[] = [
+    {
+      boldText: "Lorem ipsum dolor sit amet, consectetu",
+      summaryText:
+        "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quod sit nisi est facere dignissimos hic, nobis sapiente architecto totam sunt!",
+      date: "Today",
+      time: "16:14",
+    },
+    {
+      boldText: "Lorem ipsum dolor sit amet, consectetu",
+      summaryText:
+        "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quod sit nisi est facere dignissimos hic, nobis sapiente architecto totam sunt!",
+      date: "Yesterday",
+      time: "16:14",
+    },
+    {
+      boldText: "Lorem ipsum dolor sit amet, consectetu",
+      summaryText:
+        "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quod sit nisi est facere dignissimos hic, nobis sapiente architecto totam sunt!",
+      date: "21/2/24",
+      time: "18:14",
+    },
+  ];
+
+  // Function to get the current date in the format "Today" -------Ankita
+  const getFormattedDate = (date: string): string => {
+    const today = new Date();
+    const notificationDate = new Date(date);
+
+    if (
+      notificationDate.getDate() === today.getDate() &&
+      notificationDate.getMonth() === today.getMonth() &&
+      notificationDate.getFullYear() === today.getFullYear()
+    ) {
+      return "Today";
+    } else if (
+      notificationDate.getDate() === today.getDate() - 1 &&
+      notificationDate.getMonth() === today.getMonth() &&
+      notificationDate.getFullYear() === today.getFullYear()
+    ) {
+      return "Yesterday";
+    } else {
+      return date;
+    }
+  };
+
+  return (
+    <section className="admin-notification-main-container">
+      <div className="admin-notification-text-btn-section">
+        <p className="admin-notification-notification-list-text">
+          Notification List
+        </p>
         <div className="admin-notification-add-notification-btn">
           <Link href="/admin/admin-add-notification">
-            <AddButton text="Add Notification" />
+            <AddButton text="Add Notification" width="247px" />
           </Link>
         </div>
       </div>
-  </section>;
+      {notifications.map((notification, index) => (
+        <div
+          className={`admin-notification-user-notifications-section ${getFormattedDate(
+            notification.date
+          )}`}
+          key={index}
+        >
+          <div className="notification-section-texts">
+            <p className="admin-notification-bold-text">
+              {notification.boldText}
+            </p>
+            <p className="admin-notification-summary-text">
+              {notification.summaryText}
+            </p>
+          </div>
+          <div className="notification-section-date-and-time">
+            <p className="admin-notification-date">{notification.date}</p>
+            <div className="admin-notification-time">{notification.time}</div>
+          </div>
+        </div>
+      ))}
+    </section>
+  );
 };
 
 export default AdminNotificationContainer;

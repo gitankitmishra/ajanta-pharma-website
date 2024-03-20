@@ -3,16 +3,17 @@ import "./style.css";
 import { PlusIcon } from "@/components/icons/plus-icon";
 
 interface AddButtonProps {
-    text:string;
+  text: string;
+  width?: string;
 }
 
-const AddButton: FC<AddButtonProps> = ({text}) => {
+const AddButton: FC<AddButtonProps> = ({ text, width }) => {
   return (
     <div className="add-btn-main-section">
-      <button className="add-button">
+      <button className="add-button" style={{ width: width }}>
         {" "}
         <PlusIcon />
-       {text}
+        {text}
       </button>
     </div>
   );

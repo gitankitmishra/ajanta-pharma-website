@@ -2,15 +2,15 @@ import AdminCoursesHeroSection from "@/container/Admin-Container/admin-courses-c
 import AdminNotificationContainer from "@/container/Admin-Container/admin-notification";
 import { FC } from "react";
 
-interface AdminNotificationProps {
-    
-}
- 
+interface AdminNotificationProps {}
+
 const AdminNotification: FC<AdminNotificationProps> = () => {
-    return ( <section>
-      <AdminCoursesHeroSection/>
-     <AdminNotificationContainer/>
-    </section> );
-}
- 
+  return (
+    <section>
+      <AdminCoursesHeroSection />
+      <AdminNotificationContainer />
+    </section>
+  );
+};
+
 export default AdminNotification;
