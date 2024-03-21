@@ -1,0 +1,7 @@
+.dashboard-hero-section-main-container{
+    display: flex;
+    align-items: center;
+    gap: 10vw;
+    justify-content: space-around;
+    padding-top: 40px;
+}

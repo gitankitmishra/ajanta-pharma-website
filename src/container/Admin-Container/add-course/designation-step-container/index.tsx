@@ -47,7 +47,7 @@ const DesignationStepSection: FC<DesignationStepSectionProps> = ({
       let response;
       if (division.length > 0) {
         response = await fetch(
-          "http://localhost:8000/api/admin/dashboard/publishDesignation/B111",
+          "https://ajanta-pharma-server.vercel.app/api/admin/dashboard/publishDesignation/B111",
           {
             method: "PUT",
             headers: {
@@ -61,7 +61,7 @@ const DesignationStepSection: FC<DesignationStepSectionProps> = ({
         );
       } else {
         response = await fetch(
-          "http://localhost:8000/api/admin/dashboard/publishDesignation/B111",
+          "https://ajanta-pharma-server.vercel.app/api/admin/dashboard/publishDesignation/B111",
           {
             method: "PUT",
             headers: {
