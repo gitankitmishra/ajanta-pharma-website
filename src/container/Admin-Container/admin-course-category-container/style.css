@@ -1,0 +1,24 @@
+.admin-course-category-main-container {
+  padding: 0 40px;
+  display: flex;
+  flex-direction: column;
+}
+.admin-course-category-text-btn-section{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.admin-course-category-course-category-list-text {
+  color: #1c1d1d;
+  text-decoration: underline;
+  font-size: 24px;
+  font-weight: 500;
+}
+.admin-course-category-add-course-category-btn a{
+    text-decoration: none;
+}
+.admin-course-category-pagination{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

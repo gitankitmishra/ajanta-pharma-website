@@ -36,8 +36,6 @@ const AdminNotificationContainer: FC<AdminNotificationContainerProps> = () => {
       date: "Yesterday",
       time: "16:14",
     },
-    
-    
   ];
 
   // Function to get the current date in the format "Today" -------Ankita

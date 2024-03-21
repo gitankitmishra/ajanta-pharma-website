@@ -130,7 +130,7 @@ const BasicStepSection: FC<BasicStepSectionProps> = ({ onCategoryChange }) => {
   const handleDraftSave = () => {
     // Call API to save form data as draft
 
-    fetch("http://localhost:8000/api/admin/dashboard/publishBasicInfo", {
+    fetch("https://ajanta-pharma-server.vercel.app/api/admin/dashboard/publishBasicInfo", {
       method: "POST",
 
       headers: {

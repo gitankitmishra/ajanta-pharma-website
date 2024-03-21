@@ -1,0 +1,31 @@
+.dashboard-profile-main-section {
+  padding: 40px 40px 0 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+.dashboard-profile-welcome-text {
+  color: #fe8100;
+  font-size: 26px;
+  font-weight: 600;
+  line-height: 32px;
+  margin-bottom: 8px;
+}
+.dashboard-profile-welcome-description {
+  color: #787878;
+  font-size: 16px;
+  font-weight: 400;
+
+}
+.dashboard-profile-cards {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.dashboard-profile-added-course-text {
+  color: #1c1d1d;
+  font-size: 24px;
+  font-weight: 500;
+  text-decoration: underline;
+  margin-top: 12px;
+}
