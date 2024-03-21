@@ -1,7 +1,6 @@
 import { FC, useEffect, useState } from "react";
 import "./style.css";
 import DropdownInputField from "@/components/fields/dropdown-input-field";
-import InputField from "@/components/fields/input-field";
 import DateInputField from "@/components/fields/start-date-input-field";
 import Checkbox from "@/components/checkbox";
 import PreviousButton from "@/components/buttons/previous-button";
