@@ -1,29 +1,31 @@
-import { FC, ChangeEvent, useEffect } from "react";
+import { FC, ChangeEvent, useEffect, useState } from "react";
 import "./style.css";
 
 interface InputFieldProps {
-  moduleName: string[];
+  moduleValue: string[];
   onChange: (newModuleName: string[]) => void;
+  readOnly?: boolean;
 }
 
-const InputField: FC<InputFieldProps> = ({ moduleName, onChange }) => {
+const InputField: FC<InputFieldProps> = ({readOnly = false, moduleValue, onChange}) => {
+    
     const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
       const newValue = event.target.value;
-      onChange([newValue]); // Call the onChange callback with an array containing the new value
+      onChange([newValue]);
     };
-
-    return (
-      <div className="module-input-name">
-       
-        <input
+  return <div>
+     <input
           className="input-field"
           type="text"
-          value={moduleName[0]} 
+          value={moduleValue?.length > 0 ? moduleValue[0] : ''} 
           onChange={handleChange}
           placeholder=""
+          readOnly={readOnly}
         />
-      </div>
-    );
-};
+  </div>;
+
+  
+}
+
 
 export default InputField;
