@@ -196,13 +196,13 @@ const DesignationStepSection: FC<DesignationStepSectionProps> = ({
         </div>
       </div>
 
-      <button
+      {/* <button
         style={{ left: "40px", top: "-200px" }}
         className="designation-public-btn"
         onClick={publishDesignation}
       >
         Publish
-      </button>
+      </button> */}
 
       <div className="designation-main-div-section">
         <div className="designation-text-section">

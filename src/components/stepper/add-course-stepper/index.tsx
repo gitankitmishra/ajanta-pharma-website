@@ -22,9 +22,9 @@ const Stepper = () => {
     setCategory(value);
   };
   const [stepContent, setStepContent] = useState<StepContent>({
-    Basic: <BasicStepSection  onCategoryChange={handleCategoryChange}/>,
+    Basic: <BasicStepSection onCategoryChange={handleCategoryChange} />,
     "Module/Quiz": <ModuleQuizStepSection />,
-    Designation: <DesignationStepSection category={category}/>,
+    Designation: <DesignationStepSection category={category} />,
     Upload: <UploadStepSection />,
   });
 
@@ -40,8 +40,7 @@ const Stepper = () => {
     }
   };
   useEffect(() => {
-        console.log("categoyyyyyyyyyyyyyyyyyyyyyyyyyy",category)
-
+    console.log("categoyyyyyyyyyyyyyyyyyyyyyyyyyy", category);
   }, [category]);
   return (
     <div className="stepper-container">
@@ -81,6 +80,16 @@ const Stepper = () => {
         >
           <PreviousButton text={activeStep === 0 ? "Discard" : "Previous"} />
         </div>
+        {activeStep === 0 || activeStep === 1 || activeStep === 2 ? (
+          <div>
+            <NextButton text="Draft" />
+          </div>
+        ) : null}
+        {activeStep === 3 ? (
+          <div>
+            <NextButton text="Publish" />
+          </div>
+        ) : null}
 
         <div
           className={`${activeStep === steps.length - 1 ? "active" : ""} ${
