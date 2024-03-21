@@ -62,7 +62,7 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
       formData.append("courseCode", courseCode);
 
       const response = await fetch(
-        "http://localhost:8000/api/admin/dashboard/uploadFile/B01",
+        "https://ajanta-pharma-server.vercel.app/api/admin/dashboard/uploadFile/B01",
         {
           method: "PUT",
           body: formData,
@@ -198,7 +198,7 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
       formData.append("courseCode", courseCode);
 
       const response = await fetch(
-        "http://localhost:8000/api/admin/dashboard/uploadAssessment/B01",
+        "https://ajanta-pharma-server.vercel.app/api/admin/dashboard/uploadAssessment/B01",
         {
           method: "POST",
           body: formData,
@@ -309,7 +309,7 @@ const handleoptexcelFileSelect = (selectedFiles: FileList | null, index: number)
   
       formData.append("courseCode", courseCode);
       const response = await fetch(
-        "http://localhost:8000/api/admin/dashboard/optAssessment/B01",
+        "https://ajanta-pharma-server.vercel.app/api/admin/dashboard/optAssessment/B01",
         {
           method: "POST",
           body: formData,
