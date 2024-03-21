@@ -1,21 +1,28 @@
-/* style.css */
-
-.admin-course-list-table-main-container {
-  margin: 32px 40px;
+.admin-course-category-list-table-main-container {
+  margin: 32px 0;
   border: 1px solid #fe810080;
   border-top-left-radius: 12px;
   border-top-right-radius: 12px;
   border-bottom-left-radius: 12px;
   border-bottom-right-radius: 12px;
 }
-
-.admin-course-list-table {
+.admin-course-category-list-table {
   width: 100%;
   border-radius: 8px;
   border-collapse: collapse;
 }
+.admin-course-category-list-table:first-child {
+  border-top-left-radius: 12px;
+}
+.admin-course-category-list-table:last-child {
+  border-top-right-radius: 12px;
+}
 
-.admin-course-list-table-head {
+.admin-course-category-list-table:last-child {
+  border: none;
+}
+
+.admin-course-category-list-table-head {
   background-color: #fe81001a;
   color: #1c1d1d;
   font-size: 18px;
@@ -26,18 +33,8 @@
   text-align: left;
   border-right: 1px solid #e3e3e3;
 }
-.admin-course-list-table-head:first-child {
-  border-top-left-radius: 12px;
-}
-.admin-course-list-table-head:last-child {
-  border-top-right-radius: 12px;
-}
 
-.admin-course-list-table-head:last-child {
-  border: none;
-}
-
-.admin-course-list-table-data {
+.admin-course-category-list-table-data {
   color: #1c1d1d;
   font-size: 16px;
   font-weight: 400;
@@ -48,13 +45,19 @@
   border-right: 1px solid #e3e3e3;
   text-align: left;
 }
-.head-dropdown-icon {
+
+.course-category-head-dropdown-icon {
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
-/* Define colors for each status */
-.status-active {
+.admin-course-image-data {
+  width: 100px;
+  height: 56px;
+  border-radius: 8px;
+  background: #d9d9d9;
+}
+.course-category-status-active {
   color: #63b43c;
   border-radius: 2px;
   background: rgba(99, 180, 60, 0.1);
@@ -65,7 +68,7 @@
   justify-content: center;
 }
 
-.status-inactive {
+.course-category-status-inactive {
   color: #f00;
   width: 84px;
   height: 30px;
