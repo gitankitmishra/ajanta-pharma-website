@@ -9,10 +9,10 @@ import { useRouter } from "next/navigation";
 interface SuccessPopupProps {
   open: boolean;
   onClose: () => void;
-  text:string;
+  text: string;
 }
 
-const SuccessPopup: FC<SuccessPopupProps> = ({ open, onClose,text }) => {
+const SuccessPopup: FC<SuccessPopupProps> = ({ open, onClose, text }) => {
   const router = useRouter();
   useEffect(() => {
     let timer: NodeJS.Timeout;
@@ -38,9 +38,7 @@ const SuccessPopup: FC<SuccessPopupProps> = ({ open, onClose,text }) => {
         <Image src={SuccessPng} width={572} height={60} alt="Success Image" />
       </div>
       <div className="success-popup-texts">
-        <p className="success-popup-text">
-         {text}
-        </p>
+        <p className="success-popup-text">{text}</p>
         <p className="success-popup-second-text">Thank You!</p>
       </div>
     </div>
