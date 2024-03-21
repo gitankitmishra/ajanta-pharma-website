@@ -1,6 +1,7 @@
 import { FC } from "react";
 import "./style.css";
 import { ViewEyeIcon } from "@/components/icons/view-eye-icon";
+import { DropdownIcon } from "@/components/icons/dropdown-icon";
 
 interface AdminCourseListTableProps {
   name: string;
@@ -19,7 +20,7 @@ const data: AdminCourseListTableProps[] = [
     date: "31/01/2024",
     status: "Active",
     view: <ViewEyeIcon />,
-    currentPage: 0
+    currentPage: 0,
   },
   {
     name: "Creative Thinking",
@@ -28,7 +29,7 @@ const data: AdminCourseListTableProps[] = [
     date: "31/01/2024",
     status: "Inactive",
     view: <ViewEyeIcon />,
-    currentPage: 0
+    currentPage: 0,
   },
   {
     name: "Creative Thinking",
@@ -37,7 +38,7 @@ const data: AdminCourseListTableProps[] = [
     date: "31/01/2024",
     status: "Inactive",
     view: <ViewEyeIcon />,
-    currentPage: 0
+    currentPage: 0,
   },
   {
     name: "Creative Thinking",
@@ -46,7 +47,7 @@ const data: AdminCourseListTableProps[] = [
     date: "31/01/2024",
     status: "Inactive",
     view: <ViewEyeIcon />,
-    currentPage: 0
+    currentPage: 0,
   },
   {
     name: "Creative Thinking",
@@ -55,7 +56,7 @@ const data: AdminCourseListTableProps[] = [
     date: "31/01/2024",
     status: "Inactive",
     view: <ViewEyeIcon />,
-    currentPage: 1
+    currentPage: 1,
   },
   {
     name: "Creative Thinking",
@@ -64,7 +65,7 @@ const data: AdminCourseListTableProps[] = [
     date: "31/01/2024",
     status: "Inactive",
     view: <ViewEyeIcon />,
-    currentPage: 2
+    currentPage: 2,
   },
 ];
 const AdminCourseListTable: FC<AdminCourseListTableProps> = () => {
@@ -74,9 +75,9 @@ const AdminCourseListTable: FC<AdminCourseListTableProps> = () => {
         <thead className="admin-course-list-thead">
           <tr>
             <th className="admin-course-list-table-head">Course Code & Name</th>
-            <th className="admin-course-list-table-head">Category</th>
+            <th className="admin-course-list-table-head head-dropdown-icon">Category <DropdownIcon/></th>
             <th className="admin-course-list-table-head">Upload Date</th>
-            <th className="admin-course-list-table-head">Status</th>
+            <th className="admin-course-list-table-head head-dropdown-icon">Status <DropdownIcon/></th>
             <th className="admin-course-list-table-head">View</th>
           </tr>
         </thead>
