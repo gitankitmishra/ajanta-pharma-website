@@ -65,7 +65,7 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
         "https://ajanta-pharma-server.vercel.app/api/admin/dashboard/uploadFile/B01",
         {
           method: "PUT",
-          body: formData,
+          body: formData, 
         }
       );
 
