@@ -1,22 +1,30 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./style.css";
 import ModuleQuizStepSection from "@/container/Admin-Container/add-course/module-container";
 import BasicStepSection from "@/container/Admin-Container/add-course/basic-step-container";
 import DesignationStepSection from "@/container/Admin-Container/add-course/designation-step-container";
 import UploadStepSection from "@/container/Admin-Container/add-course/upload-step-container";
+import PreviousButton from "@/components/buttons/previous-button";
+import NextButton from "@/components/buttons/next-button";
+import { useRouter } from "next/navigation";
 
 type StepContent = {
   [key: string]: React.ReactNode;
 };
 
 const Stepper = () => {
+  const router = useRouter();
   const [activeStep, setActiveStep] = useState(0);
   const steps = ["Basic", "Module/Quiz", "Designation", "Upload"];
+  const [category, setCategory] = useState("");
+  const handleCategoryChange = (value: string) => {
+    setCategory(value);
+  };
   const [stepContent, setStepContent] = useState<StepContent>({
-    Basic: <BasicStepSection />,
+    Basic: <BasicStepSection  onCategoryChange={handleCategoryChange}/>,
     "Module/Quiz": <ModuleQuizStepSection />,
-    Designation: <DesignationStepSection />,
+    Designation: <DesignationStepSection category={category}/>,
     Upload: <UploadStepSection />,
   });
 
@@ -25,36 +33,63 @@ const Stepper = () => {
   };
 
   const handleBack = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep - 1);
+    if (activeStep === 0) {
+      router.push("/admin/admin-courses"); // Navigate to the course page
+    } else {
+      setActiveStep((prevActiveStep) => prevActiveStep - 1);
+    }
   };
+  useEffect(() => {
+        console.log("categoyyyyyyyyyyyyyyyyyyyyyyyyyy",category)
 
+  }, [category]);
   return (
     <div className="stepper-container">
       <div className="step-labels-container">
         {steps.map((step, index) => (
-          <div
-            key={index}
-            className={`step-label ${activeStep === index ? "active" : ""}`}
-          >
-            <div className="step-text">{step}</div>
-          </div>
+          <>
+            <div className="steps-text-and-underline-combined-container">
+              <div
+                key={index}
+                className={`steps-title ${
+                  activeStep === index ? "active-step" : ""
+                }`}
+              >
+                {step}
+              </div>
+
+              <div
+                className={`${
+                  activeStep === index ? "active-step-underline" : ""
+                }`}
+              ></div>
+            </div>
+            {index < steps.length - 1 && (
+              <div className="steps-dashed-line"></div>
+            )}
+          </>
         ))}
       </div>
       <div className="step-separator"></div>
       <div className="step-content">{stepContent[steps[activeStep]]}</div>
       <div className="button-container">
-        <button
-          className={`${activeStep === 0 ? "active" : ""}`}
+        <div
+          className={`${activeStep === 0 ? "active" : ""} ${
+            activeStep === 0 ? "disabled" : ""
+          }`}
           onClick={handleBack}
-          disabled={activeStep === 0}
-        ></button>
-        <button
-          className={`${activeStep === steps.length - 1 ? "active" : ""}`}
-          onClick={handleNext}
-          disabled={activeStep === steps.length - 1}
         >
-          Next
-        </button>
+          <PreviousButton text={activeStep === 0 ? "Discard" : "Previous"} />
+        </div>
+
+        <div
+          className={`${activeStep === steps.length - 1 ? "active" : ""} ${
+            activeStep === steps.length - 1 ? "disabled" : ""
+          }`}
+          onClick={activeStep !== steps.length - 1 ? handleNext : undefined}
+        >
+          <NextButton text="Next" />
+        </div>
       </div>
     </div>
   );

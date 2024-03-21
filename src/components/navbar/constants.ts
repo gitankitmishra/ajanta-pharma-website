@@ -39,7 +39,7 @@ export const AdminNavbar: NavbarType[] = [
   },
   {
     value: "Notification",
-    href: "/admin-notification",
+    href: "/admin/admin-notification",
   },
   {
     value: "Settings",

@@ -7,43 +7,61 @@
 
 .step-labels-container {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   margin-bottom: 10px;
-  padding: 30px 40px;
+  padding: 30px 0 30px 40px;
+  width: 96%;
+}
+
+.steps-text-and-underline-combined-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.steps-title {
+  color: #787878;
+  font-size: 24px;
+  font-weight: 400;
+  margin: 0 10px;
+}
+
+.active-step {
+  color: #fe8100;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.step-underline {
+  display: none;
+}
+
+.active-step-underline {
+  width: 100%;
+  border: 1px solid #fe8100;
+}
+
+.steps-dashed-line {
+  width: 25%;
+  border: 2px dashed #787878;
+  border-width: 2px 0 0 0;
+  margin-top: 15px;
 }
 
 .step-label {
   text-align: center;
 }
 
-.step-text {
-  color: #787878;
-  font-size: 24px;
-  font-weight: 400;
-  margin: 0 10px;
-}
-.step-label.active .step-text {
-  color: #fe8100;
-  font-size: 24px;
-  font-weight: 600;
-}
-
-.step-text::after {
-  content: "";
-  color: #787878;
-}
-.step-label:nth-child(-n + 3) .step-text::after {
-  content: "\00a0\00a0\00a0\00a0\00a0---------------------";
-  color: #787878;
-}
-
 .button-container {
+  top: -88px;
+  position: relative;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
+  gap: 24px;
 }
 
-.step-content{
+.step-content {
   width: 100%;
-    display: flex;
-    justify-content: center;
+  display: flex;
+  justify-content: center;
 }

@@ -1,0 +1,30 @@
+
+.breadcrumb {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.breadcrumbItem {
+  display: inline;
+}
+
+.breadcrumbItem a {
+  color: rgba(120, 120, 120, 0.8);
+  font-size: 16px;
+  font-weight: 400;
+  text-decoration: none;
+}
+.breadcrumbItem a.activeBreadcrumb {
+  color: #1c1d1d;
+  font-size: 16px;
+  font-weight: 400;
+}
+
+.breadcrumbItem a:hover {
+  text-decoration: underline;
+}
+
+.breadcrumbSeparator {
+  color: rgba(120, 120, 120, 0.8);
+}

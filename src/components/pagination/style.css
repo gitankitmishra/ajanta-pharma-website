@@ -1,4 +1,4 @@
-.pagination {
+/* .pagination {
     list-style: none;
     padding: 0;
     display: flex;
@@ -26,5 +26,63 @@
   .pagination .active button {
     background-color: #007bff;
     color: #fff;
-  }
-  
+  } */
+.css-19xm0h7-MuiButtonBase-root-MuiPaginationItem-root {
+  border-radius: 12px !important; /* Set the border radius to 12px */
+  width: 46px !important;
+  height: 46px !important;
+  font-size: 16px !important;
+  font-weight: 400 !important;
+  border: 1px solid #FE8100;
+}
+.css-cc0r4l-MuiPagination-root .MuiPaginationItem-page {
+  font-size: 16px !important;
+  font-weight: 400 !important;
+}
+.css-1vm4etb-MuiPagination-root .MuiPaginationItem-icon {
+  font-size: 24px !important;
+  color: #FE8100 !important;
+}
+.css-1vm4etb-MuiPagination-root .MuiPaginationItem-icon::selected {
+  font-size: 24px !important;
+  color: #fff !important;
+}
+.MuiPaginationItem-root.Mui-selected {
+  background-color: #FE8100 !important;
+  color: #fff !important;
+  width: 46px !important ;
+  height: 46px !important;
+}
+
+.MuiPaginationItem-root.Mui-selected:hover {
+  background-color: #FE8100;
+  color: #fff;
+}
+
+.MuiPaginationItem-root:hover {
+  background-color: #FE8100;
+  color: #fff;
+}
+
+.MuiPaginationItem-page {
+  color: #FE8100;
+  border: none;
+  border-radius: 12px;
+  width: 46px;
+  height: 46px;
+}
+
+.MuiPaginationItem-icon {
+  border-radius: 12px;
+  fill: #000;
+}
+
+.Mui-selected {
+  background-color: #FE8100;
+  color: #fff;
+}
+
+.MuiPagination-root {
+  border-radius: 12px;
+}
+
