@@ -251,9 +251,9 @@ const BasicStepSection: FC<BasicStepSectionProps> = ({ onCategoryChange }) => {
           
         />
         <div className="draft-button-placement">
-          <button className="basic-draft-button" onClick={handleDraftSave}>
+          {/* <button className="basic-draft-button" onClick={handleDraftSave}>
             Draft
-          </button>
+          </button> */}
           </div>
         </div>
 
