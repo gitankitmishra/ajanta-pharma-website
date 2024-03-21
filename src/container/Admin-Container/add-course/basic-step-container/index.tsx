@@ -29,17 +29,16 @@ const BasicStepSection: FC<BasicStepSectionProps> = ({}) => {
             Select Training
           </label>
           <DropdownInputField
-             option1={"Bussiness Orientation"}
-             option2={"Customer Orientation"}
-             option3={"Operation Excellence and analytics"}
-             option4={"Leadership"}
+            option1={"Bussiness Orientation"}
+            option2={"Customer Orientation"}
+            option3={"Operation Excellence and analytics"}
+            option4={"Leadership"}
           />
         </div>
         <div className="basic-section1-div-sections">
           <label htmlFor="" className="basic-section-labels">
             Course Code & Name
           </label>
-          <InputField />
         </div>
       </div>
       <div className="basic-div-section2">
