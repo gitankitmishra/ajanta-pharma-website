@@ -7,11 +7,12 @@ interface NextButtonProps {
   width?: string; // Optional width prop
 }
 
-const NextButton: FC<NextButtonProps> = ({ text,width,onClick }) => {
-  
+const NextButton: FC<NextButtonProps> = ({ text, width, onClick }) => {
   return (
     <div>
-      <button className="next-button" style={{width:width}} onClick={onClick}>
+
+      <button className="next-button" style={{ width: width }} onClick={onClick}>
+
         {text}
       </button>
     </div>
