@@ -38,7 +38,8 @@
 .designation-checkbox-section {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  row-gap: 16px;
+  column-gap: 70px;
+  row-gap: 28px;
   margin-top: 32px;
 }
 .designation-checkbox-section2 {
