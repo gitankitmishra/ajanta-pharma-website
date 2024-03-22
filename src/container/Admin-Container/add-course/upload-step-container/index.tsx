@@ -242,7 +242,7 @@ const UploadStepSection: FC<UploadStepSectionProps> = () => {
       </div>
 
      
-     <SuccessPopup  open={isModalOpen} onClose={handleCloseModal}/>
+     <SuccessPopup  open={isModalOpen} onClose={handleCloseModal} text=""/>
     </section>
   );
 };
