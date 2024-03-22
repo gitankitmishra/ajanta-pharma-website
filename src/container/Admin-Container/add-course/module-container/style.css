@@ -1,6 +1,6 @@
 .module-main-section {
   width: 95%;
-  /* height: 852px; */
+  height: 852px;
   border-radius: 12px;
   border: 1px solid rgba(254, 129, 0, 0.5);
   display: flex;

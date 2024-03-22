@@ -394,9 +394,7 @@ const handleoptexcelFileSelect = (selectedFiles: FileList | null, index: number)
           <p className="module-category-text">Category</p>
           <p className="module-category-type-text">Competency Based Skills</p>
         </div>
-        <button className="module-save-as-draft-btn" onClick={uploadoptAssessment}>
-          Save as Draft
-        </button>
+
         <div className="module-div-section1-div2">
           <p className="module-category-text">Training</p>
           <p className="module-category-type-text">Business Orientation</p>

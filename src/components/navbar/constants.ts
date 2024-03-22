@@ -31,7 +31,7 @@ export const AdminNavbar: NavbarType[] = [
   },
   {
     value: "Course Category",
-    href: "/admin/Admin-course-category",
+    href: "/admin/admin-course-category",
   },
   {
     value: "Course",

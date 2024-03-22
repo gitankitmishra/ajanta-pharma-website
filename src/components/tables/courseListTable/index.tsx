@@ -75,9 +75,13 @@ const AdminCourseListTable: FC<AdminCourseListTableProps> = () => {
         <thead className="admin-course-list-thead">
           <tr>
             <th className="admin-course-list-table-head">Course Code & Name</th>
-            <th className="admin-course-list-table-head head-dropdown-icon">Category <DropdownIcon/></th>
+            <th className="admin-course-list-table-head head-dropdown-icon">
+              Category <DropdownIcon />
+            </th>
             <th className="admin-course-list-table-head">Upload Date</th>
-            <th className="admin-course-list-table-head head-dropdown-icon">Status <DropdownIcon/></th>
+            <th className="admin-course-list-table-head head-dropdown-icon">
+              Status <DropdownIcon />
+            </th>
             <th className="admin-course-list-table-head">View</th>
           </tr>
         </thead>
@@ -92,7 +96,18 @@ const AdminCourseListTable: FC<AdminCourseListTableProps> = () => {
                 {person.category}
               </td>
               <td className="admin-course-list-table-data">{person.date}</td>
-              <td className="admin-course-list-table-data">{person.status}</td>
+              <td className="admin-course-list-table-data">
+                <p
+                  className={`admin-course-status-span ${
+                    person.status === "Active"
+                      ? "status-active"
+                      : "status-inactive"
+                  }`}
+                >
+                  {person.status}
+                </p>
+              </td>
+
               <td className="admin-course-list-table-data">{person.view}</td>
             </tr>
           ))}
