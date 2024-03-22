@@ -2,6 +2,7 @@ import { FC } from "react";
 import "./style.css";
 import { ViewEyeIcon } from "@/components/icons/view-eye-icon";
 import { DropdownIcon } from "@/components/icons/dropdown-icon";
+import Link from "next/link";
 
 interface AdminCourseListTableProps {
   name: string;
@@ -108,7 +109,9 @@ const AdminCourseListTable: FC<AdminCourseListTableProps> = () => {
                 </p>
               </td>
 
-              <td className="admin-course-list-table-data">{person.view}</td>
+              <td className="admin-course-list-table-data">
+                <Link href="/admin/admin-course-detail">{person.view}</Link>
+              </td>
             </tr>
           ))}
         </tbody>

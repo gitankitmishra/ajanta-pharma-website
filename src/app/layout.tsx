@@ -18,7 +18,10 @@ export default function RootLayout({
 }>) {
   const isAdmin = true;
   const currentPath = usePathname();
-  const hideNavbar = currentPath === "/admin/admin-add-course";
+  const hideNavbar =
+    currentPath === "/admin/admin-add-course" ||
+    currentPath === "/admin/admin-course-detail";
+
   return (
     <html lang="en">
       <body className={`main-body ${raleway.className}`}>
