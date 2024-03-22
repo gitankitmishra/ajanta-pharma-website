@@ -50,6 +50,8 @@ const UploadStepSection: FC<UploadStepSectionProps> = () => {
   //api to fetch all the data related to that courseCode
   const previewData = async () => {
     try {
+      console.log("helooo");
+      
       const response = await fetch("http://localhost:8000/api/admin/dashboard/getCourseByCode/B01", {
         method: "GET",
         headers: {
@@ -59,7 +61,7 @@ const UploadStepSection: FC<UploadStepSectionProps> = () => {
       if (response.status === 200) {
         const data = await response.json();
         setCourseData(data);
-        console.log("data", data.modules.moduleInfo);
+        console.log("data", data);
       }
     } catch (error) {
       console.error(error);

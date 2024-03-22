@@ -39,20 +39,13 @@ interface FormData {
 }
 
 const BasicStepSection: FC<BasicStepSectionProps> = () => {
+      const contextValue=useContext(BasicContext);
 
-  const { formData, handleChange, handleCourseCodeAndNameChange }: BasicContextType = useContext(BasicContext) || {
-    formData: {
-        category: "",
-        trainingType: "",
-        courseCode: "",
-        courseName: "",
-        learningObjectives: "",
-        startDate: "",
-        endDate: ""
-    },
-    handleChange: () => {},
-    handleCourseCodeAndNameChange: () => {}
-};
+      if (!contextValue) {
+        return null;
+      }
+      const { formData, handleChange, handleCourseCodeAndNameChange }:BasicContextType=contextValue;
+
 
 
 
