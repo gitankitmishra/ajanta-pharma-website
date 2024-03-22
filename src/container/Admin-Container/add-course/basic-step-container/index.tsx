@@ -1,6 +1,6 @@
 "use client";
 
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useContext, useEffect, useState } from "react";
 
 import "./style.css";
 
@@ -17,9 +17,9 @@ import InputFieldString from "@/components/fields/string-input-field";
 import DropdownInputField from "@/components/fields/dropdown-input-field";
 
 import DropdownSubInputField from "@/components/fields/dropdown-sub-input-field";
+import { BasicContext, BasicContextType } from "@/context/course_update/basicInfo_context";
 
 interface BasicStepSectionProps {
-  onCategoryChange: (value: string) => void; // Add onCategoryChange prop
 }
 
 interface FormData {
@@ -38,32 +38,23 @@ interface FormData {
   endDate: string;
 }
 
-const BasicStepSection: FC<BasicStepSectionProps> = ({ onCategoryChange }) => {
-  const [formData, setFormData] = useState<FormData>({
-    category: "Competency-Based Skills",
+const BasicStepSection: FC<BasicStepSectionProps> = () => {
 
-    trainingType: "",
+  const { formData, handleChange, handleCourseCodeAndNameChange }: BasicContextType = useContext(BasicContext) || {
+    formData: {
+        category: "",
+        trainingType: "",
+        courseCode: "",
+        courseName: "",
+        learningObjectives: "",
+        startDate: "",
+        endDate: ""
+    },
+    handleChange: () => {},
+    handleCourseCodeAndNameChange: () => {}
+};
 
-    courseCode: "",
 
-    courseName: "",
-
-    learningObjectives: "",
-
-    startDate: "",
-
-    endDate: "",
-  });
-
-  const handleChange = (field: keyof FormData, value: string) => {
-    setFormData((prev) => ({ ...prev, [field]: value }));
-
-    if (field === "category") {
-      onCategoryChange(value);
-
-      localStorage.setItem("category", value);
-    }
-  };
 
   useEffect(() => {
     localStorage.setItem("category", "Competency-Based Skills");
@@ -72,115 +63,27 @@ const BasicStepSection: FC<BasicStepSectionProps> = ({ onCategoryChange }) => {
   useEffect(() => {
     switch (formData.category) {
       case "Competency-Based Skills":
-        setFormData((prev) => ({
-          ...prev,
-          trainingType: "Business Orientation",
-        }));
-
+        handleChange("trainingType", "Business Orientation");
         break;
-
       case "Medical":
-        setFormData((prev) => ({ ...prev, trainingType: "Medical" }));
-
+        handleChange("trainingType", "Medical");
         break;
-
       case "Marketing":
-        setFormData((prev) => ({ ...prev, trainingType: "Brand Detailing" }));
-
+        handleChange("trainingType", "Brand Detailing");
         break;
-
       case "Personal Development":
-        setFormData((prev) => ({ ...prev, trainingType: "Communication" }));
-
+        handleChange("trainingType", "Communication");
         break;
-
       case "Classroom Training":
-        setFormData((prev) => ({
-          ...prev,
-          trainingType: "Medical Representative",
-        }));
-
+        handleChange("trainingType", "Medical Representative");
         break;
-
       default:
         break;
     }
   }, [formData.category]);
 
-  const handleCourseCodeAndNameChange = (value: string) => {
-    // Remove leading and trailing spaces from the input value
 
-    const trimmedValue = value;
-
-    // Split the trimmed value into code and name parts
-
-    const [code, ...nameParts] = trimmedValue.split(" ");
-
-    // Update the state with the trimmed code and the remaining name parts
-
-    setFormData((prev) => ({
-      ...prev,
-
-      courseCode: code,
-
-      courseName: nameParts.join(" "),
-    }));
-  };
-
-  const handleDraftSave = () => {
-    // Call API to save form data as draft
-
-    fetch("https://ajanta-pharma-server.vercel.app/api/admin/dashboard/publishBasicInfo", {
-      method: "POST",
-
-      headers: {
-        "Content-Type": "application/json",
-      },
-
-      body: JSON.stringify({
-        basicInfo: { ...formData, isActive: false, publishDate: new Date() },
-      }),
-    })
-      .then((response) => {
-        if (response.status === 200) {
-          // If response status is 200, reset the state to initial values
-
-          setFormData({
-            category: "Competency-Based Skills",
-
-            trainingType: "",
-
-            courseCode: "",
-
-            courseName: "",
-
-            learningObjectives: "",
-
-            startDate: "",
-
-            endDate: "",
-          });
-
-          console.log("Draft saved:", response);
-        }
-
-        return response.json();
-      })
-
-      .then((data) => {
-        // Display alert with the appropriate message
-
-        alert(data.message);
-
-        // Optionally handle success response
-      })
-
-      .catch((error) => {
-        console.error("Error saving draft:", error);
-
-        // Optionally handle error
-      });
-  };
+  
 
   useEffect(() => {
     console.log("Form Data:", formData);

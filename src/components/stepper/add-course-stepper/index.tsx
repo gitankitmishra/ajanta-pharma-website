@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, {  useContext, useEffect, useState } from "react";
 import "./style.css";
 import ModuleQuizStepSection from "@/container/Admin-Container/add-course/module-container";
 import BasicStepSection from "@/container/Admin-Container/add-course/basic-step-container";
@@ -8,6 +8,8 @@ import UploadStepSection from "@/container/Admin-Container/add-course/upload-ste
 import PreviousButton from "@/components/buttons/previous-button";
 import NextButton from "@/components/buttons/next-button";
 import { useRouter } from "next/navigation";
+import BasicProvider, { BasicContext } from "@/context/course_update/basicInfo_context";
+import { DesignationContext } from "@/context/course_update/designation_context";
 
 type StepContent = {
   [key: string]: React.ReactNode;
@@ -21,12 +23,41 @@ const Stepper = () => {
   const handleCategoryChange = (value: string) => {
     setCategory(value);
   };
+  const basicContextApi = useContext(BasicContext);
+  const desingationContextApi=useContext(DesignationContext);
+  const {  handleDraftSave }: any = basicContextApi;
+  const {publishDesignation}:any=desingationContextApi;
+const handleApiCall=()=>{
+  switch (activeStep) {
+    case 0:
+      // Call API for basic info
+      // Example: handleDraftSave for Basic Info
+      handleDraftSave();
+      break;
+    case 1:
+      // Call API for modules
+      // Example: mergeapi for Modules
+      alert("API call for Modules");
+      break;
+    case 2:
+      // Call API for designation
+      // Example: publishDesignation for Designation
+      publishDesignation();
+
+      break;
+    default:
+      break;
+  }
+}
+
+
   const [stepContent, setStepContent] = useState<StepContent>({
-    Basic: <BasicStepSection onCategoryChange={handleCategoryChange} />,
+    Basic: <BasicStepSection   />,
     "Module/Quiz": <ModuleQuizStepSection />,
-    Designation: <DesignationStepSection category={category} />,
+    Designation: <DesignationStepSection  />,
     Upload: <UploadStepSection />,
   });
+
 
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -39,9 +70,7 @@ const Stepper = () => {
       setActiveStep((prevActiveStep) => prevActiveStep - 1);
     }
   };
-  useEffect(() => {
-    console.log("categoyyyyyyyyyyyyyyyyyyyyyyyyyy", category);
-  }, [category]);
+ 
   return (
     <div className="stepper-container">
       <div className="step-labels-container">
@@ -82,12 +111,11 @@ const Stepper = () => {
         </div>
         {activeStep === 0 || activeStep === 1 || activeStep === 2 ? (
           <div>
-            <NextButton text="Draft" />
+            <NextButton text="Draft" onClick={handleApiCall}/>
           </div>
         ) : null}
         {activeStep === 3 ? (
           <div>
-            <NextButton text="Publish" />
           </div>
         ) : null}
 
@@ -97,7 +125,7 @@ const Stepper = () => {
           }`}
           onClick={activeStep !== steps.length - 1 ? handleNext : undefined}
         >
-          <NextButton text="Next" />
+          <NextButton text="Next"  onClick={handleApiCall} />
         </div>
       </div>
     </div>

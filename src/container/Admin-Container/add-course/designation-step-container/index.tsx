@@ -1,99 +1,29 @@
 // DesignationStepSection.tsx
-import React, { FC, useState, useEffect } from "react";
+import React, { FC, useState, useEffect, useContext } from "react";
 import "./style.css";
 import Checkbox from "@/components/checkbox";
 import PreviousButton from "@/components/buttons/previous-button";
 import NextButton from "@/components/buttons/next-button";
+import { DesignationContext } from "@/context/course_update/designation_context";
 
 interface DesignationStepSectionProps {
-  category: string;
 }
 
-const DesignationStepSection: FC<DesignationStepSectionProps> = ({
-  category,
-}) => {
-  const [division, setDivision] = useState<string[]>([]);
-  const [designation, setDesignation] = useState<string[]>([]);
+const DesignationStepSection: FC<DesignationStepSectionProps> = () => {
   const categoryCheck = localStorage.getItem("category");
+  const contextValue = useContext(DesignationContext);
 
-  const handleDivision = (value: string, isChecked: boolean) => {
-    setDivision((prev) => {
-      if (isChecked) {
-        return [...prev, value];
-      } else {
-        return prev.filter((item) => item !== value);
-      }
-    });
-  };
+  if (!contextValue) {
+    // Handle the case when DesignationContext is null
+    return null; // or return a loading indicator or an error message
+  }
 
-  const handleDesignation = (value: string, isChecked: boolean) => {
-    setDesignation((prev) => {
-      if (isChecked) {
-        return [...prev, value];
-      } else {
-        return prev.filter((item) => item !== value);
-      }
-    });
-  };
+  const { division, designation, handleDesignation, handleDivision } = contextValue;
 
-  const publishDesignation = async () => {
-    try {
-      // Check if at least one designation is selected
-      if (designation.length === 0) {
-        alert("Please select at least one designation.");
-        return; // Prevent further execution
-      }
 
-      let response;
-      if (division.length > 0) {
-        response = await fetch(
-          "https://ajanta-pharma-server.vercel.app/api/admin/dashboard/publishDesignation/B111",
-          {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              division: division,
-              designation: designation,
-            }),
-          }
-        );
-      } else {
-        response = await fetch(
-          "https://ajanta-pharma-server.vercel.app/api/admin/dashboard/publishDesignation/B111",
-          {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              designation: designation,
-            }),
-          }
-        );
-      }
 
-      if (!response.ok) {
-        throw new Error("Failed to publish designation");
-      }
 
-      const data = await response.json();
-      alert(data.message); // Displaying response message
-      console.log("Response:", data);
-
-      // Reset checkbox states
-      setDivision([]);
-      setDesignation([]);
-    } catch (error: any) {
-      console.error("Error:", error.message);
-    }
-  };
-
-  useEffect(() => {
-    console.log("Desingation", designation);
-    console.log("Division", division);
-  }, [division, designation]);
+ 
 
   return (
     <section className="designation-main-section">
