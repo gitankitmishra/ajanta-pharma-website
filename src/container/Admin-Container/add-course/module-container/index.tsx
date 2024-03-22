@@ -224,7 +224,7 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
   }
 
   const [optexcelFile,setoptexcelFile] = useState<FileList | null>(null);
-   const [selectedAssessment, setSelectedAssessment] = useState<string[]>([]);
+   const [selectedAssessment, setSelectedAssessment] = useState<string>("");
 
   const [assessmentOpt, setAssessmentOpt] = useState<optAssessment[]>
   ([
@@ -246,12 +246,37 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
 
   const handleRadioChange = (event: React.ChangeEvent<HTMLInputElement>, index: number) => {
     const { value } = event.target;
-    setSelectedAssessment(prevSelectedAssessment => ({
-      ...prevSelectedAssessment,
-      [index]: value
-    }));
+  
+    setSelectedAssessment(prevSelectedAssessment => {
+      let updatedAssessment = prevSelectedAssessment ? prevSelectedAssessment.split(',') : [];
+      
+      if (updatedAssessment[index] === value) {
+        updatedAssessment.splice(index, 1);
+      } else {
+        updatedAssessment[index] = value;
+      }
+  
+      updatedAssessment = updatedAssessment.filter(Boolean); // Remove empty values
+      const updatedAssessmentString = updatedAssessment.join(',');
+  
+      // Return the updated string
+      return updatedAssessmentString;
+    });
   };
   
+  
+  // const handleRadioChange = (event: React.ChangeEvent<HTMLInputElement>, index: number) => {
+  //   const { value } = event.target;
+  //   setSelectedAssessment(prevSelectedAssessment => {
+  //     const isSelected = prevSelectedAssessment.includes(value);
+  //     if (isSelected) {
+  //       return prevSelectedAssessment.filter(type => type !== value);
+  //     } else {
+  //       return [...prevSelectedAssessment, value];
+  //     }
+  //   });
+  // };
+
   const handleoptAssessmentTypeChange = (selectedCategory: string, index: number) => {
     const updatedoptAssessments = [...assessmentOpt];
     updatedoptAssessments[index] = {
@@ -324,20 +349,36 @@ const handleoptexcelFileSelect = (selectedFiles: FileList | null, index: number)
       console.log(error)
     }
   }
-  
+
   const mergedApi = () => {
-  setTimeout(() => {
-    uploadFile().then(checkCompletion);
-  }, 2000);
-    
     setTimeout(() => {
-    uploadAssessment().then(checkCompletion);
+      uploadFile().then(() => {
+        alert("Module File uploaded successfully");
+        checkCompletion();
+      });
+    }, 2000);
+  
+    setTimeout(() => {
+      uploadAssessment().then(() => {
+        alert("Assessment File uploaded successfully");
+        checkCompletion();
+      });
     }, 4000);
-    
-    setTimeout(() => {
-    uploadoptAssessment().then(checkCompletion);
-     }, 6000);
-    };
+  
+    const isOptionalDataProvided = true; // Adjust this based on your condition
+  
+    if (isOptionalDataProvided) {
+      setTimeout(() => {
+        // Check if assessmentOpt array contains data
+        if (assessmentOpt && assessmentOpt.length) {
+          uploadoptAssessment().then(() => {
+            checkCompletion();
+          });
+        }
+      }, 6000);
+    }
+  };
+  
     
     let completedTasks = 0;
     const checkCompletion = () => {
@@ -345,8 +386,7 @@ const handleoptexcelFileSelect = (selectedFiles: FileList | null, index: number)
     if (completedTasks === 3) {
     alert("All functions have been successfully executed.");
     }
-    
-    };
+  };
   return (
     <section className="module-main-section">
       <div className="module-div-section1">
@@ -354,7 +394,7 @@ const handleoptexcelFileSelect = (selectedFiles: FileList | null, index: number)
           <p className="module-category-text">Category</p>
           <p className="module-category-type-text">Competency Based Skills</p>
         </div>
-        <button className="module-save-as-draft-btn" onClick={mergedApi}>
+        <button className="module-save-as-draft-btn" onClick={uploadoptAssessment}>
           Save as Draft
         </button>
         <div className="module-div-section1-div2">
@@ -461,14 +501,14 @@ const handleoptexcelFileSelect = (selectedFiles: FileList | null, index: number)
               <div className="module-course-assessment">Course Assessment</div>
               <div className="module-radio-btns">
               <input
-                type="radio"
-                className="module-assessment-radio-btn"
-                id={`preAssessment-${index}`}
-                name={`assessmentType-${index}`}
-                value="pre"
-                checked={selectedAssessment[index] === "pre"}
-                onChange={(e) => handleRadioChange(e, index)}
-             />
+              type="radio"
+              className="module-assessment-radio-btn"
+              id={`preAssessment-${index}`}
+              name={`assessmentType-${index}`}
+              value="pre"
+              checked={selectedAssessment[index] === "pre"}
+              onChange={(e) => handleRadioChange(e, index)}
+            />
               <label htmlFor={`preAssessment-${index}`} className="module-container-labels">
                 Pre Assessment
               </label>
