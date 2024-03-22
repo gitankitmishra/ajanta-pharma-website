@@ -5,14 +5,18 @@ import Checkbox from "@/components/checkbox";
 import PreviousButton from "@/components/buttons/previous-button";
 import NextButton from "@/components/buttons/next-button";
 import { DesignationContext } from "@/context/course_update/designation_context";
+import { BasicContext } from "@/context/course_update/basicInfo_context";
 
 interface DesignationStepSectionProps {
 }
 
 const DesignationStepSection: FC<DesignationStepSectionProps> = () => {
-  const categoryCheck = localStorage.getItem("category");
   const contextValue = useContext(DesignationContext);
+  const basicContext=useContext(BasicContext);
 
+  if (!basicContext) {
+    return null;
+  }
   if (!contextValue) {
     // Handle the case when DesignationContext is null
     return null; // or return a loading indicator or an error message
@@ -20,8 +24,8 @@ const DesignationStepSection: FC<DesignationStepSectionProps> = () => {
 
   const { division, designation, handleDesignation, handleDivision } = contextValue;
 
-
-
+  const {formData}=basicContext
+  const {category}=formData
 
  
 
@@ -37,7 +41,7 @@ const DesignationStepSection: FC<DesignationStepSectionProps> = () => {
           </p>
         </div>
         <div className="designation-checkbox-section">
-          {categoryCheck === "Medical" || categoryCheck === "Marketing" ? (
+          {category === "Medical" || category === "Marketing" ? (
             <>
               <div className="designation-checkbox-section">
                 <Checkbox
