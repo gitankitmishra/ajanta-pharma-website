@@ -5,12 +5,11 @@ import "./style.css";
 interface UploadButtonProps {
   upload: string;
   onFileSelect: (files: FileList | null) => void;
-  uploadFile: any;
   acceptedTypes?: string; 
   formatText: string
 }
 
-const UploadButton: React.FC<UploadButtonProps> = ({ upload, onFileSelect, uploadFile, acceptedTypes,formatText }) => {
+const UploadButton: React.FC<UploadButtonProps> = ({ upload, onFileSelect, acceptedTypes,formatText }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleClick = () => {

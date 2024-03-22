@@ -100,7 +100,7 @@ export const DesignationProvider: React.FC<{ children: ReactNode }> = ({ childre
     return (
         <DesignationContext.Provider value={contextValue}>
             {children}
-        </DesignationContext.Provider>
+        </DesignationContext.Provider>                                                              
     );
 };
 

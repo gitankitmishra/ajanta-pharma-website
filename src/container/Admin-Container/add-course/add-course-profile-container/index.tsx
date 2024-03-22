@@ -4,6 +4,7 @@ import Stepper from "@/components/stepper/add-course-stepper";
 import Breadcrumb from "@/components/breadcrumb";
 import BasicProvider from "@/context/course_update/basicInfo_context";
 import DesignationProvider from "@/context/course_update/designation_context";
+import ModuleProvider from "@/context/course_update/module_context";
 
 interface AddCourseProfileContainerProps {}
 
@@ -21,7 +22,9 @@ const AddCourseProfileContainer: FC<AddCourseProfileContainerProps> = () => {
       <div className="add-course-stepper-section">
       <BasicProvider>
         <DesignationProvider>
+          <ModuleProvider>  
         <Stepper />
+        </ModuleProvider>
         </DesignationProvider>
     </BasicProvider>
       </div>

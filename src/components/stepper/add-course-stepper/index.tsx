@@ -10,6 +10,7 @@ import NextButton from "@/components/buttons/next-button";
 import { useRouter } from "next/navigation";
 import BasicProvider, { BasicContext } from "@/context/course_update/basicInfo_context";
 import { DesignationContext } from "@/context/course_update/designation_context";
+import { ModuleContext } from "@/context/course_update/module_context";
 
 type StepContent = {
   [key: string]: React.ReactNode;
@@ -27,6 +28,10 @@ const Stepper = () => {
   const desingationContextApi=useContext(DesignationContext);
   const {  handleDraftSave }: any = basicContextApi;
   const {publishDesignation}:any=desingationContextApi;
+
+
+  const moduleContextApi=useContext(ModuleContext);
+  const {mergedApi}=moduleContextApi;
 const handleApiCall=()=>{
   switch (activeStep) {
     case 0:
@@ -37,7 +42,7 @@ const handleApiCall=()=>{
     case 1:
       // Call API for modules
       // Example: mergeapi for Modules
-      alert("API call for Modules");
+      mergedApi();
       break;
     case 2:
       // Call API for designation
