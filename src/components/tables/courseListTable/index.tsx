@@ -6,8 +6,13 @@ import Link from "next/link";
 import { CourseDetailsContext, CourseDetails } from "@/context/allCourses/courses_details";
 
 const AdminCourseListTable: FC = () => {
-  const { courseData, fetchData, pageNo } = useContext(CourseDetailsContext)!;
+  const contextValue = useContext(CourseDetailsContext);
 
+  if (!contextValue) {
+    console.error("Context Error: While calling from the CustomPagination Component");
+    return null;
+  }
+  const { courseData, fetchData, pageNo }=contextValue;
   useEffect(() => {
     fetchData();
   }, [pageNo]);
