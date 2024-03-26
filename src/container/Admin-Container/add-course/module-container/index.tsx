@@ -5,37 +5,51 @@ import UploadButton from "@/components/buttons/upload-button";
 import DropdownInputField from "@/components/fields/dropdown-input-field";
 import { PlusIcon } from "@/components/icons/plus-icon";
 import { ModuleContext } from "@/context/course_update/module_context";
+import { BasicContext } from "@/context/course_update/basicInfo_context";
 
 interface ModuleQuizStepSectionProps {}
 
 const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
-
-  const contextValue=useContext(ModuleContext);
+  const contextValue = useContext(ModuleContext);
   if (!contextValue) {
     return null;
   }
+  const basicContextValue = useContext(BasicContext);
+  if (!basicContextValue) {
+    return null;
+  }
+  const { formData } = basicContextValue;
+  if (!formData) {
+    return null; // Or some other loading state if needed
+  }
 
+  // Now you can safely destructure formData
   const {
-        modules,
-        handleChangeModuleNum,
-        handleChangeModuleName,
-        handleFileSelect,
-        handleAddModule,
-       //assessment
-        assessment,
-        handleAssessmentFileNameChange,
-        handleAssessmentTypeChange,
-        handleexcelFileSelect,
-        //optional assessment
-        assessmentOpt,
-        handleRadioChange,
-        handleoptAssessmentTypeChange,
-        handleoptAssessmentFileNameChange,
-        handleoptexcelFileSelect,
-        handleAddAssessment,
-        mergedApi
-    }=contextValue;
-
+    category,
+    trainingType,
+    courseCode: basicCourseCode,
+    courseName,
+  } = formData;
+  const {
+    modules,
+    handleChangeModuleNum,
+    handleChangeModuleName,
+    handleFileSelect,
+    handleAddModule,
+    //assessment
+    assessment,
+    handleAssessmentFileNameChange,
+    handleAssessmentTypeChange,
+    handleexcelFileSelect,
+    //optional assessment
+    assessmentOpt,
+    handleRadioChange,
+    handleoptAssessmentTypeChange,
+    handleoptAssessmentFileNameChange,
+    handleoptexcelFileSelect,
+    handleAddAssessment,
+    mergedApi,
+  } = contextValue;
 
   interface ModuleData {
     moduleName: string;
@@ -50,7 +64,7 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
   useEffect(() => {
     console.log("Modules data", modules);
   }, [modules]);
-  
+
   //upload an assessment
   interface AssessmentData {
     assessmentFileName: string;
@@ -58,9 +72,9 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
     excelFile: FileList | null;
   }
 
-  const [assessmentFileName,setassessmentFileName] = useState<string[]>([]);
-  const [assessmentFileType,setassessmentFileType] = useState<string[]>([]);
-  const [excelFile,setexcelFile] = useState<FileList | null>(null);
+  const [assessmentFileName, setassessmentFileName] = useState<string[]>([]);
+  const [assessmentFileType, setassessmentFileType] = useState<string[]>([]);
+  const [excelFile, setexcelFile] = useState<FileList | null>(null);
   // const [assessment, setAssessment] = useState<AssessmentData[]>([
   //   { assessmentFileName: "", assessmentFileType: "", excelFile: null },
   // ]);
@@ -77,35 +91,37 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
 
   //optional assessment api
   interface optAssessment {
-    preAssessment:string;
-    postAssessment:string;
-    assessmentFileType:string;
-    assessmentFileName:string;
-    optexcelFile:FileList | null;
+    preAssessment: string;
+    postAssessment: string;
+    assessmentFileType: string;
+    assessmentFileName: string;
+    optexcelFile: FileList | null;
   }
 
-  const [optexcelFile,setoptexcelFile] = useState<FileList | null>(null);
-   const [selectedAssessment, setSelectedAssessment] = useState<string>("");
+  const [optexcelFile, setoptexcelFile] = useState<FileList | null>(null);
+  const [selectedAssessment, setSelectedAssessment] = useState<string>("");
 
   return (
     <section className="module-main-section">
       <div className="module-div-section1">
         <div className="module-div-section1-div1">
           <p className="module-category-text">Category</p>
-          <p className="module-category-type-text">Competency Based Skills</p>
+          <p className="module-category-type-text">{category}</p>
         </div>
 
         <div className="module-div-section1-div2">
           <p className="module-category-text">Training</p>
-          <p className="module-category-type-text">Business Orientation</p>
+          <p className="module-category-type-text">{trainingType}</p>
         </div>
         <div className="module-div-section1-div3">
           <p className="module-category-text">Course Code & Name</p>
-          <p className="module-category-type-text">BO1 - Problem Solving</p>
+          <p className="module-category-type-text">
+            {basicCourseCode} - {courseName}
+          </p>
         </div>
       </div>
       <div className="module-div-section2">
-        {modules.map((module:any, index:number) => (
+        {modules.map((module: any, index: number) => (
           <>
             <div className="module-input">
               <div className="module-input-number">
@@ -114,9 +130,8 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
                 </label>
                 <InputField
                   moduleValue={[module.moduleNo]}
-                  onChange={
-                    (newModuleNum: string[]) =>
-                      handleChangeModuleNum(newModuleNum, index) 
+                  onChange={(newModuleNum: string[]) =>
+                    handleChangeModuleNum(newModuleNum, index)
                   }
                 />
               </div>
@@ -126,9 +141,8 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
                 </label>
                 <InputField
                   moduleValue={[module.moduleName]}
-                  onChange={
-                    (newModuleName: string[]) =>
-                      handleChangeModuleName(newModuleName, index) 
+                  onChange={(newModuleName: string[]) =>
+                    handleChangeModuleName(newModuleName, index)
                   }
                 />
               </div>
@@ -138,7 +152,6 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
                   onFileSelect={(selectedFiles) =>
                     handleFileSelect(selectedFiles, index)
                   }
-                 
                   acceptedTypes=".mp4,.ppt,.pdf"
                   formatText={"File Format: mp4, ppt, pdf "}
                 />
@@ -155,7 +168,6 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
                   onValueChange={function (selectedCategory: string): void {
                     handleAssessmentTypeChange(selectedCategory, index);
                   }}
-
                   option1={"Competency-Based Skills"}
                   option2={"Medical"}
                   option3={"Marketing"}
@@ -170,8 +182,8 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
                 <InputField
                   moduleValue={[assessment[index]?.assessmentFileName]}
                   onChange={(newFileName: string[]) =>
-                  handleAssessmentFileNameChange(newFileName[0], index)
-                }
+                    handleAssessmentFileNameChange(newFileName[0], index)
+                  }
                 />
               </div>
               <div className="module-input-uplaod-btn">
@@ -180,7 +192,6 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
                   onFileSelect={(selectedFiles) =>
                     handleexcelFileSelect(selectedFiles, index)
                   }
-                
                   acceptedTypes=".xls"
                   formatText={"File Format: xls"}
                 />
@@ -194,38 +205,44 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
         </button>
       </div>
       <div className="module-div-section3">
-        {assessmentOpt.map((assessment:any, index:number) => (
+        {assessmentOpt.map((assessment: any, index: number) => (
           <>
             <div className="module-radio-selction">
               <div className="module-course-assessment">Course Assessment</div>
               <div className="module-radio-btns">
-              <input
-              type="radio"
-              className="module-assessment-radio-btn"
-              id={`preAssessment-${index}`}
-              name={`assessmentType-${index}`}
-              value="pre"
-              checked={selectedAssessment[index] === "pre"}
-              onChange={(e) => handleRadioChange(e, index)}
-            />
-              <label htmlFor={`preAssessment-${index}`} className="module-container-labels">
-                Pre Assessment
-              </label>
-            </div>
-            <div className="module-radio-btns">
-            <input
-              type="radio"
-              className="module-assessment-radio-btn"
-              id={`postAssessment-${index}`}
-              name={`assessmentType-${index}`}
-              value="post"
-              checked={selectedAssessment[index] === "post"}
-              onChange={(e) => handleRadioChange(e, index)}
-            />
-            <label htmlFor={`postAssessment-${index}`} className="module-container-labels">
-              Post Assessment
-            </label>
-          </div>
+                <input
+                  type="radio"
+                  className="module-assessment-radio-btn"
+                  id={`preAssessment-${index}`}
+                  name={`assessmentType-${index}`}
+                  value="pre"
+                  checked={selectedAssessment[index] === "pre"}
+                  onChange={(e) => handleRadioChange(e, index)}
+                />
+                <label
+                  htmlFor={`preAssessment-${index}`}
+                  className="module-container-labels"
+                >
+                  Pre Assessment
+                </label>
+              </div>
+              <div className="module-radio-btns">
+                <input
+                  type="radio"
+                  className="module-assessment-radio-btn"
+                  id={`postAssessment-${index}`}
+                  name={`assessmentType-${index}`}
+                  value="post"
+                  checked={selectedAssessment[index] === "post"}
+                  onChange={(e) => handleRadioChange(e, index)}
+                />
+                <label
+                  htmlFor={`postAssessment-${index}`}
+                  className="module-container-labels"
+                >
+                  Post Assessment
+                </label>
+              </div>
             </div>
             <div className="module-input">
               <div className="module-input-number">
@@ -233,27 +250,26 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
                   Select Assessment Type
                 </label>
                 <DropdownInputField
-                value={assessmentOpt[index].assessmentFileType}
-                onValueChange={(selectedCategory: string) => {
-                  handleoptAssessmentTypeChange(selectedCategory, index);
-                }}
-                option1={"Option 1"}
-                option2={"Option 2"}
-                option3={"Option 3"}
-                option4={"Option 4"}
-                option5={"Option 5"}
+                  value={assessmentOpt[index].assessmentFileType}
+                  onValueChange={(selectedCategory: string) => {
+                    handleoptAssessmentTypeChange(selectedCategory, index);
+                  }}
+                  option1={"Option 1"}
+                  option2={"Option 2"}
+                  option3={"Option 3"}
+                  option4={"Option 4"}
+                  option5={"Option 5"}
                 />
-
               </div>
               <div className="module-input-name">
                 <label htmlFor="" className="module-container-labels">
                   Module Name
                 </label>
                 <InputField
-                 moduleValue={[assessmentOpt[index]?.assessmentFileName]}
-                 onChange={(newFileName: string[]) =>
-                 handleoptAssessmentFileNameChange(newFileName[0], index)
-               }
+                  moduleValue={[assessmentOpt[index]?.assessmentFileName]}
+                  onChange={(newFileName: string[]) =>
+                    handleoptAssessmentFileNameChange(newFileName[0], index)
+                  }
                 />
               </div>
               <div className="module-input-uplaod-btn">

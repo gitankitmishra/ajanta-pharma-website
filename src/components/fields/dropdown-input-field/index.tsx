@@ -1,6 +1,5 @@
-import { FC, useState } from "react";
+import React, { FC, useState } from "react";
 import "./style.css";
-
 
 interface DropdownInputFieldProps {
   value: string;
@@ -9,9 +8,9 @@ interface DropdownInputFieldProps {
   option2: string;
   option3: string;
   option4: string;
-  option5:string;
+  option5: string;
+  placeholder?: string;
 }
-
 
 const DropdownInputField: FC<DropdownInputFieldProps> = ({
   value,
@@ -21,20 +20,29 @@ const DropdownInputField: FC<DropdownInputFieldProps> = ({
   option3,
   option4,
   option5,
+  placeholder,
 }) => {
   const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     onValueChange(event.target.value);
   };
 
+  // Determine if an option is selected or not
+  const isSelected = value !== "";
 
   return (
     <div>
       <select
         value={value} // Set the value to the selectedCategory prop
         onChange={handleChange}
-        className="dropdown-select"
+        className={`dropdown-select ${
+          isSelected ? "selected" : "not-selected"
+        }`}
       >
-        <option value=""></option>
+        {placeholder && (
+          <option value="" disabled className="disable-dropdown-option">
+            {placeholder}
+          </option>
+        )}
         <option value={option1} className="dropdown-option">
           {option1}
         </option>
@@ -54,6 +62,5 @@ const DropdownInputField: FC<DropdownInputFieldProps> = ({
     </div>
   );
 };
-
 
 export default DropdownInputField;
