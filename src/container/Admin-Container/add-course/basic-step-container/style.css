@@ -5,7 +5,7 @@
   /* justify-content: center; */
   flex-direction: column;
   width: 90%;
-  height: 500px;
+  height: 520px;
   border-radius: 12px;
   border: 1px solid rgba(254, 129, 0, 0.5);
 }
@@ -54,19 +54,6 @@
 }
 
 
-/* Jugaaaaaaaaaaad started */
-/* Temporay jugad needed to be correct */
-.basic-div-section3{
-  position: relative;
-}
-/* Temporay jugad needed to be correct */
-
-.draft-button-placement{
-  position: absolute;
-  top: 10px;
-  left: 700px;
-}
-/* Jugaaaaaaaaaad ended */
 
 .basic-draft-button {
   position: relative;

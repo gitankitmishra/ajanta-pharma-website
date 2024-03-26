@@ -1,5 +1,5 @@
 "use client";
-import React, {  useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import "./style.css";
 import ModuleQuizStepSection from "@/container/Admin-Container/add-course/module-container";
 import BasicStepSection from "@/container/Admin-Container/add-course/basic-step-container";
@@ -8,7 +8,9 @@ import UploadStepSection from "@/container/Admin-Container/add-course/upload-ste
 import PreviousButton from "@/components/buttons/previous-button";
 import NextButton from "@/components/buttons/next-button";
 import { useRouter } from "next/navigation";
-import BasicProvider, { BasicContext } from "@/context/course_update/basicInfo_context";
+import BasicProvider, {
+  BasicContext,
+} from "@/context/course_update/basicInfo_context";
 import { DesignationContext } from "@/context/course_update/designation_context";
 import { ModuleContext } from "@/context/course_update/module_context";
 
@@ -25,44 +27,41 @@ const Stepper = () => {
     setCategory(value);
   };
   const basicContextApi = useContext(BasicContext);
-  const desingationContextApi=useContext(DesignationContext);
-  const {  handleDraftSave }: any = basicContextApi;
-  const {publishDesignation}:any=desingationContextApi;
+  const desingationContextApi = useContext(DesignationContext);
+  const { handleDraftSave }: any = basicContextApi;
+  const { publishDesignation }: any = desingationContextApi;
 
+  const moduleContextApi = useContext(ModuleContext);
+  const { mergedApi } = moduleContextApi;
+  const handleApiCall = () => {
+    switch (activeStep) {
+      case 0:
+        // Call API for basic info
+        // Example: handleDraftSave for Basic Info
+        handleDraftSave();
+        break;
+      case 1:
+        // Call API for modules
+        // Example: mergeapi for Modules
+        mergedApi();
+        break;
+      case 2:
+        // Call API for designation
+        // Example: publishDesignation for Designation
+        publishDesignation();
 
-  const moduleContextApi=useContext(ModuleContext);
-  const {mergedApi}=moduleContextApi;
-const handleApiCall=()=>{
-  switch (activeStep) {
-    case 0:
-      // Call API for basic info
-      // Example: handleDraftSave for Basic Info
-      handleDraftSave();
-      break;
-    case 1:
-      // Call API for modules
-      // Example: mergeapi for Modules
-      mergedApi();
-      break;
-    case 2:
-      // Call API for designation
-      // Example: publishDesignation for Designation
-      publishDesignation();
-
-      break;
-    default:
-      break;
-  }
-}
-
+        break;
+      default:
+        break;
+    }
+  };
 
   const [stepContent, setStepContent] = useState<StepContent>({
-    Basic: <BasicStepSection   />,
+    Basic: <BasicStepSection />,
     "Module/Quiz": <ModuleQuizStepSection />,
-    Designation: <DesignationStepSection  />,
+    Designation: <DesignationStepSection />,
     Upload: <UploadStepSection />,
   });
-
 
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -75,7 +74,7 @@ const handleApiCall=()=>{
       setActiveStep((prevActiveStep) => prevActiveStep - 1);
     }
   };
- 
+
   return (
     <div className="stepper-container">
       <div className="step-labels-container">
@@ -114,7 +113,7 @@ const handleApiCall=()=>{
         >
           <PreviousButton text={activeStep === 0 ? "Discard" : "Previous"} />
         </div>
-        {activeStep === 0 || activeStep === 1 || activeStep === 2 ? (
+        {/* {activeStep === 0 || activeStep === 1 || activeStep === 2 ? (
           <div>
             <NextButton text="Draft" onClick={handleApiCall}/>
           </div>
@@ -122,7 +121,7 @@ const handleApiCall=()=>{
         {activeStep === 3 ? (
           <div>
           </div>
-        ) : null}
+        ) : null} */}
 
         <div
           className={`${activeStep === steps.length - 1 ? "active" : ""} ${
@@ -130,7 +129,7 @@ const handleApiCall=()=>{
           }`}
           onClick={activeStep !== steps.length - 1 ? handleNext : undefined}
         >
-          <NextButton text="Next"  onClick={handleApiCall} />
+          <NextButton text="Next" onClick={handleApiCall} />
         </div>
       </div>
     </div>
