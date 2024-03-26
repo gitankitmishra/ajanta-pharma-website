@@ -1,75 +1,17 @@
-import { FC } from "react";
+import { FC, useContext, useEffect } from "react";
 import "./style.css";
 import { ViewEyeIcon } from "@/components/icons/view-eye-icon";
 import { DropdownIcon } from "@/components/icons/dropdown-icon";
 import Link from "next/link";
+import { CourseDetailsContext, CourseDetails } from "@/context/allCourses/courses_details";
 
-interface AdminCourseListTableProps {
-  name: string;
-  courseCode: number | string;
-  category: string;
-  date: string;
-  status: string;
-  view: JSX.Element;
-  currentPage: number;
-}
-const data: AdminCourseListTableProps[] = [
-  {
-    name: "Critical Thinking",
-    courseCode: "PD2",
-    category: "Competency Based Skills",
-    date: "31/01/2024",
-    status: "Active",
-    view: <ViewEyeIcon />,
-    currentPage: 0,
-  },
-  {
-    name: "Creative Thinking",
-    courseCode: "PD1",
-    category: "Classroom Training",
-    date: "31/01/2024",
-    status: "Inactive",
-    view: <ViewEyeIcon />,
-    currentPage: 0,
-  },
-  {
-    name: "Creative Thinking",
-    courseCode: "PD1",
-    category: "Classroom Training",
-    date: "31/01/2024",
-    status: "Inactive",
-    view: <ViewEyeIcon />,
-    currentPage: 0,
-  },
-  {
-    name: "Creative Thinking",
-    courseCode: "PD1",
-    category: "Classroom Training",
-    date: "31/01/2024",
-    status: "Inactive",
-    view: <ViewEyeIcon />,
-    currentPage: 0,
-  },
-  {
-    name: "Creative Thinking",
-    courseCode: "PD1",
-    category: "Classroom Training",
-    date: "31/01/2024",
-    status: "Inactive",
-    view: <ViewEyeIcon />,
-    currentPage: 1,
-  },
-  {
-    name: "Creative Thinking",
-    courseCode: "PD1",
-    category: "Classroom Training",
-    date: "31/01/2024",
-    status: "Inactive",
-    view: <ViewEyeIcon />,
-    currentPage: 2,
-  },
-];
-const AdminCourseListTable: FC<AdminCourseListTableProps> = () => {
+const AdminCourseListTable: FC = () => {
+  const { courseData, fetchData, pageNo } = useContext(CourseDetailsContext)!;
+
+  useEffect(() => {
+    fetchData();
+  }, [pageNo]);
+
   return (
     <div className="admin-course-list-table-main-container">
       <table className="admin-course-list-table">
@@ -87,30 +29,30 @@ const AdminCourseListTable: FC<AdminCourseListTableProps> = () => {
           </tr>
         </thead>
         <tbody className="admin-course-list-tbody">
-          {data.map((person, index) => (
+          {courseData && courseData.map((course: CourseDetails, index: number) => (
             <tr key={index}>
               <td className="admin-course-list-table-data">
-                {person.courseCode}
-                {person.name}
+                {course.basicInfo.courseCode} - {course.basicInfo.courseName}
               </td>
               <td className="admin-course-list-table-data">
-                {person.category}
+                {course.basicInfo.category}
               </td>
-              <td className="admin-course-list-table-data">{person.date}</td>
+              <td className="admin-course-list-table-data">
+                {new Date(course.basicInfo.publishDate).toLocaleDateString()}
+              </td>
               <td className="admin-course-list-table-data">
                 <p
                   className={`admin-course-status-span ${
-                    person.status === "Active"
-                      ? "status-active"
-                      : "status-inactive"
+                    course.basicInfo.isActive ? "status-active" : "status-inactive"
                   }`}
                 >
-                  {person.status}
+                  {course.basicInfo.isActive ? "Active" : "Inactive"}
                 </p>
               </td>
-
               <td className="admin-course-list-table-data">
-                <Link href="/admin/admin-course-detail">{person.view}</Link>
+                <Link href={`/admin/admin-course-detail/${course._id}`}>
+               <ViewEyeIcon /> 
+                </Link>
               </td>
             </tr>
           ))}
