@@ -6,6 +6,8 @@ import Checkbox from "@/components/checkbox";
 import PreviousButton from "@/components/buttons/previous-button";
 import NextButton from "@/components/buttons/next-button";
 import SuccessPopup from "@/components/popups/success-popup";
+import { createContext } from "vm";
+import { BasicContext } from "@/context/course_update/basicInfo_context";
 
 interface CourseData {
     basicInfo: {
@@ -47,12 +49,27 @@ const UploadStepSection: FC<UploadStepSectionProps> = () => {
     setIsModalOpen(false);
   };
 
+  const courseCodeValue=createContext(BasicContext);
+
+  if (!courseCodeValue) {
+    return null;
+  }
+
+  const {formData}=courseCodeValue;
+
+  if (!formData) {
+      return null;
+  }
+
+  const {courseCode}=formData;
+
+
   //api to fetch all the data related to that courseCode
   const previewData = async () => {
     try {
       console.log("helooo");
       
-      const response = await fetch("http://localhost:8000/api/admin/dashboard/getCourseByCode/B01", {
+      const response = await fetch(`http://localhost:8000/api/admin/dashboard/getCourseByCode/B01`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json"

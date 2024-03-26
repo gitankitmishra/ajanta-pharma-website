@@ -11,13 +11,13 @@ export type CourseDetails = {
     }
 }
 
-
 interface CourseContextType {
     pageNo: number;
     updatePageNo: (newPage: number) => void;
     courseData: CourseDetails[] | null;
     loading: boolean;
     error: Error | null;
+    totalPages: number; // New property for total pages
     fetchData: () => void;
 }
 
@@ -28,6 +28,7 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({ children }) 
     const [courseData, setCourseData] = useState<CourseDetails[] | null>(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<Error | null>(null);
+    const [totalPages, setTotalPages] = useState(0); // Initialize total pages to 0
     const [pageSize, setPageSize] = useState(10);
 
     const updatePageNo = (newPage: number) => {
@@ -49,8 +50,9 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({ children }) 
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
-            const data: CourseDetails[] = await response.json();
-            setCourseData(data);
+            const data = await response.json();
+            setCourseData(data.data); // Set courseData to data.data from the response
+            setTotalPages(data.totalPages); // Set totalPages from the response
             setLoading(false);
         } catch (error:any) {
             setError(error);
@@ -68,6 +70,7 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({ children }) 
         courseData,
         loading,
         error,
+        totalPages, 
         fetchData,
     };
 

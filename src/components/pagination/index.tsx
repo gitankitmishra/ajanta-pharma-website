@@ -15,7 +15,7 @@ const CustomPagination: React.FC<CustomPaginationProps> = ({ currentPage, onPage
     return null;
   }
 
-  const { updatePageNo } = contextValue;
+  const { updatePageNo,totalPages } = contextValue;
   const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
     onPageChange(value);
     updatePageNo(value);
@@ -25,7 +25,7 @@ const CustomPagination: React.FC<CustomPaginationProps> = ({ currentPage, onPage
 
   return (
     <Pagination
-      count={10} // Total number of pages
+      count={totalPages} // Total number of pages
       page={currentPage} // Current page
       onChange={handleChange} // Handle page change
       variant="outlined" // Style variant
