@@ -1,0 +1,14 @@
+.text-area-input-field {
+  padding: 15px 24px;
+  width: 96%;
+  height: 90px;
+  border: none;
+  outline: none;
+  border-radius: 8px;
+  background: rgba(254, 129, 0, 0.1);
+  color: #1c1d1d;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 24px;
+  resize: none;
+}

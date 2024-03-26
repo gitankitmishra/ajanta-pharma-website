@@ -3,38 +3,45 @@ import React, { FC, useEffect, useState, useMemo } from "react";
 interface DropdownInputFieldProps {
   value: string;
   onValueChange: (selectedCategory: string) => void;
-  selectedCategory: string; // New prop for the selected category
+  selectedCategory: string;
+  placeholder?: string;
 }
 
 const DropdownSubInputField: FC<DropdownInputFieldProps> = ({
   value,
   onValueChange,
   selectedCategory,
+  placeholder,
 }) => {
   const [trainingTypeOptions, setTrainingTypeOptions] = useState<string[]>([]);
+  const [isNewCategorySelected, setIsNewCategorySelected] =
+    useState<boolean>(false);
 
-  const getTrainingTypeOptions = useMemo(() => {
-    // Memoized function to get training type options based on selected category
+  useEffect(() => {
+    // Set training type options based on selected category
     switch (selectedCategory) {
       case "Competency-Based Skills":
-        return [
+        setTrainingTypeOptions([
           "Business Orientation",
           "Customer Orientation",
           "Operational Excellence and Analytics",
           "Leadership",
           "Communication",
-        ];
+        ]);
+        break;
       case "Medical":
-        return ["Medical"];
+        setTrainingTypeOptions(["Medical"]);
+        break;
       case "Marketing":
-        return [
+        setTrainingTypeOptions([
           "Brand Detailing",
           "Input Detailing",
           "Knock Out Points",
           "Regional IMS",
-        ];
+        ]);
+        break;
       case "Personal Development":
-        return [
+        setTrainingTypeOptions([
           "Communication",
           "Time Management",
           "Critical Thinking",
@@ -45,34 +52,38 @@ const DropdownSubInputField: FC<DropdownInputFieldProps> = ({
           "Personal Finance",
           "Personal Grooming",
           "Self-Enrichment",
-        ];
+        ]);
+        break;
       case "Classroom Training":
-        return ["Medical Representative", "Managers"];
+        setTrainingTypeOptions(["Medical Representative", "Managers"]);
+        break;
       default:
-        return [];
+        setTrainingTypeOptions([]);
     }
+    // If a new category is selected, enable the placeholder
+    setIsNewCategorySelected(true);
   }, [selectedCategory]);
-
-  useEffect(() => {
-    // Set training type options based on selected category
-    setTrainingTypeOptions(getTrainingTypeOptions);
-
-    // Set default value to the first option if value is empty and options exist
-    if (!value && getTrainingTypeOptions.length > 0) {
-      onValueChange(getTrainingTypeOptions[0]);
-    }
-  }, [getTrainingTypeOptions, value, onValueChange]);
 
   const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     onValueChange(event.target.value);
+    // Once an option is selected, disable the placeholder
+    setIsNewCategorySelected(false);
   };
 
   return (
     <div>
-      <select value={value} onChange={handleChange} className="dropdown-select">
-        <option value=""></option>
-        {trainingTypeOptions.map((option, index) => (
-          <option key={index} value={option} className="dropdown-option">
+      <select
+        value={value}
+        onChange={handleChange}
+        className={`dropdown-select ${value ? "selected" : "not-selected"}`}
+      >
+        {isNewCategorySelected && placeholder && (
+          <option value="" className="dropdown-option">
+            {placeholder}
+          </option>
+        )}
+        {trainingTypeOptions.map((option) => (
+          <option key={option} value={option} className="dropdown-option">
             {option}
           </option>
         ))}
