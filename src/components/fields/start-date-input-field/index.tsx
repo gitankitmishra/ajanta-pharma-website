@@ -44,7 +44,7 @@ const DateInputField: FC<DateInputFieldProps> = ({
         <label htmlFor="" className="date-label">End Date</label>
         <input
           type="date"
-          className={`end-date-input-field ${endSelected ? 'selected' : ''}`}
+          className="end-date-input-field "
           value={endDate}
           onChange={handleEndDateChange}
         />
