@@ -33,6 +33,8 @@ const Stepper = () => {
 
   const moduleContextApi = useContext(ModuleContext);
   const { mergedApi } = moduleContextApi;
+
+  //Logic to take the activeStep for the Draft login
   const handleApiCall = () => {
     switch (activeStep) {
       case 0:
@@ -74,6 +76,10 @@ const Stepper = () => {
       setActiveStep((prevActiveStep) => prevActiveStep - 1);
     }
   };
+
+  useEffect(() => {
+    localStorage.setItem("activeStep", JSON.stringify(activeStep));
+  }, [activeStep]);
 
   return (
     <div className="stepper-container">
