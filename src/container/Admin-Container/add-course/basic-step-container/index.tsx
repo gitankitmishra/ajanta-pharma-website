@@ -102,8 +102,8 @@ const BasicStepSection: FC<BasicStepSectionProps> = () => {
             placeholder="Enter Course Name"
 
             width="80%"
-            value={formData.courseName}
-            onChange={(value) => handleChange("courseName", value)}
+            value={formData.course_name}
+            onChange={(value) => handleChange("course_name", value)}
 
             className="input-field"
           />
