@@ -94,15 +94,7 @@ export const BasicProvider: React.FC<{ children: ReactNode }> = ({
     )
       .then((response) => {
         if (response.status === 200) {
-          setFormData({
-            course_category: "", 
-            course_training: "", 
-            course_code: "", 
-            course_name: "", 
-            course_objective: "", 
-            course_start_date: "", 
-            course_end_date: "", 
-          });
+       
           console.log("Draft saved:", response);
         }
         return response.json();
