@@ -57,9 +57,9 @@ const BasicStepSection: FC<BasicStepSectionProps> = () => {
 
           <DropdownInputField
             placeholder="Select Category"
-            value={formData.category}
-            onValueChange={(value) => handleChange("category", value)}
-            option1={"Competency-Based Skills"}
+            value={formData.course_category}
+            onValueChange={(value) => handleChange("course_category", value)}
+            option1={"Competency-Based-Skills"}
             option2={"Medical"}
             option3={"Marketing"}
             option4={"Personal Development"}
@@ -74,9 +74,9 @@ const BasicStepSection: FC<BasicStepSectionProps> = () => {
 
           <DropdownSubInputField
             placeholder="Select Training Type"
-            value={formData.trainingType}
-            onValueChange={(value) => handleChange("trainingType", value)}
-            selectedCategory={formData.category} // Pass the selected category
+            value={formData.course_training}
+            onValueChange={(value) => handleChange("course_training", value)}
+            selectedCategory={formData.course_category} // Pass the selected category
           />
         </div>
 
@@ -89,8 +89,8 @@ const BasicStepSection: FC<BasicStepSectionProps> = () => {
             readonly
             width="80%"
             className="input-field"
-            value={formData.courseCode}
-            onChange={(value) => handleChange("courseCode", value)}
+            value={formData.course_code}
+            onChange={(value) => handleChange("course_code", value)}
           />
         </div>
         <div className="basic-section1-div-sections">
@@ -100,9 +100,11 @@ const BasicStepSection: FC<BasicStepSectionProps> = () => {
 
           <InputFieldString
             placeholder="Enter Course Name"
+
             width="80%"
             value={formData.courseName}
             onChange={(value) => handleChange("courseName", value)}
+
             className="input-field"
           />
         </div>
@@ -116,17 +118,17 @@ const BasicStepSection: FC<BasicStepSectionProps> = () => {
         <TextAreaField
           placeholder="Enter Learning Objective"
           className="basic-learning-objective-input"
-          value={formData.learningObjectives}
-          onChange={(value) => handleChange("learningObjectives", value)}
+          value={formData.course_objective}
+          onChange={(value) => handleChange("course_objective", value)}
         />
       </div>
 
       <div className="basic-div-section3">
         <DateInputField
-          startDate={formData.startDate}
-          endDate={formData.endDate}
-          onStartDateChange={(value) => handleChange("startDate", value)}
-          onEndDateChange={(value) => handleChange("endDate", value)}
+          startDate={formData.course_start_date}
+          endDate={formData.course_end_date}
+          onStartDateChange={(value) => handleChange("course_start_date", value)}
+          onEndDateChange={(value) => handleChange("course_end_date", value)}
         />
       </div>
     </section>

@@ -20,7 +20,7 @@ const DropdownSubInputField: FC<DropdownInputFieldProps> = ({
   useEffect(() => {
     // Set training type options based on selected category
     switch (selectedCategory) {
-      case "Competency-Based Skills":
+      case "Competency-Based-Skills":
         setTrainingTypeOptions([
           "Business Orientation",
           "Customer Orientation",

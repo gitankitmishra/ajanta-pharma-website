@@ -25,7 +25,6 @@ const DesignationStepSection: FC<DesignationStepSectionProps> = () => {
   const { division, designation, handleDesignation, handleDivision } = contextValue;
 
   const {formData}=basicContext
-  const {category}=formData
 
  
 
@@ -41,7 +40,7 @@ const DesignationStepSection: FC<DesignationStepSectionProps> = () => {
           </p>
         </div>
         <div className="designation-checkbox-section">
-          {category === "Medical" || category === "Marketing" ? (
+          {formData.course_category === "Medical" || formData.course_category === "Marketing" ? (
             <>
               <div className="designation-checkbox-section">
                 <Checkbox

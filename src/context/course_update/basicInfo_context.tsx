@@ -1,14 +1,14 @@
-"use client";
+"use client"
 import React, { useState, ReactNode, createContext, useEffect } from "react";
 
 export type FormData = {
-  category: string;
-  trainingType: string;
-  courseCode: string;
-  courseName: string;
-  learningObjectives: string;
-  startDate: string;
-  endDate: string;
+  course_code: string;
+  course_name: string;
+  course_category: string;
+  course_training: string;
+  course_objective: string;
+  course_start_date: string; 
+  course_end_date: string; 
 };
 
 export type BasicContextType = {
@@ -22,33 +22,42 @@ export const BasicContext = createContext<BasicContextType | null>(null);
 export const BasicProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
+  const [prevID,setprevID]=useState(0);
   const [formData, setFormData] = useState<FormData>({
-    category: "",
-    trainingType: "",
-    courseCode: "CBS-04-2024",
-    courseName: "",
-    learningObjectives: "",
-    startDate: "",
-    endDate: "9999-12-09",
+    course_code: "",
+    course_name: "",
+    course_category: "",
+    course_training: "",
+    course_objective: "",
+    course_start_date: "", // Change to empty string
+    course_end_date: "9999-12-09",
   });
 
-  const handleChange: BasicContextType["handleChange"] = (field, value) => {
+  const handleChange: BasicContextType["handleChange"] = async (field, value) => {
     console.log(`Changing ${field} to ${value}`);
-    if (field === "category") {
-      const newCourseCode = generateCourseCode(value);
-      setFormData((prev) => ({ ...prev, [field]: value, courseCode: newCourseCode }));
+    if (field === "course_category") {
+      try {
+        const newPrevID = await generateNewPrevID(value, prevID);
+        setprevID(newPrevID);
+        const newCourseCode = generateCourseCode(value, newPrevID);
+        setFormData((prev) => ({ ...prev, [field]: value, course_code: newCourseCode }));
+      } catch (error) {
+        console.error('Error occurred while updating prevID:', error);
+      }
     } else {
       setFormData((prev) => ({ ...prev, [field]: value }));
     }
   };
+  
+  useEffect(()=>{
+    console.log("FormData",formData);
+    
+  },[formData])
 
-  useEffect(() => {
-    console.log("Course Details : ", formData);
-  }, [formData]);
 
-  const generateCourseCode = (category: string, prevID: string | null = null): string => {
+  const generateCourseCode = (category: string, prevID: number | null = null): string => {
     const categoryTable: { [key: string]: string } = {
-      "Competency-Based Skills": "CBS",
+      "Competency-Based-Skills": "CBS",
       "Medical": "MED",
       "Marketing": "MKT",
       "Personal Development": "PD",
@@ -56,12 +65,12 @@ export const BasicProvider: React.FC<{ children: ReactNode }> = ({
     };
 
     const currentDate: Date = new Date();
-    const month: string = String(currentDate.getMonth() + 1).padStart(2, '0'); // Adding leading zero if month is single digit
-    const year: string = String(currentDate.getFullYear()).slice(-2); // Taking last two digits of the year
+    const month: string = String(currentDate.getMonth() + 1).padStart(2, '0');
+    const year: string = String(currentDate.getFullYear()).slice(-2);
 
     let id: string;
     if (prevID !== null && prevID !== undefined) {
-      id = String(Number(prevID) + 1).padStart(2, '0'); // Incrementing previous ID by 1
+      id = String(Number(prevID) + 1).padStart(2, '0');
     } else {
       id = "01";
     }
@@ -72,28 +81,20 @@ export const BasicProvider: React.FC<{ children: ReactNode }> = ({
 
   const handleDraftSave = () => {
     fetch(
-      "https://ajanta-pharma-server.vercel.app/api/admin/dashboard/publishBasicInfo",
+      "http://localhost:8000/api/admin/dashboard/publishBasicInfo",
       {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          basicInfo: { ...formData, isActive: false, publishDate: new Date() },
+          course_basic: { ...formData, isActive: false, publishDate: new Date() },
         }),
       }
     )
       .then((response) => {
         if (response.status === 200) {
-          setFormData({
-            category: "",
-            trainingType: "",
-            courseCode: "",
-            courseName: "",
-            learningObjectives: "",
-            startDate: "",
-            endDate: "",
-          });
+
           console.log("Draft saved:", response);
         }
         return response.json();
@@ -105,6 +106,49 @@ export const BasicProvider: React.FC<{ children: ReactNode }> = ({
         console.error("Error saving draft:", error);
       });
   };
+
+
+
+  const generateNewPrevID = async (value: string, prevID: number): Promise<number> => {
+    try {
+      const response = await fetch(
+        "http://localhost:8000/api/admin/dashboard/getCourseCodeCount",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            courseCategory: value,
+          }),
+        }
+      );
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      const data = await response.json();
+      const count = data.categoryCount;
+      // Assuming the response contains a property called 'count'
+      console.log("Data acquired", data);
+      // Now you can use the 'count' value as needed
+      return count ; // Increment the count and return
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      // Return previous ID in case of error
+      return prevID; 
+    }
+  };
+  
+  
+  
+    
+    
+
+
+
+
+
+
 
   const contextValue = {
     formData,
