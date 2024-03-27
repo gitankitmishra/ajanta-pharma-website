@@ -6,12 +6,6 @@ import "./style.css";
 
 import DateInputField from "@/components/fields/start-date-input-field";
 
-import PreviousButton from "@/components/buttons/previous-button";
-
-import NextButton from "@/components/buttons/next-button";
-
-import Link from "next/link";
-
 import InputFieldString from "@/components/fields/string-input-field";
 
 import DropdownInputField from "@/components/fields/dropdown-input-field";
@@ -93,6 +87,7 @@ const BasicStepSection: FC<BasicStepSectionProps> = () => {
 
           <InputFieldString
             readonly
+            width="80%"
             className="input-field"
             value={formData.course_code}
             onChange={(value) => handleChange("course_code", value)}
@@ -105,9 +100,11 @@ const BasicStepSection: FC<BasicStepSectionProps> = () => {
 
           <InputFieldString
             placeholder="Enter Course Name"
-            width="77%"
-            value={formData.course_name}
-            onChange={(value) => handleChange("course_name", value)}
+
+            width="80%"
+            value={formData.courseName}
+            onChange={(value) => handleChange("courseName", value)}
+
             className="input-field"
           />
         </div>
