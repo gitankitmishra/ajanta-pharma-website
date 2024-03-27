@@ -94,7 +94,7 @@ export const BasicProvider: React.FC<{ children: ReactNode }> = ({
     )
       .then((response) => {
         if (response.status === 200) {
-       
+
           console.log("Draft saved:", response);
         }
         return response.json();
