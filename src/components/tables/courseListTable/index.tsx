@@ -37,21 +37,21 @@ const AdminCourseListTable: FC = () => {
           {courseData && courseData.map((course: CourseDetails, index: number) => (
             <tr key={index}>
               <td className="admin-course-list-table-data">
-                {course.basicInfo.courseCode} - {course.basicInfo.courseName}
+                {course.basicInfo?.courseCode} - {course.basicInfo?.courseName}
               </td>
               <td className="admin-course-list-table-data">
-                {course.basicInfo.category}
+                {course.basicInfo?.category}
               </td>
               <td className="admin-course-list-table-data">
-                {new Date(course.basicInfo.publishDate).toLocaleDateString()}
+                {new Date(course.basicInfo?.publishDate).toLocaleDateString()}
               </td>
               <td className="admin-course-list-table-data">
                 <p
                   className={`admin-course-status-span ${
-                    course.basicInfo.isActive ? "status-active" : "status-inactive"
+                    course.basicInfo?.isActive ? "status-active" : "status-inactive"
                   }`}
                 >
-                  {course.basicInfo.isActive ? "Active" : "Inactive"}
+                  {course.basicInfo?.isActive ? "Active" : "Inactive"}
                 </p>
               </td>
               <td className="admin-course-list-table-data">
