@@ -8,7 +8,8 @@ const AdminCourseDetail: FC<AdminCourseDetailProps> = () => {
   return (
     <main>
       <AddCourseHeroSection />
-      <AdminCourseDeatilContainer />
+      {/* <AdminCourseDeatilContainer/> */}
+      {/* <AdminCourseDeatilContainer /> */}
     </main>
   );
 };

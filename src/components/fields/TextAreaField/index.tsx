@@ -1,4 +1,4 @@
-import React, { FC, ChangeEvent } from "react";
+import React, { FC, ChangeEvent, useEffect } from "react";
 import "./style.css";
 
 interface TextAreaFieldProps {
@@ -6,6 +6,7 @@ interface TextAreaFieldProps {
   value?: string;
   onChange: (newValue: string) => void;
   placeholder?: string;
+  error?: string;
 }
 
 const TextAreaField: FC<TextAreaFieldProps> = ({
@@ -13,11 +14,12 @@ const TextAreaField: FC<TextAreaFieldProps> = ({
   onChange,
   className,
   placeholder,
+  error = "",
 }) => {
+  
   const handleChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
     onChange(event.target.value);
   };
-
   return (
     <div className="module-input-name">
       <textarea
@@ -26,6 +28,13 @@ const TextAreaField: FC<TextAreaFieldProps> = ({
         className="text-area-input-field"
         placeholder={placeholder}
       />
+      <div
+        className={`dropdown-field-error-message ${
+          error.length !== 0 && "dropdown-field-error-display"
+        }`}
+      >
+        {error}
+      </div>
     </div>
   );
 };

@@ -1,10 +1,13 @@
+import { ArrowDown } from "@/components/icons/arrow-down";
 import React, { FC, useEffect, useState, useMemo } from "react";
+import "./style.css";
 
 interface DropdownInputFieldProps {
   value: string;
   onValueChange: (selectedCategory: string) => void;
   selectedCategory: string;
   placeholder?: string;
+  error?: string;
 }
 
 const DropdownSubInputField: FC<DropdownInputFieldProps> = ({
@@ -12,6 +15,7 @@ const DropdownSubInputField: FC<DropdownInputFieldProps> = ({
   onValueChange,
   selectedCategory,
   placeholder,
+  error = "",
 }) => {
   const [trainingTypeOptions, setTrainingTypeOptions] = useState<string[]>([]);
   const [isNewCategorySelected, setIsNewCategorySelected] =
@@ -71,24 +75,36 @@ const DropdownSubInputField: FC<DropdownInputFieldProps> = ({
   };
 
   return (
-    <div>
-      <select
-        value={value}
-        onChange={handleChange}
-        className={`dropdown-select ${value ? "selected" : "not-selected"}`}
+    <>
+      
+        <select
+          value={value}
+          onChange={handleChange}
+          className={`dropdown-select ${value ? "selected" : "not-selected"}`}
+        >
+          {isNewCategorySelected && placeholder && (
+            <option value="" className="dropdown-option">
+              {placeholder}
+            </option>
+          )}
+          {trainingTypeOptions.map((option) => (
+            <option key={option} value={option} className="dropdown-option">
+              {option}
+            </option>
+          ))}
+        </select>
+      <div
+        className={`dropdown-field-error-message ${
+          error.length !== 0 && "dropdown-field-error-display"
+        }`}
       >
-        {isNewCategorySelected && placeholder && (
-          <option value="" className="dropdown-option">
-            {placeholder}
-          </option>
-        )}
-        {trainingTypeOptions.map((option) => (
-          <option key={option} value={option} className="dropdown-option">
-            {option}
-          </option>
-        ))}
-      </select>
-    </div>
+        {error}
+      </div>
+        <div className="custom-dropdown-arrow">
+          <ArrowDown />
+        </div>
+     
+    </>
   );
 };
 
