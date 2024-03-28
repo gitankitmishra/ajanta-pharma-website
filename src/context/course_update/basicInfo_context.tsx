@@ -22,7 +22,6 @@ export type BasicContextType = {
   };
   formData: FormData;
   handleChange: (field: keyof FormData, value: string) => void;
-  handleCourseCodeAndNameChange: (value: string) => void;
 };
 
 export const BasicContext = createContext<BasicContextType | null>(null);
@@ -40,6 +39,8 @@ export const BasicProvider: React.FC<{ children: ReactNode }> = ({
     course_start_date: "", // Change to empty string
     course_end_date: "9999-12-09",
   });
+  const router=useRouter();
+
 
   const handleChange: BasicContextType["handleChange"] = async (field, value) => {
     console.log(`Changing ${field} to ${value}`);
@@ -149,25 +150,25 @@ export const BasicProvider: React.FC<{ children: ReactNode }> = ({
   const handleStepOneDone = async () => {
     let errors = {};
 
-    if (formData.category.trim().length === 0) {
+    if (formData.course_category.trim().length === 0) {
       errors = { ...errors, course_category: "Select a course category." };
     }
 
-    if (formData.trainingType.trim().length === 0) {
+    if (formData.course_training.trim().length === 0) {
       errors = {
         ...errors,
         course_training_type: "Select a course training type.",
       };
     }
-    if (formData.courseName.trim().length === 0) {
+    if (formData.course_name.trim().length === 0) {
       errors = { ...errors, course_name: "Enter a course name." };
     }
 
-    if (formData.learningObjectives.trim().length === 0) {
+    if (formData.course_objective.trim().length === 0) {
       errors = { ...errors, course_description: "Enter a short description." };
     }
 
-    if (formData.startDate.trim().length === 0) {
+    if (formData.course_start_date.trim().length === 0) {
       errors = { ...errors, start_date: "Select start date." };
     }
     setBasicInformationError(errors);
