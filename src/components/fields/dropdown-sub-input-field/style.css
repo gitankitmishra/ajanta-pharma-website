@@ -1,0 +1,8 @@
+.custom-dropdown-arrow {
+  z-index: 1;
+  position: relative;
+  top: -39%;
+  right: -16.5vw;
+  transform: translateY(-50%);
+  pointer-events: none;
+}

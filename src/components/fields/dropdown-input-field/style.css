@@ -12,6 +12,7 @@
   font-weight: 500;
   color: #1c1d1d;
   line-height: 24px;
+  cursor: pointer;
 }
 
 /* Style for the options */
@@ -29,6 +30,44 @@
 .dropdown-select.not-selected {
   color: #787878; /* Change text color to grey when no option is selected */
 }
-.dropdown-option.not-selected{
+.dropdown-option.not-selected {
   color: #787878;
+}
+.dropdown-field-error-message {
+  color: red;
+  margin-top: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  visibility: hidden;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  transform: translateY(-10px);
+  transition: transform 0.1s linear;
+}
+
+.dropdown-field-error-display {
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.dropdown-select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  padding-right: 25px;
+}
+
+.dropdown-input-field-container {
+  position: relative;
+}
+
+.dropdown-arrow {
+  z-index: 1;
+  position: absolute;
+  top: 50%;
+  right: 24px;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: #333;
 }

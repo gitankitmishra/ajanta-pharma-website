@@ -6,7 +6,7 @@ interface DateInputFieldProps {
   endDate: string;
   onStartDateChange: (value: string) => void;
   onEndDateChange: (value: string) => void;
-  
+  error?: string;
 }
 
 const DateInputField: FC<DateInputFieldProps> = ({
@@ -14,12 +14,14 @@ const DateInputField: FC<DateInputFieldProps> = ({
   endDate,
   onStartDateChange,
   onEndDateChange,
-  
+  error = "",
 }) => {
   const [startSelected, setStartSelected] = useState(false);
   const [endSelected, setEndSelected] = useState(false);
 
-  const handleStartDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleStartDateChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     onStartDateChange(event.target.value);
     setStartSelected(true);
   };
@@ -32,16 +34,29 @@ const DateInputField: FC<DateInputFieldProps> = ({
   return (
     <div className="date-input-main-section">
       <div className="start-date-container">
-        <label htmlFor="" className="date-label">Start Date</label>
+        <label htmlFor="" className="date-label">
+          Start Date
+        </label>
         <input
           type="date"
-          className={`start-date-input-field ${startSelected ? 'selected' : ''}`}
+          className={`start-date-input-field ${
+            startSelected ? "selected" : ""
+          }`}
           value={startDate}
           onChange={handleStartDateChange}
         />
+        <div
+          className={`dropdown-field-error-message ${
+            error.length !== 0 && "dropdown-field-error-display"
+          }`}
+        >
+          {error}
+        </div>
       </div>
       <div className="end-date-container">
-        <label htmlFor="" className="date-label">End Date</label>
+        <label htmlFor="" className="date-label">
+          End Date
+        </label>
         <input
           type="date"
           className="end-date-input-field "
@@ -49,7 +64,7 @@ const DateInputField: FC<DateInputFieldProps> = ({
           onChange={handleEndDateChange}
         />
       </div>
-    </div>  
+    </div>
   );
 };
 

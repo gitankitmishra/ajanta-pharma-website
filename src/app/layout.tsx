@@ -4,6 +4,9 @@ import "./globals.css";
 import { Raleway } from "next/font/google";
 import Navbar from "@/components/navbar";
 import { usePathname, useRouter } from "next/navigation";
+import BasicProvider, {
+  BasicContext,
+} from "@/context/course_update/basicInfo_context";
 const raleway = Raleway({ subsets: ["latin"] });
 
 // export const metadata: Metadata = {
@@ -24,10 +27,12 @@ export default function RootLayout({
 
   return (
     <html lang="en">
-      <body className={`main-body ${raleway.className}`}>
-        {!hideNavbar && <Navbar isAdmin={isAdmin} />}
-        <main>{children}</main>
-      </body>
+      <BasicProvider>
+        <body className={`main-body ${raleway.className}`}>
+          {!hideNavbar && <Navbar isAdmin={isAdmin} />}
+          <main>{children}</main>
+        </body>
+      </BasicProvider>
     </html>
   );
 }

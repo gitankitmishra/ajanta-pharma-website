@@ -1,5 +1,7 @@
-"use client"
+"use client";
+import { Basicinformation } from "@/types/Basicinformation";
 import React, { useState, ReactNode, createContext, useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 export type FormData = {
   course_code: string;
@@ -12,9 +14,15 @@ export type FormData = {
 };
 
 export type BasicContextType = {
+  active_step: number;
+  handleNextClick: () => void;
+  handlePreviousClick: () => void;
+  basic_information_error: {
+    [key: string]: string;
+  };
   formData: FormData;
   handleChange: (field: keyof FormData, value: string) => void;
-  handleDraftSave: () => void;
+  handleCourseCodeAndNameChange: (value: string) => void;
 };
 
 export const BasicContext = createContext<BasicContextType | null>(null);
@@ -49,11 +57,9 @@ export const BasicProvider: React.FC<{ children: ReactNode }> = ({
     }
   };
   
-  useEffect(()=>{
-    console.log("FormData",formData);
-    
-  },[formData])
-
+  useEffect(() => {
+    console.log("FormData", formData);
+  }, [formData]);
 
   const generateCourseCode = (category: string, prevID: number | null = null): string => {
     const categoryTable: { [key: string]: string } = {
@@ -77,7 +83,7 @@ export const BasicProvider: React.FC<{ children: ReactNode }> = ({
 
     const courseCode: string = `${categoryTable[category]}-${month}${year}-${id}`;
     return courseCode;
-  }
+  };
 
   const handleDraftSave = () => {
     fetch(
@@ -106,10 +112,88 @@ export const BasicProvider: React.FC<{ children: ReactNode }> = ({
         console.error("Error saving draft:", error);
       });
   };
+  const [active_step, setActiveStep] = useState<number>(0);
 
+  const handleNextClick = () => {
+    if (active_step === 0) {
+      handleStepOneDone();
+    } else if (active_step === 1) {
+      handleStepTwoDone();
+    } else if (active_step === 2) {
+      handleStepThreeDone();
+    } else if (active_step === 3) {
+      handleStepFourDone();
+    }
+  };
 
+  const handlePreviousClick = () => {
+    if (active_step === 0) {
+      router.push("/admin/admin-courses"); // Navigate to the course page
+    } else {
+      setActiveStep((prevActiveStep) => prevActiveStep - 1);
+    }
+  };
 
-  const generateNewPrevID = async (value: string, prevID: number): Promise<number> => {
+  const [basic_information_error, setBasicInformationError] = useState<{
+    [key: string]: string;
+  }>({
+    course_code: "",
+    course_name: "",
+    course_category: "",
+    course_training: "",
+    course_objective: "",
+    course_start_date: "", 
+    course_end_date: ""
+  });
+
+  const handleStepOneDone = async () => {
+    let errors = {};
+
+    if (formData.category.trim().length === 0) {
+      errors = { ...errors, course_category: "Select a course category." };
+    }
+
+    if (formData.trainingType.trim().length === 0) {
+      errors = {
+        ...errors,
+        course_training_type: "Select a course training type.",
+      };
+    }
+    if (formData.courseName.trim().length === 0) {
+      errors = { ...errors, course_name: "Enter a course name." };
+    }
+
+    if (formData.learningObjectives.trim().length === 0) {
+      errors = { ...errors, course_description: "Enter a short description." };
+    }
+
+    if (formData.startDate.trim().length === 0) {
+      errors = { ...errors, start_date: "Select start date." };
+    }
+    setBasicInformationError(errors);
+
+    console.log(errors);
+
+    if (Object.keys(errors).length !== 0) {
+      return;
+    }
+
+    setActiveStep(1);
+  };
+
+  const handleStepTwoDone = () => {
+    setActiveStep(2);
+  };
+
+  const handleStepThreeDone = () => {
+    setActiveStep(3);
+  };
+
+  const handleStepFourDone = () => {
+    setActiveStep(4);
+  };
+
+ const generateNewPrevID = async (value: string, prevID: number): Promise<number> => {
     try {
       const response = await fetch(
         "http://localhost:8000/api/admin/dashboard/getCourseCodeCount",
@@ -138,22 +222,16 @@ export const BasicProvider: React.FC<{ children: ReactNode }> = ({
       return prevID; 
     }
   };
-  
-  
-  
-    
-    
-
-
-
-
-
-
 
   const contextValue = {
     formData,
     handleChange,
     handleDraftSave,
+    active_step,
+    handleNextClick,
+    handlePreviousClick,
+    basic_information_error,
+    
   };
 
   return (
