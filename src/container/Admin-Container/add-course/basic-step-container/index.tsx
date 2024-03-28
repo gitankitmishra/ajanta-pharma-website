@@ -81,9 +81,9 @@ const BasicStepSection: FC<BasicStepSectionProps> = () => {
           <DropdownSubInputField
             placeholder="Select Training Type"
 
-            value={formData.trainingType}
-            onValueChange={(value) => handleChange("trainingType", value)}
-            selectedCategory={formData.category} // Pass the selected category
+            value={formData.course_training}
+            onValueChange={(value) => handleChange("course_training", value)}
+            selectedCategory={formData.course_category} // Pass the selected category
             error={basic_information_error.course_training_type}
 
           />
@@ -129,8 +129,8 @@ const BasicStepSection: FC<BasicStepSectionProps> = () => {
           placeholder="Enter Learning Objective"
           className="basic-learning-objective-input"
 
-          value={formData.learningObjectives}
-          onChange={(value) => handleChange("learningObjectives", value)}
+          value={formData.course_objective}
+          onChange={(value) => handleChange("course_objective", value)}
           error={basic_information_error.course_description}
 
         />
@@ -139,10 +139,10 @@ const BasicStepSection: FC<BasicStepSectionProps> = () => {
       <div className="basic-div-section3">
         <DateInputField
 
-          startDate={formData.startDate}
-          endDate={formData.endDate}
-          onStartDateChange={(value) => handleChange("startDate", value)}
-          onEndDateChange={(value) => handleChange("endDate", value)}
+          startDate={formData.course_start_date}
+          endDate={formData.course_end_date}
+          onStartDateChange={(value) => handleChange("course_start_date", value)}
+          onEndDateChange={(value) => handleChange("course_end_date", value)}
           error={basic_information_error.start_date}
 
         />

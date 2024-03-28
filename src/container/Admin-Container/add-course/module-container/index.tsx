@@ -30,10 +30,10 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
   // Now you can safely destructure formData
   const {
 
-    category,
-    trainingType,
-    courseCode: basicCourseCode,
-    courseName,
+    course_category,
+    course_training,
+    course_code: basicCourseCode,
+    course_name,
   } = formData;
   const {
     modules,
@@ -46,6 +46,7 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
     handleAssessmentFileNameChange,
     handleAssessmentTypeChange,
     handleexcelFileSelect,
+    handleChangeAssessmentName,
     //optional assessment
     assessmentOpt,
     handleRadioChange,
@@ -130,8 +131,7 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
   
 
 
-  const [optexcelFile, setoptexcelFile] = useState<FileList | null>(null);
-  const [selectedAssessment, setSelectedAssessment] = useState<string>("");
+
 
 
   return (
@@ -139,17 +139,17 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
       <div className="module-div-section1">
         <div className="module-div-section1-div1">
           <p className="module-category-text">Category</p>
-          <p className="module-category-type-text">{category}</p>
+          <p className="module-category-type-text">{course_category}</p>
         </div>
 
         <div className="module-div-section1-div2">
           <p className="module-category-text">Training</p>
-          <p className="module-category-type-text">{trainingType}</p>
+          <p className="module-category-type-text">{course_training}</p>
         </div>
         <div className="module-div-section1-div3">
           <p className="module-category-text">Course Code & Name</p>
           <p className="module-category-type-text">
-            {basicCourseCode} - {courseName}
+            {basicCourseCode} - {course_name}
           </p>
         </div>
       </div>
@@ -221,9 +221,9 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
                 <InputField
                   moduleValue={[assessment?.assessment_name]}
                   onChange={(newFileName: string[]) =>
-
+                    
                     handleChangeAssessmentName(newFileName[0], index)
-                }
+                  }
 
                 />
               </div>
