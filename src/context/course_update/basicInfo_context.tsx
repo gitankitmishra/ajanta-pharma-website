@@ -1,15 +1,15 @@
 "use client"
 import React, { useState, ReactNode, createContext } from "react";
 
-export type FormData = {
-    category: string;
-    trainingType: string;
-    courseCode: string;
-    courseName: string;
-    learningObjectives: string;
-    startDate: string;
-    endDate: string;
-}
+    export type FormData = {
+        category: string;
+        trainingType: string;
+        courseCode: string;
+        courseName: string;
+        learningObjectives: string;
+        startDate: string;
+        endDate: string;
+    }
 
 export type BasicContextType = {
     formData: FormData;
