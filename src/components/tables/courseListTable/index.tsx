@@ -55,7 +55,9 @@ const AdminCourseListTable: FC = () => {
                 </p>
               </td>
               <td className="admin-course-list-table-data">
-                <Link href={`/admin/admin-course-detail/${course._id}`}>
+                <Link href={`/admin/admin-course-detail/`}>
+                  {/* ${course._id} Need a context to hold this value to use this id to view the course 
+                  for a edit logic */}
                <ViewEyeIcon /> 
                 </Link>
               </td>
