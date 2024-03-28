@@ -7,6 +7,7 @@ interface InputFieldStringProps {
   placeholder?: string;
   width?: string;
   readonly?: boolean;
+  error?: string;
 }
 
 const InputFieldString: FC<InputFieldStringProps> = ({
@@ -16,6 +17,7 @@ const InputFieldString: FC<InputFieldStringProps> = ({
   placeholder,
   width,
   readonly,
+  error = "",
 }) => {
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     onChange(event.target.value);
@@ -25,13 +27,20 @@ const InputFieldString: FC<InputFieldStringProps> = ({
     <div className="module-input-name">
       <input
         readOnly={readonly}
-       style={{width:width}}
+        style={{ width: width }}
         type="text"
         value={value}
         onChange={handleChange}
         className={className}
         placeholder={placeholder}
       />
+      <div
+        className={`dropdown-field-error-message ${
+          error.length !== 0 && "dropdown-field-error-display"
+        }`}
+      >
+        {error}
+      </div>
     </div>
   );
 };

@@ -37,6 +37,9 @@ interface FormData {
 
 const BasicStepSection: FC<BasicStepSectionProps> = () => {
   const contextValue = useContext(BasicContext);
+  const { basic_information_error } = useContext(
+    BasicContext
+  ) as BasicContextType;
 
   if (!contextValue) {
     return null;
@@ -46,6 +49,8 @@ const BasicStepSection: FC<BasicStepSectionProps> = () => {
   useEffect(() => {
     localStorage.setItem("category", "Competency-Based Skills");
   }, []);
+
+  //handle change to update the error if the field is updated
 
   return (
     <section className="basic-main-section">
@@ -64,6 +69,7 @@ const BasicStepSection: FC<BasicStepSectionProps> = () => {
             option3={"Marketing"}
             option4={"Personal Development"}
             option5={"Classroom Training"}
+            error={basic_information_error.course_category}
           />
         </div>
 
@@ -77,6 +83,7 @@ const BasicStepSection: FC<BasicStepSectionProps> = () => {
             value={formData.trainingType}
             onValueChange={(value) => handleChange("trainingType", value)}
             selectedCategory={formData.category} // Pass the selected category
+            error={basic_information_error.course_training_type}
           />
         </div>
 
@@ -104,6 +111,7 @@ const BasicStepSection: FC<BasicStepSectionProps> = () => {
             value={formData.courseName}
             onChange={(value) => handleChange("courseName", value)}
             className="input-field"
+            error={basic_information_error.course_name}
           />
         </div>
       </div>
@@ -118,6 +126,7 @@ const BasicStepSection: FC<BasicStepSectionProps> = () => {
           className="basic-learning-objective-input"
           value={formData.learningObjectives}
           onChange={(value) => handleChange("learningObjectives", value)}
+          error={basic_information_error.course_description}
         />
       </div>
 
@@ -127,6 +136,7 @@ const BasicStepSection: FC<BasicStepSectionProps> = () => {
           endDate={formData.endDate}
           onStartDateChange={(value) => handleChange("startDate", value)}
           onEndDateChange={(value) => handleChange("endDate", value)}
+          error={basic_information_error.start_date}
         />
       </div>
     </section>

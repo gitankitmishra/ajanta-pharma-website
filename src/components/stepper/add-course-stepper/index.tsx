@@ -10,6 +10,7 @@ import NextButton from "@/components/buttons/next-button";
 import { useRouter } from "next/navigation";
 import BasicProvider, {
   BasicContext,
+  BasicContextType,
 } from "@/context/course_update/basicInfo_context";
 import { DesignationContext } from "@/context/course_update/designation_context";
 import { ModuleContext } from "@/context/course_update/module_context";
@@ -20,13 +21,16 @@ type StepContent = {
 
 const Stepper = () => {
   const router = useRouter();
-  const [activeStep, setActiveStep] = useState(0);
+  // const [activeStep, setActiveStep] = useState(0);
   const steps = ["Basic", "Module/Quiz", "Designation", "Upload"];
   const [category, setCategory] = useState("");
   const handleCategoryChange = (value: string) => {
     setCategory(value);
   };
   const basicContextApi = useContext(BasicContext);
+  const { active_step, handleNextClick, handlePreviousClick } = useContext(
+    BasicContext
+  ) as BasicContextType; //Basic Context
   const desingationContextApi = useContext(DesignationContext);
   const { handleDraftSave }: any = basicContextApi;
   const { publishDesignation }: any = desingationContextApi;
@@ -36,7 +40,7 @@ const Stepper = () => {
 
   //Logic to take the activeStep for the Draft login
   const handleApiCall = () => {
-    switch (activeStep) {
+    switch (active_step) {
       case 0:
         // Call API for basic info
         // Example: handleDraftSave for Basic Info
@@ -58,28 +62,16 @@ const Stepper = () => {
     }
   };
 
-  const [stepContent, setStepContent] = useState<StepContent>({
+  const stepContent: StepContent = {
     Basic: <BasicStepSection />,
     "Module/Quiz": <ModuleQuizStepSection />,
     Designation: <DesignationStepSection />,
     Upload: <UploadStepSection />,
-  });
-
-  const handleNext = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
-  };
-
-  const handleBack = () => {
-    if (activeStep === 0) {
-      router.push("/admin/admin-courses"); // Navigate to the course page
-    } else {
-      setActiveStep((prevActiveStep) => prevActiveStep - 1);
-    }
   };
 
   useEffect(() => {
-    localStorage.setItem("activeStep", JSON.stringify(activeStep));
-  }, [activeStep]);
+    localStorage.setItem("activeStep", JSON.stringify(active_step));
+  }, [active_step]);
 
   return (
     <div className="stepper-container">
@@ -90,7 +82,7 @@ const Stepper = () => {
               <div
                 key={index}
                 className={`steps-title ${
-                  activeStep === index ? "active-step" : ""
+                  active_step === index ? "active-step" : ""
                 }`}
               >
                 {step}
@@ -98,7 +90,7 @@ const Stepper = () => {
 
               <div
                 className={`${
-                  activeStep === index ? "active-step-underline" : ""
+                  active_step === index ? "active-step-underline" : ""
                 }`}
               ></div>
             </div>
@@ -109,15 +101,15 @@ const Stepper = () => {
         ))}
       </div>
       <div className="step-separator"></div>
-      <div className="step-content">{stepContent[steps[activeStep]]}</div>
+      <div className="step-content">{stepContent[steps[active_step]]}</div>
       <div className="button-container">
         <div
-          className={`${activeStep === 0 ? "active" : ""} ${
-            activeStep === 0 ? "disabled" : ""
+          className={`${active_step === 0 ? "active" : ""} ${
+            active_step === 0 ? "disabled" : ""
           }`}
-          onClick={handleBack}
+          onClick={handlePreviousClick}
         >
-          <PreviousButton text={activeStep === 0 ? "Discard" : "Previous"} />
+          <PreviousButton text={active_step === 0 ? "Discard" : "Previous"} />
         </div>
         {/* {activeStep === 0 || activeStep === 1 || activeStep === 2 ? (
           <div>
@@ -130,12 +122,11 @@ const Stepper = () => {
         ) : null} */}
 
         <div
-          className={`${activeStep === steps.length - 1 ? "active" : ""} ${
-            activeStep === steps.length - 1 ? "disabled" : ""
+          className={`${active_step === steps.length - 1 ? "active" : ""} ${
+            active_step === steps.length - 1 ? "disabled" : ""
           }`}
-          onClick={activeStep !== steps.length - 1 ? handleNext : undefined}
         >
-          <NextButton text="Next" onClick={handleApiCall} />
+          <NextButton text="Next" onClick={handleNextClick} />
         </div>
       </div>
     </div>

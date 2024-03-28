@@ -177,7 +177,7 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
               </div>
               <div className="module-input-name">
                 <label htmlFor="" className="module-container-labels">
-                  Module Name
+                  Assessment Name
                 </label>
                 <InputField
                   moduleValue={[assessment[index]?.assessmentFileName]}
