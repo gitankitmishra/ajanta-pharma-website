@@ -3,14 +3,18 @@
 }
 .stepper-container {
   margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
 }
 
 .step-labels-container {
   display: flex;
   justify-content: space-between;
   margin-bottom: 10px;
-  padding: 30px 0 30px 40px;
-  width: 96%;
+  padding: 30px 70px 30px 70px;
+  width: 70%;
 }
 
 .steps-text-and-underline-combined-container {
@@ -61,7 +65,7 @@
 }
 
 .step-content {
-  width: 100%;
+  width: 94%;
   display: flex;
   justify-content: center;
 }

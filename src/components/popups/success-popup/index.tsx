@@ -1,3 +1,4 @@
+"use client"
 import { FC, useEffect } from "react";
 import "./style.css";
 import UncoloredAjantaLogo from "@/public/images/uncoloured-logo.svg";

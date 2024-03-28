@@ -1,6 +1,6 @@
 .module-main-section {
   width: 95%;
-  height: 852px;
+  /* height: 852px; */
   border-radius: 12px;
   border: 1px solid rgba(254, 129, 0, 0.5);
   display: flex;
@@ -57,7 +57,7 @@
   display: flex;
   flex-direction: column;
   gap: 32px;
-  padding: 0 32px 32px 32px;
+  padding: 0 32px 120px 32px;
 }
 
 .module-input {

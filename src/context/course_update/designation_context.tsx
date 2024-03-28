@@ -1,6 +1,7 @@
 "use client"
 
-import React, { useState, ReactNode, createContext, useEffect } from "react";
+import React, { useState, ReactNode, createContext, useEffect, useContext } from "react";
+import { BasicContext } from "./basicInfo_context";
 
 export type DesignationContextType = {
     publishDesignation: () => void;
@@ -10,12 +11,21 @@ export type DesignationContextType = {
     handleDesignation: (value: string, isChecked: boolean) => void;
 }
 
+
 export const DesignationContext = createContext<DesignationContextType | null>(null);
 
 export const DesignationProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const [division, setDivision] = useState<string[]>([]);
     const [designation, setDesignation] = useState<string[]>([]);
+    const categoryValue=useContext(BasicContext);
 
+    if (!categoryValue) { 
+        return null;
+    }
+const {formData}=categoryValue;
+
+
+let courseCode=formData.course_code;
     const handleDivision = (value: string, isChecked: boolean) => {
         setDivision((prev) => {
             if (isChecked) {
@@ -35,7 +45,7 @@ export const DesignationProvider: React.FC<{ children: ReactNode }> = ({ childre
             }
         });
     };
-
+        
     const publishDesignation = async () => {
         try {
             if (designation.length === 0) {
@@ -46,7 +56,7 @@ export const DesignationProvider: React.FC<{ children: ReactNode }> = ({ childre
             let response;
             if (division.length > 0) {
                 response = await fetch(
-                    "https://ajanta-pharma-server.vercel.app/api/admin/dashboard/publishDesignation/B111",
+                    `http://localhost:8000/api/admin/dashboard/publishDesignation/${courseCode}`,
                     {
                         method: "PUT",
                         headers: {
@@ -60,7 +70,7 @@ export const DesignationProvider: React.FC<{ children: ReactNode }> = ({ childre
                 );
             } else {
                 response = await fetch(
-                    "https://ajanta-pharma-server.vercel.app/api/admin/dashboard/publishDesignation/B111",
+                    `http://localhost:8000/api/admin/dashboard/publishDesignation/${courseCode}`,
                     {
                         method: "PUT",
                         headers: {
@@ -72,6 +82,7 @@ export const DesignationProvider: React.FC<{ children: ReactNode }> = ({ childre
                     }
                 );
             }
+            console.log("data check",formData.course_category);
 
             if (!response.ok) {
                 throw new Error("Failed to publish designation");
@@ -94,13 +105,15 @@ export const DesignationProvider: React.FC<{ children: ReactNode }> = ({ childre
         handleDesignation,
     };
     useEffect(() => {
+        console.log("Data check",formData.course_code);
         console.log("Desingation", designation);
         console.log("Division", division);
+        
       }, [division, designation]);
     return (
         <DesignationContext.Provider value={contextValue}>
             {children}
-        </DesignationContext.Provider>
+        </DesignationContext.Provider>                                                              
     );
 };
 
