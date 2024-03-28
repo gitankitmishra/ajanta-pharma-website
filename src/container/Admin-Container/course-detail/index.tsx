@@ -13,7 +13,6 @@ import NextButton from "@/components/buttons/next-button";
 import { GreyPlusIcon } from "@/components/icons/greyPlusIcon";
 
 interface AdminCourseDeatilContainerProps {
-  onCategoryChange: (value: string) => void;
 }
 
 interface FormData {
@@ -33,7 +32,6 @@ interface FormData {
 }
 
 const AdminCourseDeatilContainer: FC<AdminCourseDeatilContainerProps> = ({
-  onCategoryChange,
 }) => {
   const [isClicked, setIsClicked] = useState(false);
   const [buttonText, setButtonText] = useState({
@@ -113,7 +111,7 @@ const AdminCourseDeatilContainer: FC<AdminCourseDeatilContainerProps> = ({
     setFormData((prev) => ({ ...prev, [field]: value }));
 
     if (field === "category") {
-      onCategoryChange(value);
+      // onCategoryChange(value);
 
       localStorage.setItem("category", value);
     }
