@@ -1,5 +1,8 @@
+.main-body main {
+  width: 100% !important;
+}
 .admin-course-detail-container-main-section {
-  width: 92%;
+  width: 95%;
   padding: 0 40px;
 }
 .admin-course-detail-text {

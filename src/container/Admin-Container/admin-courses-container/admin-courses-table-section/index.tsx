@@ -29,14 +29,7 @@ const AdminCoursesTableSection: FC<AdminCoursesTableSectionProps> = () => {
       </div>
       <div>
         <AdminCourseListTable
-          name={"Critical Thinking"}
-          courseCode={"PD2"}
-          category={"Competency Based Skills"}
-          date={"31/01/2024"}
-          status={"Active"}
-          view={<ViewEyeIcon />}
-          currentPage={currentPage}
-        />
+              />
       </div>
       <div className="admin-courses-pagination-section">
         <CustomPagination

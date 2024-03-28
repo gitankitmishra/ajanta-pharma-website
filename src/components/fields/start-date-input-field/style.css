@@ -1,6 +1,6 @@
 .start-date-input-field,
 .end-date-input-field {
-  width: 87%;
+  /* width: 87%; */
   height: 1.7rem;
   border-radius: 8px;
   background: rgba(254, 129, 0, 0.1);
@@ -16,18 +16,35 @@
 }
 .date-input-main-section {
   width: 100%;
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
   gap: 3rem;
 }
-.start-date-container, .end-date-container{
+.start-date-container,
+.end-date-container {
   display: flex;
-  width: 30%;
+  width: 100%;
   gap: 10px;
   flex-direction: column;
 }
-.date-label{
+.date-label {
   color: #000;
-font-size: 18px;
-font-weight: 400;
-line-height: 28px; 
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 28px;
 }
+.start-date-input-field.selected {
+  color: #000000;
+}
+
+/* .end-date-input-field.selected {
+  color: #000000;
+} */
+
+.start-date-input-field:not(.selected) {
+  color: #787878;
+}
+
+/* .end-date-input-field:not(.selected) {
+  color: #787878;
+} */

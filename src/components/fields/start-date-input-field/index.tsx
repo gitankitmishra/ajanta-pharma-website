@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, useState } from "react";
 import "./style.css";
 
 interface DateInputFieldProps {
@@ -6,6 +6,7 @@ interface DateInputFieldProps {
   endDate: string;
   onStartDateChange: (value: string) => void;
   onEndDateChange: (value: string) => void;
+  
 }
 
 const DateInputField: FC<DateInputFieldProps> = ({
@@ -13,13 +14,19 @@ const DateInputField: FC<DateInputFieldProps> = ({
   endDate,
   onStartDateChange,
   onEndDateChange,
+  
 }) => {
+  const [startSelected, setStartSelected] = useState(false);
+  const [endSelected, setEndSelected] = useState(false);
+
   const handleStartDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     onStartDateChange(event.target.value);
+    setStartSelected(true);
   };
 
   const handleEndDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     onEndDateChange(event.target.value);
+    setEndSelected(true);
   };
 
   return (
@@ -28,7 +35,7 @@ const DateInputField: FC<DateInputFieldProps> = ({
         <label htmlFor="" className="date-label">Start Date</label>
         <input
           type="date"
-          className="start-date-input-field"
+          className={`start-date-input-field ${startSelected ? 'selected' : ''}`}
           value={startDate}
           onChange={handleStartDateChange}
         />
@@ -37,7 +44,7 @@ const DateInputField: FC<DateInputFieldProps> = ({
         <label htmlFor="" className="date-label">End Date</label>
         <input
           type="date"
-          className="end-date-input-field"
+          className="end-date-input-field "
           value={endDate}
           onChange={handleEndDateChange}
         />

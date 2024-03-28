@@ -6,21 +6,18 @@ import "./style.css";
 
 import DateInputField from "@/components/fields/start-date-input-field";
 
-import PreviousButton from "@/components/buttons/previous-button";
-
-import NextButton from "@/components/buttons/next-button";
-
-import Link from "next/link";
-
 import InputFieldString from "@/components/fields/string-input-field";
 
 import DropdownInputField from "@/components/fields/dropdown-input-field";
 
 import DropdownSubInputField from "@/components/fields/dropdown-sub-input-field";
-import { BasicContext, BasicContextType } from "@/context/course_update/basicInfo_context";
+import {
+  BasicContext,
+  BasicContextType,
+} from "@/context/course_update/basicInfo_context";
+import TextAreaField from "@/components/fields/TextAreaField";
 
-interface BasicStepSectionProps {
-}
+interface BasicStepSectionProps {}
 
 interface FormData {
   category: string;
@@ -39,48 +36,16 @@ interface FormData {
 }
 
 const BasicStepSection: FC<BasicStepSectionProps> = () => {
-      const contextValue=useContext(BasicContext);
+  const contextValue = useContext(BasicContext);
 
-      if (!contextValue) {
-        return null;
-      }
-      const { formData, handleChange, handleCourseCodeAndNameChange }:BasicContextType=contextValue;
-
-
-
+  if (!contextValue) {
+    return null;
+  }
+  const { formData, handleChange }: BasicContextType = contextValue;
 
   useEffect(() => {
     localStorage.setItem("category", "Competency-Based Skills");
   }, []);
-
-  useEffect(() => {
-    switch (formData.category) {
-      case "Competency-Based Skills":
-        handleChange("trainingType", "Business Orientation");
-        break;
-      case "Medical":
-        handleChange("trainingType", "Medical");
-        break;
-      case "Marketing":
-        handleChange("trainingType", "Brand Detailing");
-        break;
-      case "Personal Development":
-        handleChange("trainingType", "Communication");
-        break;
-      case "Classroom Training":
-        handleChange("trainingType", "Medical Representative");
-        break;
-      default:
-        break;
-    }
-  }, [formData.category]);
-
-
-  
-
-  useEffect(() => {
-    console.log("Form Data:", formData);
-  }, [formData]);
 
   return (
     <section className="basic-main-section">
@@ -91,9 +56,10 @@ const BasicStepSection: FC<BasicStepSectionProps> = () => {
           </label>
 
           <DropdownInputField
-            value={formData.category}
-            onValueChange={(value) => handleChange("category", value)}
-            option1={"Competency-Based Skills"}
+            placeholder="Select Category"
+            value={formData.course_category}
+            onValueChange={(value) => handleChange("course_category", value)}
+            option1={"Competency-Based-Skills"}
             option2={"Medical"}
             option3={"Marketing"}
             option4={"Personal Development"}
@@ -103,25 +69,43 @@ const BasicStepSection: FC<BasicStepSectionProps> = () => {
 
         <div className="basic-section1-div-sections">
           <label htmlFor="" className="basic-section-labels">
-            Select trainingType
+            Select Training Type
           </label>
 
           <DropdownSubInputField
-            value={formData.trainingType}
-            onValueChange={(value) => handleChange("trainingType", value)}
-            selectedCategory={formData.category} // Pass the selected category
+            placeholder="Select Training Type"
+            value={formData.course_training}
+            onValueChange={(value) => handleChange("course_training", value)}
+            selectedCategory={formData.course_category} // Pass the selected category
           />
         </div>
 
         <div className="basic-section1-div-sections">
           <label htmlFor="" className="basic-section-labels">
-            Course Code & Name
+            Course Code
           </label>
 
           <InputFieldString
+            readonly
+            width="80%"
             className="input-field"
-            value={formData.courseCode + " " + formData.courseName}
-            onChange={handleCourseCodeAndNameChange}
+            value={formData.course_code}
+            onChange={(value) => handleChange("course_code", value)}
+          />
+        </div>
+        <div className="basic-section1-div-sections">
+          <label htmlFor="" className="basic-section-labels">
+            Course Name
+          </label>
+
+          <InputFieldString
+            placeholder="Enter Course Name"
+
+            width="80%"
+            value={formData.courseName}
+            onChange={(value) => handleChange("courseName", value)}
+
+            className="input-field"
           />
         </div>
       </div>
@@ -131,39 +115,22 @@ const BasicStepSection: FC<BasicStepSectionProps> = () => {
           Learning Objective
         </label>
 
-        <InputFieldString
+        <TextAreaField
+          placeholder="Enter Learning Objective"
           className="basic-learning-objective-input"
-          value={formData.learningObjectives}
-          onChange={(value) => handleChange("learningObjectives", value)}
+          value={formData.course_objective}
+          onChange={(value) => handleChange("course_objective", value)}
         />
       </div>
-      
+
       <div className="basic-div-section3">
         <DateInputField
-          startDate={formData.startDate}
-          endDate={formData.endDate}
-          onStartDateChange={(value) => handleChange("startDate", value)}
-          onEndDateChange={(value) => handleChange("endDate", value)}
-          
+          startDate={formData.course_start_date}
+          endDate={formData.course_end_date}
+          onStartDateChange={(value) => handleChange("course_start_date", value)}
+          onEndDateChange={(value) => handleChange("course_end_date", value)}
         />
-        <div className="draft-button-placement">
-          {/* <button className="basic-draft-button" onClick={handleDraftSave}>
-            Draft
-          </button> */}
-          </div>
-        </div>
-
-      {/* <div className="basic-div-section4">
-        <Link href="/admin/admin-courses">
-        <PreviousButton text={"Discard"} />
-        </Link> */}
-
-      {/* <button className="basic-draft-button" onClick={handleDraftSave}>
-            Save as Draft
-          </button> */}
-      {/* 
-        <NextButton text={"Next"} />
-      </div> */}
+      </div>
     </section>
   );
 };
