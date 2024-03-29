@@ -89,8 +89,8 @@ const UploadStepSection: FC<UploadStepSectionProps> = () => {
   };
 
   useEffect(() => {
-    previewData();
-  }, []);
+    console.log("prev", previewData);
+  }, [previewData]);
 
   return (
     <section className="upload-main-section">
