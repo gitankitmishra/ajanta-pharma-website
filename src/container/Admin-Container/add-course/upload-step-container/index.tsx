@@ -40,7 +40,7 @@ interface UploadStepSectionProps {}
 
 const UploadStepSection: FC<UploadStepSectionProps> = () => {
   const [courseData, setCourseData] = useState<CourseData | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   const handleUploadClick = () => {
     setIsModalOpen(true);
