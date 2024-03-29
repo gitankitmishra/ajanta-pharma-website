@@ -132,3 +132,8 @@
 .module-assessment-radio-btn{
   accent-color: #000;
 }
+
+  .download_image img{
+    width: 2vw;
+    height: 5vw;
+  }
