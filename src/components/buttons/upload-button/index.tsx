@@ -4,33 +4,56 @@ import "./style.css";
 
 interface UploadButtonProps {
   upload: string;
-  onFileSelect: (files: FileList | null) => void;
-  acceptedTypes?: string; 
-  formatText: string
+  onFileSelect?: (files: File) => void;
+  uploadFile?: () => (selectedFile: File) => void;
+  acceptedTypes?: string;
+  formatText: string;
+  id?: string;
 }
 
-const UploadButton: React.FC<UploadButtonProps> = ({ upload, onFileSelect, acceptedTypes,formatText }) => {
+const UploadButton: React.FC<UploadButtonProps> = ({
+  upload,
+  onFileSelect,
+  acceptedTypes,
+  formatText,
+  uploadFile,
+  id,
+}) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleClick = () => {
-    fileInputRef.current?.click(); 
+    fileInputRef.current?.click();
   };
 
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const selectedFiles = event.target.files;
-    onFileSelect(selectedFiles);
+    const selectedFile = event.target.files?.[0];
+    if (selectedFile) {
+      onFileSelect && onFileSelect(selectedFile);
+      if (uploadFile) {
+        const handler = uploadFile();
+        handler(selectedFile);
+      }
+    } else {
+      console.error("No file selected.");
+    }
   };
 
   return (
     <div>
       <input
+        id={id}
         type="file"
         ref={fileInputRef}
-        accept={acceptedTypes || ".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"} 
+        accept={
+          acceptedTypes ||
+          ".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        }
         onChange={handleFileSelect}
-        style={{ display: "none" }} 
+        style={{ display: "none" }}
       />
-      <button className="upload-btn" onClick={handleClick}>{upload}</button>
+      <button className="upload-btn" onClick={handleClick}>
+        {upload}
+      </button>
       <span className="upload-btn-format-type-text">{formatText} </span>
     </div>
   );

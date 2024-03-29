@@ -1,32 +1,30 @@
-import React, { FC, useState } from "react";
+import React, { ChangeEvent, FC, useState } from "react";
 import "./style.css";
 import { ArrowDown } from "@/components/icons/arrow-down";
 
 interface DropdownInputFieldProps {
   value: string;
-  onValueChange: (selectedCategory: string) => void;
-  option1: string;
-  option2: string;
-  option3: string;
-  option4: string;
-  option5: string;
+  onValueChange?: (selectedCategory: string) => void;
+  options: string[];
   placeholder?: string;
   error?: string;
+  valueLabel: string[];
+  onChange?: (event: ChangeEvent<HTMLSelectElement>) => void;
+  id?: string;
 }
 
 const DropdownInputField: FC<DropdownInputFieldProps> = ({
   value,
   onValueChange,
-  option1,
-  option2,
-  option3,
-  option4,
-  option5,
+  options,
   placeholder,
   error = "",
+  valueLabel,
+  onChange,
+  id,
 }) => {
   const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    onValueChange(event.target.value);
+    onValueChange!(event.target.value);
   };
 
   // Determine if an option is selected or not
@@ -36,8 +34,9 @@ const DropdownInputField: FC<DropdownInputFieldProps> = ({
     <>
       <div className="dropdown-input-field-container">
         <select
+          id={id}
           value={value} // Set the value to the selectedCategory prop
-          onChange={handleChange}
+          onChange={onChange ? onChange : handleChange}
           className={`dropdown-select ${
             isSelected ? "selected" : "not-selected"
           }`}
@@ -47,23 +46,21 @@ const DropdownInputField: FC<DropdownInputFieldProps> = ({
               {placeholder}
             </option>
           )}
-          <option value={option1} className="dropdown-option">
-            {option1}
-          </option>
-          <option value={option2} className="dropdown-option">
-            {option2}
-          </option>
-          <option value={option3} className="dropdown-option">
-            {option3}
-          </option>
-          <option value={option4} className="dropdown-option">
-            {option4}
-          </option>
-          <option value={option5} className="dropdown-option">
-            {option5}
-          </option>
+          {options.map((option, index) => {
+            return (
+              <option
+                key={index}
+                value={valueLabel[index]}
+                className="dropdown-option"
+              >
+                {option}
+              </option>
+            );
+          })}
         </select>
-        <div className="dropdown-arrow"><ArrowDown/></div>
+        <div className="dropdown-arrow">
+          <ArrowDown />
+        </div>
       </div>
       <div
         className={`dropdown-field-error-message ${
