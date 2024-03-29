@@ -1,4 +1,6 @@
 
+import HomeAssignedCoursesSection from "@/container/home-container/assigned-courses-section";
+import HomeContinueLearningSection from "@/container/home-container/continue-learning-section";
 import HomeHeroSection from "@/container/home-container/hero-section";
 import HomeProfileSection from "@/container/home-container/profile-section";
 import { FunctionComponent } from "react";
@@ -10,6 +12,8 @@ const Home: FunctionComponent<HomeProps> = () => {
     <section  className="home-section-main-container">
       <HomeHeroSection />
       <HomeProfileSection />
+      <HomeContinueLearningSection/>
+      <HomeAssignedCoursesSection/>
     </section>
   );
 };
