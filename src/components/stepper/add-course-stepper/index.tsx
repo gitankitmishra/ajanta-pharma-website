@@ -29,39 +29,43 @@ const Stepper = () => {
     setCategory(value);
   };
   const basicContextApi = useContext(BasicContext);
-  const { active_step, handleNextClick, handlePreviousClick } = useContext(
-    CourseContext
-  ) as CourseContextType; //Basic Context
+  const {
+    active_step,
+    handleNextClick,
+    handlePreviousClick,
+    handleDraftSave,
+    handleApiCall,
+  } = useContext(CourseContext) as CourseContextType; //Basic Context
   const desingationContextApi = useContext(DesignationContext);
-  const { handleDraftSave }: any = basicContextApi;
+
   const { publishDesignation }: any = desingationContextApi;
 
   const moduleContextApi = useContext(ModuleContext);
   const { mergedApi } = moduleContextApi;
 
   //Logic to take the activeStep for the Draft login
-  const handleApiCall = () => {
-    switch (active_step) {
-      case 0:
-        // Call API for basic info
-        // Example: handleDraftSave for Basic Info
-        handleDraftSave();
-        break;
-      case 1:
-        // Call API for modules
-        // Example: mergeapi for Modules
-        mergedApi();
-        break;
-      case 2:
-        // Call API for designation
-        // Example: publishDesignation for Designation
-        publishDesignation();
+  // const handleApiCall = () => {
+  //   switch (active_step) {
+  //     case 0:
+  //       // Call API for basic info
+  //       // Example: handleDraftSave for Basic Info
+  //       handleDraftSave();
+  //       break;
+  //     case 1:
+  //       // Call API for modules
+  //       // Example: mergeapi for Modules
+  //       mergedApi();
+  //       break;
+  //     case 2:
+  //       // Call API for designation
+  //       // Example: publishDesignation for Designation
+  //       publishDesignation();
 
-        break;
-      default:
-        break;
-    }
-  };
+  //       break;
+  //     default:
+  //       break;
+  //   }
+  // };
 
   const stepContent: StepContent = {
     Basic: <BasicStepSection />,

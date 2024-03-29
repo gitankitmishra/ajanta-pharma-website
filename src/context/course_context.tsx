@@ -11,6 +11,7 @@ import {
   useEffect,
   useState,
 } from "react";
+import { QuestionData } from "@/types/QuestionData";
 
 export type CourseContextType = {
   // common
@@ -24,6 +25,8 @@ export type CourseContextType = {
   // basic
   course_basic: CourseBasic;
   handleChange: (field: keyof CourseBasic, value: string) => void;
+  handleDraftSave: () => void;
+  handleApiCall: () => void;
 
   // modules
   course_module: CourseModule[];
@@ -36,7 +39,11 @@ export type CourseContextType = {
   files: File[];
   handleFileSelect: (selectedFile: File, index: number) => void;
   handleDownloadExcel: (index: number) => void;
-
+  handleexcelFileRead: (
+    selectedFile: File,
+    index: number,
+    category: string
+  ) => void;
   // designation
 
   // publish
@@ -96,8 +103,31 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     setActiveStep(4);
   };
 
-  const handleNextClick = () => {
+  const handleApiCall = () => {
+    switch (active_step) {
+      case 0:
+        // Call API for basic info
+        // Example: handleDraftSave for Basic Info
+        handleDraftSave();
+        break;
+      case 1:
+        // Call API for modules
+        // Example: mergeapi for Modules
+        // mergedApi();
+        break;
+      case 2:
+        // Call API for designation
+        // Example: publishDesignation for Designation
+        // publishDesignation();
+
+        break;
+      default:
+        break;
+    }
+  };
+  const handleNextClick = async () => {
     if (active_step === 0) {
+      await handleApiCall();
       handleStepOneDone();
     } else if (active_step === 1) {
       handleStepTwoDone();
@@ -126,7 +156,7 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     course_training: "Business Orientation",
     course_start_date: "9999-12-09",
     course_end_date: "9999-12-09",
-    course_status: "active",
+    course_status: "inactive",
   });
 
   const [course_basic_error, setCourseBasicError] = useState<{
@@ -199,6 +229,32 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
       // Return previous ID in case of error
       return prevID;
     }
+  };
+
+  const handleDraftSave = () => {
+    fetch("http://localhost:8000/api/admin/dashboard/draftBasicInfo", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        course_basic: {
+          ...course_basic,
+        },
+      }),
+    })
+      .then((response) => {
+        if (response.status === 200) {
+          console.log("Draft saved:", response);
+        }
+        return response.json();
+      })
+      .then((data) => {
+        alert(data.message);
+      })
+      .catch((error) => {
+        console.error("Error saving draft:", error);
+      });
   };
 
   const handleChange = async (field: string, value: any) => {
@@ -351,7 +407,51 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
       `${course_assessment[index].assessment_type}`
     );
 
-    XLSX.writeFile(wb, "assessment.xlsx");
+    XLSX.writeFile(
+      wb,
+      `${course_basic.course_code}_${course_module[index].module_no}.xlsx`
+    );
+  };
+
+  //read excel file ->
+  const handleexcelFileRead = (
+    selectedFile: File,
+    index: number,
+    category: string
+  ) => {
+    if (selectedFile) {
+      const file = selectedFile;
+      const reader = new FileReader();
+
+      reader.onload = (event) => {
+        const target = event.target;
+        if (target && target.result) {
+          const data = new Uint8Array(target.result as ArrayBuffer);
+          const workbook = XLSX.read(data, { type: "array" });
+          const sheetName = workbook.SheetNames[0];
+          const sheet = workbook.Sheets[sheetName];
+          const excelData = XLSX.utils.sheet_to_json(sheet);
+
+          if (category === "course") {
+            course_assessment_main[index].assessment_data =
+              excelData as QuestionData[];
+            console.log(course_assessment_main);
+          } else {
+            course_assessment[index].assessment_data =
+              excelData as QuestionData[];
+            console.log(course_assessment);
+          }
+        }
+      };
+
+      reader.onerror = (event) => {
+        console.error("Error reading file:", event.target?.error);
+      };
+
+      reader.readAsArrayBuffer(file);
+    } else {
+      console.error("No file selected.");
+    }
   };
 
   const handleModuleChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -379,6 +479,7 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     console.log("Selecting files for module...");
     const temp_files = files;
     temp_files[index] = selectedFile;
+
     setFiles(temp_files);
   };
 
@@ -407,6 +508,10 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
       setCourseAssessment(temp);
     }
   };
+
+  useEffect(() => {
+    console.log("course-assessment", course_assessment);
+  }, [course_assessment]);
   // ***********************************************************************************************
 
   const course_values = {
@@ -416,6 +521,8 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     handleNextClick,
     handlePreviousClick,
     active_step,
+    handleDraftSave,
+    handleApiCall,
 
     //modules
     course_module,
@@ -428,6 +535,7 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     files,
     handleFileSelect,
     handleDownloadExcel,
+    handleexcelFileRead,
   };
   return (
     <CourseContext.Provider value={course_values}>

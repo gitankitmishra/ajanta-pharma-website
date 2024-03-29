@@ -5,9 +5,6 @@ import UploadButton from "@/components/buttons/upload-button";
 import DropdownInputField from "@/components/fields/dropdown-input-field";
 import { PlusIcon } from "@/components/icons/plus-icon";
 import { ModuleContext } from "@/context/course_update/module_context";
-
-import * as XLSX from "xlsx";
-
 import { BasicContext } from "@/context/course_update/basicInfo_context";
 import { CourseContext, CourseContextType } from "@/context/course_context";
 import DownloadImg from "@/public/images/download.svg";
@@ -70,6 +67,7 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
     files,
     handleFileSelect,
     handleDownloadExcel,
+    handleexcelFileRead,
   } = useContext(CourseContext) as CourseContextType;
 
   interface ModuleData {
@@ -111,32 +109,6 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
   }, [assessment]);
 
   //optional assessment api
-
-  const handleexcelFileRead = (selectedFile: FileList | null) => {
-    if (selectedFile && selectedFile.length > 0) {
-      const file = selectedFile[0];
-      const reader = new FileReader();
-
-      reader.onload = (event) => {
-        if (event.target) {
-          const data = new Uint8Array(event.target.result as ArrayBuffer);
-          const workbook = XLSX.read(data, { type: "array" });
-          const sheetName = workbook.SheetNames[0];
-          const sheet = workbook.Sheets[sheetName];
-          const excelData = XLSX.utils.sheet_to_json(sheet);
-          console.log("Excel file content:", excelData);
-        }
-      };
-
-      reader.onerror = (event) => {
-        console.error("Error reading file:", event.target?.error);
-      };
-
-      reader.readAsArrayBuffer(file);
-    } else {
-      console.error("No file selected.");
-    }
-  };
 
   const [optexcelFile, setoptexcelFile] = useState<FileList | null>(null);
   const [selectedAssessment, setSelectedAssessment] = useState<string>("");
@@ -190,10 +162,7 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
               <div className="module-input-uplaod-btn">
                 <UploadButton
                   upload={"Upload Course Material"}
-                  // onFileSelect={(selectedFile) =>
-                  //   handleFileSelect(selectedFile, index)
-                  // }
-                  onFileSelect={(selectedFile) => {
+                  onFileSelect={(selectedFile: File) => {
                     handleFileSelect(selectedFile, index);
                   }}
                   acceptedTypes=".mp4,.ppt,.pdf"
@@ -240,7 +209,13 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
               <div className="module-input-uplaod-btn">
                 <UploadButton
                   upload={"Upload Assessment"}
-                  onFileSelect={() => ""}
+                  uploadFile={() => (selectedFile: File) => {
+                    console.log("going to check");
+                    handleexcelFileRead(selectedFile, index, "module");
+                  }}
+                  onFileSelect={(selectedFile: File) => {
+                    handleexcelFileRead(selectedFile, index, "module");
+                  }}
                   acceptedTypes=".xls"
                   formatText={"File Format: xls"}
                 />
@@ -298,14 +273,28 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
             </div>
             <div className="module-input-uplaod-btn">
               <UploadButton
-                upload={"Upload Course Material"}
-                onFileSelect={(selectedFiles) =>
-                  handleoptexcelFileSelect(selectedFiles, 0)
-                }
+                id="pre"
+                upload={"Upload Assessment"}
+                uploadFile={() => (selectedFile: File) => {
+                  console.log("going to check");
+                  handleexcelFileRead(selectedFile, 0, "course");
+                }}
+                onFileSelect={(selectedFile: File) => {
+                  handleexcelFileRead(selectedFile, 0, "course");
+                }}
                 acceptedTypes=".xls"
                 formatText={"File Format: xls"}
               />
             </div>
+            <td className="download_image">
+              <Image
+                src={DownloadImg}
+                alt="Download"
+                width={27}
+                height={24}
+                onClick={() => handleDownloadExcel(0)}
+              />
+            </td>
           </div>
 
           <div className="module-input">
@@ -339,14 +328,28 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
             </div>
             <div className="module-input-uplaod-btn">
               <UploadButton
-                upload={"Upload Course Material"}
-                onFileSelect={(selectedFiles) =>
-                  handleoptexcelFileSelect(selectedFiles, 0)
-                }
+                id="post"
+                upload={"Upload Assessment"}
+                uploadFile={() => (selectedFile: File) => {
+                  console.log("going to check");
+                  handleexcelFileRead(selectedFile, 1, "course");
+                }}
+                onFileSelect={(selectedFile: File) => {
+                  handleexcelFileRead(selectedFile, 1, "course");
+                }}
                 acceptedTypes=".xls"
                 formatText={"File Format: xls"}
               />
             </div>
+            <td className="download_image">
+              <Image
+                src={DownloadImg}
+                alt="Download"
+                width={27}
+                height={24}
+                onClick={() => handleDownloadExcel(1)}
+              />
+            </td>
           </div>
         </>
         {/* <button
