@@ -2,17 +2,15 @@ import { FC, useContext, useEffect } from "react";
 import "./style.css";
 import { DropdownIcon } from "@/components/icons/dropdown-icon";
 import Link from "next/link";
-import {
-  AdminCourcesContext,
-  CourseDetails,
-} from "@/context/allCourses/courses_details";
+
 import { EditCourseContext } from "@/context/temporary/editContext";
 import ViewEyeIcon from "@/components/icons/view-eye-icon";
+import { CourseContext } from "@/context/course_context";
 
 const AdminCourseListTable: FC = () => {
-  const contextValue = useContext(AdminCourcesContext);
+  const contextValue = useContext(CourseContext);
 
-  const { handleCourseCodeChange } = useContext(EditCourseContext);
+  // const { handleCourseCodeChange } = useContext(EditCourseContext);
 
   if (!contextValue) {
     console.error(
@@ -20,10 +18,8 @@ const AdminCourseListTable: FC = () => {
     );
     return null;
   }
-  const { courseData, fetchData, pageNo } = contextValue;
-  useEffect(() => {
-    fetchData();
-  }, [pageNo]);
+  const { courseData ,handleCourseCodeChange} = contextValue;
+
   const onViewIconClick = (courseId: string) => {
     handleCourseCodeChange(courseId); // Update course code on click
   };
@@ -45,7 +41,7 @@ const AdminCourseListTable: FC = () => {
         </thead>
         <tbody className="admin-course-list-tbody">
           {courseData &&
-            courseData.map((course: CourseDetails, index: number) => (
+            courseData.map((course: any, index: number) => (
               <tr key={index}>
                 <td className="admin-course-list-table-data">
                   {course.course_basic?.course_code} -{" "}

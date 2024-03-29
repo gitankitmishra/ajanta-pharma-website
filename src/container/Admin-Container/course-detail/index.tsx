@@ -11,7 +11,8 @@ import Checkbox from "@/components/checkbox";
 import PreviousButton from "@/components/buttons/previous-button";
 import NextButton from "@/components/buttons/next-button";
 import { GreyPlusIcon } from "@/components/icons/greyPlusIcon";
-import { EditCourseContext } from "@/context/temporary/editContext";
+import { createContext } from "vm";
+import { CourseContext } from "@/context/course_context";
 
 interface AdminCourseDeatilContainerProps {}
 
@@ -42,7 +43,6 @@ const AdminCourseDeatilContainer: FC<
 
   //usestate Call
 
-  const { basicInfo } = useContext(EditCourseContext);
 
   const handleEditClick = () => {
     if (buttonText.edit === "Edit") {
@@ -121,7 +121,7 @@ const AdminCourseDeatilContainer: FC<
       localStorage.setItem("category", value);
     }
   };
-
+const {basicInfo}=createContext(CourseContext);
   const breadcrumbItems = [
     { label: "Courses", href: "/admin/admin-dashboard" },
     {
