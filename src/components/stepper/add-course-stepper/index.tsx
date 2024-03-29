@@ -14,6 +14,7 @@ import BasicProvider, {
 } from "@/context/course_update/basicInfo_context";
 import { DesignationContext } from "@/context/course_update/designation_context";
 import { ModuleContext } from "@/context/course_update/module_context";
+import { CourseContext, CourseContextType } from "@/context/course_context";
 
 type StepContent = {
   [key: string]: React.ReactNode;
@@ -29,8 +30,8 @@ const Stepper = () => {
   };
   const basicContextApi = useContext(BasicContext);
   const { active_step, handleNextClick, handlePreviousClick } = useContext(
-    BasicContext
-  ) as BasicContextType; //Basic Context
+    CourseContext
+  ) as CourseContextType; //Basic Context
   const desingationContextApi = useContext(DesignationContext);
   const { handleDraftSave }: any = basicContextApi;
   const { publishDesignation }: any = desingationContextApi;
