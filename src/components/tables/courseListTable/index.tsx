@@ -3,14 +3,14 @@ import "./style.css";
 import { DropdownIcon } from "@/components/icons/dropdown-icon";
 import Link from "next/link";
 import {
-  CourseDetailsContext,
+  AdminCourcesContext,
   CourseDetails,
 } from "@/context/allCourses/courses_details";
 import { EditCourseContext } from "@/context/temporary/editContext";
 import ViewEyeIcon from "@/components/icons/view-eye-icon";
 
 const AdminCourseListTable: FC = () => {
-  const contextValue = useContext(CourseDetailsContext);
+  const contextValue = useContext(AdminCourcesContext);
 
   const { handleCourseCodeChange } = useContext(EditCourseContext);
 

@@ -146,11 +146,14 @@ const AdminCourseDeatilContainer: FC<
               <DropdownInputField
                 value={basicInfo && basicInfo.course_category}
                 onValueChange={(value) => handleChange("category", value)}
-                option1={"Competency-Based-Skills"}
-                option2={"Medical"}
-                option3={"Marketing"}
-                option4={"Personal Development"}
-                option5={"Classroom Training"}
+                options={[
+                  "Competency Based Skills",
+                  "Medical",
+                  "Marketing",
+                  "Personal Development",
+                  "Classroom Training",
+                ]}
+                valueLabel={[""]}
               />
             </div>
             <div className="admin-course-detail-section1-div-sections">
@@ -160,7 +163,7 @@ const AdminCourseDeatilContainer: FC<
               <DropdownSubInputField
                 value={basicInfo && basicInfo.course_category}
                 onValueChange={(value) => handleChange("trainingType", value)}
-                selectedCategory={formData.category} // Pass the selected category
+                selectedCategory={basicInfo && basicInfo.category} // Pass the selected category
               />
             </div>
             <div className="admin-course-detail-section1-div-sections">
@@ -170,7 +173,6 @@ const AdminCourseDeatilContainer: FC<
               <InputFieldString
                 className="input-field"
                 value={basicInfo && basicInfo.course_category}
-
                 onChange={handleCourseCodeAndNameChange}
               />
             </div>
@@ -267,13 +269,16 @@ const AdminCourseDeatilContainer: FC<
                       Assessment Type
                     </label>
                     <DropdownInputField
-                      value={formData.category}
+                      value={basicInfo && basicInfo.course_category}
                       onValueChange={(value) => handleChange("category", value)}
-                      option1={"Competency-Based-Skills"}
-                      option2={"Medical"}
-                      option3={"Marketing"}
-                      option4={"Personal Development"}
-                      option5={"Classroom Training"}
+                      options={[
+                        "Competency Based Skills",
+                        "Medical",
+                        "Marketing",
+                        "Personal Development",
+                        "Classroom Training",
+                      ]}
+                      valueLabel={[""]}
                     />
                   </div>
                   <div className="admin-course-detail-section2-div-sections">
@@ -378,13 +383,16 @@ const AdminCourseDeatilContainer: FC<
                       Assessment Number
                     </label>
                     <DropdownInputField
-                      value={formData.category}
+                      value={basicInfo && basicInfo.course_category}
                       onValueChange={(value) => handleChange("category", value)}
-                      option1={"Competency-Based-Skills"}
-                      option2={"Medical"}
-                      option3={"Marketing"}
-                      option4={"Personal Development"}
-                      option5={"Classroom Training"}
+                      options={[
+                        "Competency Based Skills",
+                        "Medical",
+                        "Marketing",
+                        "Personal Development",
+                        "Classroom Training",
+                      ]}
+                      valueLabel={[""]}
                     />
                   </div>
                   <div className="admin-course-detail-section2-div-sections">
@@ -639,14 +647,17 @@ const AdminCourseDeatilContainer: FC<
               Course Status
             </label>
             <DropdownInputField
-              value={formData.category}
-              onValueChange={(value) => handleChange("category", value)}
-              option1={"Competency-Based-Skills"}
-              option2={"Medical"}
-              option3={"Marketing"}
-              option4={"Personal Development"}
-              option5={"Classroom Training"}
-            />
+                value={basicInfo && basicInfo.course_category}
+                onValueChange={(value) => handleChange("category", value)}
+                options={[
+                  "Competency Based Skills",
+                  "Medical",
+                  "Marketing",
+                  "Personal Development",
+                  "Classroom Training",
+                ]}
+                valueLabel={[""]}
+              />
           </div>
         </div>
         <div className="admin-course-detail-submit-buttons-section">

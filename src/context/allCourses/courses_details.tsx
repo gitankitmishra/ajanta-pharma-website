@@ -23,11 +23,11 @@ interface CourseContextType {
   componentPage: number;
 }
 
-export const CourseDetailsContext = createContext<CourseContextType | null>(
+export const AdminCourcesContext = createContext<CourseContextType | null>(
   null
 );
 
-export const CourseProvider: React.FC<{ children: ReactNode }> = ({
+export const AdminCoursesProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
   const [componentPage, setComponentPage] = useState(0);
@@ -91,10 +91,10 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     console.log("Check here", componentPage);
   }, [componentPage]);
   return (
-    <CourseDetailsContext.Provider value={contextValue}>
+    <AdminCourcesContext.Provider value={contextValue}>
       {children}
-    </CourseDetailsContext.Provider>
+    </AdminCourcesContext.Provider>
   );
 };
 
-export default CourseProvider;
+export default AdminCoursesProvider;
