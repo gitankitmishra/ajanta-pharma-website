@@ -3,7 +3,10 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
-  pageExtensions: ["ts", "tsx"], // Change file extensions to TypeScript
+  pageExtensions: ["ts", "tsx"],
+  env:{
+    SERVER_URL: process.env.SERVER_URL,
+  }, // Change file extensions to TypeScript
   async redirects() {
     return [
       {

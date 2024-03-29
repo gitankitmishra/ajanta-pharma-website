@@ -1,6 +1,6 @@
 "use client";
 import Breadcrumb from "@/components/breadcrumb";
-import { FC, useState } from "react";
+import { FC, useContext, useState } from "react";
 import "./style.css";
 import DropdownInputField from "@/components/fields/dropdown-input-field";
 import DropdownSubInputField from "@/components/fields/dropdown-sub-input-field";
@@ -11,9 +11,10 @@ import Checkbox from "@/components/checkbox";
 import PreviousButton from "@/components/buttons/previous-button";
 import NextButton from "@/components/buttons/next-button";
 import { GreyPlusIcon } from "@/components/icons/greyPlusIcon";
+import { createContext } from "vm";
+import { CourseContext } from "@/context/course_context";
 
-interface AdminCourseDeatilContainerProps {
-}
+interface AdminCourseDeatilContainerProps {}
 
 interface FormData {
   category: string;
@@ -31,13 +32,17 @@ interface FormData {
   endDate: string;
 }
 
-const AdminCourseDeatilContainer: FC<AdminCourseDeatilContainerProps> = ({
-}) => {
+const AdminCourseDeatilContainer: FC<
+  AdminCourseDeatilContainerProps
+> = ({}) => {
   const [isClicked, setIsClicked] = useState(false);
   const [buttonText, setButtonText] = useState({
     edit: "Edit",
     discard: "Back",
   });
+
+  //usestate Call
+
 
   const handleEditClick = () => {
     if (buttonText.edit === "Edit") {
@@ -92,7 +97,7 @@ const AdminCourseDeatilContainer: FC<AdminCourseDeatilContainerProps> = ({
   };
 
   const [formData, setFormData] = useState<FormData>({
-    category: "Competency-Based Skills",
+    category: "",
 
     trainingType: "",
 
@@ -116,7 +121,7 @@ const AdminCourseDeatilContainer: FC<AdminCourseDeatilContainerProps> = ({
       localStorage.setItem("category", value);
     }
   };
-
+const {basicInfo}=createContext(CourseContext);
   const breadcrumbItems = [
     { label: "Courses", href: "/admin/admin-dashboard" },
     {
@@ -139,13 +144,16 @@ const AdminCourseDeatilContainer: FC<AdminCourseDeatilContainerProps> = ({
                 Category
               </label>
               <DropdownInputField
-                value={formData.category}
+                value={basicInfo && basicInfo.course_category}
                 onValueChange={(value) => handleChange("category", value)}
-                option1={"Competency-Based Skills"}
-                option2={"Medical"}
-                option3={"Marketing"}
-                option4={"Personal Development"}
-                option5={"Classroom Training"}
+                options={[
+                  "Competency Based Skills",
+                  "Medical",
+                  "Marketing",
+                  "Personal Development",
+                  "Classroom Training",
+                ]}
+                valueLabel={[""]}
               />
             </div>
             <div className="admin-course-detail-section1-div-sections">
@@ -153,9 +161,9 @@ const AdminCourseDeatilContainer: FC<AdminCourseDeatilContainerProps> = ({
                 Training
               </label>
               <DropdownSubInputField
-                value={formData.trainingType}
+                value={basicInfo && basicInfo.course_category}
                 onValueChange={(value) => handleChange("trainingType", value)}
-                selectedCategory={formData.category} // Pass the selected category
+                selectedCategory={basicInfo && basicInfo.category} // Pass the selected category
               />
             </div>
             <div className="admin-course-detail-section1-div-sections">
@@ -164,7 +172,7 @@ const AdminCourseDeatilContainer: FC<AdminCourseDeatilContainerProps> = ({
               </label>
               <InputFieldString
                 className="input-field"
-                value={formData.courseCode + " " + formData.courseName}
+                value={basicInfo && basicInfo.course_category}
                 onChange={handleCourseCodeAndNameChange}
               />
             </div>
@@ -261,13 +269,16 @@ const AdminCourseDeatilContainer: FC<AdminCourseDeatilContainerProps> = ({
                       Assessment Type
                     </label>
                     <DropdownInputField
-                      value={formData.category}
+                      value={basicInfo && basicInfo.course_category}
                       onValueChange={(value) => handleChange("category", value)}
-                      option1={"Competency-Based Skills"}
-                      option2={"Medical"}
-                      option3={"Marketing"}
-                      option4={"Personal Development"}
-                      option5={"Classroom Training"}
+                      options={[
+                        "Competency Based Skills",
+                        "Medical",
+                        "Marketing",
+                        "Personal Development",
+                        "Classroom Training",
+                      ]}
+                      valueLabel={[""]}
                     />
                   </div>
                   <div className="admin-course-detail-section2-div-sections">
@@ -372,13 +383,16 @@ const AdminCourseDeatilContainer: FC<AdminCourseDeatilContainerProps> = ({
                       Assessment Number
                     </label>
                     <DropdownInputField
-                      value={formData.category}
+                      value={basicInfo && basicInfo.course_category}
                       onValueChange={(value) => handleChange("category", value)}
-                      option1={"Competency-Based Skills"}
-                      option2={"Medical"}
-                      option3={"Marketing"}
-                      option4={"Personal Development"}
-                      option5={"Classroom Training"}
+                      options={[
+                        "Competency Based Skills",
+                        "Medical",
+                        "Marketing",
+                        "Personal Development",
+                        "Classroom Training",
+                      ]}
+                      valueLabel={[""]}
                     />
                   </div>
                   <div className="admin-course-detail-section2-div-sections">
@@ -633,14 +647,17 @@ const AdminCourseDeatilContainer: FC<AdminCourseDeatilContainerProps> = ({
               Course Status
             </label>
             <DropdownInputField
-              value={formData.category}
-              onValueChange={(value) => handleChange("category", value)}
-              option1={"Competency-Based Skills"}
-              option2={"Medical"}
-              option3={"Marketing"}
-              option4={"Personal Development"}
-              option5={"Classroom Training"}
-            />
+                value={basicInfo && basicInfo.course_category}
+                onValueChange={(value) => handleChange("category", value)}
+                options={[
+                  "Competency Based Skills",
+                  "Medical",
+                  "Marketing",
+                  "Personal Development",
+                  "Classroom Training",
+                ]}
+                valueLabel={[""]}
+              />
           </div>
         </div>
         <div className="admin-course-detail-submit-buttons-section">
