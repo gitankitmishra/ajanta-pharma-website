@@ -10,8 +10,9 @@ const AdminCources: FC<AdminCourcesProps> = () => {
   return (
     <CourseProvider>
       <main>
-        <AdminCoursesHeroSection />
-        <AdminCoursesTableSection />
+          <AdminCoursesHeroSection />
+
+          <AdminCoursesTableSection />
       </main>
     </CourseProvider>
   );

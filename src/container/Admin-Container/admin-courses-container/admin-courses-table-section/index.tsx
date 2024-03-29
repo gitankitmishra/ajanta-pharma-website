@@ -4,7 +4,6 @@ import Link from "next/link";
 import CustomPagination from "@/components/pagination";
 import AddButton from "@/components/buttons/add-button";
 import "./style.css";
-import { EditCourseProvider } from "@/context/temporary/editContext";
 
 interface AdminCoursesTableSectionProps {}
 
@@ -27,9 +26,7 @@ const AdminCoursesTableSection: FC<AdminCoursesTableSectionProps> = () => {
         </div>
       </div>
       <div>
-        <EditCourseProvider>
           <AdminCourseListTable />
-        </EditCourseProvider>
       </div>
       <div className="admin-courses-pagination-section">
         <CustomPagination
