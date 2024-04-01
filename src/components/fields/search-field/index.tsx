@@ -4,10 +4,15 @@ import { FC, useEffect, useState } from "react";
 import "./style.css";
 import { BellIcon } from "@/components/icons/bell-icon";
 import { ProfileIcon } from "@/components/icons/profile-icon";
+import { useRouter } from "next/navigation";
 
 interface SearchFieldSectionProps {}
 
 const SearchFieldSection: FC<SearchFieldSectionProps> = () => {
+  const router = useRouter();
+  const handleChange=()=>{
+    router.push("/notification")
+  }
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [filteredSuggestions, setFilteredSuggestions] = useState<string[]>([]);
@@ -99,7 +104,7 @@ const SearchFieldSection: FC<SearchFieldSectionProps> = () => {
           <SearchIcon />
         </div>
       </div>
-      <div className="bell-icon">
+      <div className="bell-icon" onClick={handleChange}>
         <BellIcon />
       </div>
       <div className="profile-icon">
