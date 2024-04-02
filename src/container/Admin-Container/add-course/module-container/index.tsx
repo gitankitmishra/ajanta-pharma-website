@@ -4,8 +4,6 @@ import InputField from "@/components/fields/input-field";
 import UploadButton from "@/components/buttons/upload-button";
 import DropdownInputField from "@/components/fields/dropdown-input-field";
 import { PlusIcon } from "@/components/icons/plus-icon";
-import { ModuleContext } from "@/context/course_update/module_context";
-import { BasicContext } from "@/context/course_update/basicInfo_context";
 import { CourseContext, CourseContextType } from "@/context/course_context";
 import DownloadImg from "@/public/images/download.svg";
 import Image from "next/image";
@@ -13,48 +11,6 @@ import Image from "next/image";
 interface ModuleQuizStepSectionProps {}
 
 const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
-  const contextValue = useContext(ModuleContext);
-  if (!contextValue) {
-    return null;
-  }
-  const basicContextValue = useContext(BasicContext);
-  if (!basicContextValue) {
-    return null;
-  }
-  const { formData } = basicContextValue;
-  if (!formData) {
-    return null; // Or some other loading state if needed
-  }
-
-  // Now you can safely destructure formData
-  const {
-    course_category,
-    course_training,
-    course_code: basicCourseCode,
-    course_name,
-  } = formData;
-  const {
-    modules,
-    handleChangeModuleNum,
-    handleChangeModuleName,
-    // handleFileSelect,
-    // handleAddModule,
-    //assessment
-    assessment,
-    handleAssessmentFileNameChange,
-    //handleAssessmentTypeChange,
-    handleexcelFileSelect,
-    handleChangeAssessmentName,
-    //optional assessment
-    assessmentOpt,
-    handleRadioChange,
-    handleoptAssessmentTypeChange,
-    handleoptAssessmentFileNameChange,
-    handleoptexcelFileSelect,
-    handleAddAssessment,
-    mergedApi,
-  } = contextValue;
-
   const {
     course_basic,
     course_module,
@@ -69,49 +25,6 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
     handleDownloadExcel,
     handleexcelFileRead,
   } = useContext(CourseContext) as CourseContextType;
-
-  interface ModuleData {
-    moduleName: string;
-    moduleNo: string;
-    files: FileList | null;
-  }
-  const [moduleName, setModuleName] = useState<string[]>([]);
-  const [moduleNo, setModuleNo] = useState<string[]>([]);
-  // const [files, setFiles] = useState<FileList | null>(null);
-  const [courseCode, setCourseCode] = useState<string>("");
-
-  useEffect(() => {
-    console.log("Modules data", modules);
-  }, [modules]);
-
-  //upload an assessment
-  interface AssessmentData {
-    assessmentFileName: string;
-    assessmentFileType: string;
-    excelFile: FileList | null;
-  }
-
-  const [assessmentFileName, setassessmentFileName] = useState<string[]>([]);
-  const [assessmentFileType, setassessmentFileType] = useState<string[]>([]);
-  const [excelFile, setexcelFile] = useState<FileList | null>(null);
-  // const [assessment, setAssessment] = useState<AssessmentData[]>([
-  //   { assessmentFileName: "", assessmentFileType: "", excelFile: null },
-  // ]);
-
-  useEffect(() => {
-    console.log("assessmentFileName:", assessmentFileName);
-    console.log("assessmentFileType:", assessmentFileType);
-    console.log("excelFile:", excelFile);
-  }, [assessmentFileName, assessmentFileType, excelFile]);
-
-  useEffect(() => {
-    console.log("Assessment data", assessment);
-  }, [assessment]);
-
-  //optional assessment api
-
-  const [optexcelFile, setoptexcelFile] = useState<FileList | null>(null);
-  const [selectedAssessment, setSelectedAssessment] = useState<string>("");
 
   return (
     <section className="module-main-section">
@@ -190,7 +103,7 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
                     "True or false",
                     "Short Answer",
                   ]}
-                  valueLabel={["multiple", "single", "boolean", "short"]}
+                  valueLabel={["multiple", "single", "True or false", "short"]}
                 />
               </div>
               <div className="module-input-name">
@@ -258,7 +171,7 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
                   "True or false",
                   "Short Answer",
                 ]}
-                valueLabel={["multiple", "single", "boolean", "short"]}
+                valueLabel={["multiple", "single", "True or false", "short"]}
               />
             </div>
             <div className="module-input-name">
@@ -313,7 +226,7 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
                   "True or false",
                   "Short Answer",
                 ]}
-                valueLabel={["multiple", "single", "boolean", "short"]}
+                valueLabel={["multiple", "single", "True or false", "short"]}
               />
             </div>
             <div className="module-input-name">
@@ -352,13 +265,6 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
             </td>
           </div>
         </>
-        {/* <button
-          className="module-sec-add-module-btn"
-          onClick={handleAddAssessment}
-        >
-          <PlusIcon />
-          Add Assessment
-        </button> */}
       </div>
     </section>
   );

@@ -1,15 +1,15 @@
 import React, { useState, ReactNode, createContext, useEffect } from "react";
 
 export type CourseDetails = {
-    _id: string;
-    course_basic: {
-        course_category: string,
-        course_code: string,
-        course_name: string,
-        isActive: boolean,
-        publishDate: string,
-    }
-}
+  _id: string;
+  course_basic: {
+    course_category: string;
+    course_code: string;
+    course_name: string;
+    isActive: boolean;
+    publishDate: string;
+  };
+};
 
 interface CourseContextType {
   pageNo: number;
@@ -50,7 +50,7 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
   const fetchData = async () => {
     setLoading(true);
     try {
-      const url = `http://localhost:8000/api/admin/dashboard/courseList?page=${pageNo}&pageSize=${pageSize}`;
+      const url = `http://localhost:4000/api/admin/dashboard/courseList?page=${pageNo}&pageSize=${pageSize}`;
       const response = await fetch(url, {
         method: "GET",
         headers: {
