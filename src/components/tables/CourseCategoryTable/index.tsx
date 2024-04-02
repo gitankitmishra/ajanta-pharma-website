@@ -1,7 +1,7 @@
 import { FC } from "react";
 import "./style.css";
-import { ViewEyeIcon } from "@/components/icons/view-eye-icon";
 import { DropdownIcon } from "@/components/icons/dropdown-icon";
+import ViewEyeIcon from "@/components/icons/view-eye-icon";
 
 interface CourseCategoryTableProps {
   image: string;
