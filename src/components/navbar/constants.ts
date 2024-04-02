@@ -46,3 +46,29 @@ export const AdminNavbar: NavbarType[] = [
     href: "/admin-setting",
   },
 ];
+export const ManagerNavbar: NavbarType[] = [
+  {
+    value: "Home",
+    href: "/home",
+  },
+  {
+    value: "My-Courses",
+    href: "/my-courses",
+  },
+  {
+    value: "Assessments",
+    href: "/assessments",
+  },
+  {
+    value: "Certification",
+    href: "/certification",
+  },
+  {
+    value: "Team Performance",
+    href: "/team-performance",
+  },
+  {
+    value: "Setting",
+    href: "/setting",
+  },
+];

@@ -1,0 +1,63 @@
+.home-assigned-courses-main-section {
+  margin: 44px 40px;
+}
+.home-assigned-courses-header-section {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.home-assigned-courses-text-part {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+.home-assigned-courses-text-part img {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.home-assigned-courses-text {
+  color: #1c1d1d;
+  font-size: 24px;
+  font-weight: 500;
+  text-decoration: underline;
+}
+.home-assigned-courses-view-more-text {
+  color: #787878;
+  font-size: 18px;
+  font-weight: 400;
+  text-decoration: underline;
+  cursor: pointer;
+  border: none;
+  outline: none;
+  background: transparent;
+}
+.home-assigned-courses-tooltip {
+  position: relative;
+  display: inline-block;
+}
+
+.home-assigned-courses-tooltip-text {
+  visibility: hidden;
+  width: 283px;
+  background-color: #fff;
+  text-align: center;
+  border-radius: 8px;
+  padding: 8px;
+  position: absolute;
+  z-index: 1;
+  top: -50%;
+  left: 140%;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  /* text style */
+  color: #1c1d1d;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 22px;
+}
+
+.home-assigned-courses-tooltip:hover .home-assigned-courses-tooltip-text {
+  visibility: visible;
+}

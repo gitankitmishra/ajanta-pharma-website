@@ -1,10 +1,7 @@
-"use client";
+import React, { FunctionComponent } from "react";
 import "./style.css";
-
-import { FunctionComponent, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-
 import { HomeIcon } from "@/components/icons/home-icon";
 import { MenuBarIcon } from "@/components/icons/menu-bar-icon";
 import { SettingIcon } from "@/components/icons/setting-icon";
@@ -12,16 +9,28 @@ import { GraduationCapIcon } from "@/components/icons/graduation-cap-icon";
 import { AssessmentIcon } from "@/components/icons/assessment-icon";
 import { CertificateIcon } from "@/components/icons/certificate-icon";
 import { LogoutIcon } from "@/components/icons/logout-icon";
-import { AdminNavbar, EmployeeNavbar } from "./constants";
-// import { NavbarType } from "@/types/navbar";
+import { AdminNavbar, EmployeeNavbar, ManagerNavbar } from "./constants";
 
 interface NavbarProps {
-  isAdmin: boolean;
+  user_type: "admin" | "employee" | "manager";
 }
 
-const Navbar: FunctionComponent<NavbarProps> = ({ isAdmin }) => {
-  const navLinks = isAdmin ? AdminNavbar : EmployeeNavbar;
-  const currentPath = usePathname().split("/").at(1);
+const Navbar: FunctionComponent<NavbarProps> = ({ user_type }) => {
+  const isAdminPath = usePathname().startsWith("/admin");
+  let navLinks: any[];
+
+  // Choose the appropriate navbar links based on user_type and isAdminPath
+  if (isAdminPath) {
+    navLinks = AdminNavbar;
+  } else if (user_type === "manager") {
+    navLinks = ManagerNavbar;
+  } else if (user_type === "employee") {
+    navLinks = EmployeeNavbar;
+  } else {
+    navLinks = AdminNavbar;
+  }
+
+  const currentPath = usePathname();
 
   return (
     <nav className="nav-main-container">
@@ -37,9 +46,7 @@ const Navbar: FunctionComponent<NavbarProps> = ({ isAdmin }) => {
             <Link
               key={i}
               href={el.href}
-              className={`navbutton ${
-                currentPath === el.href.replace("/", "") ? "active" : ""
-              }`}
+              className={`navbutton ${currentPath === el.href ? "active" : ""}`}
             >
               <div className="nav-icon">
                 {/* Render the appropriate icon based on the value */}
@@ -47,6 +54,10 @@ const Navbar: FunctionComponent<NavbarProps> = ({ isAdmin }) => {
                 {el.value === "My-Courses" && <GraduationCapIcon />}
                 {el.value === "Assessments" && <AssessmentIcon />}
                 {el.value === "Certification" && <CertificateIcon />}
+                {user_type === "manager" && el.value === "Team Performance" && (
+                  <CertificateIcon />
+                )}{" "}
+                {/* Render only for manager */}
                 {el.value === "Setting" && <SettingIcon />}
                 {el.value === "Dashboard" && <HomeIcon />}
                 {el.value === "Course Category" && <GraduationCapIcon />}
@@ -57,51 +68,6 @@ const Navbar: FunctionComponent<NavbarProps> = ({ isAdmin }) => {
               <div className="nav-text">{el.value}</div>
             </Link>
           ))}
-
-          {/* <Link
-            href="/home"
-            className={`navbutton ${currentPath === "home" ? "active" : ""}`}
-          >
-            <HomeIcon />
-            Home
-          </Link>
-          <Link
-            href="/my-courses"
-            className={`navbutton ${
-              currentPath === "my-courses" ? "active" : ""
-            }`}
-          >
-            <GraduationCapIcon />
-            My Courses
-          </Link>
-          <Link
-            href="/assessments"
-            className={`navbutton ${
-              currentPath === "assessments" ? "active" : ""
-            }`}
-          >
-            <AssessmentIcon />
-            Assessments
-          </Link>
-          <Link
-            href="/certification"
-            className={`navbutton ${
-              currentPath === "certification" ? "active" : ""
-            }`}
-          >
-            <CertificateIcon />
-            Certification
-          </Link>
-
-          <Link
-            href="/settings"
-            className={`navbutton ${
-              currentPath === "settings" ? "active" : ""
-            }`}
-          >
-            <SettingIcon />
-            Settings
-          </Link> */}
           <Link href="/logout">
             <LogoutIcon />
             Logout
