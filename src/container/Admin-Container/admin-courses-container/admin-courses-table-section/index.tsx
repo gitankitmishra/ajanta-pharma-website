@@ -1,6 +1,5 @@
 import AdminCourseListTable from "@/components/tables/courseListTable";
 import { FC, useState } from "react";
-import { ViewEyeIcon } from "@/components/icons/view-eye-icon";
 import Link from "next/link";
 import CustomPagination from "@/components/pagination";
 import AddButton from "@/components/buttons/add-button";
@@ -10,7 +9,6 @@ interface AdminCoursesTableSectionProps {}
 
 const AdminCoursesTableSection: FC<AdminCoursesTableSectionProps> = () => {
   const [currentPage, setCurrentPage] = useState(1);
-  
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
@@ -28,8 +26,7 @@ const AdminCoursesTableSection: FC<AdminCoursesTableSectionProps> = () => {
         </div>
       </div>
       <div>
-        <AdminCourseListTable
-              />
+          <AdminCourseListTable />
       </div>
       <div className="admin-courses-pagination-section">
         <CustomPagination

@@ -10,11 +10,12 @@ import BasicProvider, {
 import DesignationProvider from "@/context/course_update/designation_context";
 import ModuleProvider from "@/context/course_update/module_context";
 import NextButton from "@/components/buttons/next-button";
+import { CourseContext, CourseContextType } from "@/context/course_context";
 
 interface AddCourseProfileContainerProps {}
 
 const AddCourseProfileContainer: FC<AddCourseProfileContainerProps> = () => {
-  const { active_step } = useContext(BasicContext) as BasicContextType;
+  const { active_step } = useContext(CourseContext) as CourseContextType;
   const breadcrumbItems = [
     { label: "Courses", href: "/admin/admin-courses" },
     { label: "Add Course", href: "/admin/admin-add-course", isActive: true },
