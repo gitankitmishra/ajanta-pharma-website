@@ -115,7 +115,10 @@ const Stepper = () => {
             active_step === steps.length - 1 ? "disabled" : ""
           }`}
         >
-          <NextButton text="Next" onClick={handleNextClick} />
+          <NextButton
+            text={active_step === 3 ? "Upload" : "Next"}
+            onClick={handleNextClick}
+          />
         </div>
       </div>
     </div>
