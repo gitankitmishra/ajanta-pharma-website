@@ -49,10 +49,6 @@ const BasicStepSection: FC<BasicStepSectionProps> = () => {
   }
   // const { formData, handleChange }: BasicContextType = contextValue;
 
-  useEffect(() => {
-    localStorage.setItem("category", "Competency-Based Skills");
-  }, []);
-
   //handle change to update the error if the field is updated
 
   return (
