@@ -5,10 +5,10 @@ import UploadButton from "@/components/buttons/upload-button";
 import DropdownInputField from "@/components/fields/dropdown-input-field";
 import { PlusIcon } from "@/components/icons/plus-icon";
 import { ModuleContext } from "@/context/course_update/module_context";
-
-import * as XLSX from "xlsx";
-
 import { BasicContext } from "@/context/course_update/basicInfo_context";
+import { CourseContext, CourseContextType } from "@/context/course_context";
+import DownloadImg from "@/public/images/download.svg";
+import Image from "next/image";
 
 interface ModuleQuizStepSectionProps {}
 
@@ -37,12 +37,12 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
     modules,
     handleChangeModuleNum,
     handleChangeModuleName,
-    handleFileSelect,
-    handleAddModule,
+    // handleFileSelect,
+    // handleAddModule,
     //assessment
     assessment,
     handleAssessmentFileNameChange,
-    handleAssessmentTypeChange,
+    //handleAssessmentTypeChange,
     handleexcelFileSelect,
     handleChangeAssessmentName,
     //optional assessment
@@ -55,6 +55,21 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
     mergedApi,
   } = contextValue;
 
+  const {
+    course_basic,
+    course_module,
+    course_assessment,
+    handleAddModule,
+    handleModuleChange,
+    handleAssessmentNameChange,
+    handleAssessmentTypeChange,
+    course_assessment_main,
+    files,
+    handleFileSelect,
+    handleDownloadExcel,
+    handleexcelFileRead,
+  } = useContext(CourseContext) as CourseContextType;
+
   interface ModuleData {
     moduleName: string;
     moduleNo: string;
@@ -62,8 +77,12 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
   }
   const [moduleName, setModuleName] = useState<string[]>([]);
   const [moduleNo, setModuleNo] = useState<string[]>([]);
-  const [files, setFiles] = useState<FileList | null>(null);
+  // const [files, setFiles] = useState<FileList | null>(null);
   const [courseCode, setCourseCode] = useState<string>("");
+
+  useEffect(() => {
+    console.log("Modules data", modules);
+  }, [modules]);
 
   //upload an assessment
   interface AssessmentData {
@@ -91,32 +110,6 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
 
   //optional assessment api
 
-  const handleexcelFileRead = (selectedFile: FileList | null) => {
-    if (selectedFile && selectedFile.length > 0) {
-      const file = selectedFile[0];
-      const reader = new FileReader();
-
-      reader.onload = (event) => {
-        if (event.target) {
-          const data = new Uint8Array(event.target.result as ArrayBuffer);
-          const workbook = XLSX.read(data, { type: "array" });
-          const sheetName = workbook.SheetNames[0];
-          const sheet = workbook.Sheets[sheetName];
-          const excelData = XLSX.utils.sheet_to_json(sheet);
-          console.log("Excel file content:", excelData);
-        }
-      };
-
-      reader.onerror = (event) => {
-        console.error("Error reading file:", event.target?.error);
-      };
-
-      reader.readAsArrayBuffer(file);
-    } else {
-      console.error("No file selected.");
-    }
-  };
-
   const [optexcelFile, setoptexcelFile] = useState<FileList | null>(null);
   const [selectedAssessment, setSelectedAssessment] = useState<string>("");
 
@@ -125,22 +118,26 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
       <div className="module-div-section1">
         <div className="module-div-section1-div1">
           <p className="module-category-text">Category</p>
-          <p className="module-category-type-text">{course_category}</p>
+          <p className="module-category-type-text">
+            {course_basic.course_category}
+          </p>
         </div>
 
         <div className="module-div-section1-div2">
           <p className="module-category-text">Training</p>
-          <p className="module-category-type-text">{course_training}</p>
+          <p className="module-category-type-text">
+            {course_basic.course_training}
+          </p>
         </div>
         <div className="module-div-section1-div3">
           <p className="module-category-text">Course Code & Name</p>
           <p className="module-category-type-text">
-            {basicCourseCode} - {course_name}
+            {course_basic.course_code} - {course_basic.course_name}
           </p>
         </div>
       </div>
       <div className="module-div-section2">
-        {modules.map((module: any, index: number) => (
+        {course_module.map((module, index) => (
           <>
             <div className="module-input">
               <div className="module-input-number">
@@ -148,10 +145,8 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
                   Module Number
                 </label>
                 <InputField
-                  moduleValue={[module.module_no]}
-                  onChange={(newModuleNum: string[]) =>
-                    handleChangeModuleNum(newModuleNum, index)
-                  }
+                  moduleValue={module.module_no.toString()}
+                  onUpdate={handleModuleChange}
                 />
               </div>
               <div className="module-input-name">
@@ -159,18 +154,17 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
                   Module Name
                 </label>
                 <InputField
-                  moduleValue={[module.module_name]}
-                  onChange={(newModuleName: string[]) =>
-                    handleChangeModuleName(newModuleName, index)
-                  }
+                  id={`module_name-${index}`}
+                  moduleValue={module.module_name}
+                  onUpdate={handleModuleChange}
                 />
               </div>
               <div className="module-input-uplaod-btn">
                 <UploadButton
                   upload={"Upload Course Material"}
-                  onFileSelect={(selectedFiles) =>
-                    handleFileSelect(selectedFiles, index)
-                  }
+                  onFileSelect={(selectedFile: File) => {
+                    handleFileSelect(selectedFile, index);
+                  }}
                   acceptedTypes=".mp4,.ppt,.pdf"
                   formatText={"File Format: mp4, ppt, pdf "}
                 />
@@ -183,15 +177,20 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
                 </label>
                 <DropdownInputField
                   // value={assessmentFileType[index]}
-                  value={assessment?.assessment_type || ""}
-                  onValueChange={function (selectedCategory: string): void {
-                    handleAssessmentTypeChange(selectedCategory, index);
-                  }}
-                  option1={"Competency-Based Skills"}
-                  option2={"Medical"}
-                  option3={"Marketing"}
-                  option4={"Personal Development"}
-                  option5={"Classroom Training"}
+                  id={`assessment_type-${index}`}
+                  value={
+                    course_assessment[module.assessment_no as number]
+                      .assessment_type
+                  }
+                  onChange={handleAssessmentTypeChange}
+                  placeholder="select assessment type"
+                  options={[
+                    "Multiple Choice Question",
+                    "Signle Choice Question",
+                    "True or false",
+                    "Short Answer",
+                  ]}
+                  valueLabel={["multiple", "single", "boolean", "short"]}
                 />
               </div>
               <div className="module-input-name">
@@ -199,22 +198,37 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
                   Assessment Name
                 </label>
                 <InputField
-                  moduleValue={[assessment?.assessment_name]}
-                  onChange={(newFileName: string[]) =>
-                    handleChangeAssessmentName(newFileName[0], index)
+                  id={`assessment_name-${index}`}
+                  moduleValue={
+                    course_assessment[module.assessment_no as number]
+                      .assessment_name
                   }
+                  onUpdate={handleAssessmentNameChange}
                 />
               </div>
               <div className="module-input-uplaod-btn">
                 <UploadButton
                   upload={"Upload Assessment"}
-                  onFileSelect={(selectedFile) =>
-                    handleexcelFileRead(selectedFile)
-                  }
+                  uploadFile={() => (selectedFile: File) => {
+                    console.log("going to check");
+                    handleexcelFileRead(selectedFile, index, "module");
+                  }}
+                  onFileSelect={(selectedFile: File) => {
+                    handleexcelFileRead(selectedFile, index, "module");
+                  }}
                   acceptedTypes=".xls"
                   formatText={"File Format: xls"}
                 />
               </div>
+              <td className="download_image">
+                <Image
+                  src={DownloadImg}
+                  alt="Download"
+                  width={27}
+                  height={24}
+                  onClick={() => handleDownloadExcel(index)}
+                />
+              </td>
             </div>
           </>
         ))}
@@ -224,93 +238,127 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
         </button>
       </div>
       <div className="module-div-section3">
-        {assessmentOpt.map((assessment: any, index: number) => (
-          <>
-            <div className="module-radio-selction">
-              <div className="module-course-assessment">Course Assessment</div>
-              <div className="module-radio-btns">
-                <input
-                  type="radio"
-                  className="module-assessment-radio-btn"
-                  id={`preAssessment-${index}`}
-                  name={`assessmentType-${index}`}
-                  value="pre"
-                  checked={selectedAssessment[index] === "pre"}
-                  onChange={(e) => handleRadioChange(e, index)}
-                />
-                <label
-                  htmlFor={`preAssessment-${index}`}
-                  className="module-container-labels"
-                >
-                  Pre Assessment
-                </label>
-              </div>
-              <div className="module-radio-btns">
-                <input
-                  type="radio"
-                  className="module-assessment-radio-btn"
-                  id={`postAssessment-${index}`}
-                  name={`assessmentType-${index}`}
-                  value="post"
-                  checked={selectedAssessment[index] === "post"}
-                  onChange={(e) => handleRadioChange(e, index)}
-                />
-                <label
-                  htmlFor={`postAssessment-${index}`}
-                  className="module-container-labels"
-                >
-                  Post Assessment
-                </label>
-              </div>
+        <>
+          <div className="module-radio-selction">
+            <div className="module-course-assessment">Course Assessment</div>
+          </div>
+          <div className="module-input">
+            <div className="module-input-number">
+              <label htmlFor="" className="module-container-labels">
+                Select Assessment Type
+              </label>
+              <DropdownInputField
+                id="pre"
+                value={course_assessment_main[0]?.assessment_type}
+                placeholder="select assessment type"
+                onChange={handleAssessmentTypeChange}
+                options={[
+                  "Multiple Choice Question",
+                  "Signle Choice Question",
+                  "True or false",
+                  "Short Answer",
+                ]}
+                valueLabel={["multiple", "single", "boolean", "short"]}
+              />
             </div>
-            <div className="module-input">
-              <div className="module-input-number">
-                <label htmlFor="" className="module-container-labels">
-                  Select Assessment Type
-                </label>
-                <DropdownInputField
-                  value={assessmentOpt[index].assessmentFileType}
-                  onValueChange={(selectedCategory: string) => {
-                    handleoptAssessmentTypeChange(selectedCategory, index);
-                  }}
-                  option1={"Option 1"}
-                  option2={"Option 2"}
-                  option3={"Option 3"}
-                  option4={"Option 4"}
-                  option5={"Option 5"}
-                />
-              </div>
-              <div className="module-input-name">
-                <label htmlFor="" className="module-container-labels">
-                  Module Name
-                </label>
-                <InputField
-                  moduleValue={[assessmentOpt[index]?.assessmentFileName]}
-                  onChange={(newFileName: string[]) =>
-                    handleoptAssessmentFileNameChange(newFileName[0], index)
-                  }
-                />
-              </div>
-              <div className="module-input-uplaod-btn">
-                <UploadButton
-                  upload={"Upload Course Material"}
-                  onFileSelect={(selectedFiles) =>
-                    handleoptexcelFileSelect(selectedFiles, index)
-                  }
-                  acceptedTypes=".xls"
-                  formatText={"File Format: xls"}
-                />
-              </div>
+            <div className="module-input-name">
+              <label htmlFor="" className="module-container-labels">
+                Assessment Name
+              </label>
+              <InputField
+                id="pre"
+                moduleValue={course_assessment_main[0].assessment_name}
+                onUpdate={handleAssessmentNameChange}
+              />
             </div>
-          </>
-        ))}
-        <button
+            <div className="module-input-uplaod-btn">
+              <UploadButton
+                id="pre"
+                upload={"Upload Assessment"}
+                uploadFile={() => (selectedFile: File) => {
+                  console.log("going to check");
+                  handleexcelFileRead(selectedFile, 0, "course");
+                }}
+                onFileSelect={(selectedFile: File) => {
+                  handleexcelFileRead(selectedFile, 0, "course");
+                }}
+                acceptedTypes=".xls"
+                formatText={"File Format: xls"}
+              />
+            </div>
+            <td className="download_image">
+              <Image
+                src={DownloadImg}
+                alt="Download"
+                width={27}
+                height={24}
+                onClick={() => handleDownloadExcel(0)}
+              />
+            </td>
+          </div>
+
+          <div className="module-input">
+            <div className="module-input-number">
+              <label htmlFor="" className="module-container-labels">
+                Select Assessment Type
+              </label>
+              <DropdownInputField
+                id="post"
+                value={course_assessment_main[1]?.assessment_type}
+                placeholder="select assessment type"
+                onChange={handleAssessmentTypeChange}
+                options={[
+                  "Multiple Choice Question",
+                  "Signle Choice Question",
+                  "True or false",
+                  "Short Answer",
+                ]}
+                valueLabel={["multiple", "single", "boolean", "short"]}
+              />
+            </div>
+            <div className="module-input-name">
+              <label htmlFor="" className="module-container-labels">
+                Assessment Name
+              </label>
+              <InputField
+                moduleValue={course_assessment_main[1].assessment_name}
+                id="post"
+                onUpdate={handleAssessmentNameChange}
+              />
+            </div>
+            <div className="module-input-uplaod-btn">
+              <UploadButton
+                id="post"
+                upload={"Upload Assessment"}
+                uploadFile={() => (selectedFile: File) => {
+                  console.log("going to check");
+                  handleexcelFileRead(selectedFile, 1, "course");
+                }}
+                onFileSelect={(selectedFile: File) => {
+                  handleexcelFileRead(selectedFile, 1, "course");
+                }}
+                acceptedTypes=".xls"
+                formatText={"File Format: xls"}
+              />
+            </div>
+            <td className="download_image">
+              <Image
+                src={DownloadImg}
+                alt="Download"
+                width={27}
+                height={24}
+                onClick={() => handleDownloadExcel(1)}
+              />
+            </td>
+          </div>
+        </>
+        {/* <button
           className="module-sec-add-module-btn"
           onClick={handleAddAssessment}
         >
           <PlusIcon />
           Add Assessment
-        </button>
+        </button> */}
       </div>
     </section>
   );
