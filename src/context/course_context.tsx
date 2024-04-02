@@ -12,7 +12,12 @@ import {
   useState,
 } from "react";
 import { QuestionData } from "@/types/QuestionData";
+
+import { fetchService } from "@/services/fetch_services";
+import { CourseDesignation } from "@/types/CourseDesignation";
+
 import { CourseDetails } from "@/types/AdminCourseInfo";
+
 
 export type CourseContextType = {
   // common
@@ -45,7 +50,12 @@ export type CourseContextType = {
     index: number,
     category: string
   ) => void;
+
+
   // designation
+  handleChangeDesignation(event: ChangeEvent<HTMLInputElement>): void;
+  course_designation: CourseDesignation;
+  publishDesignation(): void;
 
   // publish
 
@@ -60,6 +70,7 @@ export type CourseContextType = {
   //GET AND EDIT COURSES
   handleCourseCodeChange:(value:string)=>void,
   basicInfo: CourseBasic | null;
+
 
 };
 
@@ -144,8 +155,10 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
       await handleApiCall();
       handleStepOneDone();
     } else if (active_step === 1) {
+      await uploadCourse();
       handleStepTwoDone();
     } else if (active_step === 2) {
+      await publishDesignation();
       handleStepThreeDone();
     } else if (active_step === 3) {
       handleStepFourDone();
@@ -218,7 +231,7 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
   ): Promise<number> => {
     try {
       const response = await fetch(
-        "http://localhost:8000/api/admin/dashboard/getCourseCodeCount",
+        "http://localhost:4000/api/admin/dashboard/getCourseCodeCount",
         {
           method: "POST",
           headers: {
@@ -246,7 +259,7 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
   };
 
   const handleDraftSave = () => {
-    fetch("http://localhost:8000/api/admin/dashboard/draftBasicInfo", {
+    fetch("http://localhost:4000/api/admin/dashboard/draftBasicInfo", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -493,7 +506,6 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     console.log("Selecting files for module...");
     const temp_files = files;
     temp_files[index] = selectedFile;
-
     setFiles(temp_files);
   };
 
@@ -523,9 +535,125 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     }
   };
 
+  //api calling
+  const uploadCourse = async () => {
+    const formdata = new FormData();
+    formdata.append("file_path", `course_material/${course_basic.course_code}`);
+
+    files.forEach((file, index) => {
+      formdata.append("files", file);
+      formdata.append("files_name", `files-${course_module[index].module_no}`);
+    });
+
+    const responseUrl = await fetchService({
+      method: "Post",
+      endpoint: "api/admin/dashboard/uploadAllFile",
+      data: formdata,
+    });
+
+    if (responseUrl.code === 200) {
+      const data = responseUrl;
+      console.log("check", data.data.urls);
+
+      const updatedCourseModule = course_module.map((module, index) => ({
+        ...module,
+        module_material: data.data.urls[index],
+      }));
+
+      setCourseModule(updatedCourseModule);
+      const response = await fetchService({
+        method: "Post",
+        endpoint: "api/admin/dashboard/uploadCourse",
+        data: {
+          course_module: updatedCourseModule,
+          course_assessment: {
+            ...course_assessment,
+            ...course_assessment_main,
+          },
+          course_code: course_basic.course_code,
+        },
+      });
+      if (response.code == 200) {
+        const data = response;
+        console.log("data", data);
+      } else {
+        console.error(
+          "Length mismatch between data.code and course_module arrays"
+        );
+      }
+    }
+  };
+
+  // ***********************************************************************************************
+
+  // ***********************************************************************************************
+  //designation
+  const [course_designation, setCourseDesignation] =
+    useState<CourseDesignation>({
+      division: [],
+      designation: [],
+    });
+
+  const handleChangeDesignation = (event: ChangeEvent<HTMLInputElement>) => {
+    const { id, value } = event.target;
+
+    if (id === "division") {
+      setCourseDesignation((prevState) => ({
+        ...prevState,
+        division: prevState.division.includes(value)
+          ? prevState.division.filter((item) => item !== value)
+          : [...prevState.division, value],
+      }));
+    } else {
+      setCourseDesignation((prevState) => ({
+        ...prevState,
+        designation: prevState.designation.includes(value)
+          ? prevState.designation.filter((item) => item !== value)
+          : [...prevState.designation, value],
+      }));
+    }
+  };
+
+  //api call for designation
+  const publishDesignation = async () => {
+    try {
+      if (course_designation.designation.length === 0) {
+        alert("Please select at least one designation.");
+        return;
+      }
+
+      let responseUrl;
+      if (course_designation.division.length > 0) {
+        responseUrl = await fetchService({
+          method: "PUT",
+          endpoint: `api/admin/dashboard/draftDesignation/${course_basic.course_code}`,
+          data: {
+            division: course_designation.division,
+            designation: course_designation.designation,
+          },
+        });
+      } else {
+        responseUrl = await fetchService({
+          method: "PUT",
+          endpoint: `api/admin/dashboard/draftDesignation/${course_basic.course_code}`,
+          data: {
+            designation: course_designation.designation,
+          },
+        });
+      }
+      console.log("data check", course_basic.course_category);
+
+      if (!responseUrl) {
+        throw new Error("Failed to publish designation");
+      }
+    } catch (error: any) {
+      console.error("Error:", error.message);
+    }
+  };
+
   useEffect(() => {
-    console.log("course-assessment", course_assessment);
-  }, [course_assessment]);
+    console.log("designation", course_designation);
+  }, [course_designation]);
   // ***********************************************************************************************
     
     //Pagination 
@@ -635,6 +763,10 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
 
   // ***********************************************************************************************
 
+  // ***********************************************************************************************
+  //upload(publish)
+
+  // ***********************************************************************************************
   const course_values = {
     course_basic,
     handleChange,
@@ -658,6 +790,12 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     handleDownloadExcel,
     handleexcelFileRead,
 
+
+    //designation
+    course_designation,
+    handleChangeDesignation,
+    publishDesignation,
+
     //Pagination And All Courses Display
     updatePageNo,
     courseData,
@@ -668,6 +806,7 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     //GET COURSES
     handleCourseCodeChange,
     basicInfo,
+
   };
   return (
     <CourseContext.Provider value={course_values}>

@@ -3,12 +3,7 @@ import { FC, useContext } from "react";
 import "./style.css";
 import Stepper from "@/components/stepper/add-course-stepper";
 import Breadcrumb from "@/components/breadcrumb";
-import BasicProvider, {
-  BasicContext,
-  BasicContextType,
-} from "@/context/course_update/basicInfo_context";
-import DesignationProvider from "@/context/course_update/designation_context";
-import ModuleProvider from "@/context/course_update/module_context";
+
 import NextButton from "@/components/buttons/next-button";
 import { CourseContext, CourseContextType } from "@/context/course_context";
 
@@ -32,11 +27,7 @@ const AddCourseProfileContainer: FC<AddCourseProfileContainerProps> = () => {
         </div>
       </div>
       <div className="add-course-stepper-section">
-        <DesignationProvider>
-          <ModuleProvider>
-            <Stepper />
-          </ModuleProvider>
-        </DesignationProvider>
+        <Stepper />
       </div>
     </section>
   );

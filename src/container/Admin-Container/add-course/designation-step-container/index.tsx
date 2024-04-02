@@ -2,31 +2,14 @@
 import React, { FC, useState, useEffect, useContext } from "react";
 import "./style.css";
 import Checkbox from "@/components/checkbox";
-import PreviousButton from "@/components/buttons/previous-button";
-import NextButton from "@/components/buttons/next-button";
-import { DesignationContext } from "@/context/course_update/designation_context";
-import { BasicContext } from "@/context/course_update/basicInfo_context";
+import { CourseContext, CourseContextType } from "@/context/course_context";
 
-interface DesignationStepSectionProps {
-}
+interface DesignationStepSectionProps {}
 
 const DesignationStepSection: FC<DesignationStepSectionProps> = () => {
-  const contextValue = useContext(DesignationContext);
-  const basicContext=useContext(BasicContext);
-
-  if (!basicContext) {
-    return null;
-  }
-  if (!contextValue) {
-    // Handle the case when DesignationContext is null
-    return null; // or return a loading indicator or an error message
-  }
-
-  const { division, designation, handleDesignation, handleDivision } = contextValue;
-
-  const {formData}=basicContext
-
- 
+  //calling the context here........
+  const { handleChangeDesignation, course_basic, course_designation } =
+    useContext(CourseContext) as CourseContextType;
 
   return (
     <section className="designation-main-section">
@@ -40,88 +23,121 @@ const DesignationStepSection: FC<DesignationStepSectionProps> = () => {
           </p>
         </div>
         <div className="designation-checkbox-section">
-          {formData.course_category === "Medical" || formData.course_category === "Marketing" ? (
+          {course_basic.course_category === "Medical" ||
+          course_basic.course_category === "Marketing" ? (
             <>
               <div className="designation-checkbox-section">
                 <Checkbox
+                  id="division"
                   text={"CDC"}
-                  onChange={handleDivision}
-                  isChecked={division.includes("CDC")}
+                  onChange={handleChangeDesignation}
+                  value="CDC"
+                  isChecked={course_designation.division.includes("CDC")}
                 />
                 <Checkbox
+                  id="division"
                   text={"Nuventa"}
-                  onChange={handleDivision}
-                  isChecked={division.includes("Nuventa")}
+                  value="Nuventa"
+                  onChange={handleChangeDesignation}
+                  isChecked={course_designation.division.includes("Nuventa")}
                 />
                 <Checkbox
+                  id="division"
                   text={"Revance"}
-                  onChange={handleDivision}
-                  isChecked={division.includes("Revance")}
+                  value="Revance"
+                  onChange={handleChangeDesignation}
+                  isChecked={course_designation.division.includes("Revance")}
                 />
                 <Checkbox
+                  id="division"
                   text={"Solesta"}
-                  onChange={handleDivision}
-                  isChecked={division.includes("Solesta")}
+                  value="Solesta"
+                  onChange={handleChangeDesignation}
+                  isChecked={course_designation.division.includes("Solesta")}
                 />
                 <Checkbox
+                  id="division"
                   text={"Inovio"}
-                  onChange={handleDivision}
-                  isChecked={division.includes("Inovio")}
+                  value="Inovio"
+                  onChange={handleChangeDesignation}
+                  isChecked={course_designation.division.includes("Inovio")}
                 />
                 <Checkbox
+                  id="division"
                   text={"Anvaxx"}
-                  onChange={handleDivision}
-                  isChecked={division.includes("Anvaxx")}
+                  value="Anvaxx"
+                  onChange={handleChangeDesignation}
+                  isChecked={course_designation.division.includes("Anvaxx")}
                 />
                 <Checkbox
+                  id="division"
                   text={"Illuma"}
-                  onChange={handleDivision}
-                  isChecked={division.includes("Illuma")}
+                  value="Illuma"
+                  onChange={handleChangeDesignation}
+                  isChecked={course_designation.division.includes("Illuma")}
                 />
                 <Checkbox
+                  id="division"
                   text={"Inyx"}
-                  onChange={handleDivision}
-                  isChecked={division.includes("Inyx")}
+                  value="Inyx"
+                  onChange={handleChangeDesignation}
+                  isChecked={course_designation.division.includes("Inyx")}
                 />
                 <Checkbox
+                  id="division"
                   text={"Ansca"}
-                  onChange={handleDivision}
-                  isChecked={division.includes("Ansca")}
+                  value="Ansca"
+                  onChange={handleChangeDesignation}
+                  isChecked={course_designation.division.includes("Ansca")}
                 />
                 <Checkbox
+                  id="division"
                   text={"Zillion"}
-                  onChange={handleDivision}
-                  isChecked={division.includes("Zillion")}
+                  value="Zillion"
+                  onChange={handleChangeDesignation}
+                  isChecked={course_designation.division.includes("Zillion")}
                 />
                 <Checkbox
+                  id="division"
                   text={"Avecea"}
-                  onChange={handleDivision}
-                  isChecked={division.includes("Avecea")}
+                  value="Avecea"
+                  onChange={handleChangeDesignation}
+                  isChecked={course_designation.division.includes("Avecea")}
                 />
                 <Checkbox
+                  id="division"
                   text={"Axys"}
-                  onChange={handleDivision}
-                  isChecked={division.includes("Axys")}
+                  value="Axys"
+                  onChange={handleChangeDesignation}
+                  isChecked={course_designation.division.includes("Axys")}
                 />
                 <Checkbox
+                  id="division"
                   text={"Maxcor"}
-                  onChange={handleDivision}
-                  isChecked={division.includes("Maxcor")}
+                  value="Maxcor"
+                  onChange={handleChangeDesignation}
+                  isChecked={course_designation.division.includes("Maxcor")}
                 />
                 <Checkbox
+                  id="division"
                   text={"Almiron"}
-                  onChange={handleDivision}
-                  isChecked={division.includes("Almiron")}
+                  value="Almiron"
+                  onChange={handleChangeDesignation}
+                  isChecked={course_designation.division.includes("Almiron")}
                 />
                 <Checkbox
+                  id="division"
                   text={"Mexlon"}
-                  onChange={handleDivision}
-                  isChecked={division.includes("Mexlon")}
+                  value="Mexlon"
+                  onChange={handleChangeDesignation}
+                  isChecked={course_designation.division.includes("Mexlon")}
                 />
                 <Checkbox
+                  id="division"
                   text={"Hospicare"}
-                  onChange={handleDivision}
-                  isChecked={division.includes("Hospicare")}
+                  value="Hospicare"
+                  onChange={handleChangeDesignation}
+                  isChecked={course_designation.division.includes("Hospicare")}
                 />
               </div>
             </>
@@ -143,44 +159,64 @@ const DesignationStepSection: FC<DesignationStepSectionProps> = () => {
         </div>
         <div className="designation-checkbox-section2">
           <Checkbox
+            id="designation"
             text={"Cluster Head- Derma"}
-            onChange={handleDesignation}
-            isChecked={designation.includes("Cluster Head- Derma")}
+            value="Cluster Head- Derma"
+            onChange={handleChangeDesignation}
+            isChecked={course_designation.designation.includes(
+              "Cluster Head- Derma"
+            )}
           />
           <Checkbox
+            id="designation"
             text={"Cluster Head- Pain"}
-            onChange={handleDesignation}
-            isChecked={designation.includes("Cluster Head- Pain")}
+            onChange={handleChangeDesignation}
+            value="Cluster Head- Pain"
+            isChecked={course_designation.designation.includes(
+              "Cluster Head- Pain"
+            )}
           />
           <Checkbox
+            id="designation"
             text={"Sales Head"}
-            onChange={handleDesignation}
-            isChecked={designation.includes("Sales Head")}
+            value="Sales Head"
+            onChange={handleChangeDesignation}
+            isChecked={course_designation.designation.includes("Sales Head")}
           />
           <Checkbox
+            id="designation"
             text={"Sales Manager"}
-            onChange={handleDesignation}
-            isChecked={designation.includes("Sales Manager")}
+            value="Sales Manager"
+            onChange={handleChangeDesignation}
+            isChecked={course_designation.designation.includes("Sales Manager")}
           />
           <Checkbox
+            id="designation"
             text={"DSM"}
-            onChange={handleDesignation}
-            isChecked={designation.includes("DSM")}
+            value="DSM"
+            onChange={handleChangeDesignation}
+            isChecked={course_designation.designation.includes("DSM")}
           />
           <Checkbox
+            id="designation"
             text={"RSM"}
-            onChange={handleDesignation}
-            isChecked={designation.includes("RSM")}
+            value="RSM"
+            onChange={handleChangeDesignation}
+            isChecked={course_designation.designation.includes("RSM")}
           />
           <Checkbox
+            id="designation"
             text={"DM"}
-            onChange={handleDesignation}
-            isChecked={designation.includes("DM")}
+            value="DM"
+            onChange={handleChangeDesignation}
+            isChecked={course_designation.designation.includes("DM")}
           />
           <Checkbox
+            id="designation"
             text={"SO"}
-            onChange={handleDesignation}
-            isChecked={designation.includes("SO")}
+            value="SO"
+            onChange={handleChangeDesignation}
+            isChecked={course_designation.designation.includes("SO")}
           />
         </div>
       </div>

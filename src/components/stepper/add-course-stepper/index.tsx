@@ -8,12 +8,7 @@ import UploadStepSection from "@/container/Admin-Container/add-course/upload-ste
 import PreviousButton from "@/components/buttons/previous-button";
 import NextButton from "@/components/buttons/next-button";
 import { useRouter } from "next/navigation";
-import BasicProvider, {
-  BasicContext,
-  BasicContextType,
-} from "@/context/course_update/basicInfo_context";
-import { DesignationContext } from "@/context/course_update/designation_context";
-import { ModuleContext } from "@/context/course_update/module_context";
+
 import { CourseContext, CourseContextType } from "@/context/course_context";
 
 type StepContent = {
@@ -28,20 +23,9 @@ const Stepper = () => {
   const handleCategoryChange = (value: string) => {
     setCategory(value);
   };
-  const basicContextApi = useContext(BasicContext);
-  const {
-    active_step,
-    handleNextClick,
-    handlePreviousClick,
-    handleDraftSave,
-    handleApiCall,
-  } = useContext(CourseContext) as CourseContextType; //Basic Context
-  const desingationContextApi = useContext(DesignationContext);
-
-  const { publishDesignation }: any = desingationContextApi;
-
-  const moduleContextApi = useContext(ModuleContext);
-  const { mergedApi } = moduleContextApi;
+  const { active_step, handleNextClick, handlePreviousClick } = useContext(
+    CourseContext
+  ) as CourseContextType; //Basic Context
 
   //Logic to take the activeStep for the Draft login
   // const handleApiCall = () => {
