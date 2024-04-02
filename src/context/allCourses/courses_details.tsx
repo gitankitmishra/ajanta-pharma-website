@@ -88,9 +88,6 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     handleComponentPage,
   };
 
-  useEffect(() => {
-    console.log("Check here", componentPage);
-  }, [componentPage]);
   return (
     <CourseDetailsContext.Provider value={contextValue}>
       {children}

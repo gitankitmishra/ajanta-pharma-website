@@ -6,10 +6,9 @@ import DropdownInputField from "@/components/fields/dropdown-input-field";
 import { PlusIcon } from "@/components/icons/plus-icon";
 import { ModuleContext } from "@/context/course_update/module_context";
 
-import * as XLSX from 'xlsx';
+import * as XLSX from "xlsx";
 
 import { BasicContext } from "@/context/course_update/basicInfo_context";
-
 
 interface ModuleQuizStepSectionProps {}
 
@@ -29,7 +28,6 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
 
   // Now you can safely destructure formData
   const {
-
     course_category,
     course_training,
     course_code: basicCourseCode,
@@ -57,7 +55,6 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
     mergedApi,
   } = contextValue;
 
-
   interface ModuleData {
     moduleName: string;
     moduleNo: string;
@@ -67,10 +64,6 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
   const [moduleNo, setModuleNo] = useState<string[]>([]);
   const [files, setFiles] = useState<FileList | null>(null);
   const [courseCode, setCourseCode] = useState<string>("");
-
-  useEffect(() => {
-    console.log("Modules data", modules);
-  }, [modules]);
 
   //upload an assessment
   interface AssessmentData {
@@ -98,41 +91,34 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
 
   //optional assessment api
 
-
   const handleexcelFileRead = (selectedFile: FileList | null) => {
     if (selectedFile && selectedFile.length > 0) {
       const file = selectedFile[0];
       const reader = new FileReader();
-  
+
       reader.onload = (event) => {
         if (event.target) {
           const data = new Uint8Array(event.target.result as ArrayBuffer);
-          const workbook = XLSX.read(data, { type: 'array' });
-          const sheetName = workbook.SheetNames[0]; 
+          const workbook = XLSX.read(data, { type: "array" });
+          const sheetName = workbook.SheetNames[0];
           const sheet = workbook.Sheets[sheetName];
           const excelData = XLSX.utils.sheet_to_json(sheet);
-          console.log('Excel file content:', excelData);
+          console.log("Excel file content:", excelData);
         }
       };
-  
+
       reader.onerror = (event) => {
-        console.error('Error reading file:', event.target?.error);
+        console.error("Error reading file:", event.target?.error);
       };
-  
+
       reader.readAsArrayBuffer(file);
     } else {
-      console.error('No file selected.');
+      console.error("No file selected.");
     }
   };
 
-  const [optexcelFile,setoptexcelFile] = useState<FileList | null>(null);
+  const [optexcelFile, setoptexcelFile] = useState<FileList | null>(null);
   const [selectedAssessment, setSelectedAssessment] = useState<string>("");
-
-  
-
-
-
-
 
   return (
     <section className="module-main-section">
@@ -162,12 +148,9 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
                   Module Number
                 </label>
                 <InputField
-
                   moduleValue={[module.module_no]}
-                  onChange={
-                    (newModuleNum: string[]) =>
-                      handleChangeModuleNum(newModuleNum, index) 
-
+                  onChange={(newModuleNum: string[]) =>
+                    handleChangeModuleNum(newModuleNum, index)
                   }
                 />
               </div>
@@ -176,12 +159,9 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
                   Module Name
                 </label>
                 <InputField
-
                   moduleValue={[module.module_name]}
-                  onChange={
-                    (newModuleName: string[]) =>
-                      handleChangeModuleName(newModuleName, index) 
-
+                  onChange={(newModuleName: string[]) =>
+                    handleChangeModuleName(newModuleName, index)
                   }
                 />
               </div>
@@ -221,10 +201,8 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
                 <InputField
                   moduleValue={[assessment?.assessment_name]}
                   onChange={(newFileName: string[]) =>
-                    
                     handleChangeAssessmentName(newFileName[0], index)
                   }
-
                 />
               </div>
               <div className="module-input-uplaod-btn">

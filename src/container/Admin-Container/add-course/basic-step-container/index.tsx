@@ -46,10 +46,6 @@ const BasicStepSection: FC<BasicStepSectionProps> = () => {
   }
   const { formData, handleChange }: BasicContextType = contextValue;
 
-  useEffect(() => {
-    localStorage.setItem("category", "Competency-Based Skills");
-  }, []);
-
   //handle change to update the error if the field is updated
 
   return (
@@ -80,12 +76,10 @@ const BasicStepSection: FC<BasicStepSectionProps> = () => {
 
           <DropdownSubInputField
             placeholder="Select Training Type"
-
             value={formData.course_training}
             onValueChange={(value) => handleChange("course_training", value)}
             selectedCategory={formData.course_category} // Pass the selected category
             error={basic_information_error.course_training_type}
-
           />
         </div>
 
@@ -109,11 +103,9 @@ const BasicStepSection: FC<BasicStepSectionProps> = () => {
 
           <InputFieldString
             placeholder="Enter Course Name"
-
             width="80%"
             value={formData.course_name}
             onChange={(value) => handleChange("course_name", value)}
-
             className="input-field"
             error={basic_information_error.course_name}
           />
@@ -128,23 +120,21 @@ const BasicStepSection: FC<BasicStepSectionProps> = () => {
         <TextAreaField
           placeholder="Enter Learning Objective"
           className="basic-learning-objective-input"
-
           value={formData.course_objective}
           onChange={(value) => handleChange("course_objective", value)}
           error={basic_information_error.course_description}
-
         />
       </div>
 
       <div className="basic-div-section3">
         <DateInputField
-
           startDate={formData.course_start_date}
           endDate={formData.course_end_date}
-          onStartDateChange={(value) => handleChange("course_start_date", value)}
+          onStartDateChange={(value) =>
+            handleChange("course_start_date", value)
+          }
           onEndDateChange={(value) => handleChange("course_end_date", value)}
           error={basic_information_error.start_date}
-
         />
       </div>
     </section>
