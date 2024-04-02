@@ -1,3 +1,4 @@
+"use client";
 import { FC, useEffect, useState } from "react";
 import "./style.css";
 import DropdownInputField from "@/components/fields/dropdown-input-field";
@@ -10,36 +11,36 @@ import { createContext } from "vm";
 import { BasicContext } from "@/context/course_update/basicInfo_context";
 
 interface CourseData {
-    basicInfo: {
-      courseCode: string;
-      courseName: string;
-      startDate: string;
-      endDate: string;
-      category: string;
-      learningObjectives: string;
-      trainingType:string;
-      courseNo:number;
-      isActive:Boolean;
-      publishDate:Date;
+  basicInfo: {
+    courseCode: string;
+    courseName: string;
+    startDate: string;
+    endDate: string;
+    category: string;
+    learningObjectives: string;
+    trainingType: string;
+    courseNo: number;
+    isActive: Boolean;
+    publishDate: Date;
+  };
+  designationInfo: {
+    division: string[];
+    designation: string[];
+  };
+  modules: {
+    moduleInfo: {
+      moduleFileUrl: string[];
+      moduleName: string[];
+      moduleNo: string[];
     };
-    designationInfo: {
-      division: string[];
-      designation: string[];
-    };
-    modules: {
-      moduleInfo: {
-        moduleFileUrl: string[];
-        moduleName: string[];
-        moduleNo: string[];
-      };
-    };
-  }
+  };
+}
 
 interface UploadStepSectionProps {}
 
 const UploadStepSection: FC<UploadStepSectionProps> = () => {
   const [courseData, setCourseData] = useState<CourseData | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   const handleUploadClick = () => {
     setIsModalOpen(true);
@@ -49,32 +50,34 @@ const UploadStepSection: FC<UploadStepSectionProps> = () => {
     setIsModalOpen(false);
   };
 
-  const courseCodeValue=createContext(BasicContext);
+  const courseCodeValue = createContext(BasicContext);
 
   if (!courseCodeValue) {
     return null;
   }
 
-  const {formData}=courseCodeValue;
+  const { formData } = courseCodeValue;
 
   if (!formData) {
-      return null;
+    return null;
   }
 
-  const {courseCode}=formData;
-
+  const { courseCode } = formData;
 
   //api to fetch all the data related to that courseCode
   const previewData = async () => {
     try {
       console.log("helooo");
-      
-      const response = await fetch(`http://localhost:8000/api/admin/dashboard/getCourseByCode/B01`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json"
+
+      const response = await fetch(
+        `http://localhost:8000/api/admin/dashboard/getCourseByCode/B01`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
         }
-      });
+      );
       if (response.status === 200) {
         const data = await response.json();
         setCourseData(data);
@@ -83,122 +86,127 @@ const UploadStepSection: FC<UploadStepSectionProps> = () => {
     } catch (error) {
       console.error(error);
     }
-  }
-  
+  };
+
   useEffect(() => {
-    previewData();
-  }, []);
-  
+    console.log("prev", previewData);
+  }, [previewData]);
 
   return (
     <section className="upload-main-section">
       <p className="upload-preview-text">Preview</p>
       {courseData && (
-      <div className="upload-div-section">
-        <div className="upload-section1">
-          <div className="upload-section1-div-sections">
-            <label htmlFor="" className="upload-section-labels">
-              Category
-            </label>
-            <input className="input-field-1" readOnly
-              value={courseData?.basicInfo?.category || ''}/>
+        <div className="upload-div-section">
+          <div className="upload-section1">
+            <div className="upload-section1-div-sections">
+              <label htmlFor="" className="upload-section-labels">
+                Category
+              </label>
+              <input
+                className="input-field-1"
+                readOnly
+                value={courseData?.basicInfo?.category || ""}
+              />
+            </div>
+            <div className="upload-section1-div-sections">
+              <label htmlFor="" className="upload-section-labels">
+                Training
+              </label>
+              <input
+                className="input-field-1"
+                readOnly
+                value={courseData?.basicInfo?.trainingType || ""}
+              />
+            </div>
+            <div className="upload-section1-div-sections">
+              <label htmlFor="" className="upload-section-labels">
+                Course Code & Name
+              </label>
+              <input
+                className="input-field-1"
+                readOnly
+                value={`${courseData?.basicInfo?.courseCode || ""} ${
+                  courseData?.basicInfo?.courseName || ""
+                }`}
+              />
+            </div>
           </div>
-          <div className="upload-section1-div-sections">
+          <div className="upload-div-section2">
             <label htmlFor="" className="upload-section-labels">
-              Training
-            </label>
-            <input className="input-field-1" readOnly
-              value={courseData?.basicInfo?.trainingType || ''}/>
-          </div>
-          <div className="upload-section1-div-sections">
-            <label htmlFor="" className="upload-section-labels">
-              Course Code & Name
+              Learning Objective
             </label>
             <input
               className="input-field-1"
               readOnly
-              value={`${courseData?.basicInfo?.courseCode || ''} ${courseData?.basicInfo?.courseName || ''}`}
+              value={courseData?.basicInfo?.learningObjectives || ""}
             />
           </div>
-        </div>
-        <div className="upload-div-section2">
-          <label htmlFor="" className="upload-section-labels">
-            Learning Objective
-          </label>
-          <input
-              className="input-field-1"
-              readOnly
-              value={courseData?.basicInfo?.learningObjectives || ''}
-            />
-        </div>
- <div className="upload-div-section3">
-  <div className="date-input-row">
-    <label htmlFor="" className="upload-section-labels">
-      Start Date
-    </label>
-    <br />
-    <input
-      className="input-field-2"
-      readOnly
-      value={courseData?.basicInfo?.startDate || ''}
-    />
-  </div>
-  <div className="date-input-row">
-    <label htmlFor="" className="upload-section-labels">
-      End Date
-    </label>
-    <br />
-    <input
-      className="input-field-2"
-      readOnly
-      value={courseData?.basicInfo?.endDate || ''}
-    />
-  </div>
-</div>
-
-      </div>
-      )}
-<div className="upload-div-section">
-  {courseData && courseData.modules && courseData.modules.moduleInfo && (
-    <div className="upload-section2">
-      {courseData.modules.moduleInfo.moduleNo.map((moduleNo, index) => (
-        <div key={index} className="upload-section2-div-sections">
-          <label htmlFor="" className="upload-section-labels">
-            Module Number
-          </label>
-          <input
-            className="input-field-1"
-            readOnly
-            value={moduleNo}
-          />
-          <label htmlFor="" className="upload-section-labels">
-            Module Name
-          </label>
-          <input
-            className="input-field-1"
-            readOnly
-            value={courseData.modules.moduleInfo.moduleName[index]}
-          />
-          <div className="upload-section2-uploaded-file">
-            <div className="uploaded-video-file">
-              {/* <input type="text" className="uploaded-mp4" /> */}
-            </div>
-            <div className="uploaded-video-file-text">
-              <span className="upload-file-name">video.mp4</span>
+          <div className="upload-div-section3">
+            <div className="date-input-row">
+              <label htmlFor="" className="upload-section-labels">
+                Start Date
+              </label>
               <br />
-              <span className="upload-file-size">2.2MB</span>
+              <input
+                className="input-field-2"
+                readOnly
+                value={courseData?.basicInfo?.startDate || ""}
+              />
+            </div>
+            <div className="date-input-row">
+              <label htmlFor="" className="upload-section-labels">
+                End Date
+              </label>
+              <br />
+              <input
+                className="input-field-2"
+                readOnly
+                value={courseData?.basicInfo?.endDate || ""}
+              />
             </div>
           </div>
         </div>
-      ))}
-    </div>
-  )}
-
+      )}
+      <div className="upload-div-section">
+        {courseData && courseData.modules && courseData.modules.moduleInfo && (
+          <div className="upload-section2">
+            {courseData.modules.moduleInfo.moduleNo.map((moduleNo, index) => (
+              <div key={index} className="upload-section2-div-sections">
+                <label htmlFor="" className="upload-section-labels">
+                  Module Number
+                </label>
+                <input className="input-field-1" readOnly value={moduleNo} />
+                <label htmlFor="" className="upload-section-labels">
+                  Module Name
+                </label>
+                <input
+                  className="input-field-1"
+                  readOnly
+                  value={courseData.modules.moduleInfo.moduleName[index]}
+                />
+                <div className="upload-section2-uploaded-file">
+                  <div className="uploaded-video-file">
+                    {/* <input type="text" className="uploaded-mp4" /> */}
+                  </div>
+                  <div className="uploaded-video-file-text">
+                    <span className="upload-file-name">video.mp4</span>
+                    <br />
+                    <span className="upload-file-size">2.2MB</span>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
 
         <div className="upload-section2-course-assessment">
           <p className="upload-course-assessment-text">Course Assessment </p>
           <div>
-            <input type="radio" id="assessment" className="upload-assesment-radio-btn"/>
+            <input
+              type="radio"
+              id="assessment"
+              className="upload-assesment-radio-btn"
+            />
             <label htmlFor="assessment" className="upload-selected-assessment">
               Post Assessment
             </label>
@@ -223,7 +231,6 @@ const UploadStepSection: FC<UploadStepSectionProps> = () => {
             } } /> */}
             {/* <InputField/> */}
           </div>
-        
         </div>
       </div>
       <div className="upload-div-checkbox-main-section">
@@ -256,12 +263,10 @@ const UploadStepSection: FC<UploadStepSectionProps> = () => {
               <NextButton text={"Upload"} />
             </div>
           </div> */}
-      
         </div>
       </div>
 
-     
-     <SuccessPopup  open={isModalOpen} onClose={handleCloseModal} text=""/>
+      <SuccessPopup open={isModalOpen} onClose={handleCloseModal} text="" />
     </section>
   );
 };

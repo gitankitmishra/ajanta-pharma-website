@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState, ReactNode, createContext, useEffect, useContext } from "react";
+import React, { useState, ReactNode, createContext, useContext } from "react";
 import { BasicContext } from "./basicInfo_context";
 
 export type DesignationContextType = {
@@ -104,12 +104,7 @@ let courseCode=formData.course_code;
         handleDivision,
         handleDesignation,
     };
-    useEffect(() => {
-        console.log("Data check",formData.course_code);
-        console.log("Desingation", designation);
-        console.log("Division", division);
-        
-      }, [division, designation]);
+
     return (
         <DesignationContext.Provider value={contextValue}>
             {children}
