@@ -1,0 +1,16 @@
+.course-summary-table-main-section {
+  margin: 44px 40px 34px 40px;
+}
+.course-summary-table-header-text {
+  color: #1c1d1d;
+  font-size: 24px;
+  font-weight: 500;
+  text-decoration: underline;
+}
+.course-summary-table-span-text {
+  margin-left: 12px;
+  color: rgba(28, 29, 29, 0.8);
+  font-size: 20px;
+  font-weight: 400;
+  text-decoration: none;
+}

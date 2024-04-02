@@ -1,0 +1,79 @@
+.notification-main-container {
+  padding: 0 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.notification-text-btn-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+.notification-notification-list-text {
+  color: #1c1d1d;
+  font-size: 24px;
+  font-weight: 500;
+  text-decoration: underline;
+}
+.notification-user-notifications-section {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  border-radius: 8px;
+  padding: 16px 16px 16px 20px;
+  background-color: #f9f9f9;
+}
+.notification-user-notifications-section.Today {
+  background-color: #fe81001a; /* Change to desired color for today's notifications */
+}
+
+.notification-bold-text {
+  color: #1c1d1d;
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 24px;
+  margin-bottom: 8px;
+}
+.notification-summary-text {
+  color: #787878;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+}
+
+.notification-date {
+  color: #787878;
+  text-align: right;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+  margin-bottom: 8px;
+}
+.notification-time {
+  color: #787878;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+}
+.notification-section-date-and-time {
+  text-align: center;
+}
+.notification-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.notification-no-notifications {
+  margin-top: 99px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+.notification-no-notification-text {
+  color: rgba(120, 120, 120, 0.6);
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 24px;
+}
