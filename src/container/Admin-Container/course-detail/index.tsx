@@ -12,29 +12,21 @@ import PreviousButton from "@/components/buttons/previous-button";
 import NextButton from "@/components/buttons/next-button";
 import { GreyPlusIcon } from "@/components/icons/greyPlusIcon";
 import { createContext } from "vm";
-import { CourseContext } from "@/context/course_context";
+import { CourseContext, CourseContextType } from "@/context/course_context";
 
 interface AdminCourseDeatilContainerProps {}
-
-interface FormData {
-  category: string;
-
-  trainingType: string;
-
-  courseCode: string;
-
-  courseName: string;
-
-  learningObjectives: string;
-
-  startDate: string;
-
-  endDate: string;
-}
 
 const AdminCourseDeatilContainer: FC<
   AdminCourseDeatilContainerProps
 > = ({}) => {
+  //context
+  const {
+    handleChangeDesignation,
+    course_designation,
+    course_basic,
+    handleChange,
+  } = useContext(CourseContext) as CourseContextType;
+
   const [isClicked, setIsClicked] = useState(false);
   const [buttonText, setButtonText] = useState({
     edit: "Edit",
@@ -42,7 +34,6 @@ const AdminCourseDeatilContainer: FC<
   });
 
   //usestate Call
-
 
   const handleEditClick = () => {
     if (buttonText.edit === "Edit") {
@@ -76,52 +67,7 @@ const AdminCourseDeatilContainer: FC<
     ]);
     setIsClicked(true);
   };
-  const handleCourseCodeAndNameChange = (value: string) => {
-    // Remove leading and trailing spaces from the input value
 
-    const trimmedValue = value;
-
-    // Split the trimmed value into code and name parts
-
-    const [code, ...nameParts] = trimmedValue.split(" ");
-
-    // Update the state with the trimmed code and the remaining name parts
-
-    setFormData((prev) => ({
-      ...prev,
-
-      courseCode: code,
-
-      courseName: nameParts.join(" "),
-    }));
-  };
-
-  const [formData, setFormData] = useState<FormData>({
-    category: "",
-
-    trainingType: "",
-
-    courseCode: "",
-
-    courseName: "",
-
-    learningObjectives: "",
-
-    startDate: "",
-
-    endDate: "",
-  });
-
-  const handleChange = (field: keyof FormData, value: string) => {
-    setFormData((prev) => ({ ...prev, [field]: value }));
-
-    if (field === "category") {
-      // onCategoryChange(value);
-
-      localStorage.setItem("category", value);
-    }
-  };
-const {basicInfo}=createContext(CourseContext);
   const breadcrumbItems = [
     { label: "Courses", href: "/admin/admin-dashboard" },
     {
@@ -144,8 +90,10 @@ const {basicInfo}=createContext(CourseContext);
                 Category
               </label>
               <DropdownInputField
-                value={basicInfo && basicInfo.course_category}
-                onValueChange={(value) => handleChange("category", value)}
+                value={course_basic.course_category}
+                onValueChange={(value) =>
+                  handleChange("course_category", value)
+                }
                 options={[
                   "Competency Based Skills",
                   "Medical",
@@ -161,9 +109,11 @@ const {basicInfo}=createContext(CourseContext);
                 Training
               </label>
               <DropdownSubInputField
-                value={basicInfo && basicInfo.course_category}
-                onValueChange={(value) => handleChange("trainingType", value)}
-                selectedCategory={basicInfo && basicInfo.category} // Pass the selected category
+                value={course_basic.course_training}
+                onValueChange={(value) =>
+                  handleChange("course_training", value)
+                }
+                selectedCategory={course_basic.course_training}
               />
             </div>
             <div className="admin-course-detail-section1-div-sections">
@@ -172,8 +122,8 @@ const {basicInfo}=createContext(CourseContext);
               </label>
               <InputFieldString
                 className="input-field"
-                value={basicInfo && basicInfo.course_category}
-                onChange={handleCourseCodeAndNameChange}
+                value={`${course_basic.course_code}  ${course_basic.course_name}`}
+                onChange={() => ""}
               />
             </div>
           </div>
@@ -214,11 +164,11 @@ const {basicInfo}=createContext(CourseContext);
                     >
                       Module Number
                     </label>
-                    <InputFieldString
+                    {/* <InputFieldString
                       className="input-field"
                       value={formData.courseCode + " " + formData.courseName}
                       onChange={handleCourseCodeAndNameChange}
-                    />
+                    /> */}
                   </div>
                   <div className="admin-course-detail-section2-div-sections">
                     <label
@@ -227,11 +177,11 @@ const {basicInfo}=createContext(CourseContext);
                     >
                       Module Name
                     </label>
-                    <InputFieldString
+                    {/* <InputFieldString
                       className="input-field"
                       value={formData.courseCode + " " + formData.courseName}
                       onChange={handleCourseCodeAndNameChange}
-                    />
+                    /> */}
                   </div>
                   <div className="admin-course-detail-section2-admin-course-detailed-file">
                     <div className="admin-course-detailed-video-file">
@@ -268,7 +218,7 @@ const {basicInfo}=createContext(CourseContext);
                     >
                       Assessment Type
                     </label>
-                    <DropdownInputField
+                    {/* <DropdownInputField
                       value={basicInfo && basicInfo.course_category}
                       onValueChange={(value) => handleChange("category", value)}
                       options={[
@@ -279,7 +229,7 @@ const {basicInfo}=createContext(CourseContext);
                         "Classroom Training",
                       ]}
                       valueLabel={[""]}
-                    />
+                    /> */}
                   </div>
                   <div className="admin-course-detail-section2-div-sections">
                     <label
@@ -288,11 +238,11 @@ const {basicInfo}=createContext(CourseContext);
                     >
                       Assessment Name
                     </label>
-                    <InputFieldString
+                    {/* <InputFieldString
                       className="input-field"
                       value={formData.courseCode + " " + formData.courseName}
                       onChange={handleCourseCodeAndNameChange}
-                    />
+                    /> */}
                   </div>
                   <div className="admin-course-detail-section2-admin-course-detailed-file">
                     <div className="admin-course-detailed-video-file">
@@ -382,7 +332,7 @@ const {basicInfo}=createContext(CourseContext);
                     >
                       Assessment Number
                     </label>
-                    <DropdownInputField
+                    {/* <DropdownInputField
                       value={basicInfo && basicInfo.course_category}
                       onValueChange={(value) => handleChange("category", value)}
                       options={[
@@ -393,7 +343,7 @@ const {basicInfo}=createContext(CourseContext);
                         "Classroom Training",
                       ]}
                       valueLabel={[""]}
-                    />
+                    /> */}
                   </div>
                   <div className="admin-course-detail-section2-div-sections">
                     <label
@@ -402,11 +352,11 @@ const {basicInfo}=createContext(CourseContext);
                     >
                       Assessment Name
                     </label>
-                    <InputFieldString
+                    {/* <InputFieldString
                       className="input-field"
                       value={formData.courseCode + " " + formData.courseName}
                       onChange={handleCourseCodeAndNameChange}
-                    />
+                    /> */}
                   </div>
                 </div>
               </>
@@ -431,116 +381,11 @@ const {basicInfo}=createContext(CourseContext);
             </div>
             <div className="admin-course-detail-checkbox-section">
               <Checkbox
-                text="CDC"
-                onChange={function (value: string, isChecked: boolean): void {
-                  throw new Error("Function not implemented.");
-                }}
-                isChecked={true}
-              />
-              <Checkbox
-                text="Nuventa"
-                onChange={function (value: string, isChecked: boolean): void {
-                  throw new Error("Function not implemented.");
-                }}
-                isChecked={false}
-              />
-              <Checkbox
-                text="Revance"
-                onChange={function (value: string, isChecked: boolean): void {
-                  throw new Error("Function not implemented.");
-                }}
-                isChecked={false}
-              />
-              <Checkbox
-                text="CDC"
-                onChange={function (value: string, isChecked: boolean): void {
-                  throw new Error("Function not implemented.");
-                }}
-                isChecked={true}
-              />
-              <Checkbox
-                text="Nuventa"
-                onChange={function (value: string, isChecked: boolean): void {
-                  throw new Error("Function not implemented.");
-                }}
-                isChecked={false}
-              />
-              <Checkbox
-                text="Revance"
-                onChange={function (value: string, isChecked: boolean): void {
-                  throw new Error("Function not implemented.");
-                }}
-                isChecked={false}
-              />
-              <Checkbox
-                text="CDC"
-                onChange={function (value: string, isChecked: boolean): void {
-                  throw new Error("Function not implemented.");
-                }}
-                isChecked={true}
-              />
-              <Checkbox
-                text="Nuventa"
-                onChange={function (value: string, isChecked: boolean): void {
-                  throw new Error("Function not implemented.");
-                }}
-                isChecked={false}
-              />
-              <Checkbox
-                text="Revance"
-                onChange={function (value: string, isChecked: boolean): void {
-                  throw new Error("Function not implemented.");
-                }}
-                isChecked={false}
-              />
-              <Checkbox
-                text="CDC"
-                onChange={function (value: string, isChecked: boolean): void {
-                  throw new Error("Function not implemented.");
-                }}
-                isChecked={true}
-              />
-              <Checkbox
-                text="Nuventa"
-                onChange={function (value: string, isChecked: boolean): void {
-                  throw new Error("Function not implemented.");
-                }}
-                isChecked={false}
-              />
-              <Checkbox
-                text="Revance"
-                onChange={function (value: string, isChecked: boolean): void {
-                  throw new Error("Function not implemented.");
-                }}
-                isChecked={false}
-              />
-              <Checkbox
-                text="Nuventa"
-                onChange={function (value: string, isChecked: boolean): void {
-                  throw new Error("Function not implemented.");
-                }}
-                isChecked={false}
-              />
-              <Checkbox
-                text="Revance"
-                onChange={function (value: string, isChecked: boolean): void {
-                  throw new Error("Function not implemented.");
-                }}
-                isChecked={false}
-              />
-              <Checkbox
-                text="Nuventa"
-                onChange={function (value: string, isChecked: boolean): void {
-                  throw new Error("Function not implemented.");
-                }}
-                isChecked={false}
-              />
-              <Checkbox
-                text="Revance"
-                onChange={function (value: string, isChecked: boolean): void {
-                  throw new Error("Function not implemented.");
-                }}
-                isChecked={false}
+                id="division"
+                text={"CDC"}
+                onChange={handleChangeDesignation}
+                value="CDC"
+                isChecked={course_designation.division.includes("CDC")}
               />
             </div>
           </div>
@@ -551,83 +396,11 @@ const {basicInfo}=createContext(CourseContext);
             </div>
             <div className="admin-course-detail-checkbox-section2">
               <Checkbox
-                text={"Cluster Head- Cardiac"}
-                onChange={function (value: string, isChecked: boolean): void {
-                  throw new Error("Function not implemented.");
-                }}
-                isChecked={true}
-              />
-              <Checkbox
-                text={"Cluster Head- Ophthal"}
-                onChange={function (value: string, isChecked: boolean): void {
-                  throw new Error("Function not implemented.");
-                }}
-                isChecked={false}
-              />
-              <Checkbox
-                text={"Cluster Head- Derma"}
-                onChange={function (value: string, isChecked: boolean): void {
-                  throw new Error("Function not implemented.");
-                }}
-                isChecked={true}
-              />
-              <Checkbox
-                text={"Cluster Head- Pain"}
-                onChange={function (value: string, isChecked: boolean): void {
-                  throw new Error("Function not implemented.");
-                }}
-                isChecked={false}
-              />
-
-              <Checkbox
-                text={"SO"}
-                onChange={function (value: string, isChecked: boolean): void {
-                  throw new Error("Function not implemented.");
-                }}
-                isChecked={false}
-              />
-              <Checkbox
-                text={"Cluster Head- Cardiac"}
-                onChange={function (value: string, isChecked: boolean): void {
-                  throw new Error("Function not implemented.");
-                }}
-                isChecked={true}
-              />
-              <Checkbox
-                text={"Cluster Head- Ophthal"}
-                onChange={function (value: string, isChecked: boolean): void {
-                  throw new Error("Function not implemented.");
-                }}
-                isChecked={false}
-              />
-              <Checkbox
-                text={"Cluster Head- Derma"}
-                onChange={function (value: string, isChecked: boolean): void {
-                  throw new Error("Function not implemented.");
-                }}
-                isChecked={true}
-              />
-              <Checkbox
-                text={"Cluster Head- Pain"}
-                onChange={function (value: string, isChecked: boolean): void {
-                  throw new Error("Function not implemented.");
-                }}
-                isChecked={false}
-              />
-
-              <Checkbox
-                text={"SO"}
-                onChange={function (value: string, isChecked: boolean): void {
-                  throw new Error("Function not implemented.");
-                }}
-                isChecked={false}
-              />
-              <Checkbox
-                text={"Cluster Head- Cardiac"}
-                onChange={function (value: string, isChecked: boolean): void {
-                  throw new Error("Function not implemented.");
-                }}
-                isChecked={true}
+                id="designation"
+                text={"RSM"}
+                value="RSM"
+                onChange={handleChangeDesignation}
+                isChecked={course_designation.designation.includes("RSM")}
               />
             </div>
             {/* <div className="admin-course-detail-btn-section">
@@ -646,18 +419,18 @@ const {basicInfo}=createContext(CourseContext);
             >
               Course Status
             </label>
-            <DropdownInputField
-                value={basicInfo && basicInfo.course_category}
-                onValueChange={(value) => handleChange("category", value)}
-                options={[
-                  "Competency Based Skills",
-                  "Medical",
-                  "Marketing",
-                  "Personal Development",
-                  "Classroom Training",
-                ]}
-                valueLabel={[""]}
-              />
+            {/* <DropdownInputField
+              value={basicInfo && basicInfo.course_category}
+              onValueChange={(value) => handleChange("category", value)}
+              options={[
+                "Competency Based Skills",
+                "Medical",
+                "Marketing",
+                "Personal Development",
+                "Classroom Training",
+              ]}
+              valueLabel={[""]}
+            /> */}
           </div>
         </div>
         <div className="admin-course-detail-submit-buttons-section">
