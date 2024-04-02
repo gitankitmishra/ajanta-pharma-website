@@ -16,6 +16,7 @@ import {
   BasicContextType,
 } from "@/context/course_update/basicInfo_context";
 import TextAreaField from "@/components/fields/TextAreaField";
+import { CourseContext, CourseContextType } from "@/context/course_context";
 
 interface BasicStepSectionProps {}
 
@@ -37,14 +38,20 @@ interface FormData {
 
 const BasicStepSection: FC<BasicStepSectionProps> = () => {
   const contextValue = useContext(BasicContext);
-  const { basic_information_error } = useContext(
-    BasicContext
-  ) as BasicContextType;
+  const { course_basic_error } = useContext(CourseContext) as CourseContextType;
+
+  const { course_basic, handleChange } = useContext(
+    CourseContext
+  ) as CourseContextType;
 
   if (!contextValue) {
     return null;
   }
-  const { formData, handleChange }: BasicContextType = contextValue;
+  // const { formData, handleChange }: BasicContextType = contextValue;
+
+  useEffect(() => {
+    localStorage.setItem("category", "Competency-Based Skills");
+  }, []);
 
   //handle change to update the error if the field is updated
 
@@ -58,14 +65,17 @@ const BasicStepSection: FC<BasicStepSectionProps> = () => {
 
           <DropdownInputField
             placeholder="Select Category"
-            value={formData.course_category}
+            value={course_basic.course_category}
             onValueChange={(value) => handleChange("course_category", value)}
-            option1={"Competency-Based-Skills"}
-            option2={"Medical"}
-            option3={"Marketing"}
-            option4={"Personal Development"}
-            option5={"Classroom Training"}
-            error={basic_information_error.course_category}
+            options={[
+              "Competency Based Skills",
+              "Medical",
+              "Marketing",
+              "Personal Development",
+              "Classroom Training",
+            ]}
+            error={course_basic_error.course_category}
+            valueLabel={[""]}
           />
         </div>
 
@@ -76,10 +86,10 @@ const BasicStepSection: FC<BasicStepSectionProps> = () => {
 
           <DropdownSubInputField
             placeholder="Select Training Type"
-            value={formData.course_training}
+            value={course_basic.course_training}
             onValueChange={(value) => handleChange("course_training", value)}
-            selectedCategory={formData.course_category} // Pass the selected category
-            error={basic_information_error.course_training_type}
+            selectedCategory={course_basic.course_category} // Pass the selected category
+            error={course_basic_error.course_training}
           />
         </div>
 
@@ -92,7 +102,7 @@ const BasicStepSection: FC<BasicStepSectionProps> = () => {
             readonly
             width="80%"
             className="input-field"
-            value={formData.course_code}
+            value={course_basic.course_code}
             onChange={(value) => handleChange("course_code", value)}
           />
         </div>
@@ -104,10 +114,10 @@ const BasicStepSection: FC<BasicStepSectionProps> = () => {
           <InputFieldString
             placeholder="Enter Course Name"
             width="80%"
-            value={formData.course_name}
+            value={course_basic.course_name}
             onChange={(value) => handleChange("course_name", value)}
             className="input-field"
-            error={basic_information_error.course_name}
+            error={course_basic_error.course_name}
           />
         </div>
       </div>
@@ -120,21 +130,21 @@ const BasicStepSection: FC<BasicStepSectionProps> = () => {
         <TextAreaField
           placeholder="Enter Learning Objective"
           className="basic-learning-objective-input"
-          value={formData.course_objective}
+          value={course_basic.course_objective}
           onChange={(value) => handleChange("course_objective", value)}
-          error={basic_information_error.course_description}
+          error={course_basic_error.course_objective}
         />
       </div>
 
       <div className="basic-div-section3">
         <DateInputField
-          startDate={formData.course_start_date}
-          endDate={formData.course_end_date}
+          startDate={course_basic.course_start_date?.toString() ?? ""}
+          endDate={course_basic.course_end_date.toString()}
           onStartDateChange={(value) =>
             handleChange("course_start_date", value)
           }
           onEndDateChange={(value) => handleChange("course_end_date", value)}
-          error={basic_information_error.start_date}
+          error={course_basic_error.course_start_date}
         />
       </div>
     </section>
