@@ -1,0 +1,73 @@
+.my-certificate-card-main-section {
+  /* width: 1064px; */
+  margin: 0 40px;
+  padding: 0 20px;
+  justify-content: space-between;
+  height: 102px;
+  border-radius: 8px;
+  border: 1px solid #f9f9f9;
+  background: #f9f9f9;
+  display: flex;
+  align-items: center;
+}
+.my-certificate-card-main-section:hover {
+  border: 1px solid #fe8100;
+  background: #fff;
+}
+.my-certificate-card-image-section {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+.my-certificate-card-image-div {
+  width: 70px;
+  height: 70px;
+  border-radius: 8px;
+  background: lightgray -24.752px -23.365px / 168.66% 168.717% no-repeat;
+}
+.my-certificate-card-image-div img {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.my-certifiacte-card-course-code-text,
+.my-certificate-card-marks-text,
+.my-certificate-card-issued-on-text {
+  color: #787878;
+  text-shadow: 0px 3px 3px rgba(255, 255, 255, 0.16);
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+}
+.my-certificate-card-marks-text,
+.my-certificate-card-issued-on-text,
+.my-certificate-card-marks-percentage-text,
+.my-certificate-card-marks-percentage-text {
+  text-align: right;
+}
+.my-certifiacte-card-course-name-text,
+.my-certificate-card-marks-percentage-text,
+.my-certificate-card-marks-percentage-text {
+  color: #1c1d1d;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 26px;
+  text-align: right;
+}
+.my-certificate-card-view-text,
+.my-certificate-card-download-text {
+  color: #fe8100;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 24px;
+  text-align: right !important;
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  align-items: center;
+  cursor: pointer;
+}
+.my-certificate-card-view-text:hover,
+.my-certificate-card-download-text:hover {
+  text-decoration: underline;
+}

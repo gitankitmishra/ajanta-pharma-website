@@ -1,0 +1,17 @@
+.competency-based-skill-main-section {
+  margin: 0 40px;
+}
+.competency-based-skill-heading-section {
+  margin-top: 20px;
+}
+.competency-based-skill-heading-text {
+  color: #1c1d1d;
+  font-size: 24px;
+  font-weight: 500;
+  text-decoration: underline;
+}
+.competency-based-skill-cards-section {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  margin-top: 32px;
+}
