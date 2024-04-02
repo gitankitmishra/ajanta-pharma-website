@@ -11,10 +11,7 @@ import InputFieldString from "@/components/fields/string-input-field";
 import DropdownInputField from "@/components/fields/dropdown-input-field";
 
 import DropdownSubInputField from "@/components/fields/dropdown-sub-input-field";
-import {
-  BasicContext,
-  BasicContextType,
-} from "@/context/course_update/basicInfo_context";
+
 import TextAreaField from "@/components/fields/TextAreaField";
 import { CourseContext, CourseContextType } from "@/context/course_context";
 
@@ -37,21 +34,13 @@ interface FormData {
 }
 
 const BasicStepSection: FC<BasicStepSectionProps> = () => {
-  const contextValue = useContext(BasicContext);
   const { course_basic_error } = useContext(CourseContext) as CourseContextType;
 
   const { course_basic, handleChange } = useContext(
     CourseContext
   ) as CourseContextType;
 
-  if (!contextValue) {
-    return null;
-  }
   // const { formData, handleChange }: BasicContextType = contextValue;
-
-  useEffect(() => {
-    localStorage.setItem("category", "Competency-Based Skills");
-  }, []);
 
   //handle change to update the error if the field is updated
 

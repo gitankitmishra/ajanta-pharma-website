@@ -12,6 +12,10 @@ import {
   useState,
 } from "react";
 import { QuestionData } from "@/types/QuestionData";
+
+import { fetchService } from "@/services/fetch_services";
+import { CourseDesignation } from "@/types/CourseDesignation";
+
 import { CourseDetails } from "@/types/AdminCourseInfo";
 
 export type CourseContextType = {
@@ -45,10 +49,11 @@ export type CourseContextType = {
     index: number,
     category: string
   ) => void;
+
   // designation
-
-  // publish
-
+  handleChangeDesignation(event: ChangeEvent<HTMLInputElement>): void;
+  course_designation: CourseDesignation;
+  publishDesignation(): void;
 
   //pagination and the Admin All courses display part
   updatePageNo: (newPage: number) => void;
@@ -56,11 +61,9 @@ export type CourseContextType = {
   totalPages: number; // New property for total pages
   handleComponentPage: (value: number) => void;
 
-
   //GET AND EDIT COURSES
-  handleCourseCodeChange:(value:string)=>void,
+  handleCourseCodeChange: (value: string) => void;
   basicInfo: CourseBasic | null;
-
 };
 
 export const CourseContext = createContext<CourseContextType | null>(null);
@@ -144,10 +147,14 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
       await handleApiCall();
       handleStepOneDone();
     } else if (active_step === 1) {
+      await uploadCourse();
       handleStepTwoDone();
     } else if (active_step === 2) {
+      await publishDesignation();
       handleStepThreeDone();
     } else if (active_step === 3) {
+      await uploadfromDraft();
+      console.log("step 3");
       handleStepFourDone();
     }
   };
@@ -163,12 +170,12 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
   // ***********************************************************************************************
   // course basic
   const [course_basic, setCourseBasic] = useState<CourseBasic>({
-    course_code: "CBS-0324-04",
-    course_name: "dfg",
-    course_category: "Competency-Based-Skills",
-    course_objective: "sdf",
-    course_training: "Business Orientation",
-    course_start_date: "9999-12-09",
+    course_code: "",
+    course_name: "",
+    course_category: "",
+    course_objective: "",
+    course_training: "",
+    course_start_date: "",
     course_end_date: "9999-12-09",
     course_status: "inactive",
   });
@@ -218,7 +225,7 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
   ): Promise<number> => {
     try {
       const response = await fetch(
-        "http://localhost:8000/api/admin/dashboard/getCourseCodeCount",
+        "http://localhost:4000/api/admin/dashboard/getCourseCodeCount",
         {
           method: "POST",
           headers: {
@@ -246,7 +253,7 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
   };
 
   const handleDraftSave = () => {
-    fetch("http://localhost:8000/api/admin/dashboard/draftBasicInfo", {
+    fetch("http://localhost:4000/api/admin/dashboard/draftBasicInfo", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -493,7 +500,6 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     console.log("Selecting files for module...");
     const temp_files = files;
     temp_files[index] = selectedFile;
-
     setFiles(temp_files);
   };
 
@@ -523,81 +529,192 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     }
   };
 
-  useEffect(() => {
-    console.log("course-assessment", course_assessment);
-  }, [course_assessment]);
+  //api calling
+  const uploadCourse = async () => {
+    const formdata = new FormData();
+    formdata.append("file_path", `course_material/${course_basic.course_code}`);
+
+    files.forEach((file, index) => {
+      formdata.append("files", file);
+      formdata.append("files_name", `files-${course_module[index].module_no}`);
+    });
+
+    const responseUrl = await fetchService({
+      method: "Post",
+      endpoint: "api/admin/dashboard/uploadAllFile",
+      data: formdata,
+    });
+
+    if (responseUrl.code === 200) {
+      const data = responseUrl;
+      console.log("check", data.data.urls);
+
+      const updatedCourseModule = course_module.map((module, index) => ({
+        ...module,
+        module_material: data.data.urls[index],
+      }));
+
+      setCourseModule(updatedCourseModule);
+      const response = await fetchService({
+        method: "Post",
+        endpoint: "api/admin/dashboard/uploadCourse",
+        data: {
+          course_module: updatedCourseModule,
+          course_assessment: {
+            ...course_assessment,
+            ...course_assessment_main,
+          },
+          course_code: course_basic.course_code,
+        },
+      });
+      if (response.code == 200) {
+        const data = response;
+        console.log("data", data);
+      } else {
+        console.error(
+          "Length mismatch between data.code and course_module arrays"
+        );
+      }
+    }
+  };
+
   // ***********************************************************************************************
-    
-    //Pagination 
-    //All courses Display
-    const [pageNo, setPageNo] = useState(1);
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState<Error | null>(null);
-    const [totalPages, setTotalPages] = useState(0); // Initialize total pages to 0
-    const [pageSize, setPageSize] = useState(10);
-    const [componentPage, setComponentPage] = useState(0);
-    const [courseData, setCourseData] = useState<CourseDetails[] | null>(null);
 
+  // ***********************************************************************************************
+  //designation
+  const [course_designation, setCourseDesignation] =
+    useState<CourseDesignation>({
+      division: [],
+      designation: [],
+    });
 
-    const updatePageNo = (newPage: number) => {
-      setPageNo(newPage);
-      console.log("Value of the page no is ", newPage);
-    };
+  const handleChangeDesignation = (event: ChangeEvent<HTMLInputElement>) => {
+    const { id, value } = event.target;
 
-    const handleComponentPage = (value: number) => {
-      setComponentPage(value);
-    };
+    if (id === "division") {
+      setCourseDesignation((prevState) => ({
+        ...prevState,
+        division: prevState.division.includes(value)
+          ? prevState.division.filter((item) => item !== value)
+          : [...prevState.division, value],
+      }));
+    } else {
+      setCourseDesignation((prevState) => ({
+        ...prevState,
+        designation: prevState.designation.includes(value)
+          ? prevState.designation.filter((item) => item !== value)
+          : [...prevState.designation, value],
+      }));
+    }
+  };
 
-    const fetchData = async () => {
-      setLoading(true);
-      try {
-        const url = `http://localhost:8000/api/admin/dashboard/courseList?page=${pageNo}&pageSize=${pageSize}`;
-        const response = await fetch(url, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            // Add any additional headers if needed
+  //api call for designation
+  const publishDesignation = async () => {
+    try {
+      if (course_designation.designation.length === 0) {
+        alert("Please select at least one designation.");
+        return;
+      }
+
+      let responseUrl;
+      if (course_designation.division.length > 0) {
+        responseUrl = await fetchService({
+          method: "PUT",
+          endpoint: `api/admin/dashboard/draftDesignation/${course_basic.course_code}`,
+          data: {
+            division: course_designation.division,
+            designation: course_designation.designation,
           },
         });
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        const data = await response.json();
-        setCourseData(data.data); // Set courseData to data.data from the response
-        setTotalPages(data.totalPages); // Set totalPages from the response
-        setLoading(false);
-      } catch (error: any) {
-        setError(error);
-        setLoading(false);
+      } else {
+        responseUrl = await fetchService({
+          method: "PUT",
+          endpoint: `api/admin/dashboard/draftDesignation/${course_basic.course_code}`,
+          data: {
+            designation: course_designation.designation,
+          },
+        });
       }
-    };
+      console.log("data check", course_basic.course_category);
 
-    useEffect(() => {
-      fetchData(); // Fetch data initially
-    }, [pageNo, pageSize]);
+      if (!responseUrl) {
+        throw new Error("Failed to publish designation");
+      }
+    } catch (error: any) {
+      console.error("Error:", error.message);
+    }
+  };
 
+  useEffect(() => {
+    console.log("designation", course_designation);
+  }, [course_designation]);
+  // ***********************************************************************************************
 
-    
+  //Pagination
+  //All courses Display
+  const [pageNo, setPageNo] = useState(1);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<Error | null>(null);
+  const [totalPages, setTotalPages] = useState(0); // Initialize total pages to 0
+  const [pageSize, setPageSize] = useState(10);
+  const [componentPage, setComponentPage] = useState(0);
+  const [courseData, setCourseData] = useState<CourseDetails[] | null>(null);
 
+  const updatePageNo = (newPage: number) => {
+    setPageNo(newPage);
+    console.log("Value of the page no is ", newPage);
+  };
 
+  const handleComponentPage = (value: number) => {
+    setComponentPage(value);
+  };
 
-//*/****************************************************************************************** */
+  const fetchData = async () => {
+    setLoading(true);
+    try {
+      const url = `http://localhost:4000/api/admin/dashboard/courseList?page=${pageNo}&pageSize=${pageSize}`;
+      const response = await fetch(url, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          // Add any additional headers if needed
+        },
+      });
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      const data = await response.json();
+      setCourseData(data.data); // Set courseData to data.data from the response
+      setTotalPages(data.totalPages); // Set totalPages from the response
+      setLoading(false);
+    } catch (error: any) {
+      setError(error);
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
+    fetchData();
+  }, [pageNo, pageSize]);
 
-      //GET COURSE AND EDIT COURSE
-      const [course_id, setCourseCode] = useState("");
-      const [basicInfo, setBasicInfo] = useState<CourseBasic | null>(null);
-     
-      
+  useEffect(() => {
+    console.log("Course Details", courseData);
+  }, [pageNo, pageSize]);
+
+  //*/****************************************************************************************** */
+
+  //GET COURSE AND EDIT COURSE
+  const [course_id, setCourseCode] = useState("");
+  const [basicInfo, setBasicInfo] = useState<CourseBasic | null>(null);
+
   const handleCourseCodeChange = (value: string) => {
     setCourseCode(value);
   };
 
-
   const getCourseData = async (): Promise<void> => {
     try {
       const response = await fetch(
-        `http://localhost:8000/api/admin/dashboard/getCourseByCode/${course_id}`,
+        `http://localhost:4000/api/admin/dashboard/getCourseByCode/${course_id}`,
         {
           method: "GET",
           headers: {
@@ -614,7 +731,7 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
       if (responseData && responseData.data && responseData.data.course_basic) {
         // Set the 'basicInfo' state with the 'course_basic' data from the response
         console.log(responseData);
-        
+
         setBasicInfo(responseData.data.course_basic);
       } else {
         // Handle the case where the expected data is missing in the response
@@ -630,11 +747,27 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     }
   }, [course_id]);
 
-
-
-
   // ***********************************************************************************************
 
+  // ***********************************************************************************************
+  //upload(draft -> upload)
+
+  //api calling
+  const uploadfromDraft = async () => {
+    console.log("uploading data");
+    const response = await fetchService({
+      method: "GET",
+      endpoint: `api/admin/dashboard/pushData/${course_basic.course_code}`,
+    });
+    if (response.code == 200) {
+      const data = response;
+      console.log("dataa", response.data);
+      console.log("uploaded to course collection");
+    } else {
+      console.log("error");
+    }
+  };
+  // ***********************************************************************************************
   const course_values = {
     course_basic,
     handleChange,
@@ -658,12 +791,16 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     handleDownloadExcel,
     handleexcelFileRead,
 
+    //designation
+    course_designation,
+    handleChangeDesignation,
+    publishDesignation,
+
     //Pagination And All Courses Display
     updatePageNo,
     courseData,
     totalPages,
     handleComponentPage,
-
 
     //GET COURSES
     handleCourseCodeChange,
