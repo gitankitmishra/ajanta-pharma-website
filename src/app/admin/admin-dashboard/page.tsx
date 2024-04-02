@@ -16,13 +16,13 @@ const Dashboard: FC<DashboardProps> = () => {
      <DashboardHeroSection/>
      <DashboardProfileSection/>
      <AdminCourseListTable
-          name={"Critical Thinking"}
-          courseCode={"PD2"}
-          category={"Competency Based Skills"}
-          date={"31/01/2024"}
-          status={"Active"}
-          view={<ViewEyeIcon />}
-          currentPage={currentPage}
+          // name={"Critical Thinking"}
+          // courseCode={"PD2"}
+          // category={"Competency Based Skills"}
+          // date={"31/01/2024"}
+          // status={"Active"}
+          // view={<ViewEyeIcon />}
+          // currentPage={currentPage}
         />
     </>
   );

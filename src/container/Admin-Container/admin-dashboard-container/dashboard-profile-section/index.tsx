@@ -20,7 +20,7 @@ const DashboardProfileSection: FC<DashboardProfileSectionProps> = () => {
           width={32}
           height={32}
           />
-        <StatusCard  title={"Total Categories"} count={10}  imageUrl={Question}
+        <StatusCard  title={"Total Categories"} count={5}  imageUrl={Question}
           width={32}
           height={32}
           />

@@ -12,8 +12,12 @@ import {
   useState,
 } from "react";
 import { QuestionData } from "@/types/QuestionData";
+
 import { fetchService } from "@/services/fetch_services";
 import { CourseDesignation } from "@/types/CourseDesignation";
+
+import { CourseDetails } from "@/types/AdminCourseInfo";
+
 
 export type CourseContextType = {
   // common
@@ -47,10 +51,27 @@ export type CourseContextType = {
     category: string
   ) => void;
 
+
   // designation
   handleChangeDesignation(event: ChangeEvent<HTMLInputElement>): void;
   course_designation: CourseDesignation;
   publishDesignation(): void;
+
+  // publish
+
+
+  //pagination and the Admin All courses display part
+  updatePageNo: (newPage: number) => void;
+  courseData: any[] | null;
+  totalPages: number; // New property for total pages
+  handleComponentPage: (value: number) => void;
+
+
+  //GET AND EDIT COURSES
+  handleCourseCodeChange:(value:string)=>void,
+  basicInfo: CourseBasic | null;
+
+
 };
 
 export const CourseContext = createContext<CourseContextType | null>(null);
@@ -634,6 +655,113 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     console.log("designation", course_designation);
   }, [course_designation]);
   // ***********************************************************************************************
+    
+    //Pagination 
+    //All courses Display
+    const [pageNo, setPageNo] = useState(1);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState<Error | null>(null);
+    const [totalPages, setTotalPages] = useState(0); // Initialize total pages to 0
+    const [pageSize, setPageSize] = useState(10);
+    const [componentPage, setComponentPage] = useState(0);
+    const [courseData, setCourseData] = useState<CourseDetails[] | null>(null);
+
+
+    const updatePageNo = (newPage: number) => {
+      setPageNo(newPage);
+      console.log("Value of the page no is ", newPage);
+    };
+
+    const handleComponentPage = (value: number) => {
+      setComponentPage(value);
+    };
+
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        const url = `http://localhost:8000/api/admin/dashboard/courseList?page=${pageNo}&pageSize=${pageSize}`;
+        const response = await fetch(url, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            // Add any additional headers if needed
+          },
+        });
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        const data = await response.json();
+        setCourseData(data.data); // Set courseData to data.data from the response
+        setTotalPages(data.totalPages); // Set totalPages from the response
+        setLoading(false);
+      } catch (error: any) {
+        setError(error);
+        setLoading(false);
+      }
+    };
+
+    useEffect(() => {
+      fetchData(); // Fetch data initially
+    }, [pageNo, pageSize]);
+
+
+    
+
+
+
+//*/****************************************************************************************** */
+
+
+      //GET COURSE AND EDIT COURSE
+      const [course_id, setCourseCode] = useState("");
+      const [basicInfo, setBasicInfo] = useState<CourseBasic | null>(null);
+     
+      
+  const handleCourseCodeChange = (value: string) => {
+    setCourseCode(value);
+  };
+
+
+  const getCourseData = async (): Promise<void> => {
+    try {
+      const response = await fetch(
+        `http://localhost:8000/api/admin/dashboard/getCourseByCode/${course_id}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      const responseData = await response.json();
+
+      // Check if the response data contains 'data' and 'course_basic' properties
+      if (responseData && responseData.data && responseData.data.course_basic) {
+        // Set the 'basicInfo' state with the 'course_basic' data from the response
+        console.log(responseData);
+        
+        setBasicInfo(responseData.data.course_basic);
+      } else {
+        // Handle the case where the expected data is missing in the response
+        console.error("Invalid response format:", responseData);
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+  useEffect(() => {
+    if (course_id) {
+      getCourseData();
+    }
+  }, [course_id]);
+
+
+
+
+  // ***********************************************************************************************
 
   // ***********************************************************************************************
   //upload(publish)
@@ -662,10 +790,23 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     handleDownloadExcel,
     handleexcelFileRead,
 
+
     //designation
     course_designation,
     handleChangeDesignation,
     publishDesignation,
+
+    //Pagination And All Courses Display
+    updatePageNo,
+    courseData,
+    totalPages,
+    handleComponentPage,
+
+
+    //GET COURSES
+    handleCourseCodeChange,
+    basicInfo,
+
   };
   return (
     <CourseContext.Provider value={course_values}>

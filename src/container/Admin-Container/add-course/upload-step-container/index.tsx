@@ -1,12 +1,20 @@
-import { FC, useContext, useEffect, useState } from "react";
+
+"use client";
+import { FC, useEffect, useState,useContext } from "react";
+
 import "./style.css";
 import SuccessPopup from "@/components/popups/success-popup";
+
 import { CourseContext, CourseContextType } from "@/context/course_context";
 import Checkbox from "@/components/checkbox";
+
+import { createContext } from "vm";
+
 
 interface UploadStepSectionProps {}
 
 const UploadStepSection: FC<UploadStepSectionProps> = () => {
+
   //context call
   const {
     course_basic,
@@ -15,7 +23,9 @@ const UploadStepSection: FC<UploadStepSectionProps> = () => {
     course_module,
     course_designation,
   } = useContext(CourseContext) as CourseContextType;
-  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+
 
   const handleUploadClick = () => {
     setIsModalOpen(true);
@@ -24,6 +34,7 @@ const UploadStepSection: FC<UploadStepSectionProps> = () => {
   const handleCloseModal = () => {
     setIsModalOpen(false);
   };
+
 
   const extractFileExtension = (filename: any) => {
     const parts = filename.split(".");
@@ -34,9 +45,11 @@ const UploadStepSection: FC<UploadStepSectionProps> = () => {
     }
   };
 
+
   return (
     <section className="upload-main-section">
       <p className="upload-preview-text">Preview</p>
+
       <div className="upload-div-section">
         <div className="upload-section1">
           <div className="upload-section1-div-sections">
@@ -58,14 +71,16 @@ const UploadStepSection: FC<UploadStepSectionProps> = () => {
               readOnly
               value={course_basic.course_training}
             />
+
           </div>
-          <div className="upload-section1-div-sections">
+          <div className="upload-div-section2">
             <label htmlFor="" className="upload-section-labels">
-              Course Code & Name
+              Learning Objective
             </label>
             <input
               className="input-field-1"
               readOnly
+
               value={`${course_basic.course_code}  ${course_basic.course_name}`}
             />
           </div>
@@ -79,6 +94,7 @@ const UploadStepSection: FC<UploadStepSectionProps> = () => {
             readOnly
             value={course_basic.course_objective}
           />
+
         </div>
         <div className="upload-div-section3">
           <div className="date-input-row">
@@ -274,6 +290,7 @@ const UploadStepSection: FC<UploadStepSectionProps> = () => {
             <div onClick={handleUploadClick}>
               <NextButton text={"Upload"} />
             </div>
+
           </div>  */}
           {course_designation.designation.map((designation, index) => (
             <div className="upload-checkbox-section" key={index}>

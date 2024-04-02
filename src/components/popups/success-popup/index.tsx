@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { FC, useEffect } from "react";
 import "./style.css";
 import UncoloredAjantaLogo from "@/public/images/uncoloured-logo.svg";
@@ -28,7 +28,7 @@ const SuccessPopup: FC<SuccessPopupProps> = ({ open, onClose, text }) => {
 
     // Clean up the timer when the component unmounts or when the popup is closed
     return () => clearTimeout(timer);
-  }, [open, onClose]);
+  }, [open, onClose, router]);
 
   return (
     <div className={`success-popup-main-container ${open ? "open" : ""}`}>

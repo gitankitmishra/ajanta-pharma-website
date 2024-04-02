@@ -1,22 +1,27 @@
 import { FC, useContext, useEffect } from "react";
 import "./style.css";
-import { ViewEyeIcon } from "@/components/icons/view-eye-icon";
 import { DropdownIcon } from "@/components/icons/dropdown-icon";
 import Link from "next/link";
-import { CourseDetailsContext, CourseDetails } from "@/context/allCourses/courses_details";
+
+import ViewEyeIcon from "@/components/icons/view-eye-icon";
+import { CourseContext } from "@/context/course_context";
 
 const AdminCourseListTable: FC = () => {
-  const contextValue = useContext(CourseDetailsContext);
+  const contextValue = useContext(CourseContext);
+
+  // const { handleCourseCodeChange } = useContext(EditCourseContext);
 
   if (!contextValue) {
-    console.error("Context Error: While calling from the CustomPagination Component");
+    console.error(
+      "Context Error: While calling from the CustomPagination Component"
+    );
     return null;
   }
-  const { courseData, fetchData, pageNo }=contextValue;
-  useEffect(() => {
-    fetchData();
-  }, [pageNo]);
+  const { courseData, handleCourseCodeChange } = contextValue;
 
+  const onViewIconClick = (courseId: string) => {
+    handleCourseCodeChange(courseId); // Update course code on click
+  };
   return (
     <div className="admin-course-list-table-main-container">
       <table className="admin-course-list-table">
@@ -34,33 +39,45 @@ const AdminCourseListTable: FC = () => {
           </tr>
         </thead>
         <tbody className="admin-course-list-tbody">
-          {courseData && courseData.map((course: CourseDetails, index: number) => (
-            <tr key={index}>
-              <td className="admin-course-list-table-data">
-                {course.course_basic?.course_code} - {course.course_basic?.course_name}
-              </td>
-              <td className="admin-course-list-table-data">
-                {course.course_basic?.course_category}
-              </td>
-              <td className="admin-course-list-table-data">
-                {new Date(course.course_basic?.publishDate).toLocaleDateString()}
-              </td>
-              <td className="admin-course-list-table-data">
-                <p
-                  className={`admin-course-status-span ${
-                    course.course_basic?.isActive ? "status-active" : "status-inactive"
-                  }`}
-                >
-                  {course.course_basic?.isActive ? "Active" : "Inactive"}
-                </p>
-              </td>
-              <td className="admin-course-list-table-data">
-                <Link href={`/admin/admin-course-detail/${course._id}`}>
-               <ViewEyeIcon /> 
-                </Link>
-              </td>
-            </tr>
-          ))}
+          {courseData &&
+            courseData.map((course: any, index: number) => (
+              <tr key={index}>
+                <td className="admin-course-list-table-data">
+                  {course.course_basic?.course_code} -{" "}
+                  {course.course_basic?.course_name}
+                </td>
+                <td className="admin-course-list-table-data">
+                  {course.course_basic?.course_category}
+                </td>
+                <td className="admin-course-list-table-data">
+                  {new Date(
+                    course.course_basic?.publishDate
+                  ).toLocaleDateString()}
+                </td>
+                <td className="admin-course-list-table-data">
+                  <p
+                    className={`admin-course-status-span ${
+                      course.course_basic?.isActive
+                        ? "status-active"
+                        : "status-inactive"
+                    }`}
+                  >
+                    {course.course_basic?.isActive ? "Active" : "Inactive"}
+                  </p>
+                </td>
+                <td className="admin-course-list-table-data">
+                  <Link href={`/admin/admin-course-detail/`}>
+                    {/* ${course._id} Need a context to hold this value to use this id to view the course 
+                  for a edit logic */}
+                    <ViewEyeIcon
+                      onClick={() =>
+                        onViewIconClick(course.course_basic.course_code)
+                      }
+                    />
+                  </Link>
+                </td>
+              </tr>
+            ))}
         </tbody>
       </table>
     </div>
