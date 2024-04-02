@@ -2,12 +2,20 @@ import React from "react";
 import PropTypes from "prop-types";
 
 interface ViewEyeIconProps {
-  onClick: () => void;
+  onClick?: () => void;
 }
 
 const ViewEyeIcon: React.FC<ViewEyeIconProps> = ({ onClick }) => {
   return (
-    <button onClick={onClick} style={{ border: "none", background: "none", padding: 0, cursor: "pointer" }}>
+    <button
+      onClick={onClick}
+      style={{
+        border: "none",
+        background: "none",
+        padding: 0,
+        cursor: "pointer",
+      }}
+    >
       <svg
         width="24"
         height="24"

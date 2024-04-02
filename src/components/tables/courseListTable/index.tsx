@@ -3,7 +3,6 @@ import "./style.css";
 import { DropdownIcon } from "@/components/icons/dropdown-icon";
 import Link from "next/link";
 
-import { EditCourseContext } from "@/context/temporary/editContext";
 import ViewEyeIcon from "@/components/icons/view-eye-icon";
 import { CourseContext } from "@/context/course_context";
 
@@ -18,7 +17,7 @@ const AdminCourseListTable: FC = () => {
     );
     return null;
   }
-  const { courseData ,handleCourseCodeChange} = contextValue;
+  const { courseData, handleCourseCodeChange } = contextValue;
 
   const onViewIconClick = (courseId: string) => {
     handleCourseCodeChange(courseId); // Update course code on click
@@ -70,7 +69,11 @@ const AdminCourseListTable: FC = () => {
                   <Link href={`/admin/admin-course-detail/`}>
                     {/* ${course._id} Need a context to hold this value to use this id to view the course 
                   for a edit logic */}
-                    <ViewEyeIcon onClick={() => onViewIconClick(course.course_basic.course_code)} />
+                    <ViewEyeIcon
+                      onClick={() =>
+                        onViewIconClick(course.course_basic.course_code)
+                      }
+                    />
                   </Link>
                 </td>
               </tr>
