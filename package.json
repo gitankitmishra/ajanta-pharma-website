@@ -15,6 +15,8 @@
     "@splidejs/splide": "^4.1.4",
     "@splidejs/splide-extension-auto-scroll": "^0.5.3",
     "@types/react-slick": "^0.23.13",
+    "chart.js": "^4.4.2",
+    "chartjs-plugin-datalabels": "^2.2.0",
     "context": "^3.0.27",
     "next": "14.1.1",
     "react": "^18",

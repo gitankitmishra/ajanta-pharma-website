@@ -1,0 +1,29 @@
+.piechart-card-main-section {
+  width: 527px;
+  height: 560px;
+  padding: 28px 24px;
+  border-radius: 12px;
+  border: 1px solid #fe8100;
+  box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.16);
+}
+.piechart-card-header-part {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 17px;
+  border-bottom: 2963.*-px solid #f0f0f0;
+}
+.piechart-card-header-heading-text {
+  color: #000;
+  font-size: 24px;
+  font-weight: 500;
+  line-height: 28px;
+  text-decoration: underline;
+}
+.piechart-card-dropdown {
+  border: none;
+  outline: none;
+  color: #4f4f4f;
+  font-size: 16px;
+  font-weight: 400;
+}
