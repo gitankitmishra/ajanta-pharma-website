@@ -1,14 +1,14 @@
 .course-card-main-container {
-  /* width:25vw; */
+  width: 342px;
   height: 221px;
   background: #fe81001a;
   border-radius: 12px;
   border: 1px solid #fff;
   cursor: pointer;
-  margin:0 20px 20px 0;
+  margin: 0 20px 20px 0;
 }
 .course-card-main-container:hover {
-  /* width: 25vw; */
+  width: 342px;
   height: 221px;
   background: #fff;
   border-radius: 12px;

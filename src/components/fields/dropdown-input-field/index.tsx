@@ -1,4 +1,4 @@
-import React, { ChangeEvent, FC, useState } from "react";
+import React, { ChangeEvent, FC, useEffect, useState } from "react";
 import "./style.css";
 import { ArrowDown } from "@/components/icons/arrow-down";
 
@@ -11,6 +11,7 @@ interface DropdownInputFieldProps {
   valueLabel: string[];
   onChange?: (event: ChangeEvent<HTMLSelectElement>) => void;
   id?: string;
+  isEditable?: boolean;
 }
 
 const DropdownInputField: FC<DropdownInputFieldProps> = ({
@@ -22,10 +23,14 @@ const DropdownInputField: FC<DropdownInputFieldProps> = ({
   valueLabel,
   onChange,
   id,
+  isEditable,
 }) => {
   const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     onValueChange!(event.target.value);
   };
+
+
+
 
   // Determine if an option is selected or not
   const isSelected = value !== "";
@@ -40,6 +45,7 @@ const DropdownInputField: FC<DropdownInputFieldProps> = ({
           className={`dropdown-select ${
             isSelected ? "selected" : "not-selected"
           }`}
+          disabled={isEditable}
         >
           {placeholder && (
             <option value="" disabled className="disable-dropdown-option">

@@ -3,11 +3,12 @@ import React, { FC, useEffect, useState, useMemo } from "react";
 import "./style.css";
 
 interface DropdownInputFieldProps {
-  value: string;
+  value?: string;
   onValueChange: (selectedCategory: string) => void;
   selectedCategory: string;
   placeholder?: string;
   error?: string;
+  isEditable?: boolean;
 }
 
 const DropdownSubInputField: FC<DropdownInputFieldProps> = ({
@@ -16,6 +17,7 @@ const DropdownSubInputField: FC<DropdownInputFieldProps> = ({
   selectedCategory,
   placeholder,
   error = "",
+  isEditable,
 }) => {
   const [trainingTypeOptions, setTrainingTypeOptions] = useState<string[]>([]);
   const [isNewCategorySelected, setIsNewCategorySelected] =
@@ -24,7 +26,7 @@ const DropdownSubInputField: FC<DropdownInputFieldProps> = ({
   useEffect(() => {
     // Set training type options based on selected category
     switch (selectedCategory) {
-      case "Competency-Based-Skills":
+      case "Competency Based Skills":
         setTrainingTypeOptions([
           "Business Orientation",
           "Customer Orientation",
@@ -76,23 +78,23 @@ const DropdownSubInputField: FC<DropdownInputFieldProps> = ({
 
   return (
     <>
-      
-        <select
-          value={value}
-          onChange={handleChange}
-          className={`dropdown-select ${value ? "selected" : "not-selected"}`}
-        >
-          {isNewCategorySelected && placeholder && (
-            <option value="" className="dropdown-option">
-              {placeholder}
-            </option>
-          )}
-          {trainingTypeOptions.map((option) => (
-            <option key={option} value={option} className="dropdown-option">
-              {option}
-            </option>
-          ))}
-        </select>
+      <select
+        value={value}
+        onChange={handleChange}
+        className={`dropdown-select ${value ? "selected" : "not-selected"}`}
+        disabled={isEditable}
+      >
+        {isNewCategorySelected && placeholder && (
+          <option value="" className="dropdown-option">
+            {placeholder}
+          </option>
+        )}
+        {trainingTypeOptions.map((option) => (
+          <option key={option} value={option} className="dropdown-option">
+            {option}
+          </option>
+        ))}
+      </select>
       <div
         className={`dropdown-field-error-message ${
           error.length !== 0 && "dropdown-field-error-display"
@@ -100,10 +102,9 @@ const DropdownSubInputField: FC<DropdownInputFieldProps> = ({
       >
         {error}
       </div>
-        <div className="custom-dropdown-arrow">
-          <ArrowDown />
-        </div>
-     
+      <div className="custom-dropdown-arrow">
+        <ArrowDown />
+      </div>
     </>
   );
 };

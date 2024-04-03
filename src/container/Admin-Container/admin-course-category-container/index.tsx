@@ -5,7 +5,7 @@ import Link from "next/link";
 import AddButton from "@/components/buttons/add-button";
 import CustomPagination from "@/components/pagination";
 import CourseCategoryTable from "@/components/tables/CourseCategoryTable";
-import { ViewEyeIcon } from "@/components/icons/view-eye-icon";
+import ViewEyeIcon from "@/components/icons/view-eye-icon";
 
 interface AdminCourseCategoryContainerProps {}
 
