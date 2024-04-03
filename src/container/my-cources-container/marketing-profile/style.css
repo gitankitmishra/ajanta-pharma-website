@@ -1,0 +1,18 @@
+.marketing-profile-section-main-section {
+    margin: 0 40px;
+  }
+  .marketing-profile-section-heading-section {
+    margin-top: 20px;
+  }
+  .marketing-profile-section-heading-text {
+    color: #1c1d1d;
+    font-size: 24px;
+    font-weight: 500;
+    text-decoration: underline;
+  }
+  .marketing-profile-section-cards-section {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    margin-top: 32px;
+  }
+  
