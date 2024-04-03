@@ -93,7 +93,7 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
                   id={`assessment_type-${index}`}
                   value={
                     course_assessment[module.assessment_no as number]
-                      .assessment_type
+                      ?.assessment_type
                   }
                   onChange={handleAssessmentTypeChange}
                   placeholder="select assessment type"
@@ -103,7 +103,7 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
                     "True or false",
                     "Short Answer",
                   ]}
-                  valueLabel={["multiple", "single", "True or false", "short"]}
+                  valueLabel={["multiple", "single", "boolean", "short"]}
                 />
               </div>
               <div className="module-input-name">
@@ -171,7 +171,7 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
                   "True or false",
                   "Short Answer",
                 ]}
-                valueLabel={["multiple", "single", "True or false", "short"]}
+                valueLabel={["multiple", "single", "boolean", "short"]}
               />
             </div>
             <div className="module-input-name">
@@ -180,7 +180,7 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
               </label>
               <InputField
                 id="pre"
-                moduleValue={course_assessment_main[0].assessment_name}
+                moduleValue={course_assessment_main[0]?.assessment_name}
                 onUpdate={handleAssessmentNameChange}
               />
             </div>
@@ -226,7 +226,7 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
                   "True or false",
                   "Short Answer",
                 ]}
-                valueLabel={["multiple", "single", "True or false", "short"]}
+                valueLabel={["multiple", "single", "boolean", "short"]}
               />
             </div>
             <div className="module-input-name">
@@ -234,7 +234,7 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
                 Assessment Name
               </label>
               <InputField
-                moduleValue={course_assessment_main[1].assessment_name}
+                moduleValue={course_assessment_main[1]?.assessment_name}
                 id="post"
                 onUpdate={handleAssessmentNameChange}
               />

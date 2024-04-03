@@ -63,6 +63,9 @@ export type CourseContextType = {
 
   //GET AND EDIT COURSES
   getCourseData: (course_id: string) => void;
+
+  //to edit
+  updateCourse: () => void;
 };
 
 export const CourseContext = createContext<CourseContextType | null>(null);
@@ -721,12 +724,28 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
       // Check if the response data contains 'data' and 'course_basic' properties
       if (responseData && responseData.data && responseData.data.course_basic) {
         setCourseBasic(responseData.data.course_basic);
-        setCourseAssessment(responseData.data.course_assessment);
+        // setCourseAssessment(Object.values(responseData.data.course_assessment));
+
+        //condition
+        const filteredCourseAssessment = Object.values(
+          responseData.data.course_assessment
+        ).filter(
+          (assessment: any) => assessment.assessment_category === "course"
+        ) as CourseAssessment[];
+
+        const filteredModuleAssessment = Object.values(
+          responseData.data.course_assessment
+        ).filter(
+          (assessment: any) => assessment.assessment_category === "module"
+        ) as CourseAssessment[];
+
+        setCourseAssessment(filteredCourseAssessment);
+        setCourseAssessmentMain(filteredModuleAssessment);
         setCourseModule(responseData.data.course_module);
         setCourseDesignation(responseData.data.course_designation);
 
         console.log("responssssssss", responseData.data);
-        console.log("basiccccc", responseData.data.course_basic);
+        console.log("assessment main", course_assessment_main);
       } else {
         console.error("Invalid response format:", responseData);
       }
@@ -735,9 +754,32 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     }
   };
 
-  useEffect(() => {
-    console.log("basic detailsssssss", course_basic);
-  }, [course_basic]);
+  // ***********************************************************************************************
+
+  //api to update the data or edit
+  const updateCourse = async () => {
+    console.log("button upload");
+
+    const response = await fetchService({
+      method: "PUT",
+      endpoint: ` api/admin/dashboard/editCourse/${course_basic.course_code}`,
+      data: {
+        course: {
+          ...course_basic,
+          ...course_assessment,
+          ...course_assessment_main,
+          ...course_designation,
+        },
+        course_code: course_basic.course_code,
+      },
+    });
+    if (response.code === 200) {
+      const data = response;
+      console.log(data);
+    } else {
+      console.log("error");
+    }
+  };
 
   // ***********************************************************************************************
 
@@ -797,6 +839,9 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
 
     //GET COURSES
     getCourseData,
+
+    //edit
+    updateCourse,
   };
   return (
     <CourseContext.Provider value={course_values}>
