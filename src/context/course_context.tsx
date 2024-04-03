@@ -695,11 +695,7 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
 
   useEffect(() => {
     fetchData();
-  }, [pageNo, pageSize]);
-
-  useEffect(() => {
-    console.log("Course Details", courseData);
-  }, [pageNo, pageSize]);
+  }, [pageNo]);
 
   //*/****************************************************************************************** */
 
