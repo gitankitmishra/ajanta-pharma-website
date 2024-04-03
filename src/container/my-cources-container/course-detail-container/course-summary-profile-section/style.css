@@ -1,0 +1,8 @@
+.course-summary-main-section {
+  margin: 0 40px;
+}
+.course-summary-cards-section{
+    display: flex;
+    justify-content: space-between;
+    margin-top: 34px;
+}

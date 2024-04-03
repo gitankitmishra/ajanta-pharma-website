@@ -9,6 +9,9 @@
 .my-course-cards-row {
   display: flex;
 }
+.my-course-cards-row a{
+ text-decoration: none;
+}
 .my-course-title-section {
   width: 92%;
   display: flex;

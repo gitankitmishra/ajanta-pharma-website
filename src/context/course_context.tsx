@@ -199,7 +199,7 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     prevID: number | null = null
   ): string => {
     const categoryTable: { [key: string]: string } = {
-      "Competency-Based-Skills": "CBS",
+      "Competency Based Skills": "CBS",
       Medical: "MED",
       Marketing: "MKT",
       "Personal Development": "PD",
@@ -542,7 +542,7 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     });
 
     const responseUrl = await fetchService({
-      method: "Post",
+      method: "POST",
       endpoint: "api/admin/dashboard/uploadAllFile",
       data: formdata,
     });
@@ -794,7 +794,8 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
       endpoint: `api/admin/dashboard/pushData/${course_basic.course_code}`,
     });
     if (response.code == 200) {
-      const data = response;
+      alert("Data Published SuccessFully!!!");
+      router.push("/admin/admin-courses");
       console.log("dataa", response.data);
       console.log("uploaded to course collection");
     } else {

@@ -5,21 +5,24 @@ import "./style.css";
 import { BellIcon } from "@/components/icons/bell-icon";
 import { ProfileIcon } from "@/components/icons/profile-icon";
 import { useRouter } from "next/navigation";
+import { WhiteBellIcon } from "@/components/icons/whiteBellIcon";
 
 interface SearchFieldSectionProps {}
 
 const SearchFieldSection: FC<SearchFieldSectionProps> = () => {
   const router = useRouter();
-  const handleChange=()=>{
-    router.push("/notification")
-  }
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [filteredSuggestions, setFilteredSuggestions] = useState<string[]>([]);
   const [selectedSuggestionIndex, setSelectedSuggestionIndex] =
     useState<number>(-1);
   const [isSearchFocused, setIsSearchFocused] = useState<boolean>(false);
-
+  const [clicked, setClicked] = useState(false);
+  
+  const handleChange = () => {
+    router.push("/notification");
+    setClicked(!clicked);
+  };
   useEffect(() => {
     const defaultSuggestions = [
       "BO1 - Business Etiquette",
@@ -99,13 +102,16 @@ const SearchFieldSection: FC<SearchFieldSectionProps> = () => {
               </div>
             ))}
           </div>
-         )} 
+        )}
         <div className="search-icon">
           <SearchIcon />
         </div>
       </div>
-      <div className="bell-icon" onClick={handleChange}>
-        <BellIcon />
+      <div
+        className={`bell-icon ${clicked ? "clicked" : ""}`}
+        onClick={handleChange}
+      >
+       {clicked ? <WhiteBellIcon/>:<BellIcon/>} 
       </div>
       <div className="profile-icon">
         <ProfileIcon />

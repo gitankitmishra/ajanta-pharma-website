@@ -51,9 +51,9 @@ const Navbar: FunctionComponent<NavbarProps> = ({ user_type }) => {
               <div className="nav-icon">
                 {/* Render the appropriate icon based on the value */}
                 {el.value === "Home" && <HomeIcon />}
-                {el.value === "My-Courses" && <GraduationCapIcon />}
+                {el.value === "My Courses" && <GraduationCapIcon />}
                 {el.value === "Assessments" && <AssessmentIcon />}
-                {el.value === "Certification" && <CertificateIcon />}
+                {el.value === "My Certifications" && <CertificateIcon />}
                 {user_type === "manager" && el.value === "Team Performance" && (
                   <CertificateIcon />
                 )}{" "}

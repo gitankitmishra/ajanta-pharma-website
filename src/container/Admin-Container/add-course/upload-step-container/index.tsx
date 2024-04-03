@@ -30,7 +30,7 @@ const UploadStepSection: FC<UploadStepSectionProps> = () => {
   };
 
   const extractFileExtension = (filename: any) => {
-    const parts = filename.split(".");
+    const parts = filename.split("/");
     if (parts.length > 1) {
       return parts.pop();
     } else {
@@ -42,7 +42,7 @@ const UploadStepSection: FC<UploadStepSectionProps> = () => {
     <section className="upload-main-section">
       <p className="upload-preview-text">Preview</p>
 
-      <div className="upload-div-section">
+      <div className="upload-div-section1">
         <div className="upload-section1">
           <div className="upload-section1-div-sections">
             <label htmlFor="" className="upload-section-labels">
@@ -79,8 +79,8 @@ const UploadStepSection: FC<UploadStepSectionProps> = () => {
           <label htmlFor="" className="upload-section-labels">
             Learning Objective
           </label>
-          <input
-            className="input-field-1"
+          <textarea
+            className="upload-step-textarea"
             readOnly
             value={course_basic.course_objective}
           />
@@ -112,28 +112,32 @@ const UploadStepSection: FC<UploadStepSectionProps> = () => {
       </div>
 
       <div className="upload-div-section">
-        <div className="upload-section1">
+        <div>
           {course_module.map((module, index) => {
             console.log("module", module);
 
             return (
-              <div className="upload-section2-div-sections" key={index}>
-                <label htmlFor="" className="upload-section-labels">
-                  Module Number
-                </label>
-                <input
-                  className="input-field-1"
-                  readOnly
-                  value={module.module_no}
-                />
-                <label htmlFor="" className="upload-section-labels">
-                  Module Name
-                </label>
-                <input
-                  className="input-field-1"
-                  readOnly
-                  value={module.module_name}
-                />
+              <div className="upload-section2-div-containers" key={index}>
+                <div className="upload-section2-div-sections">
+                  <label htmlFor="" className="upload-section-labels">
+                    Module Number
+                  </label>
+                  <input
+                    className="input-field-1"
+                    readOnly
+                    value={module.module_no}
+                  />
+                </div>
+                <div className="upload-section2-div-sections">
+                  <label htmlFor="" className="upload-section-labels">
+                    Module Name
+                  </label>
+                  <input
+                    className="input-field-1"
+                    readOnly
+                    value={module.module_name}
+                  />
+                </div>
                 <div className="upload-section2-uploaded-file">
                   <div className="uploaded-video-file"></div>
                   <div className="uploaded-video-file-text">
@@ -141,7 +145,7 @@ const UploadStepSection: FC<UploadStepSectionProps> = () => {
                       {extractFileExtension(module.module_material)}
                     </span>
                     <br />
-                    <span className="upload-file-size">2.2MB</span>
+                    {/* <span className="upload-file-size">2.2MB</span> */}
                   </div>
                 </div>
               </div>
@@ -150,35 +154,39 @@ const UploadStepSection: FC<UploadStepSectionProps> = () => {
         </div>
       </div>
 
-      <div className="upload-div-section">
-        <div className="upload-section1">
+      <div className="upload-div-section ">
+        <div>
           {course_assessment.map((assesment, index) => {
             console.log("assessment", assesment);
 
             return (
-              <div className="upload-section2-div-sections" key={index}>
-                <label htmlFor="" className="upload-section-labels">
-                  Assesment Type
-                </label>
-                <input
-                  className="input-field-1"
-                  readOnly
-                  value={assesment.assessment_type}
-                />
-                <label htmlFor="" className="upload-section-labels">
-                  Assessment Name
-                </label>
-                <input
-                  className="input-field-1"
-                  readOnly
-                  value={assesment.assessment_name}
-                />
+              <div className="upload-section2-div-containers" key={index}>
+                <div className="upload-section2-div-sections">
+                  <label htmlFor="" className="upload-section-labels">
+                    Assesment Type
+                  </label>
+                  <input
+                    className="input-field-1"
+                    readOnly
+                    value={assesment.assessment_type}
+                  />
+                </div>
+                <div className="upload-section2-div-sections">
+                  <label htmlFor="" className="upload-section-labels">
+                    Assessment Name
+                  </label>
+                  <input
+                    className="input-field-1"
+                    readOnly
+                    value={assesment.assessment_name}
+                  />
+                </div>
                 <div className="upload-section2-uploaded-file">
                   <div className="uploaded-video-file"></div>
                   <div className="uploaded-video-file-text">
-                    <span className="upload-file-name">video</span>
+                    <span className="upload-file-name">Data</span>
                     <br />
-                    <span className="upload-file-size">2.2MB</span>
+                    {/* <span className="upload-file-size">2.2MB</span> */}
                   </div>
                 </div>
               </div>
@@ -192,11 +200,18 @@ const UploadStepSection: FC<UploadStepSectionProps> = () => {
       </div>
       {course_assessment_main[0].assessment_name != "" && (
         <>
-          <div className="upload-section2">
-            <div>pre</div>
+          <div className=" upload-section-2-special">
+            <div className="upload-section2-div-sections">
+              {" "}
+              <label htmlFor="" className="upload-section-labels">
+               Assessment Position
+              </label>
+              <input type="text" value={"Pre"} className="upload-assessment-position"
+                readOnly />
+            </div>
             <div className="upload-section2-div-sections">
               <label htmlFor="" className="upload-section-labels">
-                Assessment Number
+                Assessment Type
               </label>
               <input
                 className="input-field-1"
@@ -251,8 +266,9 @@ const UploadStepSection: FC<UploadStepSectionProps> = () => {
           <div className="upload-text-section">
             <p className="upload-text">Divisions </p>
           </div>
+          <div className="upload-checkbox-section">
           {course_designation.division.map((division, index) => (
-            <div className="upload-checkbox-section" key={index}>
+            <div  key={index}>
               <Checkbox
                 text={division}
                 id={`division-${index}`}
@@ -260,15 +276,16 @@ const UploadStepSection: FC<UploadStepSectionProps> = () => {
               />
             </div>
           ))}
+            </div>
         </div>
 
         <div className="upload-main-div-section">
           <div className="upload-text-section">
             <p className="upload-text"> Designation</p>
           </div>
-
+          <div className="upload-checkbox-section" >
           {course_designation.designation.map((designation, index) => (
-            <div className="upload-checkbox-section" key={index}>
+            <div key={index}>
               <Checkbox
                 text={designation}
                 id={`designation-${index}`}
@@ -276,6 +293,7 @@ const UploadStepSection: FC<UploadStepSectionProps> = () => {
               />
             </div>
           ))}
+          </div>
         </div>
       </div>
 
