@@ -1,4 +1,4 @@
-import { FC, useContext, useEffect } from "react";
+import { FC, useContext } from "react";
 import "./style.css";
 import { DropdownIcon } from "@/components/icons/dropdown-icon";
 import Link from "next/link";
