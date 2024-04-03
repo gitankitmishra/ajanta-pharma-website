@@ -6,7 +6,7 @@ interface InputFieldStringProps {
   onChange: (newValue: string) => void;
   placeholder?: string;
   width?: string;
-  readonly?: boolean;
+  isEditable?: boolean;
   error?: string;
 }
 
@@ -16,7 +16,7 @@ const InputFieldString: FC<InputFieldStringProps> = ({
   className,
   placeholder,
   width,
-  readonly,
+  isEditable,
   error = "",
 }) => {
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -26,7 +26,7 @@ const InputFieldString: FC<InputFieldStringProps> = ({
   return (
     <div className="module-input-name">
       <input
-        readOnly={readonly}
+        readOnly={isEditable}
         style={{ width: width }}
         type="text"
         value={value}

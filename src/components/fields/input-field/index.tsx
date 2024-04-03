@@ -7,14 +7,15 @@ interface InputFieldProps {
   onUpdate?: (event: ChangeEvent<HTMLInputElement>) => void;
   readOnly?: boolean;
   id?: string;
+  isEditable?: boolean;
 }
 
 const InputField: FC<InputFieldProps> = ({
-  readOnly = false,
   moduleValue,
   onChange,
   onUpdate,
   id,
+  isEditable,
 }) => {
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const newValue = event.target.value;
@@ -29,7 +30,7 @@ const InputField: FC<InputFieldProps> = ({
         value={moduleValue}
         onChange={onUpdate ? onUpdate : handleChange}
         placeholder=""
-        readOnly={readOnly}
+        readOnly={isEditable}
       />
     </div>
   );

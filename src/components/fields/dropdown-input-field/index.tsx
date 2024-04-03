@@ -11,6 +11,7 @@ interface DropdownInputFieldProps {
   valueLabel: string[];
   onChange?: (event: ChangeEvent<HTMLSelectElement>) => void;
   id?: string;
+  isEditable?: boolean;
 }
 
 const DropdownInputField: FC<DropdownInputFieldProps> = ({
@@ -22,6 +23,7 @@ const DropdownInputField: FC<DropdownInputFieldProps> = ({
   valueLabel,
   onChange,
   id,
+  isEditable,
 }) => {
   const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     onValueChange!(event.target.value);
@@ -40,6 +42,7 @@ const DropdownInputField: FC<DropdownInputFieldProps> = ({
           className={`dropdown-select ${
             isSelected ? "selected" : "not-selected"
           }`}
+          disabled={isEditable}
         >
           {placeholder && (
             <option value="" disabled className="disable-dropdown-option">
