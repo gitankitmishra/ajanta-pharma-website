@@ -62,8 +62,7 @@ export type CourseContextType = {
   handleComponentPage: (value: number) => void;
 
   //GET AND EDIT COURSES
-  handleCourseCodeChange: (value: string) => void;
-  basicInfo: CourseBasic | null;
+  getCourseData: (course_id: string) => void;
 };
 
 export const CourseContext = createContext<CourseContextType | null>(null);
@@ -644,10 +643,6 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
       console.error("Error:", error.message);
     }
   };
-
-  useEffect(() => {
-    console.log("designation", course_designation);
-  }, [course_designation]);
   // ***********************************************************************************************
 
   //Pagination
@@ -697,21 +692,17 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     fetchData();
   }, [pageNo, pageSize]);
 
-  useEffect(() => {
-    console.log("Course Details", courseData);
-  }, [pageNo, pageSize]);
-
   //*/****************************************************************************************** */
 
   //GET COURSE AND EDIT COURSE
   const [course_id, setCourseCode] = useState("");
-  const [basicInfo, setBasicInfo] = useState<CourseBasic | null>(null);
+  const [data, setData] = useState<any>([]);
 
   const handleCourseCodeChange = (value: string) => {
     setCourseCode(value);
   };
 
-  const getCourseData = async (): Promise<void> => {
+  const getCourseData = async (course_id: string): Promise<void> => {
     try {
       const response = await fetch(
         `http://localhost:4000/api/admin/dashboard/getCourseByCode/${course_id}`,
@@ -729,23 +720,24 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
 
       // Check if the response data contains 'data' and 'course_basic' properties
       if (responseData && responseData.data && responseData.data.course_basic) {
-        // Set the 'basicInfo' state with the 'course_basic' data from the response
-        console.log(responseData);
+        setCourseBasic(responseData.data.course_basic);
+        setCourseAssessment(responseData.data.course_assessment);
+        setCourseModule(responseData.data.course_module);
+        setCourseDesignation(responseData.data.course_designation);
 
-        setBasicInfo(responseData.data.course_basic);
+        console.log("responssssssss", responseData.data);
+        console.log("basiccccc", responseData.data.course_basic);
       } else {
-        // Handle the case where the expected data is missing in the response
         console.error("Invalid response format:", responseData);
       }
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
+
   useEffect(() => {
-    if (course_id) {
-      getCourseData();
-    }
-  }, [course_id]);
+    console.log("basic detailsssssss", course_basic);
+  }, [course_basic]);
 
   // ***********************************************************************************************
 
@@ -803,8 +795,7 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     handleComponentPage,
 
     //GET COURSES
-    handleCourseCodeChange,
-    basicInfo,
+    getCourseData,
   };
   return (
     <CourseContext.Provider value={course_values}>

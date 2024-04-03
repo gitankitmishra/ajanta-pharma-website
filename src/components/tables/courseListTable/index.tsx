@@ -4,7 +4,7 @@ import { DropdownIcon } from "@/components/icons/dropdown-icon";
 import Link from "next/link";
 
 import ViewEyeIcon from "@/components/icons/view-eye-icon";
-import { CourseContext } from "@/context/course_context";
+import { CourseContext, CourseContextType } from "@/context/course_context";
 
 const AdminCourseListTable: FC = () => {
   const contextValue = useContext(CourseContext);
@@ -17,11 +17,8 @@ const AdminCourseListTable: FC = () => {
     );
     return null;
   }
-  const { courseData, handleCourseCodeChange } = contextValue;
+  const { courseData, getCourseData } = contextValue;
 
-  const onViewIconClick = (courseId: string) => {
-    handleCourseCodeChange(courseId); // Update course code on click
-  };
   return (
     <div className="admin-course-list-table-main-container">
       <table className="admin-course-list-table">
@@ -51,7 +48,7 @@ const AdminCourseListTable: FC = () => {
                 </td>
                 <td className="admin-course-list-table-data">
                   {new Date(
-                    course.course_basic?.publishDate
+                    course.course_basic.course_start_date
                   ).toLocaleDateString()}
                 </td>
                 <td className="admin-course-list-table-data">
@@ -71,7 +68,7 @@ const AdminCourseListTable: FC = () => {
                   for a edit logic */}
                     <ViewEyeIcon
                       onClick={() =>
-                        onViewIconClick(course.course_basic.course_code)
+                        getCourseData(course.course_basic.course_code)
                       }
                     />
                   </Link>

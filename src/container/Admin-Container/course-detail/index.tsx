@@ -1,6 +1,6 @@
 "use client";
 import Breadcrumb from "@/components/breadcrumb";
-import { FC, useContext, useState } from "react";
+import { FC, useContext, useEffect, useState } from "react";
 import "./style.css";
 import DropdownInputField from "@/components/fields/dropdown-input-field";
 import DropdownSubInputField from "@/components/fields/dropdown-sub-input-field";
@@ -13,6 +13,8 @@ import NextButton from "@/components/buttons/next-button";
 import { GreyPlusIcon } from "@/components/icons/greyPlusIcon";
 import { createContext } from "vm";
 import { CourseContext, CourseContextType } from "@/context/course_context";
+import TextAreaField from "@/components/fields/TextAreaField";
+import InputField from "@/components/fields/input-field";
 
 interface AdminCourseDeatilContainerProps {}
 
@@ -21,10 +23,14 @@ const AdminCourseDeatilContainer: FC<
 > = ({}) => {
   //context
   const {
-    handleChangeDesignation,
-    course_designation,
     course_basic,
     handleChange,
+    course_module,
+    course_assessment,
+    handleModuleChange,
+    handleAddModule,
+    handleAssessmentNameChange,
+    handleAssessmentTypeChange,
   } = useContext(CourseContext) as CourseContextType;
 
   const [isClicked, setIsClicked] = useState(false);
@@ -56,10 +62,6 @@ const AdminCourseDeatilContainer: FC<
     { assessmentType: "", assessmentName: "" },
   ]);
 
-  const handleAddModule = () => {
-    setModules([...modules, { moduleName: "", moduleNo: "", files: null }]);
-  };
-
   const handleAddAssessment = () => {
     setAssessmentOpt([
       ...assessmentOpt,
@@ -76,6 +78,12 @@ const AdminCourseDeatilContainer: FC<
       isActive: true,
     },
   ];
+
+  //useState
+  const [isEditable, setIsEditable] = useState(false);
+  console.log("check training", course_basic.course_training);
+  console.log("course assessment", course_assessment);
+
   return (
     <section className="admin-course-detail-container-main-section">
       <div className="admin-course-detail-breadcrumb-section">
@@ -102,6 +110,7 @@ const AdminCourseDeatilContainer: FC<
                   "Classroom Training",
                 ]}
                 valueLabel={[""]}
+                isEditable={!isEditable}
               />
             </div>
             <div className="admin-course-detail-section1-div-sections">
@@ -109,11 +118,11 @@ const AdminCourseDeatilContainer: FC<
                 Training
               </label>
               <DropdownSubInputField
-                value={course_basic.course_training}
                 onValueChange={(value) =>
                   handleChange("course_training", value)
                 }
-                selectedCategory={course_basic.course_training}
+                selectedCategory={course_basic.course_category}
+                isEditable={!isEditable}
               />
             </div>
             <div className="admin-course-detail-section1-div-sections">
@@ -124,6 +133,7 @@ const AdminCourseDeatilContainer: FC<
                 className="input-field"
                 value={`${course_basic.course_code}  ${course_basic.course_name}`}
                 onChange={() => ""}
+                isEditable={!isEditable}
               />
             </div>
           </div>
@@ -134,83 +144,103 @@ const AdminCourseDeatilContainer: FC<
             <input
               type="text"
               className="admin-course-detail-learning-objective-input"
+              value={course_basic.course_objective}
+              readOnly={!isEditable}
             />
+
+            {/* <TextAreaField
+              placeholder="Enter Learning Objective"
+              className="admin-course-detail-learning-objective-input"
+              value={course_basic.course_objective}
+              onChange={(value) => handleChange("course_objective", value)}
+            /> */}
           </div>
           <div className="admin-course-detail-div-section3">
             <DateInputField
-              startDate={""}
-              endDate={""}
-              onStartDateChange={function (value: string): void {
-                throw new Error("Function not implemented.");
-              }}
-              onEndDateChange={function (value: string): void {
-                throw new Error("Function not implemented.");
-              }}
+              startDate={course_basic.course_start_date?.toString() ?? ""}
+              endDate={course_basic.course_end_date.toString()}
+              onStartDateChange={(value) =>
+                handleChange("course_start_date", value)
+              }
+              onEndDateChange={(value) =>
+                handleChange("course_end_date", value)
+              }
+              isEditable={!isEditable}
             />
           </div>
         </div>
         <div className="admin-course-detail-div-section">
-          {modules.map(
-            (
-              module,
-              index //maping for replication module section
-            ) => (
-              <>
-                <div className="admin-course-detail-section2">
-                  <div className="admin-course-detail-section2-div-sections">
-                    <label
-                      htmlFor=""
-                      className="admin-course-detail-section-labels"
-                    >
-                      Module Number
-                    </label>
-                    {/* <InputFieldString
+          {course_module?.map((module, index) => {
+            return (
+              <div className="admin-course-detail-section2" key={index}>
+                <div className="admin-course-detail-section2-div-sections">
+                  <label
+                    htmlFor=""
+                    className="admin-course-detail-section-labels"
+                  >
+                    Module Number
+                  </label>
+                  {/* <InputFieldString
+                      className="input-field"
+                      value={module.module_no}
+                      onChange={handleCourseCodeAndNameChange}
+                    /> */}
+                  <InputField
+                    moduleValue={module.module_no.toString()}
+                    onUpdate={handleModuleChange}
+                    isEditable={!isEditable}
+                  />
+                </div>
+                <div className="admin-course-detail-section2-div-sections">
+                  <label
+                    htmlFor=""
+                    className="admin-course-detail-section-labels"
+                  >
+                    Module Name
+                  </label>
+                  {/* <InputFieldString
                       className="input-field"
                       value={formData.courseCode + " " + formData.courseName}
                       onChange={handleCourseCodeAndNameChange}
                     /> */}
+                  <InputField
+                    id={`module_name-${index}`}
+                    moduleValue={module.module_name}
+                    onUpdate={handleModuleChange}
+                    isEditable={!isEditable}
+                  />
+                </div>
+                <div className="admin-course-detail-section2-admin-course-detailed-file">
+                  <div className="admin-course-detailed-video-file">
+                    {/* <input type="text" className="admin-course-detailed-mp4" /> */}
+                    <span className="admin-course-detailed-file-name">MP4</span>
                   </div>
-                  <div className="admin-course-detail-section2-div-sections">
-                    <label
-                      htmlFor=""
-                      className="admin-course-detail-section-labels"
-                    >
-                      Module Name
-                    </label>
-                    {/* <InputFieldString
-                      className="input-field"
-                      value={formData.courseCode + " " + formData.courseName}
-                      onChange={handleCourseCodeAndNameChange}
-                    /> */}
-                  </div>
-                  <div className="admin-course-detail-section2-admin-course-detailed-file">
-                    <div className="admin-course-detailed-video-file">
-                      {/* <input type="text" className="admin-course-detailed-mp4" /> */}
-                      <span className="admin-course-detailed-file-name">
-                        MP4
-                      </span>
-                    </div>
-                    <div className="admin-course-detailed-video-file-text">
-                      <span className="admin-course-detail-file-name">
-                        video.mp4
-                      </span>
-                      <br />
-                      <span className="admin-course-detail-file-size">
-                        2.2MB
-                      </span>
-                    </div>
-                  </div>
-                  <div className="admin-course-detail-upload-btns">
-                    <button
-                      className={`admin-course-detail-upload-btn ${
-                        isClicked ? "clicked" : "unClicked"
-                      }`}
-                    >
-                      Upload
-                    </button>
+                  <div className="admin-course-detailed-video-file-text">
+                    <span className="admin-course-detail-file-name">
+                      video.mp4
+                    </span>
+                    <br />
+                    <span className="admin-course-detail-file-size">2.2MB</span>
                   </div>
                 </div>
-                <div className="admin-course-detail-section2">
+                <div className="admin-course-detail-upload-btns">
+                  <button
+                    className={`admin-course-detail-upload-btn ${
+                      isClicked ? "clicked" : "unClicked"
+                    }`}
+                  >
+                    Upload
+                  </button>
+                </div>
+              </div>
+            );
+          })}
+
+          <div className="admin-course-detail-section2">
+            {course_assessment?.map((assessment, index) => {
+              console.log("let's checkkks", assessment);
+              return (
+                <>
                   <div className="admin-course-detail-section2-div-sections">
                     <label
                       htmlFor=""
@@ -218,19 +248,28 @@ const AdminCourseDeatilContainer: FC<
                     >
                       Assessment Type
                     </label>
-                    {/* <DropdownInputField
-                      value={basicInfo && basicInfo.course_category}
-                      onValueChange={(value) => handleChange("category", value)}
+                    <DropdownInputField
+                      // value={assessmentFileType[index]}
+                      id={`assessment_type-${index}`}
+                      value={assessment.assessment_type}
+                      onChange={handleAssessmentTypeChange}
+                      placeholder="select assessment type"
                       options={[
-                        "Competency Based Skills",
-                        "Medical",
-                        "Marketing",
-                        "Personal Development",
-                        "Classroom Training",
+                        "Multiple Choice Question",
+                        "Signle Choice Question",
+                        "True or false",
+                        "Short Answer",
                       ]}
-                      valueLabel={[""]}
-                    /> */}
+                      valueLabel={[
+                        "multiple",
+                        "single",
+                        "True or false",
+                        "short",
+                      ]}
+                      isEditable={!isEditable}
+                    />
                   </div>
+
                   <div className="admin-course-detail-section2-div-sections">
                     <label
                       htmlFor=""
@@ -238,42 +277,38 @@ const AdminCourseDeatilContainer: FC<
                     >
                       Assessment Name
                     </label>
-                    {/* <InputFieldString
-                      className="input-field"
-                      value={formData.courseCode + " " + formData.courseName}
-                      onChange={handleCourseCodeAndNameChange}
-                    /> */}
+                    <input
+                      className="input-field-1"
+                      readOnly
+                      value={assessment.assessment_position}
+                    />
                   </div>
-                  <div className="admin-course-detail-section2-admin-course-detailed-file">
-                    <div className="admin-course-detailed-video-file">
-                      <span className="admin-course-detailed-file-name">
-                        XLS
-                      </span>
-                      {/* <input type="text" className="admin-course-detailed-mp4" /> */}
-                    </div>
-                    <div className="admin-course-detailed-video-file-text">
-                      <span className="admin-course-detail-file-name">
-                        excel.xls
-                      </span>
-                      <br />
-                      <span className="admin-course-detail-file-size">
-                        2.2MB
-                      </span>
-                    </div>
-                  </div>
-                  <div className="admin-course-detail-upload-btns">
-                    <button
-                      className={`admin-course-detail-upload-btn ${
-                        isClicked ? "clicked" : "unClicked"
-                      }`}
-                    >
-                      Upload
-                    </button>
-                  </div>
-                </div>
-              </>
-            )
-          )}
+                </>
+              );
+            })}
+
+            <div className="admin-course-detail-section2-admin-course-detailed-file">
+              <div className="admin-course-detailed-video-file">
+                <span className="admin-course-detailed-file-name">XLS</span>
+                {/* <input type="text" className="admin-course-detailed-mp4" /> */}
+              </div>
+              <div className="admin-course-detailed-video-file-text">
+                <span className="admin-course-detail-file-name">excel.xls</span>
+                <br />
+                <span className="admin-course-detail-file-size">2.2MB</span>
+              </div>
+            </div>
+            <div className="admin-course-detail-upload-btns">
+              <button
+                className={`admin-course-detail-upload-btn ${
+                  isClicked ? "clicked" : "unClicked"
+                }`}
+              >
+                Upload
+              </button>
+            </div>
+          </div>
+
           <button
             className={`admin-course-detail-sec-add-module-btn ${
               isClicked ? "clicked" : "unClicked"
@@ -380,13 +415,13 @@ const AdminCourseDeatilContainer: FC<
               <p className="admin-course-detail-text">Divisions </p>
             </div>
             <div className="admin-course-detail-checkbox-section">
-              <Checkbox
+              {/* <Checkbox
                 id="division"
                 text={"CDC"}
                 onChange={handleChangeDesignation}
                 value="CDC"
-                isChecked={course_designation.division.includes("CDC")}
-              />
+                isChecked={data.course_designation?.division.includes("CDC")}
+              /> */}
             </div>
           </div>
 
@@ -395,13 +430,13 @@ const AdminCourseDeatilContainer: FC<
               <p className="admin-course-detail-text"> Designation</p>
             </div>
             <div className="admin-course-detail-checkbox-section2">
-              <Checkbox
+              {/* <Checkbox
                 id="designation"
                 text={"RSM"}
                 value="RSM"
                 onChange={handleChangeDesignation}
-                isChecked={course_designation.designation.includes("RSM")}
-              />
+                isChecked={data.course_designation?.designation.includes("RSM")}
+              /> */}
             </div>
             {/* <div className="admin-course-detail-btn-section">
             <PreviousButton text={"Previous"} />
