@@ -82,6 +82,9 @@
   gap: 10px;
   flex-direction: column;
 }
+.pre-assessment{
+  margin-bottom: 4px;
+}
 .admin-course-detailed-video-file {
   display: flex;
   align-items: center;

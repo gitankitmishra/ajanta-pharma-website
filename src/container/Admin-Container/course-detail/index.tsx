@@ -27,11 +27,44 @@ const AdminCourseDeatilContainer: FC<
     handleChange,
     course_module,
     course_assessment,
+    course_assessment_main,
+    course_designation,
+    handleChangeDesignation,
     handleModuleChange,
     handleAddModule,
     handleAssessmentNameChange,
     handleAssessmentTypeChange,
+    updateCourse,
   } = useContext(CourseContext) as CourseContextType;
+  const allDivisions = [
+    "CDC",
+    "Nuventa",
+    "Revance",
+    "Solesta",
+    "Inovio",
+    "Anvaxx",
+    "Illuma",
+    "Inyx",
+    "Ansca",
+    "Zillion",
+    "Avecea",
+    "Axys",
+    "Maxcor",
+    "Almiron",
+    "Mexlon",
+    "Hospicare",
+  ];
+
+  const allDesignation = [
+    "Cluster Head- Derma",
+    "Cluster Head- Pain",
+    "Sales Head",
+    "Sales Manager",
+    "DSM",
+    "RSM",
+    "DM",
+    "SO",
+  ];
 
   const [isClicked, setIsClicked] = useState(false);
   const [buttonText, setButtonText] = useState({
@@ -43,9 +76,12 @@ const AdminCourseDeatilContainer: FC<
 
   const handleEditClick = () => {
     if (buttonText.edit === "Edit") {
+      setIsEditable(true);
       setButtonText({ edit: "Next", discard: "Discard" });
+    } else if (buttonText.edit === "Upload") {
+      updateCourse();
     } else {
-      setButtonText({ edit: "Previous", discard: "Upload" });
+      setButtonText({ edit: "Upload", discard: "Previous" });
     }
     setIsClicked(true);
   };
@@ -146,6 +182,7 @@ const AdminCourseDeatilContainer: FC<
               className="admin-course-detail-learning-objective-input"
               value={course_basic.course_objective}
               readOnly={!isEditable}
+              disabled={!isEditable}
             />
 
             {/* <TextAreaField
@@ -237,8 +274,8 @@ const AdminCourseDeatilContainer: FC<
           })}
 
           <div className="admin-course-detail-section2">
-            {course_assessment?.map((assessment, index) => {
-              console.log("let's checkkks", assessment);
+            {course_assessment?.map((assessment: any, index: number) => {
+              console.log("checkkkk", assessment);
               return (
                 <>
                   <div className="admin-course-detail-section2-div-sections">
@@ -249,14 +286,13 @@ const AdminCourseDeatilContainer: FC<
                       Assessment Type
                     </label>
                     <DropdownInputField
-                      // value={assessmentFileType[index]}
                       id={`assessment_type-${index}`}
                       value={assessment.assessment_type}
                       onChange={handleAssessmentTypeChange}
                       placeholder="select assessment type"
                       options={[
                         "Multiple Choice Question",
-                        "Signle Choice Question",
+                        "Single Choice Question",
                         "True or false",
                         "Short Answer",
                       ]}
@@ -277,36 +313,43 @@ const AdminCourseDeatilContainer: FC<
                     >
                       Assessment Name
                     </label>
-                    <input
-                      className="input-field-1"
-                      readOnly
-                      value={assessment.assessment_position}
+                    <InputField
+                      id={`assessment_name-${index}`}
+                      moduleValue={assessment.assessment_name}
+                      onUpdate={handleAssessmentNameChange}
+                      isEditable={!isEditable}
                     />
+                  </div>
+
+                  <div className="admin-course-detail-section2-admin-course-detailed-file">
+                    <div className="admin-course-detailed-video-file">
+                      <span className="admin-course-detailed-file-name">
+                        XLS
+                      </span>
+                      {/* <input type="text" className="admin-course-detailed-mp4" /> */}
+                    </div>
+                    <div className="admin-course-detailed-video-file-text">
+                      <span className="admin-course-detail-file-name">
+                        excel.xls
+                      </span>
+                      <br />
+                      <span className="admin-course-detail-file-size">
+                        2.2MB
+                      </span>
+                    </div>
+                  </div>
+                  <div className="admin-course-detail-upload-btns">
+                    <button
+                      className={`admin-course-detail-upload-btn ${
+                        isClicked ? "clicked" : "unClicked"
+                      }`}
+                    >
+                      Upload
+                    </button>
                   </div>
                 </>
               );
             })}
-
-            <div className="admin-course-detail-section2-admin-course-detailed-file">
-              <div className="admin-course-detailed-video-file">
-                <span className="admin-course-detailed-file-name">XLS</span>
-                {/* <input type="text" className="admin-course-detailed-mp4" /> */}
-              </div>
-              <div className="admin-course-detailed-video-file-text">
-                <span className="admin-course-detail-file-name">excel.xls</span>
-                <br />
-                <span className="admin-course-detail-file-size">2.2MB</span>
-              </div>
-            </div>
-            <div className="admin-course-detail-upload-btns">
-              <button
-                className={`admin-course-detail-upload-btn ${
-                  isClicked ? "clicked" : "unClicked"
-                }`}
-              >
-                Upload
-              </button>
-            </div>
           </div>
 
           <button
@@ -318,32 +361,28 @@ const AdminCourseDeatilContainer: FC<
             {isClicked ? <PlusIcon /> : <GreyPlusIcon />}
             Add Module
           </button>
-          {assessmentOpt.map(
-            (
-              assessment,
-              index //maping for replicating assessment section
-            ) => (
-              <>
-                <div className="admin-course-detail-section2-course-assessment">
-                  <p className="admin-course-detail-course-assessment-text">
-                    Course Assessment{" "}
-                  </p>
-                  <div className="admin-course-detail-assessment-radio-btns ">
+
+          <>
+            <div className="admin-course-detail-section2-course-assessment">
+              <p className="admin-course-detail-course-assessment-text">
+                Course Assessment{" "}
+              </p>
+              {/* <div className="admin-course-detail-assessment-radio-btns ">
                     <input
                       type="radio"
-                      id="pre-assessment"
+                      id="pre"
                       className={`admin-course-detail-assesment-radio-btn ${
                         isClicked ? "clicked" : "unClicked"
                       }`}
                     />
                     <label
-                      htmlFor="pre-assessment"
+                      htmlFor="pre"
                       className="admin-course-detail-selected-assessment"
                     >
                       Pre Assessment
                     </label>
-                  </div>
-                  <div className="admin-course-detail-assessment-radio-btns">
+                  </div> */}
+              {/* <div className="admin-course-detail-assessment-radio-btns">
                     <input
                       type="radio"
                       id="post-assessment"
@@ -357,56 +396,127 @@ const AdminCourseDeatilContainer: FC<
                     >
                       Post Assessment
                     </label>
-                  </div>
+                  </div> */}
+            </div>
+            {course_assessment_main[0].assessment_name != "" && (
+              <div className="admin-course-detail-section2">
+                <div className="pre-assessment">Pre</div>
+                <div className="admin-course-detail-section2-div-sections">
+                  <label
+                    htmlFor=""
+                    className="admin-course-detail-section-labels"
+                  >
+                    Assessment Type
+                  </label>
+                  <DropdownInputField
+                    id="pre"
+                    value={course_assessment_main[0]?.assessment_type}
+                    placeholder="select assessment type"
+                    onChange={handleAssessmentTypeChange}
+                    options={[
+                      "Multiple Choice Question",
+                      "Signle Choice Question",
+                      "True or false",
+                      "Short Answer",
+                    ]}
+                    valueLabel={["multiple", "single", "boolean", "short"]}
+                  />
                 </div>
-                <div className="admin-course-detail-section2">
-                  <div className="admin-course-detail-section2-div-sections">
-                    <label
-                      htmlFor=""
-                      className="admin-course-detail-section-labels"
-                    >
-                      Assessment Number
-                    </label>
-                    {/* <DropdownInputField
-                      value={basicInfo && basicInfo.course_category}
-                      onValueChange={(value) => handleChange("category", value)}
-                      options={[
-                        "Competency Based Skills",
-                        "Medical",
-                        "Marketing",
-                        "Personal Development",
-                        "Classroom Training",
-                      ]}
-                      valueLabel={[""]}
-                    /> */}
-                  </div>
-                  <div className="admin-course-detail-section2-div-sections">
-                    <label
-                      htmlFor=""
-                      className="admin-course-detail-section-labels"
-                    >
-                      Assessment Name
-                    </label>
-                    {/* <InputFieldString
-                      className="input-field"
-                      value={formData.courseCode + " " + formData.courseName}
-                      onChange={handleCourseCodeAndNameChange}
-                    /> */}
-                  </div>
+                <div className="admin-course-detail-section2-div-sections">
+                  <label
+                    htmlFor=""
+                    className="admin-course-detail-section-labels"
+                  >
+                    Assessment Name
+                  </label>
+                  <InputField
+                    id="pre"
+                    moduleValue={course_assessment_main[0].assessment_name}
+                    onUpdate={handleAssessmentNameChange}
+                  />
                 </div>
-              </>
-            )
-          )}
-
-          <button
-            className={`admin-course-detail-sec-add-module-btn ${
-              isClicked ? "clicked" : "unClicked"
-            }`}
-            onClick={handleAddAssessment}
-          >
-            {isClicked ? <PlusIcon /> : <GreyPlusIcon />}
-            Add Assessment
-          </button>
+              </div>
+            )}
+            ;{/* post  */}
+            {course_assessment_main[1]?.assessment_name != "" && (
+              <div className="admin-course-detail-section2">
+                <div className="pre-assessment">Post</div>
+                <div className="admin-course-detail-section2-div-sections">
+                  <label
+                    htmlFor=""
+                    className="admin-course-detail-section-labels"
+                  >
+                    Assessment Type
+                  </label>
+                  <DropdownInputField
+                    id="post"
+                    value={course_assessment_main[1]?.assessment_type}
+                    placeholder="select assessment type"
+                    onChange={handleAssessmentTypeChange}
+                    options={[
+                      "Multiple Choice Question",
+                      "Signle Choice Question",
+                      "True or false",
+                      "Short Answer",
+                    ]}
+                    valueLabel={["multiple", "single", "boolean", "short"]}
+                  />
+                </div>
+                <div className="admin-course-detail-section2-div-sections">
+                  <label
+                    htmlFor=""
+                    className="admin-course-detail-section-labels"
+                  >
+                    Assessment Name
+                  </label>
+                  <InputField
+                    id="post"
+                    moduleValue={course_assessment_main[1]?.assessment_name}
+                    onUpdate={handleAssessmentNameChange}
+                  />
+                </div>
+              </div>
+            )}
+            {course_assessment_main[2]?.assessment_name != "" && (
+              <div className="admin-course-detail-section2">
+                <div className="pre-assessment">Post</div>
+                <div className="admin-course-detail-section2-div-sections">
+                  <label
+                    htmlFor=""
+                    className="admin-course-detail-section-labels"
+                  >
+                    Assessment Type
+                  </label>
+                  <DropdownInputField
+                    id="post"
+                    value={course_assessment_main[2]?.assessment_type}
+                    placeholder="select assessment type"
+                    onChange={handleAssessmentTypeChange}
+                    options={[
+                      "Multiple Choice Question",
+                      "Signle Choice Question",
+                      "True or false",
+                      "Short Answer",
+                    ]}
+                    valueLabel={["multiple", "single", "boolean", "short"]}
+                  />
+                </div>
+                <div className="admin-course-detail-section2-div-sections">
+                  <label
+                    htmlFor=""
+                    className="admin-course-detail-section-labels"
+                  >
+                    Assessment Name
+                  </label>
+                  <InputField
+                    id="post"
+                    moduleValue={course_assessment_main[2]?.assessment_name}
+                    onUpdate={handleAssessmentNameChange}
+                  />
+                </div>
+              </div>
+            )}
+          </>
         </div>
 
         <div className="admin-course-detail-div-checkbox-main-section">
@@ -415,13 +525,18 @@ const AdminCourseDeatilContainer: FC<
               <p className="admin-course-detail-text">Divisions </p>
             </div>
             <div className="admin-course-detail-checkbox-section">
-              {/* <Checkbox
-                id="division"
-                text={"CDC"}
-                onChange={handleChangeDesignation}
-                value="CDC"
-                isChecked={data.course_designation?.division.includes("CDC")}
-              /> */}
+              {allDivisions.map((division, index) => (
+                <Checkbox
+                  key={index}
+                  id={`division-${index}`}
+                  text={division}
+                  value={division}
+                  onChange={handleChangeDesignation}
+                  isChecked={course_designation?.division.includes(division)}
+                  isEditable={!isEditable}
+                  disabled={!isEditable}
+                />
+              ))}
             </div>
           </div>
 
@@ -430,20 +545,21 @@ const AdminCourseDeatilContainer: FC<
               <p className="admin-course-detail-text"> Designation</p>
             </div>
             <div className="admin-course-detail-checkbox-section2">
-              {/* <Checkbox
-                id="designation"
-                text={"RSM"}
-                value="RSM"
-                onChange={handleChangeDesignation}
-                isChecked={data.course_designation?.designation.includes("RSM")}
-              /> */}
+              {allDesignation.map((designation, index) => (
+                <Checkbox
+                  key={index}
+                  id={`designation-${index}`}
+                  text={designation}
+                  value={designation}
+                  onChange={handleChangeDesignation}
+                  isChecked={course_designation?.designation.includes(
+                    designation
+                  )}
+                  isEditable={!isEditable}
+                  disabled={!isEditable}
+                />
+              ))}
             </div>
-            {/* <div className="admin-course-detail-btn-section">
-            <PreviousButton text={"Previous"} />
-            <div onClick={handleadmin-course-detailClick}>
-              <NextButton text={"admin-course-detail"} />
-            </div>
-          </div> */}
           </div>
         </div>
         <div className="admin-course-detail-status-update-section">
@@ -454,18 +570,13 @@ const AdminCourseDeatilContainer: FC<
             >
               Course Status
             </label>
-            {/* <DropdownInputField
-              value={basicInfo && basicInfo.course_category}
-              onValueChange={(value) => handleChange("category", value)}
-              options={[
-                "Competency Based Skills",
-                "Medical",
-                "Marketing",
-                "Personal Development",
-                "Classroom Training",
-              ]}
+            <DropdownInputField
+              value={course_basic.course_status}
+              onValueChange={(value) => handleChange("course_status", value)}
+              options={["active", "inactive"]}
               valueLabel={[""]}
-            /> */}
+              isEditable={!isEditable}
+            />
           </div>
         </div>
         <div className="admin-course-detail-submit-buttons-section">
