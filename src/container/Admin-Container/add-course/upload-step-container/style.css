@@ -5,7 +5,7 @@
   /* justify-content: center; */
   flex-direction: column;
   width: 94%;
-  height: 1330px;
+  height: 1500px;
   border-radius: 12px;
   border: 1px solid rgba(254, 129, 0, 0.5);
 }
@@ -41,16 +41,30 @@
   font-weight: 400;
   line-height: 28px;
 }
-.upload-div-section {
+.upload-div-section1{
   gap: 32px;
   display: flex;
   padding: 32px;
   flex-direction: column;
   border-bottom: 1px solid #fe810080;
 }
-.upload-section1 {
+.upload-div-section{
+  gap: 32px;
   display: flex;
-  gap: 48px;
+  padding: 32px;
+  flex-direction: column;
+}
+.upload-div-checkbox-main-section{
+  border-top: 1px solid #fe810080;
+}
+.upload-section1 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+.upload-section2-div-containers {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  align-items: end;
 }
 .upload-preview-text {
   color: #000;
@@ -70,7 +84,7 @@
   gap: 12px;
 }
 .upload-section2-div-sections{
-  width: 30.5%;
+  width: 90.5%;
 }
 .uploaded-video-file {
   width: 90px;
@@ -111,6 +125,7 @@
   font-size: 18px;
   font-weight: 600;
   line-height: 28px;
+  margin-left: 32px;
 }
 .upload-selected-assessment {
   color: #000;
@@ -152,9 +167,45 @@
   font-weight: 500;
   line-height: 24px;
 }
+.upload-assessment-position{
+  width: 87% ;
+  height: 1.7rem;
+  border-radius: 8px;
+  background: rgba(254, 129, 0, 0.1);
+  border: none;
+  outline: none;
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.16);
+  padding: 1rem 1.5rem;
+  /* text styling */
+  color: #1c1d1d;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 24px;
+}
+.upload-section-2-special{
+  margin: 32px;
+  display: grid;
+    grid-template-columns: repeat(3, 1fr);
+}
+.upload-step-textarea{
+  width: 96% ;
+  height: 105px;
+  resize: none;
+  border-radius: 8px;
+  background: rgba(254, 129, 0, 0.1);
+  border: none;
+  outline: none;
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.16);
+  padding: 1rem 1.5rem;
+  /* text styling */
+  color: #1c1d1d;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 24px;
+}
 
 .input-field-2 {
-  width: 139% !important;
+  width: 125% !important;
   height: 1.7rem;
   border-radius: 8px;
   background: rgba(254, 129, 0, 0.1);
@@ -190,8 +241,8 @@
 }
 
 .upload-div-section3 {
-  display: flex;
-  align-items: center;
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
 }
 
 .date-input-row {
