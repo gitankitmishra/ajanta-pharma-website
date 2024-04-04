@@ -16,7 +16,6 @@ import { CourseContext, CourseContextType } from "@/context/course_context";
 import TextAreaField from "@/components/fields/TextAreaField";
 import InputField from "@/components/fields/input-field";
 import UploadButton from "@/components/buttons/upload-button";
-import ViewText from "@/components/fields/View-text";
 
 interface AdminCourseDeatilContainerProps {}
 

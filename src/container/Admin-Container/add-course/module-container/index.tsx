@@ -7,6 +7,8 @@ import { PlusIcon } from "@/components/icons/plus-icon";
 import { CourseContext, CourseContextType } from "@/context/course_context";
 import DownloadImg from "@/public/images/download.svg";
 import Image from "next/image";
+import ViewEyeIcon from "@/components/icons/view-eye-icon";
+import ViewEyeIcon1 from "@/components/icons/eye-icon";
 
 interface ModuleQuizStepSectionProps {}
 
@@ -21,6 +23,8 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
     handleAssessmentTypeChange,
     course_assessment_main,
     files,
+    filesUploaded,
+    openLink,
     handleFileSelect,
     handleDownloadExcel,
     handleexcelFileRead,
@@ -82,6 +86,9 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
                   formatText={"File Format: mp4, ppt, pdf "}
                 />
               </div>
+              <div>
+                <ViewEyeIcon1 filesUploaded={filesUploaded} files={files} />
+              </div>
             </div>
             <div className="module-input">
               <div className="module-input-number">
@@ -132,6 +139,9 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
                   acceptedTypes=".xls"
                   formatText={"File Format: xls"}
                 />
+              </div>
+              <div>
+                <ViewEyeIcon1 files={[]} />
               </div>
               <td className="download_image">
                 <Image
@@ -199,6 +209,9 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
                 formatText={"File Format: xls"}
               />
             </div>
+            <div>
+              <ViewEyeIcon1 files={[]} />
+            </div>
             <td className="download_image">
               <Image
                 src={DownloadImg}
@@ -253,6 +266,9 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
                 acceptedTypes=".xls"
                 formatText={"File Format: xls"}
               />
+            </div>
+            <div>
+              <ViewEyeIcon1 files={[]} />
             </div>
             <td className="download_image">
               <Image
