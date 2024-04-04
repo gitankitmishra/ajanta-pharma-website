@@ -140,7 +140,7 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
                   formatText={"File Format: xls"}
                 />
               </div>
-              {fileAssessmentUpload ? (
+              {course_assessment[index].assessment_data.length !== 0 ? (
                 <div>
                   <EyeIcon files={[]} />
                 </div>
@@ -212,7 +212,7 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
                 formatText={"File Format: xls"}
               />
             </div>
-            {fileAssessmentUpload ? (
+            {course_assessment_main[0].assessment_data.length !== 0 ? (
               <div>
                 <EyeIcon files={[]} />
               </div>
@@ -273,7 +273,7 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
                 formatText={"File Format: xls"}
               />
             </div>
-            {fileAssessmentUpload ? (
+            {course_assessment_main[1].assessment_data.length !== 0 ? (
               <div>
                 <EyeIcon files={[]} />
               </div>
