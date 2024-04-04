@@ -49,6 +49,7 @@ export type CourseContextType = {
     index: number,
     category: string
   ) => void;
+  openLink: (index: number) => void;
 
   // designation
   handleChangeDesignation(event: ChangeEvent<HTMLInputElement>): void;
@@ -75,7 +76,7 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
 }) => {
   const router = useRouter();
 
-  const [active_step, setActiveStep] = useState<number>(1);
+  const [active_step, setActiveStep] = useState<number>(0);
 
   const handleStepOneDone = async () => {
     let errors = {};
@@ -580,6 +581,11 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     }
   };
 
+  const openLink = (index: number) => {
+    const link = course_module[index].module_material;
+    window.open(link, "_blank");
+  };
+
   // ***********************************************************************************************
 
   // ***********************************************************************************************
@@ -756,21 +762,25 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
 
   // ***********************************************************************************************
 
+  const mergedAssessment = {
+    ...course_assessment,
+    ...course_assessment_main,
+  };
   //api to update the data or edit
   const updateCourse = async () => {
     console.log("button upload");
 
     const response = await fetchService({
       method: "PUT",
-      endpoint: ` api/admin/dashboard/editCourse/${course_basic.course_code}`,
+      endpoint: `api/admin/dashboard/editCourse/${course_basic.course_code}`,
       data: {
         course: {
           ...course_basic,
-          ...course_assessment,
-          ...course_assessment_main,
+          mergedAssessment,
           ...course_designation,
+          ...course_module,
         },
-        course_code: course_basic.course_code,
+        courseCode: course_basic.course_code,
       },
     });
     if (response.code === 200) {
@@ -825,6 +835,7 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     handleFileSelect,
     handleDownloadExcel,
     handleexcelFileRead,
+    openLink,
 
     //designation
     course_designation,

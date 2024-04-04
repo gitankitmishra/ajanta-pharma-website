@@ -3,12 +3,13 @@ import React, { useRef } from "react";
 import "./style.css";
 
 interface UploadButtonProps {
-  upload: string;
+  upload?: string;
   onFileSelect?: (files: File) => void;
   uploadFile?: () => (selectedFile: File) => void;
   acceptedTypes?: string;
-  formatText: string;
+  formatText?: string;
   id?: string;
+  className?: string;
 }
 
 const UploadButton: React.FC<UploadButtonProps> = ({
@@ -18,6 +19,7 @@ const UploadButton: React.FC<UploadButtonProps> = ({
   formatText,
   uploadFile,
   id,
+  className,
 }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
 

@@ -7,6 +7,7 @@ interface TextAreaFieldProps {
   onChange: (newValue: string) => void;
   placeholder?: string;
   error?: string;
+  isEditable?: boolean;
 }
 
 const TextAreaField: FC<TextAreaFieldProps> = ({
@@ -15,8 +16,8 @@ const TextAreaField: FC<TextAreaFieldProps> = ({
   className,
   placeholder,
   error = "",
+  isEditable,
 }) => {
-  
   const handleChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
     onChange(event.target.value);
   };
@@ -27,6 +28,7 @@ const TextAreaField: FC<TextAreaFieldProps> = ({
         onChange={handleChange}
         className="text-area-input-field"
         placeholder={placeholder}
+        readOnly={isEditable}
       />
       <div
         className={`dropdown-field-error-message ${
