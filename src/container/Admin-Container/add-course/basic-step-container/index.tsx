@@ -64,7 +64,7 @@ const BasicStepSection: FC<BasicStepSectionProps> = () => {
               "Classroom Training",
             ]}
             error={course_basic_error.course_category}
-            valueLabel={[""]}
+            valueLabel={["Competency Based Skills"]}
           />
         </div>
 
@@ -88,7 +88,7 @@ const BasicStepSection: FC<BasicStepSectionProps> = () => {
           </label>
 
           <InputFieldString
-            readonly
+            readOnly={true}
             width="80%"
             className="input-field"
             value={course_basic.course_code}

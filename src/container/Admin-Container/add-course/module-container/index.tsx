@@ -7,6 +7,8 @@ import { PlusIcon } from "@/components/icons/plus-icon";
 import { CourseContext, CourseContextType } from "@/context/course_context";
 import DownloadImg from "@/public/images/download.svg";
 import Image from "next/image";
+import ViewEyeIcon from "@/components/icons/view-eye-icon";
+import EyeIcon from "@/components/icons/eye-icon";
 
 interface ModuleQuizStepSectionProps {}
 
@@ -21,6 +23,8 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
     handleAssessmentTypeChange,
     course_assessment_main,
     files,
+    filesUploaded,
+    openLink,
     handleFileSelect,
     handleDownloadExcel,
     handleexcelFileRead,
@@ -82,6 +86,9 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
                   formatText={"File Format: mp4, ppt, pdf "}
                 />
               </div>
+              <div>
+                <EyeIcon filesUploaded={filesUploaded} files={files} />
+              </div>
             </div>
             <div className="module-input">
               <div className="module-input-number">
@@ -93,7 +100,7 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
                   id={`assessment_type-${index}`}
                   value={
                     course_assessment[module.assessment_no as number]
-                      .assessment_type
+                      ?.assessment_type
                   }
                   onChange={handleAssessmentTypeChange}
                   placeholder="Select assessment type"
@@ -103,7 +110,7 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
                     "True or false",
                     "Short Answer",
                   ]}
-                  valueLabel={["multiple", "single", "True or false", "short"]}
+                  valueLabel={["multiple", "single", "boolean", "short"]}
                 />
               </div>
               <div className="module-input-name">
@@ -133,7 +140,10 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
                   formatText={"File Format: xls"}
                 />
               </div>
-              <td className="module-download-image">
+              <div>
+                <EyeIcon files={[]} />
+              </div>
+              <td className="download_image">
                 <Image
                   src={DownloadImg}
                   alt="Download"
@@ -174,7 +184,7 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
                   "True or false",
                   "Short Answer",
                 ]}
-                valueLabel={["multiple", "single", "True or false", "short"]}
+                valueLabel={["multiple", "single", "boolean", "short"]}
               />
             </div>
             <div className="module-input-name">
@@ -183,7 +193,7 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
               </label>
               <InputField
                 id="pre"
-                moduleValue={course_assessment_main[0].assessment_name}
+                moduleValue={course_assessment_main[0]?.assessment_name}
                 onUpdate={handleAssessmentNameChange}
               />
             </div>
@@ -202,7 +212,10 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
                 formatText={"File Format: xls"}
               />
             </div>
-            <td className="module-download-image">
+            <div>
+              <EyeIcon files={[]} />
+            </div>
+            <td className="download_image">
               <Image
                 src={DownloadImg}
                 alt="Download"
@@ -232,7 +245,7 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
                   "True or false",
                   "Short Answer",
                 ]}
-                valueLabel={["multiple", "single", "True or false", "short"]}
+                valueLabel={["multiple", "single", "boolean", "short"]}
               />
             </div>
             <div className="module-input-name">
@@ -240,7 +253,7 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
                 Assessment Name
               </label>
               <InputField
-                moduleValue={course_assessment_main[1].assessment_name}
+                moduleValue={course_assessment_main[1]?.assessment_name}
                 id="post"
                 onUpdate={handleAssessmentNameChange}
               />
@@ -260,7 +273,10 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
                 formatText={"File Format: xls"}
               />
             </div>
-            <td className="module-download-image">
+            <div>
+              <EyeIcon files={[]} />
+            </div>
+            <td className="download_image">
               <Image
                 src={DownloadImg}
                 alt="Download"

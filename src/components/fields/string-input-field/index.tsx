@@ -8,6 +8,7 @@ interface InputFieldStringProps {
   width?: string;
   isEditable?: boolean;
   error?: string;
+  readOnly?: boolean;
 }
 
 const InputFieldString: FC<InputFieldStringProps> = ({
