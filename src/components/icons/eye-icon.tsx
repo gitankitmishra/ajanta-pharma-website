@@ -1,11 +1,67 @@
-export const EyeIcon = () =>{
-    return(
-        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-<g id="eye">
-<path id="Vector" d="M9.99935 4.16602C12.478 4.16602 14.6778 5.81673 16.1939 7.36193C16.994 8.17734 17.394 8.58505 17.5427 9.53567C17.5775 9.75802 17.5775 10.2407 17.5427 10.463C17.394 11.4136 16.994 11.8214 16.1939 12.6368C14.6778 14.182 12.478 15.8327 9.99935 15.8327C7.52067 15.8327 5.32093 14.182 3.80479 12.6368C3.00471 11.8214 2.60467 11.4136 2.45596 10.463C2.42117 10.2407 2.42117 9.75802 2.45596 9.53567C2.60467 8.58505 3.00471 8.17734 3.80479 7.36193C5.32093 5.81673 7.52067 4.16602 9.99935 4.16602Z" stroke="#FE8100" stroke-width="1.5" stroke-linejoin="round"/>
-<path id="Vector_2" d="M12.5 10C12.5 11.3807 11.3807 12.5 10 12.5C8.61929 12.5 7.5 11.3807 7.5 10C7.5 8.61929 8.61929 7.5 10 7.5C11.3807 7.5 12.5 8.61929 12.5 10Z" stroke="#FE8100" stroke-width="1.5" stroke-linejoin="round"/>
-</g>
-</svg>
+import React from "react";
+import PropTypes from "prop-types";
 
-    )
+interface ViewEyeIcon1Props {
+  filesUploaded?: boolean;
+  files: File[];
 }
+
+const ViewEyeIcon1: React.FC<ViewEyeIcon1Props> = ({
+  files,
+  filesUploaded,
+}) => {
+  const handleEyeClick = () => {
+    if (filesUploaded && files.length > 0) {
+      console.log("Displaying the uploaded file...");
+
+      const fileUrl = URL.createObjectURL(files[0]);
+
+      window.open(fileUrl, "_blank");
+    }
+  };
+
+  return (
+    <button
+      onClick={handleEyeClick}
+      style={{
+        border: "none",
+        background: "none",
+        padding: 0,
+        cursor: "pointer",
+      }}
+    >
+      <svg
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <g id="eye">
+          <path
+            id="Vector"
+            d="M12 5C15.2414 5 18.0852 7.35234 19.9031 9.32973C20.7101 10.2075 21.1136 10.6464 21.2498 11.5556C21.2831 11.7782 21.2831 12.2218 21.2498 12.4444C21.1136 13.3536 20.7101 13.7925 19.9031 14.6703C18.0852 16.6477 15.2414 19 12 19C8.75865 19 5.91481 16.6477 4.09687 14.6703C3.28988 13.7925 2.88639 13.3536 2.7502 12.4444C2.71686 12.2218 2.71686 11.7782 2.7502 11.5556C2.88639 10.6464 3.28988 10.2075 4.09687 9.32973C5.91482 7.35234 8.75865 5 12 5Z"
+            stroke={filesUploaded ? "#000000" : "#808080"}
+            strokeOpacity="0.8"
+            strokeWidth="1.5"
+            strokeLinejoin="round"
+          />
+          <path
+            id="Vector_2"
+            d="M15 12C15 13.6569 13.6569 15 12 15C10.3431 15 9 13.6569 9 12C9 10.3431 10.3431 9 12 9C13.6569 9 15 10.3431 15 12Z"
+            stroke={filesUploaded ? "#000000" : "#808080"}
+            strokeOpacity="0.8"
+            strokeWidth="1.5"
+            strokeLinejoin="round"
+          />
+        </g>
+      </svg>
+    </button>
+  );
+};
+
+ViewEyeIcon1.propTypes = {
+  filesUploaded: PropTypes.bool.isRequired,
+};
+
+export default ViewEyeIcon1;

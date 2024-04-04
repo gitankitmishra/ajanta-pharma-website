@@ -13,6 +13,7 @@ const UploadStepSection: FC<UploadStepSectionProps> = () => {
   //context call
   const {
     course_basic,
+    openLink,
     course_assessment,
     course_assessment_main,
     course_module,
@@ -30,7 +31,7 @@ const UploadStepSection: FC<UploadStepSectionProps> = () => {
   };
 
   const extractFileExtension = (filename: any) => {
-    const parts = filename.split("/");
+    const parts = filename?.split("/");
     if (parts.length > 1) {
       return parts.pop();
     } else {
@@ -139,7 +140,13 @@ const UploadStepSection: FC<UploadStepSectionProps> = () => {
                   />
                 </div>
                 <div className="upload-section2-uploaded-file">
-                  <div className="uploaded-video-file"></div>
+                  <div
+                    className="uploaded-video-file"
+                    key={index}
+                    onClick={() => openLink(index)}
+                  >
+                    View
+                  </div>
                   <div className="uploaded-video-file-text">
                     <span className="upload-file-name">
                       {extractFileExtension(module.module_material)}
@@ -182,7 +189,7 @@ const UploadStepSection: FC<UploadStepSectionProps> = () => {
                   />
                 </div>
                 <div className="upload-section2-uploaded-file">
-                  <div className="uploaded-video-file"></div>
+                  <div className="uploaded-video-file">View</div>
                   <div className="uploaded-video-file-text">
                     <span className="upload-file-name">Data</span>
                     <br />
@@ -237,7 +244,7 @@ const UploadStepSection: FC<UploadStepSectionProps> = () => {
         </>
       )}
 
-      {course_assessment_main[1].assessment_name != "" && (
+      {course_assessment_main[1]?.assessment_name != "" && (
         <>
           <div className="upload-section2">
             <div>post</div>
@@ -258,7 +265,7 @@ const UploadStepSection: FC<UploadStepSectionProps> = () => {
               <input
                 className="input-field-1"
                 readOnly
-                value={course_assessment_main[1].assessment_name}
+                value={course_assessment_main[1]?.assessment_name}
               />
             </div>
           </div>
