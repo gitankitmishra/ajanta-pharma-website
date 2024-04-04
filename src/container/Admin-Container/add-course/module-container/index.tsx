@@ -24,10 +24,10 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
     course_assessment_main,
     files,
     filesUploaded,
-    openLink,
     handleFileSelect,
     handleDownloadExcel,
     handleexcelFileRead,
+    fileAssessmentUpload,
   } = useContext(CourseContext) as CourseContextType;
 
   return (
@@ -140,18 +140,21 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
                   formatText={"File Format: xls"}
                 />
               </div>
-              <div>
-                <EyeIcon files={[]} />
-              </div>
-              <td className="download_image">
-                <Image
-                  src={DownloadImg}
-                  alt="Download"
-                  width={27}
-                  height={24}
-                  onClick={() => handleDownloadExcel(index)}
-                />
-              </td>
+              {fileAssessmentUpload ? (
+                <div>
+                  <EyeIcon files={[]} />
+                </div>
+              ) : (
+                <td className="download_image">
+                  <Image
+                    src={DownloadImg}
+                    alt="Download"
+                    width={27}
+                    height={24}
+                    onClick={() => handleDownloadExcel(index)}
+                  />
+                </td>
+              )}
             </div>
           </>
         ))}
@@ -212,18 +215,21 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
                 formatText={"File Format: xls"}
               />
             </div>
-            <div>
-              <EyeIcon files={[]} />
-            </div>
-            <td className="download_image">
-              <Image
-                src={DownloadImg}
-                alt="Download"
-                width={27}
-                height={24}
-                onClick={() => handleDownloadExcel(0)}
-              />
-            </td>
+            {fileAssessmentUpload ? (
+              <div>
+                <EyeIcon files={[]} />
+              </div>
+            ) : (
+              <td className="download_image">
+                <Image
+                  src={DownloadImg}
+                  alt="Download"
+                  width={27}
+                  height={24}
+                  onClick={() => handleDownloadExcel(0)}
+                />
+              </td>
+            )}
           </div>
 
           <div className="module-input">
@@ -273,18 +279,21 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
                 formatText={"File Format: xls"}
               />
             </div>
-            <div>
-              <EyeIcon files={[]} />
-            </div>
-            <td className="download_image">
-              <Image
-                src={DownloadImg}
-                alt="Download"
-                width={27}
-                height={24}
-                onClick={() => handleDownloadExcel(1)}
-              />
-            </td>
+            {fileAssessmentUpload ? (
+              <div>
+                <EyeIcon files={[]} />
+              </div>
+            ) : (
+              <td className="download_image">
+                <Image
+                  src={DownloadImg}
+                  alt="Download"
+                  width={27}
+                  height={24}
+                  onClick={() => handleDownloadExcel(1)}
+                />
+              </td>
+            )}
           </div>
         </>
       </div>
