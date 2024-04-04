@@ -1,0 +1,51 @@
+.thin-progressbar-slide-main-section {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.thin-progressbar-slide-texts {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  margin-top: 26px;
+}
+.thin-progressbar-slide-progress {
+  background-color: #f2f2f2; /* Gray background for the progress bar */
+  border-radius: 5px;
+  width: 100%;
+}
+
+.thin-progressbar-slide-progress-bar {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  height: 8px;
+  border-radius: 4px;
+  background-color: #f98d4d;
+  color: #000;
+  font-weight: 600;
+  text-align: center;
+  line-height: 30px;
+}
+.thin-progressbar-profile-icon {
+  margin-left: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.thin-progressbar-slide-course-name-text {
+  color: #121212;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 16px;
+  letter-spacing: 0.048px;
+}
+.thin-progressbar-slide-course-count {
+  color: #121212;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 21px;
+  letter-spacing: 0.3px;
+  opacity: 0.5;
+}
