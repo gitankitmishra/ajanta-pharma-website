@@ -86,7 +86,7 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
                   formatText={"File Format: mp4, ppt, pdf "}
                 />
               </div>
-              <div>
+              <div className="module-eye-icon">
                 <EyeIcon filesUploaded={filesUploaded} files={files} />
               </div>
             </div>
@@ -145,7 +145,7 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
                   <EyeIcon files={[]} />
                 </div>
               ) : (
-                <td className="download_image">
+                <td className="module-download-image">
                   <Image
                     src={DownloadImg}
                     alt="Download"
@@ -220,7 +220,7 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
                 <EyeIcon files={[]} />
               </div>
             ) : (
-              <td className="download_image">
+              <td className="module-download-image">
                 <Image
                   src={DownloadImg}
                   alt="Download"
@@ -284,7 +284,7 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
                 <EyeIcon files={[]} />
               </div>
             ) : (
-              <td className="download_image">
+              <td className="module-download-image">
                 <Image
                   src={DownloadImg}
                   alt="Download"

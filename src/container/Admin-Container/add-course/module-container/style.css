@@ -149,3 +149,6 @@
   width: 2vw;
   height: 5vw;
 }
+.module-eye-icon{
+  display: flex;
+}
