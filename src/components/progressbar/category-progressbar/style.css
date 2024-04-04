@@ -1,0 +1,25 @@
+.category-progressbar-main-section {
+  width: 32vw;
+  height: 380px;
+  border-radius: 12px;
+  border: 1px solid #fe8100;
+  box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.16);
+  padding: 28px 24px;
+}
+.category-progressbar-header-part {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.category-progressbar-header-heading-text {
+  color: #000;
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 28px;
+  text-decoration: underline;
+}
+.category-progressbar-score-span {
+  color: #4f4f4f;
+  font-size: 16px;
+  font-weight: 400;
+}

@@ -1,0 +1,32 @@
+
+.thick-progressbar-slide {
+  height: 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.thick-progressbar-slide-progress {
+  background-color: #fff; /* Gray background for the progress bar */
+  border-radius: 5px;
+  width: 100%;
+}
+
+.thick-progressbar-slide-progress-bar {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  height: 38px;
+  border-radius: 4px;
+  background-color: rgba(254, 129, 0, 0.1);
+  color: #000;
+  font-weight: 600;
+  text-align: center;
+  line-height: 30px;
+}
+.thick-progressbar-profile-icon {
+  margin-left: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

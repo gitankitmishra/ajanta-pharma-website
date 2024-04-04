@@ -61,3 +61,8 @@
   display: flex;
   justify-content: space-between;
 }
+.team-performance-profile-progressbar-section {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+}

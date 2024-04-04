@@ -4,6 +4,8 @@ import { ListIcon } from "@/components/icons/list-icon";
 import ManagerSearchField from "@/components/fields/manager-search-field";
 import { FilterIcon } from "@/components/icons/filter-icon";
 import PieChartCard from "@/components/cards/pieChart-card";
+import PerformersProgressbar from "@/components/progressbar/performers-progressbar";
+import CategoryProgressbar from "@/components/progressbar/category-progressbar";
 
 interface TeamPerformanceProfileContainerProps {}
 
@@ -59,7 +61,10 @@ const TeamPerformanceProfileContainer: FunctionComponent<
         </div>
       </div>
       {/* -------------------Progress bar section ----------------------- */}
-
+      <div className="team-performance-profile-progressbar-section">
+        <PerformersProgressbar />
+        <CategoryProgressbar/>
+      </div>
     </section>
   );
 };
