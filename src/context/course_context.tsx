@@ -51,6 +51,7 @@ export type CourseContextType = {
   ) => void;
   openLink: (index: number) => void;
   filesUploaded: boolean;
+  fileAssessmentUpload: boolean;
 
   // designation
   handleChangeDesignation(event: ChangeEvent<HTMLInputElement>): void;
@@ -398,6 +399,9 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     ]);
   };
 
+  const [fileAssessmentUpload, setFileAssessmentUpload] =
+    useState<boolean>(false);
+
   //download excel
   const handleDownloadExcel = (index: number) => {
     let ws = XLSX.utils.json_to_sheet([]);
@@ -487,6 +491,10 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
             console.log(course_assessment);
           }
         }
+
+        const filesAssessmentUploaded =
+          course_assessment_main.length > 0 || course_assessment.length > 0;
+        setFileAssessmentUpload(filesAssessmentUploaded);
       };
 
       reader.onerror = (event) => {
@@ -907,6 +915,7 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     handleexcelFileRead,
     openLink,
     filesUploaded,
+    fileAssessmentUpload,
 
     //designation
     course_designation,
