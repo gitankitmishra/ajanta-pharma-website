@@ -195,19 +195,27 @@ const UploadStepSection: FC<UploadStepSectionProps> = () => {
         </div>
       </div>
 
-      <div className="upload-section2-course-assessment">
-        <p className="upload-course-assessment-text">Course Assessment </p>
-      </div>
+      {/* Check if assessment_name is not empty */}
+      {(course_assessment_main[0].assessment_name !== "" ||
+        course_assessment_main[1].assessment_name !== "") && (
+        <div className="upload-section2-course-assessment">
+          <p className="upload-course-assessment-text">Course Assessment </p>
+        </div>
+      )}
       {course_assessment_main[0].assessment_name != "" && (
         <>
           <div className=" upload-section-2-special">
             <div className="upload-section2-div-sections">
               {" "}
               <label htmlFor="" className="upload-section-labels">
-               Assessment Position
+                Assessment Position
               </label>
-              <input type="text" value={"Pre"} className="upload-assessment-position"
-                readOnly />
+              <input
+                type="text"
+                value={"Pre"}
+                className="upload-assessment-position"
+                readOnly
+              />
             </div>
             <div className="upload-section2-div-sections">
               <label htmlFor="" className="upload-section-labels">
@@ -263,36 +271,40 @@ const UploadStepSection: FC<UploadStepSectionProps> = () => {
 
       <div className="upload-div-checkbox-main-section">
         <div className="upload-main-div-section">
-          <div className="upload-text-section">
-            <p className="upload-text">Divisions </p>
-          </div>
+          {course_designation.division.length > 0 && (
+            <div className="upload-text-section">
+              <p className="upload-text">Divisions </p>
+            </div>
+          )}
           <div className="upload-checkbox-section">
-          {course_designation.division.map((division, index) => (
-            <div  key={index}>
-              <Checkbox
-                text={division}
-                id={`division-${index}`}
-                isChecked={true}
-              />
-            </div>
-          ))}
-            </div>
+            {course_designation.division.map((division, index) => (
+              <div key={index}>
+                <Checkbox
+                  text={division}
+                  id={`division-${index}`}
+                  isChecked={true}
+                />
+              </div>
+            ))}
+          </div>
         </div>
 
         <div className="upload-main-div-section">
-          <div className="upload-text-section">
-            <p className="upload-text"> Designation</p>
-          </div>
-          <div className="upload-checkbox-section" >
-          {course_designation.designation.map((designation, index) => (
-            <div key={index}>
-              <Checkbox
-                text={designation}
-                id={`designation-${index}`}
-                isChecked={true}
-              />
+          {course_designation.designation.length > 0 && (
+            <div className="upload-text-section">
+              <p className="upload-text"> Designation</p>
             </div>
-          ))}
+          )}
+          <div className="upload-checkbox-section">
+            {course_designation.designation.map((designation, index) => (
+              <div key={index}>
+                <Checkbox
+                  text={designation}
+                  id={`designation-${index}`}
+                  isChecked={true}
+                />
+              </div>
+            ))}
           </div>
         </div>
       </div>
