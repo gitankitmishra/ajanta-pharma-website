@@ -8,7 +8,7 @@ import { CourseContext, CourseContextType } from "@/context/course_context";
 import DownloadImg from "@/public/images/download.svg";
 import Image from "next/image";
 import ViewEyeIcon from "@/components/icons/view-eye-icon";
-import ViewEyeIcon1 from "@/components/icons/eye-icon";
+import EyeIcon from "@/components/icons/eye-icon";
 
 interface ModuleQuizStepSectionProps {}
 
@@ -87,7 +87,7 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
                 />
               </div>
               <div>
-                <ViewEyeIcon1 filesUploaded={filesUploaded} files={files} />
+                <EyeIcon filesUploaded={filesUploaded} files={files} />
               </div>
             </div>
             <div className="module-input">
@@ -141,7 +141,7 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
                 />
               </div>
               <div>
-                <ViewEyeIcon1 files={[]} />
+                <EyeIcon files={[]} />
               </div>
               <td className="download_image">
                 <Image
@@ -210,7 +210,7 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
               />
             </div>
             <div>
-              <ViewEyeIcon1 files={[]} />
+              <EyeIcon files={[]} />
             </div>
             <td className="download_image">
               <Image
@@ -268,7 +268,7 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
               />
             </div>
             <div>
-              <ViewEyeIcon1 files={[]} />
+              <EyeIcon files={[]} />
             </div>
             <td className="download_image">
               <Image
