@@ -43,8 +43,23 @@ const TeamPerformanceProfileContainer: FunctionComponent<
       </div>
       {/* --------------------------Pie Chart Section--------------------------- */}
       <div className="team-performance-profile-piechart-section">
-        <PieChartCard/>
+        <div className="team-performance-profile-piechart">
+          <PieChartCard
+            labels={["Pune", "Nashik", "Mumbai", "Gujrat"]}
+            values={[200, 120, 57, 35]}
+            heading={" Headquarter Wise Status"}
+          />
+        </div>
+        <div className="team-performance-profile-piechart">
+          <PieChartCard
+            labels={["DSM", "DM", "RSM", "SO"]}
+            values={[20, 12, 7, 5]}
+            heading={" Designation Wise Status "}
+          />
+        </div>
       </div>
+      {/* -------------------Progress bar section ----------------------- */}
+
     </section>
   );
 };

@@ -1,14 +1,22 @@
-
-"use client"
+"use client";
+import Chart, {
+  ChartConfiguration,
+  ChartData,
+  ChartOptions,
+} from "chart.js/auto";
+import ChartDataLabels from "chartjs-plugin-datalabels"; // Import Chart.js DataLabels plugin
 import { FunctionComponent, useEffect, useRef } from "react";
-import Chart, { ChartConfiguration, ChartData, ChartOptions } from "chart.js/auto";
 import "./style.css";
 
-interface PieChartCardProps {}
+interface PieChartCardProps {
+  labels: string[];
+  values: number[];
+  heading: string;
+}
 
-const PieChartCard: FunctionComponent<PieChartCardProps> = () => {
+const PieChartCard: FunctionComponent<PieChartCardProps> = ({labels, values,heading}) => {
   const chartRef = useRef<HTMLCanvasElement>(null);
-  const chartInstance = useRef<Chart<"pie", number[], string>>();
+  const chartInstance = useRef<Chart<"pie">>();
 
   useEffect(() => {
     if (chartRef.current) {
@@ -20,10 +28,10 @@ const PieChartCard: FunctionComponent<PieChartCardProps> = () => {
           chartInstance.current.destroy();
         }
 
-        const config: ChartConfiguration<"pie", number[], string> = {
+        const config: ChartConfiguration<"pie"> = {
           type: "pie",
           data: {
-            labels: ["Pune", "Nashik", "Mumbai", "Gujrat"],
+            labels: labels,
             datasets: [
               {
                 backgroundColor: [
@@ -32,12 +40,27 @@ const PieChartCard: FunctionComponent<PieChartCardProps> = () => {
                   "#FE810066",
                   "#FE810033",
                 ],
-                data: [200, 120, 57, 35]
-              }
-            ]
-          }
+                data: values,
+              },
+            ],
+          },
+          options: {
+            plugins: {
+              datalabels: {
+                color: "#000", // Color of data labels
+                font: {
+                  weight: 600,
+                  size: 24,
+                },
+                formatter: (value, ctx) => {
+                  return value;
+                },
+              },
+            },
+          },
         };
 
+        Chart.register(ChartDataLabels); // Register the DataLabels plugin
         chartInstance.current = new Chart(ctx, config);
       }
     }
@@ -48,13 +71,13 @@ const PieChartCard: FunctionComponent<PieChartCardProps> = () => {
         chartInstance.current.destroy();
       }
     };
-  }, []);
+  }, [labels, values]);
 
   return (
     <div className="piechart-card-main-section">
       <div className="piechart-card-header-part">
         <p className="piechart-card-header-heading-text">
-          Headquarter Wise Status{" "}
+         {heading}
         </p>
         <select className="piechart-card-dropdown">
           <option value="not-completed">Not Completed</option>
@@ -63,6 +86,9 @@ const PieChartCard: FunctionComponent<PieChartCardProps> = () => {
       </div>
       <div className="piechart-card-chart-part">
         <canvas ref={chartRef}></canvas>
+      </div>
+      <div className="piechart-card-btn-part">
+       <button className="piechart-card-excel-btn">Export to Excel</button>
       </div>
     </div>
   );
