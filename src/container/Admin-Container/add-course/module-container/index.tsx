@@ -103,7 +103,7 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
                       ?.assessment_type
                   }
                   onChange={handleAssessmentTypeChange}
-                  placeholder="select assessment type"
+                  placeholder="Select assessment type"
                   options={[
                     "Multiple Choice Question",
                     "Signle Choice Question",
@@ -168,12 +168,15 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
           <div className="module-input">
             <div className="module-input-number">
               <label htmlFor="" className="module-container-labels">
-                Select Assessment Type
+                Select Pre Assessment Type{" "}
+                <span className="module-container-labels-optional-span">
+                  (Optional)
+                </span>
               </label>
               <DropdownInputField
                 id="pre"
                 value={course_assessment_main[0]?.assessment_type}
-                placeholder="select assessment type"
+                placeholder="Select pre assessment type"
                 onChange={handleAssessmentTypeChange}
                 options={[
                   "Multiple Choice Question",
@@ -226,12 +229,15 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
           <div className="module-input">
             <div className="module-input-number">
               <label htmlFor="" className="module-container-labels">
-                Select Assessment Type
+                Select Post Assessment Type{" "}
+                <span className="module-container-labels-optional-span">
+                  (Optional)
+                </span>
               </label>
               <DropdownInputField
                 id="post"
                 value={course_assessment_main[1]?.assessment_type}
-                placeholder="select assessment type"
+                placeholder="Select post assessment type"
                 onChange={handleAssessmentTypeChange}
                 options={[
                   "Multiple Choice Question",
