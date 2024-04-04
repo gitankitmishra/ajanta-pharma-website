@@ -6,10 +6,7 @@ interface ViewEyeIcon1Props {
   files: File[];
 }
 
-const ViewEyeIcon1: React.FC<ViewEyeIcon1Props> = ({
-  files,
-  filesUploaded,
-}) => {
+const EyeIcon: React.FC<ViewEyeIcon1Props> = ({ files, filesUploaded }) => {
   const handleEyeClick = () => {
     if (filesUploaded && files.length > 0) {
       console.log("Displaying the uploaded file...");
@@ -60,8 +57,8 @@ const ViewEyeIcon1: React.FC<ViewEyeIcon1Props> = ({
   );
 };
 
-ViewEyeIcon1.propTypes = {
+EyeIcon.propTypes = {
   filesUploaded: PropTypes.bool.isRequired,
 };
 
-export default ViewEyeIcon1;
+export default EyeIcon;
