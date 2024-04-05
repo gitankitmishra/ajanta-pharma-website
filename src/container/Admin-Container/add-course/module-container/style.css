@@ -148,7 +148,8 @@
 .module-download-image img {
   width: 2vw;
   height: 5vw;
+  cursor: pointer;
 }
-.module-eye-icon{
+.module-eye-icon {
   display: flex;
 }

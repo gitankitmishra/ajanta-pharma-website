@@ -6,6 +6,7 @@ import { FilterIcon } from "@/components/icons/filter-icon";
 import PieChartCard from "@/components/cards/pieChart-card";
 import PerformersProgressbar from "@/components/progressbar/performers-progressbar";
 import CategoryProgressbar from "@/components/progressbar/category-progressbar";
+import SpeedometerChart from "@/components/speedometer";
 
 interface TeamPerformanceProfileContainerProps {}
 
@@ -44,7 +45,7 @@ const TeamPerformanceProfileContainer: FunctionComponent<
         </div>
       </div>
       {/* --------------------------Pie Chart Section--------------------------- */}
-      <div className="team-performance-profile-piechart-section">
+      {/* <div className="team-performance-profile-piechart-section">
         <div className="team-performance-profile-piechart">
           <PieChartCard
             labels={["Pune", "Nashik", "Mumbai", "Gujrat"]}
@@ -59,11 +60,15 @@ const TeamPerformanceProfileContainer: FunctionComponent<
             heading={" Designation Wise Status "}
           />
         </div>
-      </div>
+      </div> */}
       {/* -------------------Progress bar section ----------------------- */}
       <div className="team-performance-profile-progressbar-section">
-        <PerformersProgressbar />
-        <CategoryProgressbar/>
+        {/* <PerformersProgressbar />
+        <CategoryProgressbar/> */}
+      </div>
+      {/* ------------------------ Speedometer Section------------------- */}
+      <div className="team-performance-profile-speedometer-section">
+        <SpeedometerChart />
       </div>
     </section>
   );
