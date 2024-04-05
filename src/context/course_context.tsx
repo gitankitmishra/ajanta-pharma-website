@@ -82,27 +82,27 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
 }) => {
   const router = useRouter();
 
-  const [active_step, setActiveStep] = useState<number>(0);
+  const [active_step, setActiveStep] = useState<number>(3);
 
   const handleStepOneDone = async () => {
     let errors = {};
 
     if (course_basic.course_category.trim().length === 0) {
-      errors = { ...errors, course_category: "Select a course category." };
+      errors = { ...errors, course_category: "Select course category." };
     }
 
     if (course_basic.course_training.trim().length === 0) {
       errors = {
         ...errors,
-        course_training: "Select a course training type.",
+        course_training: "Select course training type.",
       };
     }
     if (course_basic.course_name.trim().length === 0) {
-      errors = { ...errors, course_name: "Enter a course name." };
+      errors = { ...errors, course_name: "Enter course name." };
     }
 
     if (course_basic.course_objective.trim().length === 0) {
-      errors = { ...errors, course_objective: "Enter a short description." };
+      errors = { ...errors, course_objective: "Enter short description." };
     }
 
     if (course_basic.course_start_date.trim().length === 0) {

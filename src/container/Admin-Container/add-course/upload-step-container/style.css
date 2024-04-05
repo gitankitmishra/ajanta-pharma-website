@@ -41,30 +41,33 @@
   font-weight: 400;
   line-height: 28px;
 }
-.upload-div-section1{
+.upload-div-section1 {
   gap: 32px;
   display: flex;
   padding: 32px;
   flex-direction: column;
   border-bottom: 1px solid #fe810080;
 }
-.upload-div-section{
+.upload-div-section {
   gap: 32px;
   display: flex;
   padding: 32px;
   flex-direction: column;
 }
-.upload-div-checkbox-main-section{
+.upload-div-checkbox-main-section {
   border-top: 1px solid #fe810080;
 }
 .upload-section1 {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  display: flex;
+  gap: 3rem;
 }
 .upload-section2-div-containers {
+  width: 100%;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  align-items: end;
+  grid-template-columns: repeat(4, 1fr);
+  grid-gap: 3rem;
+  grid-gap: 3rem;
+  gap: 3rem;
 }
 .upload-preview-text {
   color: #000;
@@ -80,12 +83,10 @@
 }
 .upload-section2-uploaded-file {
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   gap: 12px;
 }
-.upload-section2-div-sections{
-  width: 90.5%;
-}
+
 .uploaded-video-file {
   display: flex;
   align-items: center;
@@ -99,6 +100,7 @@
   font-size: 16px;
   font-weight: 400;
   line-height: 24px;
+  cursor: pointer;
 }
 .upload-file-name {
   color: #000;
@@ -117,7 +119,7 @@
   display: grid;
   grid-template-columns: repeat(3, 1fr);
 }
-.upload-assesment-radio-btn{
+.upload-assesment-radio-btn {
   accent-color: #000;
 }
 .upload-selected-assessment {
@@ -170,8 +172,8 @@
   font-weight: 500;
   line-height: 24px;
 }
-.upload-assessment-position{
-  width: 87% ;
+.upload-assessment-position {
+  width: 87%;
   height: 1.7rem;
   border-radius: 8px;
   background: rgba(254, 129, 0, 0.1);
@@ -185,13 +187,13 @@
   font-weight: 500;
   line-height: 24px;
 }
-.upload-section-2-special{
+.upload-section-2-special {
   margin: 32px;
   display: grid;
-    grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, 1fr);
 }
-.upload-step-textarea{
-  width: 96% ;
+.upload-step-textarea {
+  width: 97%;
   height: 105px;
   resize: none;
   border-radius: 8px;
@@ -207,8 +209,8 @@
   line-height: 24px;
 }
 
-.input-field-2 {
-  width: 125% !important;
+.upload-date-input-field {
+  width: 87%;
   height: 1.7rem;
   border-radius: 8px;
   background: rgba(254, 129, 0, 0.1);
@@ -244,10 +246,13 @@
 }
 
 .upload-div-section3 {
+  width: 100%;
   display: grid;
-  grid-template-columns: repeat(3,1fr);
+  grid-template-columns: repeat(4, 1fr);
+  grid-gap: 3rem;
+  gap: 3rem;
 }
-
+/* 
 .date-input-row {
-  margin-right: 191px; 
-}
+  margin-right: 191px;
+} */

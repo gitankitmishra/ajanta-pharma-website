@@ -27,7 +27,6 @@
   color: #787878;
   font-size: 24px;
   font-weight: 400;
-  margin: 0 10px;
 }
 
 .active-step {
@@ -49,7 +48,7 @@
   width: 25%;
   border: 2px dashed #787878;
   border-width: 2px 0 0 0;
-  margin-top: 15px;
+  margin: 15px 10px 0 10px;
 }
 
 .step-label {
@@ -65,7 +64,8 @@
 }
 
 .step-content {
-  width: 94%;
+  width: 90%;
+  padding: 0 80px;
   display: flex;
   justify-content: center;
 }

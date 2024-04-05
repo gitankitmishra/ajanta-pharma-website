@@ -77,35 +77,41 @@ const DropdownSubInputField: FC<DropdownInputFieldProps> = ({
   };
 
   return (
-    <>
+    <div className="custom-dropdown-input-field-container">
       <select
         value={value}
         onChange={handleChange}
-        className={`dropdown-select ${value ? "selected" : "not-selected"}`}
+        className={`custom-dropdown-select ${
+          value ? "selected" : "not-selected"
+        }`}
         disabled={isEditable}
       >
         {isNewCategorySelected && placeholder && (
-          <option value="" className="dropdown-option">
+          <option value="" className="custom-dropdown-option">
             {placeholder}
           </option>
         )}
         {trainingTypeOptions.map((option) => (
-          <option key={option} value={option} className="dropdown-option">
+          <option
+            key={option}
+            value={option}
+            className="custom-dropdown-option"
+          >
             {option}
           </option>
         ))}
       </select>
+      <div className="custom-dropdown-arrow">
+        <ArrowDown />
+      </div>
       <div
-        className={`dropdown-field-error-message ${
-          error.length !== 0 && "dropdown-field-error-display"
+        className={`custom-dropdown-field-error-message ${
+          error.length !== 0 && "custom-dropdown-field-error-display"
         }`}
       >
         {error}
       </div>
-      <div className="custom-dropdown-arrow">
-        <ArrowDown />
-      </div>
-    </>
+    </div>
   );
 };
 

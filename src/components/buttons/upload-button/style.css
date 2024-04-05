@@ -1,5 +1,5 @@
 .upload-btn {
-  width: 100%;
+  width: 270px;
   height: 3.5rem;
   border-radius: 32px;
   background: #fe8100;
@@ -7,7 +7,7 @@
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.16);
   /* text styling */
   color: #fff;
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 600;
   line-height: 28px;
   cursor: pointer;

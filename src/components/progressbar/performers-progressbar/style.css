@@ -1,0 +1,39 @@
+.performers-progressbar-main-section {
+  width: 32vw;
+  height: 380px;
+  border-radius: 12px;
+  border: 1px solid #fe8100;
+  box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.16);
+  padding: 28px 24px;
+}
+.performers-progressbar-header-part {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.performers-progressbar-header-heading-text {
+  color: #000;
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 28px;
+  text-decoration: underline;
+}
+.performers-progressbar-score-span {
+  color: #4f4f4f;
+  font-size: 16px;
+  font-weight: 400;
+}
+.performers-progressbar-course-name-text {
+  color: #64748b;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  margin-top: 24px;
+  margin-bottom: 16px;
+  letter-spacing: 0.014px;
+}
+.performers-progressbar-thick-progressbar-part{
+    display: flex;
+    gap: 14px;
+    flex-direction: column;
+}

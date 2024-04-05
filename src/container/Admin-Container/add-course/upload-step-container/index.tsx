@@ -6,6 +6,7 @@ import SuccessPopup from "@/components/popups/success-popup";
 
 import { CourseContext, CourseContextType } from "@/context/course_context";
 import Checkbox from "@/components/checkbox";
+import DateInputField from "@/components/fields/start-date-input-field";
 
 interface UploadStepSectionProps {}
 
@@ -65,14 +66,24 @@ const UploadStepSection: FC<UploadStepSectionProps> = () => {
               value={course_basic.course_training}
             />
           </div>
-          <div className="upload-div-section2">
+          <div className="upload-section1-div-sections">
             <label htmlFor="" className="upload-section-labels">
-              Learning Objective
+              Course Code
             </label>
             <input
               className="input-field-1"
               readOnly
-              value={`${course_basic.course_code}  ${course_basic.course_name}`}
+              value={`${course_basic.course_code}`}
+            />
+          </div>
+          <div className="upload-section1-div-sections">
+            <label htmlFor="" className="upload-section-labels">
+              Course Name
+            </label>
+            <input
+              className="input-field-1"
+              readOnly
+              value={`${course_basic.course_name}`}
             />
           </div>
         </div>
@@ -93,7 +104,7 @@ const UploadStepSection: FC<UploadStepSectionProps> = () => {
             </label>
             <br />
             <input
-              className="input-field-2"
+              className="upload-date-input-field"
               readOnly
               value={course_basic.course_start_date}
             />
@@ -104,7 +115,7 @@ const UploadStepSection: FC<UploadStepSectionProps> = () => {
             </label>
             <br />
             <input
-              className="input-field-2"
+              className="upload-date-input-field"
               readOnly
               value={course_basic.course_end_date}
             />
@@ -113,11 +124,11 @@ const UploadStepSection: FC<UploadStepSectionProps> = () => {
       </div>
 
       <div className="upload-div-section">
-        <div>
-          {course_module.map((module, index) => {
-            console.log("module", module);
+        {course_module.map((module, index) => {
+          const assessment = course_assessment[index];
 
-            return (
+          return (
+            <>
               <div className="upload-section2-div-containers" key={index}>
                 <div className="upload-section2-div-sections">
                   <label htmlFor="" className="upload-section-labels">
@@ -142,7 +153,6 @@ const UploadStepSection: FC<UploadStepSectionProps> = () => {
                 <div className="upload-section2-uploaded-file">
                   <div
                     className="uploaded-video-file"
-                    key={index}
                     onClick={() => openLink(index)}
                   >
                     View
@@ -152,59 +162,58 @@ const UploadStepSection: FC<UploadStepSectionProps> = () => {
                       {extractFileExtension(module.module_material)}
                     </span>
                     <br />
-                    {/* <span className="upload-file-size">2.2MB</span> */}
                   </div>
                 </div>
               </div>
-            );
-          })}
-        </div>
-      </div>
-
-      <div className="upload-div-section ">
-        <div>
-          {course_assessment.map((assesment, index) => {
-            console.log("assessment", assesment);
-
-            return (
-              <div className="upload-section2-div-containers" key={index}>
-                <div className="upload-section2-div-sections">
-                  <label htmlFor="" className="upload-section-labels">
-                    Assesment Type
-                  </label>
-                  <input
-                    className="input-field-1"
-                    readOnly
-                    value={assesment.assessment_type}
-                  />
-                </div>
-                <div className="upload-section2-div-sections">
-                  <label htmlFor="" className="upload-section-labels">
-                    Assessment Name
-                  </label>
-                  <input
-                    className="input-field-1"
-                    readOnly
-                    value={assesment.assessment_name}
-                  />
-                </div>
-                <div className="upload-section2-uploaded-file">
-                  <div className="uploaded-video-file">View</div>
-                  <div className="uploaded-video-file-text">
-                    <span className="upload-file-name">Data</span>
-                    <br />
-                    {/* <span className="upload-file-size">2.2MB</span> */}
+              <div>
+                {/* Render assessment details */}
+                {assessment && (
+                  <div
+                    className="upload-section2-div-containers"
+                    key={`${index}_assessment`}
+                  >
+                    <div className="upload-section2-div-sections">
+                      <label htmlFor="" className="upload-section-labels">
+                        Assessment Type
+                      </label>
+                      <input
+                        className="input-field-1"
+                        readOnly
+                        value={assessment.assessment_type}
+                      />
+                    </div>
+                    <div className="upload-section2-div-sections">
+                      <label htmlFor="" className="upload-section-labels">
+                        Assessment Name
+                      </label>
+                      <input
+                        className="input-field-1"
+                        readOnly
+                        value={assessment.assessment_name}
+                      />
+                    </div>
+                    <div className="upload-section2-uploaded-file">
+                      <div className="uploaded-video-file">View</div>
+                      <div className="uploaded-video-file-text">
+                        <span className="upload-file-name">Data</span>
+                        <br />
+                      </div>
+                    </div>
                   </div>
-                </div>
+                )}
               </div>
-            );
-          })}
-        </div>
+            </>
+          );
+        })}
       </div>
 
-      <div className="upload-section2-course-assessment">
-        <p className="upload-course-assessment-text">Course Assessment </p>
-      </div>
+      {/* Check if assessment_name is not empty */}
+      {(course_assessment_main[0].assessment_name !== "" ||
+        course_assessment_main[1].assessment_name !== "") && (
+        <div className="upload-section2-course-assessment">
+          <p className="upload-course-assessment-text">Course Assessment </p>
+        </div>
+      )}
       {course_assessment_main[0].assessment_name != "" && (
         <>
           <div className=" upload-section-2-special">
@@ -274,9 +283,12 @@ const UploadStepSection: FC<UploadStepSectionProps> = () => {
 
       <div className="upload-div-checkbox-main-section">
         <div className="upload-main-div-section">
-          <div className="upload-text-section">
-            <p className="upload-text">Divisions </p>
-          </div>
+          {course_designation.division.length > 0 && (
+            <div className="upload-text-section">
+              <p className="upload-text">Divisions </p>
+            </div>
+          )}
+
           <div className="upload-checkbox-section">
             {course_designation.division.map((division, index) => (
               <div key={index}>
@@ -291,9 +303,12 @@ const UploadStepSection: FC<UploadStepSectionProps> = () => {
         </div>
 
         <div className="upload-main-div-section">
-          <div className="upload-text-section">
-            <p className="upload-text"> Designation</p>
-          </div>
+          {course_designation.designation.length > 0 && (
+            <div className="upload-text-section">
+              <p className="upload-text"> Designation</p>
+            </div>
+          )}
+
           <div className="upload-checkbox-section">
             {course_designation.designation.map((designation, index) => (
               <div key={index}>

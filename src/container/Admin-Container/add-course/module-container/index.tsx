@@ -145,7 +145,7 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
                   <EyeIcon files={[]} />
                 </div>
               ) : (
-                <td className="download_image">
+                <td className="module-download-image">
                   <Image
                     src={DownloadImg}
                     alt="Download"
@@ -217,7 +217,7 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
                 <EyeIcon files={[]} />
               </div>
             ) : (
-              <td className="download_image">
+              <td className="module-download-image">
                 <Image
                   src={DownloadImg}
                   alt="Download"
@@ -278,7 +278,7 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
                 <EyeIcon files={[]} />
               </div>
             ) : (
-              <td className="download_image">
+              <td className="module-download-image">
                 <Image
                   src={DownloadImg}
                   alt="Download"
