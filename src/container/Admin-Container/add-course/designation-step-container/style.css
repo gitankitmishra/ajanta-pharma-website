@@ -37,14 +37,13 @@
 } */
 .designation-checkbox-section {
   display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  column-gap: 70px;
-  row-gap: 28px;
+  grid-template-columns: repeat(5, 1fr);
+  row-gap: 16px;
   margin-top: 32px;
 }
 .designation-checkbox-section2 {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   row-gap: 16px;
   margin-top: 32px;
 }

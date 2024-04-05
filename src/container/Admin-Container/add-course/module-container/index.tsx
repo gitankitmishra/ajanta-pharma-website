@@ -86,7 +86,7 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
                   formatText={"File Format: mp4, ppt, pdf "}
                 />
               </div>
-              <div className="module-eye-icon">
+              <div>
                 <EyeIcon filesUploaded={filesUploaded} files={files} />
               </div>
             </div>
@@ -103,7 +103,7 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
                       ?.assessment_type
                   }
                   onChange={handleAssessmentTypeChange}
-                  placeholder="Select assessment type"
+                  placeholder="select assessment type"
                   options={[
                     "Multiple Choice Question",
                     "Signle Choice Question",
@@ -171,15 +171,12 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
           <div className="module-input">
             <div className="module-input-number">
               <label htmlFor="" className="module-container-labels">
-                Select Pre Assessment Type{" "}
-                <span className="module-container-labels-optional-span">
-                  (Optional)
-                </span>
+                Select Assessment Type
               </label>
               <DropdownInputField
                 id="pre"
                 value={course_assessment_main[0]?.assessment_type}
-                placeholder="Select pre assessment type"
+                placeholder="select assessment type"
                 onChange={handleAssessmentTypeChange}
                 options={[
                   "Multiple Choice Question",
@@ -235,15 +232,12 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
           <div className="module-input">
             <div className="module-input-number">
               <label htmlFor="" className="module-container-labels">
-                Select Post Assessment Type{" "}
-                <span className="module-container-labels-optional-span">
-                  (Optional)
-                </span>
+                Select Assessment Type
               </label>
               <DropdownInputField
                 id="post"
                 value={course_assessment_main[1]?.assessment_type}
-                placeholder="Select post assessment type"
+                placeholder="select assessment type"
                 onChange={handleAssessmentTypeChange}
                 options={[
                   "Multiple Choice Question",
