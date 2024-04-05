@@ -1,15 +1,12 @@
 import { FunctionComponent } from "react";
 import "./style.css";
-import { ProgressbarProfileIcon } from "@/components/icons/progressbar-profile-icon";
 import ThickProgressbar from "../progressbar-thick";
 
-interface PerformersProgressbarProps {
+interface PerformersProgressbarProps {}
 
-}
-
-const PerformersProgressbar: FunctionComponent<PerformersProgressbarProps> = ({
- 
-}) => {
+const PerformersProgressbar: FunctionComponent<
+  PerformersProgressbarProps
+> = ({}) => {
   return (
     <div className="performers-progressbar-main-section">
       <div className="performers-progressbar-header-part">

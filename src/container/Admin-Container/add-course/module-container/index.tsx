@@ -47,9 +47,15 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
           </p>
         </div>
         <div className="module-div-section1-div3">
-          <p className="module-category-text">Course Code & Name</p>
+          <p className="module-category-text">Course Code</p>
           <p className="module-category-type-text">
-            {course_basic.course_code} - {course_basic.course_name}
+            {course_basic.course_code}
+          </p>
+        </div>
+        <div className="module-div-section1-div4">
+          <p className="module-category-text">Course Name</p>
+          <p className="module-category-type-text">
+            {course_basic.course_name}
           </p>
         </div>
       </div>
@@ -64,6 +70,7 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
                 <InputField
                   moduleValue={module.module_no.toString()}
                   onUpdate={handleModuleChange}
+                  disabled
                 />
               </div>
               <div className="module-input-name">
@@ -86,7 +93,7 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
                   formatText={"File Format: mp4, ppt, pdf "}
                 />
               </div>
-              <div>
+              <div className="module-eye-icon">
                 <EyeIcon filesUploaded={filesUploaded} files={files} />
               </div>
             </div>
@@ -140,12 +147,17 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
                   formatText={"File Format: xls"}
                 />
               </div>
-              {fileAssessmentUpload ? (
+
+              {course_assessment[index].assessment_data.length !== 0 ? (
+
+              {fileAssessmentUpload ? (  //Harsha ke uper responsibilty
+
                 <div>
                   <EyeIcon files={[]} />
                 </div>
               ) : (
-                <td className="download_image">
+                <td className="module-download-image">
+
                   <Image
                     src={DownloadImg}
                     alt="Download"
@@ -172,9 +184,6 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
             <div className="module-input-number">
               <label htmlFor="" className="module-container-labels">
                 Select Pre Assessment Type{" "}
-                <span className="module-container-labels-optional-span">
-                  (Optional)
-                </span>
               </label>
               <DropdownInputField
                 id="pre"
@@ -186,6 +195,7 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
                   "Signle Choice Question",
                   "True or false",
                   "Short Answer",
+                  "Not Available",
                 ]}
                 valueLabel={["multiple", "single", "boolean", "short"]}
               />
@@ -215,12 +225,17 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
                 formatText={"File Format: xls"}
               />
             </div>
-            {fileAssessmentUpload ? (
+
+            {course_assessment_main[0].assessment_data.length !== 0 ? (
+
+            {fileAssessmentUpload ? ( //Harsha ke uper responsibilty
+
               <div>
                 <EyeIcon files={[]} />
               </div>
             ) : (
-              <td className="download_image">
+
+              <td className="module-download-image">
                 <Image
                   src={DownloadImg}
                   alt="Download"
@@ -236,9 +251,6 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
             <div className="module-input-number">
               <label htmlFor="" className="module-container-labels">
                 Select Post Assessment Type{" "}
-                <span className="module-container-labels-optional-span">
-                  (Optional)
-                </span>
               </label>
               <DropdownInputField
                 id="post"
@@ -250,6 +262,7 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
                   "Signle Choice Question",
                   "True or false",
                   "Short Answer",
+                  "Not Available",
                 ]}
                 valueLabel={["multiple", "single", "boolean", "short"]}
               />
@@ -279,12 +292,16 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
                 formatText={"File Format: xls"}
               />
             </div>
-            {fileAssessmentUpload ? (
+
+            {course_assessment_main[1].assessment_data.length !== 0 ? (
+
+            {fileAssessmentUpload ? (  //Harsha ke uper responsibilty
+
               <div>
                 <EyeIcon files={[]} />
               </div>
             ) : (
-              <td className="download_image">
+              <td className="module-download-image">
                 <Image
                   src={DownloadImg}
                   alt="Download"
