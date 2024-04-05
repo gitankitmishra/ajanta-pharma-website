@@ -81,14 +81,15 @@ const AdminCourseDeatilContainer: FC<
   const handleEditClick = () => {
     if (buttonText.edit === "Edit") {
       setIsEditable(true);
+      setIsClicked(!isClicked);
       setButtonText({ edit: "Next", discard: "Discard" });
     } else if (buttonText.edit === "Upload") {
       updateCourse();
     } else {
       setButtonText({ edit: "Upload", discard: "Previous" });
     }
-    setIsClicked(true);
   };
+
   interface ModuleData {
     moduleName: string;
     moduleNo: string;
@@ -107,7 +108,6 @@ const AdminCourseDeatilContainer: FC<
       ...assessmentOpt,
       { assessmentType: "", assessmentName: "" },
     ]);
-    setIsClicked(true);
   };
 
   const breadcrumbItems = [
@@ -446,7 +446,7 @@ const AdminCourseDeatilContainer: FC<
                     </label>
                   </div> */}
             </div>
-            {course_assessment_main[0].assessment_name != "" && (
+            {course_assessment_main[0]?.assessment_name != "" && (
               <div className="admin-course-detail-section2">
                 <div className="pre-assessment">Pre</div>
                 <div className="admin-course-detail-section2-div-sections">
@@ -479,13 +479,13 @@ const AdminCourseDeatilContainer: FC<
                   </label>
                   <InputField
                     id="pre"
-                    moduleValue={course_assessment_main[0].assessment_name}
+                    moduleValue={course_assessment_main[0]?.assessment_name}
                     onUpdate={handleAssessmentNameChange}
                   />
                 </div>
               </div>
             )}
-            ;{/* post  */}
+            {/* post  */}
             {course_assessment_main[1]?.assessment_name != "" && (
               <div className="admin-course-detail-section2">
                 <div className="pre-assessment">Post</div>
@@ -541,7 +541,7 @@ const AdminCourseDeatilContainer: FC<
                   text={division}
                   value={division}
                   onChange={handleChangeDesignation}
-                  isChecked={course_designation?.division.includes(division)}
+                  isChecked={course_designation?.division?.includes(division)}
                   disabled={!isEditable}
                 />
               ))}

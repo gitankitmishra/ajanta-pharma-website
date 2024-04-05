@@ -17,6 +17,7 @@ import { fetchService } from "@/services/fetch_services";
 import { CourseDesignation } from "@/types/CourseDesignation";
 
 import { CourseDetails } from "@/types/AdminCourseInfo";
+import { fileURLToPath } from "url";
 
 export type CourseContextType = {
   // common
@@ -52,6 +53,9 @@ export type CourseContextType = {
   openLink: (index: number) => void;
   filesUploaded: boolean;
   fileAssessmentUpload: boolean;
+  searchTerm: string;
+  searchNameData: (event: ChangeEvent<HTMLInputElement>) => void;
+  filteredData: (course: CourseBasic) => void;
 
   // designation
   handleChangeDesignation(event: ChangeEvent<HTMLInputElement>): void;
@@ -257,6 +261,21 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     }
   };
 
+  const [searchTerm, setSearchTerm] = useState<string>("");
+  const searchNameData = (event: ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value.toLowerCase();
+    setSearchTerm(value);
+  };
+
+  const filteredData: any = [course_basic].filter(
+    (course: CourseBasic) =>
+      course.course_name.toLowerCase().includes(searchTerm) ||
+      course.course_code.toLowerCase().includes(searchTerm)
+  );
+
+  useEffect(() => {
+    console.log("test the search", fileURLToPath);
+  }, [searchTerm]);
   const handleDraftSave = async () => {
     const response = await fetchService({
       method: "POST",
@@ -847,6 +866,7 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
   //api to update the data or edit
   const updateCourse = async () => {
     console.log("button upload");
+    console.log("testt");
 
     const response = await fetchService({
       method: "PUT",
@@ -916,6 +936,9 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     openLink,
     filesUploaded,
     fileAssessmentUpload,
+    filteredData,
+    searchNameData,
+    searchTerm,
 
     //designation
     course_designation,

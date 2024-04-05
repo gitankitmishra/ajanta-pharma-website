@@ -10,6 +10,8 @@ import { WhiteBellIcon } from "@/components/icons/whiteBellIcon";
 interface SearchFieldSectionProps {}
 
 const SearchFieldSection: FC<SearchFieldSectionProps> = () => {
+  //context data
+
   const router = useRouter();
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>("");
@@ -18,7 +20,7 @@ const SearchFieldSection: FC<SearchFieldSectionProps> = () => {
     useState<number>(-1);
   const [isSearchFocused, setIsSearchFocused] = useState<boolean>(false);
   const [clicked, setClicked] = useState(false);
-  
+
   const handleChange = () => {
     router.push("/notification");
     setClicked(!clicked);
@@ -111,7 +113,7 @@ const SearchFieldSection: FC<SearchFieldSectionProps> = () => {
         className={`bell-icon ${clicked ? "clicked" : ""}`}
         onClick={handleChange}
       >
-       {clicked ? <WhiteBellIcon/>:<BellIcon/>} 
+        {clicked ? <WhiteBellIcon /> : <BellIcon />}
       </div>
       <div className="profile-icon">
         <ProfileIcon />
