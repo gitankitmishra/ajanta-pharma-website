@@ -202,9 +202,13 @@ const UploadStepSection: FC<UploadStepSectionProps> = () => {
         </div>
       </div>
 
-      <div className="upload-section2-course-assessment">
-        <p className="upload-course-assessment-text">Course Assessment </p>
-      </div>
+      {/* Check if assessment_name is not empty */}
+      {(course_assessment_main[0].assessment_name !== "" ||
+        course_assessment_main[1].assessment_name !== "") && (
+        <div className="upload-section2-course-assessment">
+          <p className="upload-course-assessment-text">Course Assessment </p>
+        </div>
+      )}
       {course_assessment_main[0].assessment_name != "" && (
         <>
           <div className=" upload-section-2-special">
@@ -274,9 +278,13 @@ const UploadStepSection: FC<UploadStepSectionProps> = () => {
 
       <div className="upload-div-checkbox-main-section">
         <div className="upload-main-div-section">
-          <div className="upload-text-section">
-            <p className="upload-text">Divisions </p>
-          </div>
+
+          {course_designation.division.length > 0 && (
+            <div className="upload-text-section">
+              <p className="upload-text">Divisions </p>
+            </div>
+          )}
+
           <div className="upload-checkbox-section">
             {course_designation.division.map((division, index) => (
               <div key={index}>
@@ -291,9 +299,13 @@ const UploadStepSection: FC<UploadStepSectionProps> = () => {
         </div>
 
         <div className="upload-main-div-section">
-          <div className="upload-text-section">
-            <p className="upload-text"> Designation</p>
-          </div>
+
+          {course_designation.designation.length > 0 && (
+            <div className="upload-text-section">
+              <p className="upload-text"> Designation</p>
+            </div>
+          )}
+
           <div className="upload-checkbox-section">
             {course_designation.designation.map((designation, index) => (
               <div key={index}>
