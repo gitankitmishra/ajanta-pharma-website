@@ -32,7 +32,7 @@ const AdminCourseListTable: FC = () => {
             <th className="admin-course-list-table-head head-dropdown-icon">
               Status <DropdownIcon />
             </th>
-            <th className="admin-course-list-table-head">View</th>
+            <th className="admin-course-list-table-head ">View</th>
           </tr>
         </thead>
         <tbody className="admin-course-list-tbody">
@@ -62,7 +62,7 @@ const AdminCourseListTable: FC = () => {
                     {course.course_basic?.isActive ? "Active" : "Inactive"}
                   </p>
                 </td>
-                <td className="admin-course-list-table-data">
+                <td className="admin-course-list-table-data admin-course-eye-icon">
                   <Link href={`/admin/admin-course-detail/`}>
                     {/* ${course._id} Need a context to hold this value to use this id to view the course 
                   for a edit logic */}

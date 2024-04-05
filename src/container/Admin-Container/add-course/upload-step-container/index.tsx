@@ -6,6 +6,7 @@ import SuccessPopup from "@/components/popups/success-popup";
 
 import { CourseContext, CourseContextType } from "@/context/course_context";
 import Checkbox from "@/components/checkbox";
+import DateInputField from "@/components/fields/start-date-input-field";
 
 interface UploadStepSectionProps {}
 
@@ -65,14 +66,24 @@ const UploadStepSection: FC<UploadStepSectionProps> = () => {
               value={course_basic.course_training}
             />
           </div>
-          <div className="upload-div-section2">
+          <div className="upload-section1-div-sections">
             <label htmlFor="" className="upload-section-labels">
-              Learning Objective
+              Course Code
             </label>
             <input
               className="input-field-1"
               readOnly
-              value={`${course_basic.course_code}  ${course_basic.course_name}`}
+              value={`${course_basic.course_code}`}
+            />
+          </div>
+          <div className="upload-section1-div-sections">
+            <label htmlFor="" className="upload-section-labels">
+              Course Name
+            </label>
+            <input
+              className="input-field-1"
+              readOnly
+              value={`${course_basic.course_name}`}
             />
           </div>
         </div>
@@ -87,13 +98,14 @@ const UploadStepSection: FC<UploadStepSectionProps> = () => {
           />
         </div>
         <div className="upload-div-section3">
+         
           <div className="date-input-row">
             <label htmlFor="" className="upload-section-labels">
               Start Date
             </label>
             <br />
             <input
-              className="input-field-2"
+              className="upload-date-input-field"
               readOnly
               value={course_basic.course_start_date}
             />
@@ -104,7 +116,7 @@ const UploadStepSection: FC<UploadStepSectionProps> = () => {
             </label>
             <br />
             <input
-              className="input-field-2"
+              className="upload-date-input-field"
               readOnly
               value={course_basic.course_end_date}
             />

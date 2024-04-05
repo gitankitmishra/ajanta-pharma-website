@@ -18,7 +18,8 @@
 
 .module-div-section1-div1,
 .module-div-section1-div2,
-.module-div-section1-div3 {
+.module-div-section1-div3,
+.module-div-section1-div4 {
   flex: 1;
   display: flex;
   align-items: center;
@@ -27,7 +28,8 @@
   height: 126px;
 }
 .module-div-section1-div1,
-.module-div-section1-div2 {
+.module-div-section1-div2,
+.module-div-section1-div3 {
   border-right: 1px solid #fe810080;
 }
 
@@ -115,12 +117,6 @@
 }
 .module-container-labels {
   color: #000;
-  font-size: 18px;
-  font-weight: 400;
-  line-height: 28px;
-}
-.module-container-labels-optional-span {
-  color: #787878;
   font-size: 18px;
   font-weight: 400;
   line-height: 28px;
