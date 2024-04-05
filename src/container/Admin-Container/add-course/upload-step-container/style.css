@@ -62,9 +62,12 @@
   gap: 3rem;
 }
 .upload-section2-div-containers {
+  width: 100%;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  align-items: end;
+  grid-template-columns: repeat(4, 1fr);
+  grid-gap: 3rem;
+  grid-gap: 3rem;
+  gap: 3rem;
 }
 .upload-preview-text {
   color: #000;
@@ -80,12 +83,10 @@
 }
 .upload-section2-uploaded-file {
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   gap: 12px;
 }
-.upload-section2-div-sections {
-  width: 90.5%;
-}
+
 .uploaded-video-file {
   display: flex;
   align-items: center;
