@@ -147,12 +147,17 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
                   formatText={"File Format: xls"}
                 />
               </div>
+
               {course_assessment[index].assessment_data.length !== 0 ? (
+
+              {fileAssessmentUpload ? (  //Harsha ke uper responsibilty
+
                 <div>
                   <EyeIcon files={[]} />
                 </div>
               ) : (
                 <td className="module-download-image">
+
                   <Image
                     src={DownloadImg}
                     alt="Download"
@@ -220,11 +225,16 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
                 formatText={"File Format: xls"}
               />
             </div>
+
             {course_assessment_main[0].assessment_data.length !== 0 ? (
+
+            {fileAssessmentUpload ? ( //Harsha ke uper responsibilty
+
               <div>
                 <EyeIcon files={[]} />
               </div>
             ) : (
+
               <td className="module-download-image">
                 <Image
                   src={DownloadImg}
@@ -282,7 +292,11 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
                 formatText={"File Format: xls"}
               />
             </div>
+
             {course_assessment_main[1].assessment_data.length !== 0 ? (
+
+            {fileAssessmentUpload ? (  //Harsha ke uper responsibilty
+
               <div>
                 <EyeIcon files={[]} />
               </div>
