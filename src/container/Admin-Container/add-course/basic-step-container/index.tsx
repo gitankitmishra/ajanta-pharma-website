@@ -88,7 +88,7 @@ const BasicStepSection: FC<BasicStepSectionProps> = () => {
           </label>
 
           <InputFieldString
-            readOnly={true}
+            readOnly
             width="80%"
             className="input-field"
             value={course_basic.course_code}
