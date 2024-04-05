@@ -98,7 +98,6 @@ const UploadStepSection: FC<UploadStepSectionProps> = () => {
           />
         </div>
         <div className="upload-div-section3">
-         
           <div className="date-input-row">
             <label htmlFor="" className="upload-section-labels">
               Start Date
@@ -125,11 +124,11 @@ const UploadStepSection: FC<UploadStepSectionProps> = () => {
       </div>
 
       <div className="upload-div-section">
-        <div>
-          {course_module.map((module, index) => {
-            const assessment = course_assessment[index];
+        {course_module.map((module, index) => {
+          const assessment = course_assessment[index];
 
-            return (
+          return (
+            <>
               <div className="upload-section2-div-containers" key={index}>
                 <div className="upload-section2-div-sections">
                   <label htmlFor="" className="upload-section-labels">
@@ -165,7 +164,8 @@ const UploadStepSection: FC<UploadStepSectionProps> = () => {
                     <br />
                   </div>
                 </div>
-
+              </div>
+              <div>
                 {/* Render assessment details */}
                 {assessment && (
                   <div
@@ -202,9 +202,9 @@ const UploadStepSection: FC<UploadStepSectionProps> = () => {
                   </div>
                 )}
               </div>
-            );
-          })}
-        </div>
+            </>
+          );
+        })}
       </div>
 
       {/* Check if assessment_name is not empty */}
