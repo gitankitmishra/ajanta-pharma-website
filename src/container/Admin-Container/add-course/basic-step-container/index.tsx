@@ -89,7 +89,7 @@ const BasicStepSection: FC<BasicStepSectionProps> = () => {
 
           <InputFieldString
             readOnly={true}
-            width="80%"
+            width="86%"
             className="input-field"
             value={course_basic.course_code}
             onChange={(value) => handleChange("course_code", value)}
@@ -102,7 +102,7 @@ const BasicStepSection: FC<BasicStepSectionProps> = () => {
 
           <InputFieldString
             placeholder="Enter Course Name"
-            width="80%"
+            width="86%"
             value={course_basic.course_name}
             onChange={(value) => handleChange("course_name", value)}
             className="input-field"

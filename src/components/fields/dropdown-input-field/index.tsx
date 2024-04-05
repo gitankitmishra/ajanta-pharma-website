@@ -29,9 +29,6 @@ const DropdownInputField: FC<DropdownInputFieldProps> = ({
     onValueChange!(event.target.value);
   };
 
-
-
-
   // Determine if an option is selected or not
   const isSelected = value !== "";
 
