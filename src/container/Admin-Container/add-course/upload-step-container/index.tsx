@@ -13,6 +13,7 @@ const UploadStepSection: FC<UploadStepSectionProps> = () => {
   //context call
   const {
     course_basic,
+    openLink,
     course_assessment,
     course_assessment_main,
     course_module,
@@ -30,7 +31,7 @@ const UploadStepSection: FC<UploadStepSectionProps> = () => {
   };
 
   const extractFileExtension = (filename: any) => {
-    const parts = filename.split("/");
+    const parts = filename?.split("/");
     if (parts.length > 1) {
       return parts.pop();
     } else {
@@ -139,7 +140,13 @@ const UploadStepSection: FC<UploadStepSectionProps> = () => {
                   />
                 </div>
                 <div className="upload-section2-uploaded-file">
-                  <div className="uploaded-video-file"></div>
+                  <div
+                    className="uploaded-video-file"
+                    key={index}
+                    onClick={() => openLink(index)}
+                  >
+                    View
+                  </div>
                   <div className="uploaded-video-file-text">
                     <span className="upload-file-name">
                       {extractFileExtension(module.module_material)}
@@ -182,7 +189,7 @@ const UploadStepSection: FC<UploadStepSectionProps> = () => {
                   />
                 </div>
                 <div className="upload-section2-uploaded-file">
-                  <div className="uploaded-video-file"></div>
+                  <div className="uploaded-video-file">View</div>
                   <div className="uploaded-video-file-text">
                     <span className="upload-file-name">Data</span>
                     <br />
@@ -224,7 +231,7 @@ const UploadStepSection: FC<UploadStepSectionProps> = () => {
               <input
                 className="input-field-1"
                 readOnly
-                value={course_assessment_main[0].assessment_no}
+                value={course_assessment_main[0].assessment_type}
               />
             </div>
             <div className="upload-section2-div-sections">
@@ -241,7 +248,7 @@ const UploadStepSection: FC<UploadStepSectionProps> = () => {
         </>
       )}
 
-      {course_assessment_main[1].assessment_name != "" && (
+      {course_assessment_main[1]?.assessment_name != "" && (
         <>
           <div className="upload-section2">
             <div>post</div>
@@ -252,7 +259,7 @@ const UploadStepSection: FC<UploadStepSectionProps> = () => {
               <input
                 className="input-field-1"
                 readOnly
-                value={course_assessment_main[1].assessment_no}
+                value={course_assessment_main[1].assessment_type}
               />
             </div>
             <div className="upload-section2-div-sections">
@@ -262,7 +269,7 @@ const UploadStepSection: FC<UploadStepSectionProps> = () => {
               <input
                 className="input-field-1"
                 readOnly
-                value={course_assessment_main[1].assessment_name}
+                value={course_assessment_main[1]?.assessment_name}
               />
             </div>
           </div>
@@ -271,11 +278,13 @@ const UploadStepSection: FC<UploadStepSectionProps> = () => {
 
       <div className="upload-div-checkbox-main-section">
         <div className="upload-main-div-section">
+
           {course_designation.division.length > 0 && (
             <div className="upload-text-section">
               <p className="upload-text">Divisions </p>
             </div>
           )}
+
           <div className="upload-checkbox-section">
             {course_designation.division.map((division, index) => (
               <div key={index}>
@@ -290,11 +299,13 @@ const UploadStepSection: FC<UploadStepSectionProps> = () => {
         </div>
 
         <div className="upload-main-div-section">
+
           {course_designation.designation.length > 0 && (
             <div className="upload-text-section">
               <p className="upload-text"> Designation</p>
             </div>
           )}
+
           <div className="upload-checkbox-section">
             {course_designation.designation.map((designation, index) => (
               <div key={index}>

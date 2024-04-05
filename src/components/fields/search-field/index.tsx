@@ -4,7 +4,7 @@ import { FC, useEffect, useState } from "react";
 import "./style.css";
 import { BellIcon } from "@/components/icons/bell-icon";
 import { ProfileIcon } from "@/components/icons/profile-icon";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { WhiteBellIcon } from "@/components/icons/whiteBellIcon";
 
 interface SearchFieldSectionProps {}
@@ -18,6 +18,9 @@ const SearchFieldSection: FC<SearchFieldSectionProps> = () => {
     useState<number>(-1);
   const [isSearchFocused, setIsSearchFocused] = useState<boolean>(false);
   const [clicked, setClicked] = useState(false);
+  // hide searchbar when /team-performance page is open
+  const currentPath =usePathname()
+  const hideSearch = currentPath === "/team-performance";
   
   const handleChange = () => {
     router.push("/notification");
@@ -75,7 +78,7 @@ const SearchFieldSection: FC<SearchFieldSectionProps> = () => {
 
   return (
     <section className="search-field-main-section">
-      <div className="search-container">
+      {!hideSearch && (<div className="search-container">
         <input
           type="text"
           placeholder="Search..."
@@ -107,6 +110,7 @@ const SearchFieldSection: FC<SearchFieldSectionProps> = () => {
           <SearchIcon />
         </div>
       </div>
+      )}
       <div
         className={`bell-icon ${clicked ? "clicked" : ""}`}
         onClick={handleChange}

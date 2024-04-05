@@ -1,0 +1,18 @@
+.personal-development-profile-main-section {
+    margin: 0 40px;
+  }
+  .personal-development-profile-heading-section {
+    margin-top: 20px;
+  }
+  .personal-development-profile-heading-text {
+    color: #1c1d1d;
+    font-size: 24px;
+    font-weight: 500;
+    text-decoration: underline;
+  }
+  .personal-development-profile-cards-section {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    margin-top: 32px;
+  }
+  

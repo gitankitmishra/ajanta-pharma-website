@@ -2,7 +2,7 @@ import { FunctionComponent } from "react";
 import "./style.css";
 import Image from "next/image";
 import { DownloadIcon } from "@/components/icons/download-icon";
-import { EyeIcon } from "@/components/icons/eye-icon";
+import EyeIcon from "@/components/icons/eye-icon";
 
 interface MyCertificateCardProps {
   imageUrl: string;
@@ -47,7 +47,7 @@ const MyCertificateCard: FunctionComponent<MyCertificateCardProps> = ({
           View Certificate <DownloadIcon />{" "}
         </p>
         <p className="my-certificate-card-download-text">
-          Download Certificate <EyeIcon />
+          Download Certificate <EyeIcon files={[]} />
         </p>
       </div>
     </div>
