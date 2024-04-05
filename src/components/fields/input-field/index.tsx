@@ -8,7 +8,7 @@ interface InputFieldProps {
   readOnly?: boolean;
   id?: string;
   isEditable?: boolean;
-  disabled?:boolean
+  disabled?: boolean;
 }
 
 const InputField: FC<InputFieldProps> = ({
@@ -17,7 +17,7 @@ const InputField: FC<InputFieldProps> = ({
   onUpdate,
   id,
   isEditable,
-  disabled
+  disabled,
 }) => {
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const newValue = event.target.value;
