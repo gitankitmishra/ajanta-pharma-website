@@ -859,10 +859,6 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
 
   // ***********************************************************************************************
 
-  const mergedAssessment = {
-    ...course_assessment,
-    ...course_assessment_main,
-  };
   //api to update the data or edit
   const updateCourse = async () => {
     console.log("button upload");
@@ -872,15 +868,22 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
       method: "PUT",
       endpoint: `api/admin/dashboard/editCourse/${course_basic.course_code}`,
       data: {
-        course: {
-          ...course_basic,
-          mergedAssessment,
+        course_designation: {
           ...course_designation,
+        },
+        course_basic: {
+          ...course_basic,
+        },
+        course_assessment: {
+          ...course_assessment,
+          ...course_assessment_main,
+        },
+        course_module: {
           ...course_module,
         },
-        courseCode: course_basic.course_code,
       },
     });
+
     if (response.code === 200) {
       const data = response;
       console.log(data);
@@ -888,6 +891,19 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
       console.log("error");
     }
   };
+
+  useEffect(() => {
+    console.log("basic", course_basic.course_status);
+    console.log("module", course_module);
+    console.log("assessment", course_assessment);
+    console.log("assessment - main", course_assessment_main);
+    console.log("designation", course_designation);
+  }, [
+    course_basic,
+    course_assessment,
+    course_assessment_main,
+    course_designation,
+  ]);
 
   // ***********************************************************************************************
 
