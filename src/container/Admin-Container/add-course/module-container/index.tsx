@@ -49,13 +49,13 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
         <div className="module-div-section1-div3">
           <p className="module-category-text">Course Code </p>
           <p className="module-category-type-text">
-            {course_basic.course_code} 
+            {course_basic.course_code}
           </p>
         </div>
         <div className="module-div-section1-div4">
           <p className="module-category-text">Course Name</p>
           <p className="module-category-type-text">
-          {course_basic.course_name}
+            {course_basic.course_name}
           </p>
         </div>
       </div>
@@ -70,6 +70,7 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
                 <InputField
                   moduleValue={module.module_no.toString()}
                   onUpdate={handleModuleChange}
+                  disabled={true}
                 />
               </div>
               <div className="module-input-name">
@@ -189,7 +190,7 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
                   "Signle Choice Question",
                   "True or false",
                   "Short Answer",
-                  "Not Available"
+                  "Not Available",
                 ]}
                 valueLabel={["multiple", "single", "boolean", "short", "N/A"]}
               />
@@ -251,7 +252,7 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
                   "Signle Choice Question",
                   "True or false",
                   "Short Answer",
-                  "Not Available"
+                  "Not Available",
                 ]}
                 valueLabel={["multiple", "single", "boolean", "short", "N/A"]}
               />
