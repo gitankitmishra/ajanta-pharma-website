@@ -47,9 +47,15 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
           </p>
         </div>
         <div className="module-div-section1-div3">
-          <p className="module-category-text">Course Code & Name</p>
+          <p className="module-category-text">Course Code </p>
           <p className="module-category-type-text">
-            {course_basic.course_code} - {course_basic.course_name}
+            {course_basic.course_code} 
+          </p>
+        </div>
+        <div className="module-div-section1-div4">
+          <p className="module-category-text">Course Name</p>
+          <p className="module-category-type-text">
+          {course_basic.course_name}
           </p>
         </div>
       </div>
@@ -86,7 +92,7 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
                   formatText={"File Format: mp4, ppt, pdf "}
                 />
               </div>
-              <div>
+              <div className="module-eye-icon">
                 <EyeIcon filesUploaded={filesUploaded} files={files} />
               </div>
             </div>
@@ -171,20 +177,21 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
           <div className="module-input">
             <div className="module-input-number">
               <label htmlFor="" className="module-container-labels">
-                Select Assessment Type
+                Select Pre Assessment Type
               </label>
               <DropdownInputField
                 id="pre"
                 value={course_assessment_main[0]?.assessment_type}
-                placeholder="select assessment type"
+                placeholder="select pre assessment type"
                 onChange={handleAssessmentTypeChange}
                 options={[
                   "Multiple Choice Question",
                   "Signle Choice Question",
                   "True or false",
                   "Short Answer",
+                  "Not Available"
                 ]}
-                valueLabel={["multiple", "single", "boolean", "short"]}
+                valueLabel={["multiple", "single", "boolean", "short", "N/A"]}
               />
             </div>
             <div className="module-input-name">
@@ -232,20 +239,21 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
           <div className="module-input">
             <div className="module-input-number">
               <label htmlFor="" className="module-container-labels">
-                Select Assessment Type
+                Select Post Assessment Type
               </label>
               <DropdownInputField
                 id="post"
                 value={course_assessment_main[1]?.assessment_type}
-                placeholder="select assessment type"
+                placeholder="select post assessment type"
                 onChange={handleAssessmentTypeChange}
                 options={[
                   "Multiple Choice Question",
                   "Signle Choice Question",
                   "True or false",
                   "Short Answer",
+                  "Not Available"
                 ]}
-                valueLabel={["multiple", "single", "boolean", "short"]}
+                valueLabel={["multiple", "single", "boolean", "short", "N/A"]}
               />
             </div>
             <div className="module-input-name">

@@ -77,41 +77,43 @@ const DropdownSubInputField: FC<DropdownInputFieldProps> = ({
   };
 
   return (
-    <div className="custom-dropdown-input-field-container">
-      <select
-        value={value}
-        onChange={handleChange}
-        className={`custom-dropdown-select ${
-          value ? "selected" : "not-selected"
-        }`}
-        disabled={isEditable}
-      >
-        {isNewCategorySelected && placeholder && (
-          <option value="" className="custom-dropdown-option">
-            {placeholder}
-          </option>
-        )}
-        {trainingTypeOptions.map((option) => (
-          <option
-            key={option}
-            value={option}
-            className="custom-dropdown-option"
-          >
-            {option}
-          </option>
-        ))}
-      </select>
-      <div className="custom-dropdown-arrow">
-        <ArrowDown />
-      </div>
-      <div
-        className={`custom-dropdown-field-error-message ${
-          error.length !== 0 && "custom-dropdown-field-error-display"
-        }`}
-      >
-        {error}
-      </div>
-    </div>
+    <>
+      <div className="custom-dropdown-input-field-container">
+        <select
+          value={value}
+          onChange={handleChange}
+          className={`custom-dropdown-select ${
+            value ? "selected" : "not-selected"
+          }`}
+          disabled={isEditable}
+        >
+          {isNewCategorySelected && placeholder && (
+            <option value="" className="custom-dropdown-option">
+              {placeholder}
+            </option>
+          )}
+          {trainingTypeOptions.map((option) => (
+            <option
+              key={option}
+              value={option}
+              className="custom-dropdown-option"
+            >
+              {option}
+            </option>
+          ))}
+        </select>
+        <div className="custom-dropdown-arrow">
+          <ArrowDown />
+        </div>
+        </div>
+        <div
+          className={`custom-dropdown-field-error-message ${
+            error.length !== 0 && "custom-dropdown-field-error-display"
+          }`}
+        >
+          {error}
+        </div>
+    </>
   );
 };
 

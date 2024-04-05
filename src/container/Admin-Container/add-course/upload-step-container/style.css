@@ -5,7 +5,7 @@
   /* justify-content: center; */
   flex-direction: column;
   width: 94%;
-  height: 1500px;
+  height: 1300px;
   border-radius: 12px;
   border: 1px solid rgba(254, 129, 0, 0.5);
 }
@@ -227,7 +227,7 @@
 
 .upload-checkbox-section {
   display: grid;
-  grid-template-columns: repeat(7, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   row-gap: 16px;
   margin-top: 32px;
 }
