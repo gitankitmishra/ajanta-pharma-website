@@ -82,11 +82,11 @@ const AdminCourseDeatilContainer: FC<
     if (buttonText.edit === "Edit") {
       setIsEditable(true);
       setIsClicked(!isClicked);
-      setButtonText({ edit: "Next", discard: "Discard" });
-    } else if (buttonText.edit === "Upload") {
+      setButtonText({ edit: "Preview", discard: "Discard" });
+    } else if (buttonText.edit === "Save") {
       updateCourse();
     } else {
-      setButtonText({ edit: "Upload", discard: "Previous" });
+      setButtonText({ edit: "Save", discard: "Previous" });
     }
   };
 
@@ -284,7 +284,11 @@ const AdminCourseDeatilContainer: FC<
                   />
                 </div>
                 <div className="admin-course-detail-section2-admin-course-detailed-file">
-                  <div className="admin-course-detailed-video-file">
+                  <div
+                    className={`admin-course-detailed-video-file ${
+                      isClicked ? "clicked" : "unClicked"
+                    }`}
+                  >
                     {/* <input type="text" className="admin-course-detailed-mp4" /> */}
 
                     <span
@@ -304,14 +308,33 @@ const AdminCourseDeatilContainer: FC<
                   </div>
                 </div>
                 <div className="admin-course-detail-upload-btns">
-                  {/* <button
+                  <button
                     className={`admin-course-detail-upload-btn ${
                       isClicked ? "clicked" : "unClicked"
                     }`}
+                    onClick={() => {
+                      // Check if the button is clickable based on isEditable state
+                      if (isEditable) {
+                        // Simulate file input click
+                        const fileInput = document.createElement("input");
+                        fileInput.type = "file";
+                        fileInput.accept = ".mp4,.ppt,.pdf"; // Set accepted file types
+                        fileInput.addEventListener("change", (event) => {
+                          const selectedFile = (
+                            event.target as HTMLInputElement
+                          ).files?.[0];
+                          if (selectedFile) {
+                            handleFileSelect(selectedFile, index);
+                          }
+                        });
+                        fileInput.click();
+                      }
+                    }}
                   >
                     Upload
-                  </button> */}
-                  <UploadButton
+                  </button>
+
+                  {/* <UploadButton
                     upload={"Upload"}
                     onFileSelect={(selectedFile: File) => {
                       handleFileSelect(selectedFile, index);
@@ -321,7 +344,7 @@ const AdminCourseDeatilContainer: FC<
                     className={`admin-course-detail-upload-btn ${
                       isClicked ? "clicked" : "unclicked"
                     }`}
-                  />
+                  /> */}
                 </div>
               </div>
             );
@@ -376,12 +399,17 @@ const AdminCourseDeatilContainer: FC<
                   </div>
 
                   <div className="admin-course-detail-section2-admin-course-detailed-file">
-                    <div className="admin-course-detailed-video-file">
+                    <div
+                      className={`admin-course-detailed-video-file ${
+                        isClicked ? "clicked" : "unClicked"
+                      }`}
+                    >
                       <span className="admin-course-detailed-file-name">
                         XLS
                       </span>
                       {/* <input type="text" className="admin-course-detailed-mp4" /> */}
                     </div>
+
                     <div className="admin-course-detailed-video-file-text">
                       <span className="admin-course-detail-file-name">
                         excel.xls
@@ -393,14 +421,38 @@ const AdminCourseDeatilContainer: FC<
                     </div>
                   </div>
                   <div className="admin-course-detail-upload-btns">
-                    {/* <button
+                    <button
                       className={`admin-course-detail-upload-btn ${
                         isClicked ? "clicked" : "unClicked"
                       }`}
+                      onClick={() => {
+                        // Check if the button is clickable based on isEditable state
+                        if (isEditable) {
+                          // Simulate file input click
+                          const fileInput = document.createElement("input");
+                          fileInput.type = "file";
+                          fileInput.accept = ".xls"; // Set accepted file types
+                          fileInput.addEventListener("change", (event) => {
+                            const selectedFile = (
+                              event.target as HTMLInputElement
+                            ).files?.[0];
+                            if (selectedFile) {
+                              console.log("going to check");
+                              handleexcelFileRead(
+                                selectedFile,
+                                index,
+                                "module"
+                              );
+                            }
+                          });
+                          fileInput.click();
+                        }
+                      }}
                     >
                       Upload
-                    </button> */}
-                    <UploadButton
+                    </button>
+
+                    {/* <UploadButton
                       upload={"Upload Assessment"}
                       uploadFile={() => (selectedFile: File) => {
                         console.log("going to check");
@@ -414,7 +466,7 @@ const AdminCourseDeatilContainer: FC<
                       className={`admin-course-detail-upload-btn ${
                         isClicked ? "clicked" : "unClicked"
                       }`}
-                    />
+                    /> */}
                   </div>
                 </>
               );
@@ -425,18 +477,30 @@ const AdminCourseDeatilContainer: FC<
             className={`admin-course-detail-sec-add-module-btn ${
               isClicked ? "clicked" : "unClicked"
             }`}
-            onClick={handleAddModule}
+            onClick={() => {
+              // Check if the button is clickable based on isEditable state
+              if (isEditable) {
+                handleAddModule();
+              }
+            }}
           >
             {isClicked ? <PlusIcon /> : <GreyPlusIcon />}
-            Add Module
+            <span
+              className={`admin-course-detail-add-module-span-text ${
+                isClicked ? "clicked" : "unClicked"
+              }`}
+            >
+              {" "}
+              Add Module
+            </span>
           </button>
 
           <>
-            <div className="admin-course-detail-section2-course-assessment">
+            {/* <div className="admin-course-detail-section2-course-assessment">
               <p className="admin-course-detail-course-assessment-text">
                 Course Assessment{" "}
               </p>
-              {/* <div className="admin-course-detail-assessment-radio-btns ">
+              <div className="admin-course-detail-assessment-radio-btns ">
                     <input
                       type="radio"
                       id="pre"
@@ -450,8 +514,8 @@ const AdminCourseDeatilContainer: FC<
                     >
                       Pre Assessment
                     </label>
-                  </div> */}
-              {/* <div className="admin-course-detail-assessment-radio-btns">
+                  </div>
+              <div className="admin-course-detail-assessment-radio-btns">
                     <input
                       type="radio"
                       id="post-assessment"
@@ -465,11 +529,20 @@ const AdminCourseDeatilContainer: FC<
                     >
                       Post Assessment
                     </label>
-                  </div> */}
-            </div>
+                  </div>
+            </div> */}
             {course_assessment_main[0]?.assessment_name != "" && (
               <div className="admin-course-detail-section2">
-                <div className="pre-assessment">Pre</div>
+                {/* given input field by ankita connect backend for pre and post */}
+                <div className="dmin-course-detail-section2-div-sections">
+                  <label
+                    htmlFor=""
+                    className="admin-course-detail-section-labels"
+                  >
+                    Course Assessment Type
+                  </label>
+                  <InputField />
+                </div>
                 <div className="admin-course-detail-section2-div-sections">
                   <label
                     htmlFor=""
@@ -507,45 +580,55 @@ const AdminCourseDeatilContainer: FC<
               </div>
             )}
             {/* post  */}
-            {course_assessment_main[1]?.assessment_name != "" && (
-              <div className="admin-course-detail-section2">
-                <div className="pre-assessment">Post</div>
-                <div className="admin-course-detail-section2-div-sections">
-                  <label
-                    htmlFor=""
-                    className="admin-course-detail-section-labels"
-                  >
-                    Assessment Type
-                  </label>
-                  <DropdownInputField
-                    id="post"
-                    value={course_assessment_main[1]?.assessment_type}
-                    placeholder="select assessment type"
-                    onChange={handleAssessmentTypeChange}
-                    options={[
-                      "Multiple Choice Question",
-                      "Signle Choice Question",
-                      "True or false",
-                      "Short Answer",
-                    ]}
-                    valueLabel={["multiple", "single", "boolean", "short"]}
-                  />
-                </div>
-                <div className="admin-course-detail-section2-div-sections">
-                  <label
-                    htmlFor=""
-                    className="admin-course-detail-section-labels"
-                  >
-                    Assessment Name
-                  </label>
-                  <InputField
-                    id="post"
-                    moduleValue={course_assessment_main[1]?.assessment_name}
-                    onUpdate={handleAssessmentNameChange}
-                  />
-                </div>
-              </div>
-            )}
+            <div className="admin-course-detail-section2">
+              {course_assessment_main[1]?.assessment_name != "" && (
+                <>
+                  <div className="dmin-course-detail-section2-div-sections">
+                    <label
+                      htmlFor=""
+                      className="admin-course-detail-section-labels"
+                    >
+                      Course Assessment Type
+                    </label>
+                    <InputField />
+                  </div>
+                  <div className="admin-course-detail-section2-div-sections">
+                    <label
+                      htmlFor=""
+                      className="admin-course-detail-section-labels"
+                    >
+                      Assessment Type
+                    </label>
+                    <DropdownInputField
+                      id="post"
+                      value={course_assessment_main[1]?.assessment_type}
+                      placeholder="select assessment type"
+                      onChange={handleAssessmentTypeChange}
+                      options={[
+                        "Multiple Choice Question",
+                        "Signle Choice Question",
+                        "True or false",
+                        "Short Answer",
+                      ]}
+                      valueLabel={["multiple", "single", "boolean", "short"]}
+                    />
+                  </div>
+                  <div className="admin-course-detail-section2-div-sections">
+                    <label
+                      htmlFor=""
+                      className="admin-course-detail-section-labels"
+                    >
+                      Assessment Name
+                    </label>
+                    <InputField
+                      id="post"
+                      moduleValue={course_assessment_main[1]?.assessment_name}
+                      onUpdate={handleAssessmentNameChange}
+                    />
+                  </div>
+                </>
+              )}
+            </div>
           </>
         </div>
 
