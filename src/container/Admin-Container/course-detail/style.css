@@ -24,7 +24,6 @@
 
 .admin-course-detail-section1-div-sections {
   display: flex;
-  gap: 10px;
   flex-direction: column;
   width: 90%;
 }
@@ -44,7 +43,6 @@
   line-height: 24px;
 }
 .admin-course-detail-div-section2 {
-  gap: 10px;
   display: flex;
   flex-direction: column;
 }
@@ -53,6 +51,8 @@
   font-size: 18px;
   font-weight: 400;
   line-height: 28px;
+  margin-bottom: 10px;
+  display: flex;
 }
 .admin-course-detail-div-section {
   gap: 32px;
@@ -67,8 +67,9 @@
 }
 
 .admin-course-detail-section2 {
-  display: flex;
-  gap: 42px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 3rem;
   align-items: flex-end;
 }
 .admin-course-detail-section2-admin-course-detailed-file {
@@ -76,13 +77,12 @@
   align-items: center;
   gap: 12px;
 }
-.admin-course-detail-section2-div-sections {
+/* .admin-course-detail-section2-div-sections {
   display: flex;
-  width: 30%;
   gap: 10px;
   flex-direction: column;
-}
-.pre-assessment{
+} */
+.pre-assessment {
   margin-bottom: 4px;
 }
 .admin-course-detailed-video-file {
@@ -93,6 +93,12 @@
   height: 56px;
   border-radius: 8px;
   border: 1px solid #fe8100;
+}
+.admin-course-detailed-video-file.clicked {
+  cursor: pointer;
+}
+.admin-course-detailed-video-file.unClicked {
+  cursor: not-allowed;
 }
 .admin-course-detailed-file-name {
   color: #000;
@@ -137,15 +143,15 @@
   border: 2px solid #787878;
 }
 .admin-course-detail-assesment-radio-btn:checked::before {
-  content: ""; 
-  position: absolute; 
-  top: 50%; 
+  content: "";
+  position: absolute;
+  top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%); 
-  width: 15px; 
-  height: 15px; 
-  border-radius: 50%; 
-  background-color: #fe8100; 
+  transform: translate(-50%, -50%);
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background-color: #fe8100;
 }
 .admin-course-detail-assesment-radio-btn:checked {
   background-color: #fff; /* Change the background color when checked */
@@ -222,13 +228,13 @@
 
 .admin-course-detail-checkbox-section {
   display: grid;
-  grid-template-columns: repeat(7, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   row-gap: 16px;
   margin-top: 32px;
 }
 .admin-course-detail-checkbox-section2 {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   row-gap: 16px;
   margin-top: 32px;
 }
@@ -260,7 +266,6 @@
   font-weight: 600;
   line-height: 24px;
   letter-spacing: 0.1px;
-  cursor: pointer;
 }
 .admin-course-detail-sec-add-module-btn.unClicked {
   color: #787878;
@@ -275,7 +280,6 @@
   width: 168px;
   height: 46px;
   border-radius: 32px;
-
   border: 1px solid #7878781a;
   /* text style */
 
@@ -284,9 +288,16 @@
   line-height: 28px;
   cursor: pointer;
 }
+.admin-course-detail-add-module-span-text.unClicked {
+  cursor: not-allowed;
+}
+.admin-course-detail-add-module-span-text.clicked {
+  cursor: pointer;
+}
 .admin-course-detail-upload-btn.unClicked {
   background: #7878781a;
   color: #787878;
+  cursor: not-allowed;
 }
 .admin-course-detail-upload-btn.clicked {
   background: #fe8100;
@@ -294,9 +305,11 @@
 }
 .admin-course-detail-status-update-section {
   padding: 32px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
 }
 .admin-course-detail-status-update-div-sections {
-  width: 31%;
+  width: 90%;
   gap: 10px;
   display: flex;
   flex-direction: column;
