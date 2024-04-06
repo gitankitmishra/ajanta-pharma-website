@@ -2,8 +2,8 @@
   width: 100% !important;
 }
 .admin-course-detail-container-main-section {
-  width: 95%;
-  padding: 0 40px;
+  /* width: 95%; */
+  padding: 0 80px;
 }
 .admin-course-detail-text {
   margin-top: 8px;
