@@ -167,14 +167,35 @@ const AdminCourseDeatilContainer: FC<
             </div>
             <div className="admin-course-detail-section1-div-sections">
               <label htmlFor="" className="admin-course-detail-section-labels">
-                Course Code & Name
+                Course Code
               </label>
               <InputFieldString
                 className="input-field"
-                value={`${course_basic.course_code}  ${course_basic.course_name}`}
+                value={`${course_basic.course_code}`}
                 onChange={(newValue: string) => {
-                  const [newCode, newName] = newValue.split(" ");
+                  const [newCode] = newValue.split(" ");
                   handleChange("course_code", newCode);
+                }}
+                isEditable={!isEditable}
+              />
+              {/* <InputFieldString
+                placeholder="Enter Course Name"
+                width="80%"
+                value={`${course_basic.course_code}  ${course_basic.course_name}`}
+                onChange={(value) => handleChange("course_name", value)}
+                className="input-field"
+                isEditable={!isEditable}
+              /> */}
+            </div>
+            <div className="admin-course-detail-section1-div-sections">
+              <label htmlFor="" className="admin-course-detail-section-labels">
+                Course Name
+              </label>
+              <InputFieldString
+                className="input-field"
+                value={` ${course_basic.course_name}`}
+                onChange={(newValue: string) => {
+                  const [newName] = newValue.split(" ");
                   handleChange("course_name", newName);
                 }}
                 isEditable={!isEditable}
