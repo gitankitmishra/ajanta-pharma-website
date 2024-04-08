@@ -17,6 +17,7 @@ import { fetchService } from "@/services/fetch_services";
 import { CourseDesignation } from "@/types/CourseDesignation";
 
 import { CourseDetails } from "@/types/AdminCourseInfo";
+import { fileURLToPath } from "url";
 
 export type CourseContextType = {
   // common
@@ -52,6 +53,9 @@ export type CourseContextType = {
   openLink: (index: number) => void;
   filesUploaded: boolean;
   fileAssessmentUpload: boolean;
+  searchTerm: string;
+  searchNameData: (event: ChangeEvent<HTMLInputElement>) => void;
+  filteredData: (course: CourseBasic) => void;
 
   // designation
   handleChangeDesignation(event: ChangeEvent<HTMLInputElement>): void;
@@ -98,7 +102,7 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     }
 
     if (course_basic.course_objective.trim().length === 0) {
-      errors = { ...errors, course_objective: "Enter short description." };
+      errors = { ...errors, course_objective: "Enter learning objective." };
     }
 
     if (course_basic.course_start_date.trim().length === 0) {
@@ -257,6 +261,21 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     }
   };
 
+  const [searchTerm, setSearchTerm] = useState<string>("");
+  const searchNameData = (event: ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value.toLowerCase();
+    setSearchTerm(value);
+  };
+
+  const filteredData: any = [course_basic].filter(
+    (course: CourseBasic) =>
+      course.course_name.toLowerCase().includes(searchTerm) ||
+      course.course_code.toLowerCase().includes(searchTerm)
+  );
+
+  useEffect(() => {
+    console.log("test the search", fileURLToPath);
+  }, [searchTerm]);
   const handleDraftSave = async () => {
     const response = await fetchService({
       method: "POST",
@@ -840,27 +859,31 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
 
   // ***********************************************************************************************
 
-  const mergedAssessment = {
-    ...course_assessment,
-    ...course_assessment_main,
-  };
   //api to update the data or edit
   const updateCourse = async () => {
     console.log("button upload");
+    console.log("testt");
 
     const response = await fetchService({
       method: "PUT",
       endpoint: `api/admin/dashboard/editCourse/${course_basic.course_code}`,
       data: {
-        course: {
-          ...course_basic,
-          mergedAssessment,
+        course_designation: {
           ...course_designation,
+        },
+        course_basic: {
+          ...course_basic,
+        },
+        course_assessment: {
+          ...course_assessment,
+          ...course_assessment_main,
+        },
+        course_module: {
           ...course_module,
         },
-        courseCode: course_basic.course_code,
       },
     });
+
     if (response.code === 200) {
       const data = response;
       console.log(data);
@@ -868,6 +891,19 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
       console.log("error");
     }
   };
+
+  useEffect(() => {
+    console.log("basic", course_basic.course_status);
+    console.log("module", course_module);
+    console.log("assessment", course_assessment);
+    console.log("assessment - main", course_assessment_main);
+    console.log("designation", course_designation);
+  }, [
+    course_basic,
+    course_assessment,
+    course_assessment_main,
+    course_designation,
+  ]);
 
   // ***********************************************************************************************
 
@@ -916,6 +952,9 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     openLink,
     filesUploaded,
     fileAssessmentUpload,
+    filteredData,
+    searchNameData,
+    searchTerm,
 
     //designation
     course_designation,

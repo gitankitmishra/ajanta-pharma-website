@@ -36,10 +36,14 @@
 .admin-course-list-table-head:last-child {
   border: none;
 }
-
+/* .admin-course-list-table-data-name-and-code {
+  font-family: "Open sans";
+  font-weight: 200;
+} */
 .admin-course-list-table-data {
   color: #1c1d1d;
   font-size: 16px;
+
   font-weight: 400;
   line-height: 18px;
   border-bottom: 1px solid #e3e3e3;
@@ -56,7 +60,7 @@
 /* Define colors for each status */
 .status-active {
   color: #63b43c;
-  border-radius: 2px;
+  border-radius: 4px;
   background: rgba(99, 180, 60, 0.1);
   width: 72px;
   height: 30px;
@@ -69,13 +73,13 @@
   color: #f00;
   width: 84px;
   height: 30px;
-  border-radius: 2px;
+  border-radius: 4px;
   background: rgba(255, 0, 0, 0.1);
   display: flex;
   align-items: center;
   justify-content: center;
 }
-.admin-course-eye-icon{
+.admin-course-eye-icon {
   padding-left: 8px;
   text-align: center;
 }

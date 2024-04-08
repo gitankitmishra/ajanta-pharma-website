@@ -53,7 +53,7 @@ const UploadButton: React.FC<UploadButtonProps> = ({
         onChange={handleFileSelect}
         style={{ display: "none" }}
       />
-      <button className="upload-btn" onClick={handleClick}>
+      <button className={`upload-btn ${className}`} onClick={handleClick}>
         {upload}
       </button>
       <span className="upload-btn-format-type-text">{formatText} </span>
