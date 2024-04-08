@@ -102,7 +102,7 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     }
 
     if (course_basic.course_objective.trim().length === 0) {
-      errors = { ...errors, course_objective: "Enter short description." };
+      errors = { ...errors, course_objective: "Enter learning objective." };
     }
 
     if (course_basic.course_start_date.trim().length === 0) {
