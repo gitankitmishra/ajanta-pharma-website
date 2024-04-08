@@ -116,7 +116,7 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
                     "Signle Choice Question",
                     "True or false",
                     "Short Answer",
-                    "Not Applicable"
+                    "Not Applicable",
                   ]}
                   valueLabel={["multiple", "single", "boolean", "short", "N/A"]}
                 />
@@ -149,7 +149,7 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
                 />
               </div>
               {course_assessment[index].assessment_data.length !== 0 ? (
-                <div>
+                <div className="module-eye-icon">
                   <EyeIcon files={[]} />
                 </div>
               ) : (
@@ -167,14 +167,20 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
           </>
         ))}
         <button className="module-sec-add-module-btn" onClick={handleAddModule}>
-          <PlusIcon />
-          Add Module
+          <span className="module-sec-add-module-btn-add-module">
+            <PlusIcon /> Add Module
+          </span>
         </button>
       </div>
       <div className="module-div-section3">
         <>
           <div className="module-radio-selction">
-            <div className="module-course-assessment">Course Assessment</div>
+            <div className="module-course-assessment">
+              Course Assessment{" "}
+              <span className="module-course-assessment-optional-span">
+                (Optional)
+              </span>
+            </div>
           </div>
           <div className="module-input">
             <div className="module-input-number">
@@ -221,8 +227,8 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
                 formatText={"File Format: xls"}
               />
             </div>
-            {course_assessment_main[0].assessment_data.length !== 0 ? (
-              <div>
+            {course_assessment_main[0]?.assessment_data.length !== 0 ? (
+              <div className="module-eye-icon">
                 <EyeIcon files={[]} />
               </div>
             ) : (
