@@ -36,14 +36,12 @@
 .admin-course-list-table-head:last-child {
   border: none;
 }
-/* .admin-course-list-table-data-name-and-code {
-  font-family: "Open sans";
-  font-weight: 200;
-} */
+.admin-course-list-table-data-name-and-code {
+  font-family: "Open Sans";
+}
 .admin-course-list-table-data {
   color: #1c1d1d;
   font-size: 16px;
-
   font-weight: 400;
   line-height: 18px;
   border-bottom: 1px solid #e3e3e3;

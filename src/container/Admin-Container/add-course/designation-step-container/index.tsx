@@ -218,20 +218,7 @@ const DesignationStepSection: FC<DesignationStepSectionProps> = () => {
             onChange={handleChangeDesignation}
             isChecked={course_designation.designation.includes("SO")}
           />
-          <Checkbox
-            id="designation"
-            text={"DM"}
-            value="DM"
-            onChange={handleChangeDesignation}
-            isChecked={course_designation.designation.includes("DM")}
-          />
-          <Checkbox
-            id="designation"
-            text={"SO"}
-            value="SO"
-            onChange={handleChangeDesignation}
-            isChecked={course_designation.designation.includes("SO")}
-          />
+         
         </div>
       </div>
     </section>
