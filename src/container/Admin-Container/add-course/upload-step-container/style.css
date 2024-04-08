@@ -5,7 +5,7 @@
   /* justify-content: center; */
   flex-direction: column;
   width: 94%;
-  height: 1300px;
+  height: 1600px;
   border-radius: 12px;
   border: 1px solid rgba(254, 129, 0, 0.5);
 }
@@ -190,7 +190,8 @@
 .upload-section-2-special {
   margin: 32px;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  gap: 3rem;
+  grid-template-columns: repeat(4, 1fr);
 }
 .upload-step-textarea {
   width: 97%;
