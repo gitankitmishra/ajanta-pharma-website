@@ -284,21 +284,39 @@ const AdminCourseDeatilContainer: FC<
                   />
                 </div>
                 <div className="admin-course-detail-section2-admin-course-detailed-file">
-                  <div
-                    className={`admin-course-detailed-video-file ${
-                      isClicked ? "clicked" : "unClicked"
-                    }`}
-                  >
-                    {/* <input type="text" className="admin-course-detailed-mp4" /> */}
-
-                    <span
-                      key={index}
-                      className="admin-course-detailed-file-name"
-                      onClick={() => openLink(index)}
+                  {!isEditable ? ( // addes isEditable functinality removed onclick by ankita 
+                    <div
+                      className={`admin-course-detailed-video-file ${
+                        isClicked ? "clicked" : "unClicked"
+                      }`}
                     >
-                      View
-                    </span>
-                  </div>
+                      {/* <input type="text" className="admin-course-detailed-mp4" /> */}
+
+                      <span
+                        key={index}
+                        className="admin-course-detailed-file-name"
+                        // onClick={() => openLink(index)} 
+                      >
+                        View
+                      </span>
+                    </div>
+                  ) : (
+                    <div
+                      className={`admin-course-detailed-video-file ${
+                        isClicked ? "clicked" : "unClicked"
+                      }`}
+                    >
+                      {/* <input type="text" className="admin-course-detailed-mp4" /> */}
+
+                      <span
+                        key={index}
+                        className="admin-course-detailed-file-name"
+                        onClick={() => openLink(index)}
+                      >
+                        View
+                      </span>
+                    </div>
+                  )}
                   <div className="admin-course-detailed-video-file-text">
                     <span className="admin-course-detail-file-name">
                       video.mp4
