@@ -44,7 +44,7 @@ const AdminCourseListTable: FC = () => {
           </tr>
         </thead>
         <tbody className="admin-course-list-tbody">
-        {(searchTerm ? filteredData : courseData as any[]) 
+          {(searchTerm ? filteredData : (courseData as any[]))
             ?.sort((a: any, b: any) => {
               const dateA = new Date(
                 a.course_basic.course_start_date
@@ -56,14 +56,14 @@ const AdminCourseListTable: FC = () => {
             })
             .map((course: any, index: number) => (
               <tr key={index}>
-                <td className="admin-course-list-table-data admin-course-list">
+                <td className="admin-course-list-table-data admin-course-list-table-data-name-and-code">
                   {course.course_basic?.course_code} -{" "}
                   {course.course_basic?.course_name}
                 </td>
                 <td className="admin-course-list-table-data">
                   {course.course_basic?.course_category}
                 </td>
-                <td className="admin-course-list-table-data">
+                <td className="admin-course-list-table-data admin-course-list-table-data-name-and-code">
                   {new Date(
                     course.course_basic.course_start_date
                   ).toLocaleDateString()}
