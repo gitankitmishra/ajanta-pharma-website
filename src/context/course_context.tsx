@@ -78,7 +78,7 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
 }) => {
   const router = useRouter();
 
-  const [active_step, setActiveStep] = useState<number>(3);
+  const [active_step, setActiveStep] = useState<number>(0);
 
   const handleStepOneDone = async () => {
     let errors = {};
@@ -198,7 +198,7 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
   });
 
   const generateCourseCode = (
-    category: string,
+    training: string,
     prevID: number | null = null
   ): string => {
     const categoryTable: { [key: string]: string } = {
@@ -207,6 +207,39 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
       Marketing: "MKT",
       "Personal Development": "PD",
       "Classroom Training": "CT",
+    };
+
+    const trainingTable: { [key: string]: string } = {
+      // Competency
+      "Business Orientation": "BO",
+      "Customer Orientation": "CO",
+      "Operational Excellence": "OE",
+      Leadership: "LE",
+      Communication: "COMM",
+
+      // Medical
+      "Medical Updates": "MU",
+
+      // Marketing
+      "Brand Detailing": "BD",
+      "Input Detailing": "ID",
+      "Knock Out Points": "KOP",
+      "Regional IMS": "RIMS",
+
+      // Personal development
+      "Time Management": "TM",
+      "Critical Thinking": "CT",
+      "Problem Solving": "PS",
+      "Creative Thinking": "CTH",
+      "Conflict Resolution": "CR",
+      "Negotiation Skills": "NS",
+      "Personal Finance": "PF",
+      "Personal Grooming": "PG",
+      "Self Enrichment": "SE",
+
+      // Classroom training
+      "Medical Representative": "MR",
+      Managers: "MGR",
     };
 
     const currentDate: Date = new Date();
@@ -220,14 +253,13 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
       id = "01";
     }
 
-    const courseCode: string = `${categoryTable[category]}-${month}${year}-${id}`;
+    const courseCode: string = `${
+      categoryTable[course_basic.course_category]
+    }-${trainingTable[training]}-${month}${year}-${id}`;
     return courseCode;
   };
 
-  const generateNewPrevID = async (
-    value: string,
-    prevID: number
-  ): Promise<number> => {
+  const generateNewPrevID = async (prevID: number): Promise<number> => {
     try {
       const response = await fetch(
         `${process.env.SERVER_URL}api/admin/dashboard/getCourseCodeCount`,
@@ -237,7 +269,7 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            courseCategory: value,
+            courseCategory: course_basic.course_category,
           }),
         }
       );
@@ -307,9 +339,9 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
       setCourseBasicError({ ...course_basic_error, [field]: "" });
     }
 
-    if (field === "course_category") {
+    if (field === "course_training") {
       try {
-        const newPrevID = await generateNewPrevID(value, 0);
+        const newPrevID = await generateNewPrevID(0);
         const newCourseCode = generateCourseCode(value, newPrevID);
         setCourseBasic((prev) => ({
           ...prev,
@@ -323,6 +355,7 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
       setCourseBasic((prev) => ({ ...prev, [field]: value }));
     }
   };
+
   // ***********************************************************************************************
 
   // ***********************************************************************************************
@@ -695,7 +728,7 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
   const [pageSize, setPageSize] = useState(10);
   const [componentPage, setComponentPage] = useState(0);
   const [courseData, setCourseData] = useState<CourseDetails[] | null>(null);
-
+  const [keyName, setKeyName] = useState("course");
   const updatePageNo = (newPage: number) => {
     setPageNo(newPage);
     console.log("Value of the page no is ", newPage);
@@ -709,7 +742,7 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     setLoading(true);
     const response = await fetchService({
       method: "GET",
-      endpoint: `api/admin/dashboard/courseList?page=${pageNo}&pageSize=${pageSize}`,
+      endpoint: `api/admin/dashboard/courseList?page=${pageNo}&pageSize=${pageSize}&key=${keyName}`,
     });
     if (response.code === 200) {
       setCourseData(response.data.data);

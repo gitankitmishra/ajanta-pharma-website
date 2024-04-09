@@ -36,7 +36,7 @@ const DropdownSubInputField: FC<DropdownInputFieldProps> = ({
         ]);
         break;
       case "Medical":
-        setTrainingTypeOptions(["Medical"]);
+        setTrainingTypeOptions(["Medical Updates"]);
         break;
       case "Marketing":
         setTrainingTypeOptions([
@@ -57,7 +57,7 @@ const DropdownSubInputField: FC<DropdownInputFieldProps> = ({
           "Negotiation Skills",
           "Personal Finance",
           "Personal Grooming",
-          "Self-Enrichment",
+          "Self Enrichment",
         ]);
         break;
       case "Classroom Training":
