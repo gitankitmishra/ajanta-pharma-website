@@ -8,7 +8,7 @@ interface DropdownInputFieldProps {
   selectedCategory: string;
   placeholder?: string;
   error?: string;
-  disabled?: boolean;
+  isEditable?: boolean;
 }
 
 const DropdownSubInputField: FC<DropdownInputFieldProps> = ({
@@ -17,7 +17,7 @@ const DropdownSubInputField: FC<DropdownInputFieldProps> = ({
   selectedCategory,
   placeholder,
   error = "",
-  disabled,
+  isEditable,
 }) => {
   const [trainingTypeOptions, setTrainingTypeOptions] = useState<string[]>([]);
   const [isNewCategorySelected, setIsNewCategorySelected] =
@@ -85,7 +85,7 @@ const DropdownSubInputField: FC<DropdownInputFieldProps> = ({
           className={`custom-dropdown-select ${
             value ? "selected" : "not-selected"
           }`}
-          disabled={true}
+          disabled={isEditable}
         >
           {isNewCategorySelected && placeholder && (
             <option value="" className="custom-dropdown-option">

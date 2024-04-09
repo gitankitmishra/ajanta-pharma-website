@@ -150,7 +150,7 @@ const AdminCourseDeatilContainer: FC<
                   "Classroom Training",
                 ]}
                 valueLabel={[""]}
-                disabled={true}
+                isEditable={!isEditable}
               />
             </div>
             <div className="admin-course-detail-section1-div-sections">
@@ -162,7 +162,7 @@ const AdminCourseDeatilContainer: FC<
                   handleChange("course_training", value)
                 }
                 selectedCategory={course_basic.course_category}
-                disabled={true}
+                isEditable={!isEditable}
               />
             </div>
             <div className="admin-course-detail-section1-div-sections">
@@ -176,7 +176,7 @@ const AdminCourseDeatilContainer: FC<
                   const [newCode] = newValue.split(" ");
                   handleChange("course_code", newCode);
                 }}
-                readOnly
+                isEditable={!isEditable}
               />
               {/* <InputFieldString
                 placeholder="Enter Course Name"
@@ -198,7 +198,7 @@ const AdminCourseDeatilContainer: FC<
                   const [newName] = newValue.split(" ");
                   handleChange("course_name", newName);
                 }}
-                readOnly
+                isEditable={!isEditable}
               />
               {/* <InputFieldString
                 placeholder="Enter Course Name"
@@ -225,7 +225,7 @@ const AdminCourseDeatilContainer: FC<
               className="admin-course-detail-learning-objective-input"
               value={course_basic.course_objective}
               onChange={(value) => handleChange("course_objective", value)}
-              readOnly
+              isEditable={!isEditable}
             />
           </div>
           <div className="admin-course-detail-div-section3">
@@ -238,7 +238,7 @@ const AdminCourseDeatilContainer: FC<
               onEndDateChange={(value) =>
                 handleChange("course_end_date", value)
               }
-              readOnly
+              isEditable={!isEditable}
             />
           </div>
         </div>
@@ -663,7 +663,7 @@ const AdminCourseDeatilContainer: FC<
                   text={division}
                   value={division}
                   onChange={handleChangeDesignation}
-                  isChecked={course_designation.division.includes(division)}
+                  isChecked={course_designation?.division?.includes(division)}
                   disabled={!isEditable}
                 />
               ))}
