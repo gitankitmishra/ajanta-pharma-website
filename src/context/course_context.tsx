@@ -52,15 +52,19 @@ export type CourseContextType = {
   ) => void;
   openLink: (index: number) => void;
   filesUploaded: boolean;
-  fileAssessmentUpload: boolean;
   searchTerm: string;
   searchNameData: (event: ChangeEvent<HTMLInputElement>) => void;
   filteredData: (course: CourseBasic) => void;
+  writeIntoFile: (index: number) => void;
+  visible: boolean;
+  handleCancelIcon: () => void;
 
   // designation
   handleChangeDesignation(event: ChangeEvent<HTMLInputElement>): void;
   course_designation: CourseDesignation;
   publishDesignation(): void;
+  deserror: string;
+  isMedicalOrMarketing(): any;
 
   //pagination and the Admin All courses display part
   updatePageNo: (newPage: number) => void;
@@ -151,6 +155,26 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
         break;
     }
   };
+  // const handleNextClick = async () => {
+  //   if (active_step === 0) {
+  //     await handleApiCall();
+  //     handleStepOneDone();
+  //   } else if (active_step === 1) {
+  //     await uploadCourse();
+  //     handleStepTwoDone();
+  //   } else if (active_step === 2) {
+  //     handleShowError(() => {
+  //       if (deserror === "") {
+  //         publishDesignation().then(() => handleStepThreeDone());
+  //       }
+  //     });
+  //   } else if (active_step === 3) {
+  //     await uploadfromDraft();
+  //     console.log("step 3");
+  //     handleStepFourDone();
+  //   }
+  // };
+
   const handleNextClick = async () => {
     if (active_step === 0) {
       await handleApiCall();
@@ -159,11 +183,12 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
       await uploadCourse();
       handleStepTwoDone();
     } else if (active_step === 2) {
-      await publishDesignation();
-      handleStepThreeDone();
+      handleShowError(() => {
+        publishDesignation();
+        handleStepThreeDone();
+      });
     } else if (active_step === 3) {
       await uploadfromDraft();
-      console.log("step 3");
       handleStepFourDone();
     }
   };
@@ -213,6 +238,35 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
       "Classroom Training": "CT",
     };
 
+    const trainingTable: { [key: string]: string } = {
+      //Competancy
+      "Business Orientation": "BO",
+      "Customer Orientation": "CO",
+      "Operational Excellence and Analytics": "",
+      Leadership: "L",
+      Communication: "C",
+      //medical
+      Medical: "ME",
+      //marketing
+      "Brand Detailing": "BD",
+      "Input Detailing": "ID",
+      "Knock Out Points": "KP",
+      "Regional IMS": "RIMS",
+      //Personal development
+      "Time Management": "TM",
+      "Critical Thinking": "CT",
+      "Problem Solving": "PS",
+      "Creative Thinking": "CTH",
+      "Conflict Resolution": "CR",
+      "Negotiation Skills": "NS",
+      "Personal Finance": "PF",
+      "Personal Grooming": "PG",
+      "Self-Enrichment": "SE",
+      //Classroom training
+      "Medical Representative": "MR",
+      Managers: "MGR",
+    };
+
     const currentDate: Date = new Date();
     const month: string = String(currentDate.getMonth() + 1).padStart(2, "0");
     const year: string = String(currentDate.getFullYear()).slice(-2);
@@ -223,8 +277,9 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     } else {
       id = "01";
     }
-
     const courseCode: string = `${categoryTable[category]}-${month}${year}-${id}`;
+    console.log("testtt", courseCode);
+
     return courseCode;
   };
 
@@ -328,7 +383,10 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
 
     if (field === "course_category") {
       try {
-        const newPrevID = await generateNewPrevID(value, 0);
+        const newPrevID: number | string | any = await generateNewPrevID(
+          value,
+          0
+        );
         const newCourseCode = generateCourseCode(value, newPrevID);
         setCourseBasic((prev) => ({
           ...prev,
@@ -374,6 +432,8 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     ]
   );
 
+  const [visible, setVisible] = useState<boolean>(true);
+
   const [course_assessment_main, setCourseAssessmentMain] = useState<
     CourseAssessment[]
   >([
@@ -417,9 +477,6 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
       },
     ]);
   };
-
-  const [fileAssessmentUpload, setFileAssessmentUpload] =
-    useState<boolean>(false);
 
   //download excel
   const handleDownloadExcel = (index: number) => {
@@ -503,6 +560,7 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
           if (category === "course") {
             course_assessment_main[index].assessment_data =
               excelData as QuestionData[];
+
             console.log(course_assessment_main);
           } else {
             course_assessment[index].assessment_data =
@@ -510,10 +568,6 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
             console.log(course_assessment);
           }
         }
-
-        const filesAssessmentUploaded =
-          course_assessment_main.length > 0 || course_assessment.length > 0;
-        setFileAssessmentUpload(filesAssessmentUploaded);
       };
 
       reader.onerror = (event) => {
@@ -526,11 +580,43 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     }
   };
 
+  //write the data from assessment data
+  const writeIntoFile = (index: number) => {
+    const assessmentData = course_assessment[index].assessment_data;
+
+    if (!assessmentData || assessmentData.length === 0) {
+      console.error("No assessment data available to write into file.");
+      return;
+    }
+
+    const ws = XLSX.utils.json_to_sheet(assessmentData);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(
+      wb,
+      ws,
+      `${course_basic.course_code}_${course_module[index].module_no}`
+    );
+
+    XLSX.writeFile(
+      wb,
+      `${course_basic.course_code}_${course_module[index].module_no}.xlsx`
+    );
+  };
+
+  const handleCancelIcon = () => {
+    setVisible(false);
+  };
+
   const handleModuleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const temp: CourseModule[] = [...course_module];
     const index: number = parseInt(event.target.id.split("-")[1]);
     temp[index].module_name = event.target.value;
     setCourseModule(temp);
+    //assessment
+    const temp2: CourseAssessment[] = [...course_assessment];
+    const index2: number = parseInt(event.target.id.split("-")[1]);
+    temp2[index2].assessment_name = event.target.value;
+    setCourseAssessment(temp2);
   };
 
   const handleAssessmentNameChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -647,6 +733,35 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
       designation: [],
     });
 
+  // designation error
+  const [deserror, setDesError] = useState<string>("");
+  const handleShowError = (callback: any) => {
+    if (
+      (!course_designation.division ||
+        course_designation.division.length === 0) &&
+      (course_basic.course_category === "Medical" ||
+        course_basic.course_category === "Marketing")
+    ) {
+      setDesError("Select at least one division.");
+      setActiveStep(2);
+    } else {
+      if (
+        course_designation.division &&
+        course_designation.division.length > 0
+      ) {
+        setDesError("");
+        callback();
+      }
+    }
+  };
+
+  const isMedicalOrMarketing = () => {
+    return (
+      course_basic.course_category === "Medical" ||
+      course_basic.course_category === "Marketing"
+    );
+  };
+
   const handleChangeDesignation = (event: ChangeEvent<HTMLInputElement>) => {
     const { id, value } = event.target;
 
@@ -667,11 +782,14 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     }
   };
 
+  useEffect(() => {
+    console.log("course designation", course_designation);
+  }, [course_designation]);
   //api call for designation
   const publishDesignation = async () => {
     try {
       if (course_designation.designation.length === 0) {
-        alert("Please select at least one designation.");
+        setActiveStep(2);
         return;
       }
 
@@ -951,15 +1069,19 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     handleexcelFileRead,
     openLink,
     filesUploaded,
-    fileAssessmentUpload,
     filteredData,
     searchNameData,
     searchTerm,
+    writeIntoFile,
+    visible,
+    handleCancelIcon,
 
     //designation
     course_designation,
     handleChangeDesignation,
     publishDesignation,
+    deserror,
+    isMedicalOrMarketing,
 
     //Pagination And All Courses Display
     updatePageNo,

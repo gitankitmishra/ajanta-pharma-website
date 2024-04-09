@@ -8,7 +8,7 @@ interface DropdownInputFieldProps {
   selectedCategory: string;
   placeholder?: string;
   error?: string;
-  isEditable?: boolean;
+  disabled?: boolean;
 }
 
 const DropdownSubInputField: FC<DropdownInputFieldProps> = ({
@@ -17,7 +17,7 @@ const DropdownSubInputField: FC<DropdownInputFieldProps> = ({
   selectedCategory,
   placeholder,
   error = "",
-  isEditable,
+  disabled,
 }) => {
   const [trainingTypeOptions, setTrainingTypeOptions] = useState<string[]>([]);
   const [isNewCategorySelected, setIsNewCategorySelected] =
@@ -85,7 +85,7 @@ const DropdownSubInputField: FC<DropdownInputFieldProps> = ({
           className={`custom-dropdown-select ${
             value ? "selected" : "not-selected"
           }`}
-          disabled={isEditable}
+          disabled={true}
         >
           {isNewCategorySelected && placeholder && (
             <option value="" className="custom-dropdown-option">
@@ -105,14 +105,14 @@ const DropdownSubInputField: FC<DropdownInputFieldProps> = ({
         <div className="custom-dropdown-arrow">
           <ArrowDown />
         </div>
-        </div>
-        <div
-          className={`custom-dropdown-field-error-message ${
-            error.length !== 0 && "custom-dropdown-field-error-display"
-          }`}
-        >
-          {error}
-        </div>
+      </div>
+      <div
+        className={`custom-dropdown-field-error-message ${
+          error.length !== 0 && "custom-dropdown-field-error-display"
+        }`}
+      >
+        {error}
+      </div>
     </>
   );
 };

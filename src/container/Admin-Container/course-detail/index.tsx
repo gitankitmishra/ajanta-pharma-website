@@ -150,7 +150,7 @@ const AdminCourseDeatilContainer: FC<
                   "Classroom Training",
                 ]}
                 valueLabel={[""]}
-                isEditable={!isEditable}
+                disabled={true}
               />
             </div>
             <div className="admin-course-detail-section1-div-sections">
@@ -162,7 +162,7 @@ const AdminCourseDeatilContainer: FC<
                   handleChange("course_training", value)
                 }
                 selectedCategory={course_basic.course_category}
-                isEditable={!isEditable}
+                disabled={true}
               />
             </div>
             <div className="admin-course-detail-section1-div-sections">
@@ -176,7 +176,7 @@ const AdminCourseDeatilContainer: FC<
                   const [newCode] = newValue.split(" ");
                   handleChange("course_code", newCode);
                 }}
-                isEditable={!isEditable}
+                readOnly
               />
               {/* <InputFieldString
                 placeholder="Enter Course Name"
@@ -198,7 +198,7 @@ const AdminCourseDeatilContainer: FC<
                   const [newName] = newValue.split(" ");
                   handleChange("course_name", newName);
                 }}
-                isEditable={!isEditable}
+                readOnly
               />
               {/* <InputFieldString
                 placeholder="Enter Course Name"
@@ -225,7 +225,7 @@ const AdminCourseDeatilContainer: FC<
               className="admin-course-detail-learning-objective-input"
               value={course_basic.course_objective}
               onChange={(value) => handleChange("course_objective", value)}
-              isEditable={!isEditable}
+              readOnly
             />
           </div>
           <div className="admin-course-detail-div-section3">
@@ -238,7 +238,7 @@ const AdminCourseDeatilContainer: FC<
               onEndDateChange={(value) =>
                 handleChange("course_end_date", value)
               }
-              isEditable={!isEditable}
+              readOnly
             />
           </div>
         </div>
@@ -284,7 +284,7 @@ const AdminCourseDeatilContainer: FC<
                   />
                 </div>
                 <div className="admin-course-detail-section2-admin-course-detailed-file">
-                  {!isEditable ? ( // addes isEditable functinality removed onclick by ankita 
+                  {!isEditable ? ( // addes isEditable functinality removed onclick by ankita
                     <div
                       className={`admin-course-detailed-video-file ${
                         isClicked ? "clicked" : "unClicked"
@@ -295,7 +295,7 @@ const AdminCourseDeatilContainer: FC<
                       <span
                         key={index}
                         className="admin-course-detailed-file-name"
-                        // onClick={() => openLink(index)} 
+                        // onClick={() => openLink(index)}
                       >
                         View
                       </span>
@@ -663,7 +663,7 @@ const AdminCourseDeatilContainer: FC<
                   text={division}
                   value={division}
                   onChange={handleChangeDesignation}
-                  isChecked={course_designation?.division?.includes(division)}
+                  isChecked={course_designation.division.includes(division)}
                   disabled={!isEditable}
                 />
               ))}

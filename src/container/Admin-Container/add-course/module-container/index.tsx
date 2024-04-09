@@ -9,6 +9,7 @@ import DownloadImg from "@/public/images/download.svg";
 import Image from "next/image";
 import ViewEyeIcon from "@/components/icons/view-eye-icon";
 import EyeIcon from "@/components/icons/eye-icon";
+import { CancelIcon } from "@/components/icons/cancel-icon";
 
 interface ModuleQuizStepSectionProps {}
 
@@ -27,7 +28,9 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
     handleFileSelect,
     handleDownloadExcel,
     handleexcelFileRead,
-    fileAssessmentUpload,
+    writeIntoFile,
+    handleCancelIcon,
+    visible,
   } = useContext(CourseContext) as CourseContextType;
 
   return (
@@ -148,6 +151,22 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
                   formatText={"File Format: xls"}
                 />
               </div>
+              {visible && (
+                <div
+                  onClick={() => writeIntoFile(index)}
+                  className="module-input-view-btn"
+                >
+                  <span
+                    onClick={() => {
+                      handleCancelIcon();
+                    }}
+                  >
+                    <CancelIcon />
+                  </span>
+                  XLS
+                </div>
+              )}
+
               {course_assessment[index].assessment_data.length !== 0 ? (
                 <div className="module-eye-icon">
                   <EyeIcon files={[]} />

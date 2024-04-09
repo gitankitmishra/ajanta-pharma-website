@@ -44,7 +44,7 @@ const AdminCourseListTable: FC = () => {
           </tr>
         </thead>
         <tbody className="admin-course-list-tbody">
-        {(searchTerm ? filteredData : courseData as any[]) 
+          {(searchTerm ? filteredData : (courseData as any[]))
             ?.sort((a: any, b: any) => {
               const dateA = new Date(
                 a.course_basic.course_start_date
@@ -71,12 +71,14 @@ const AdminCourseListTable: FC = () => {
                 <td className="admin-course-list-table-data">
                   <p
                     className={`admin-course-status-span ${
-                      course.course_basic?.isActive
+                      course.course_basic?.course_status === "active"
                         ? "status-active"
                         : "status-inactive"
                     }`}
                   >
-                    {course.course_basic?.isActive ? "Active" : "Inactive"}
+                    {course.course_basic?.course_status === "active"
+                      ? "Active"
+                      : "Inactive"}
                   </p>
                 </td>
                 <td className="admin-course-list-table-data admin-course-eye-icon">
