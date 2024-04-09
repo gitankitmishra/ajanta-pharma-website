@@ -17,30 +17,12 @@ import { CourseContext, CourseContextType } from "@/context/course_context";
 
 interface BasicStepSectionProps {}
 
-interface FormData {
-  category: string;
-
-  trainingType: string;
-
-  courseCode: string;
-
-  courseName: string;
-
-  learningObjectives: string;
-
-  startDate: string;
-
-  endDate: string;
-}
-
 const BasicStepSection: FC<BasicStepSectionProps> = () => {
   const { course_basic_error } = useContext(CourseContext) as CourseContextType;
 
   const { course_basic, handleChange } = useContext(
     CourseContext
   ) as CourseContextType;
-
-  // const { formData, handleChange }: BasicContextType = contextValue;
 
   //handle change to update the error if the field is updated
 

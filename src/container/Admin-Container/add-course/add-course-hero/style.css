@@ -3,3 +3,6 @@
   justify-content: space-between;
   padding: 52px 80px 24px 80px;
 }
+.add-course-hero-image-section img{
+  cursor: pointer;
+}

@@ -116,10 +116,21 @@ const Stepper = () => {
           }`}
         >
           <NextButton
-            text={active_step === 3 ? "Upload" : "Next"}
+            text={
+              active_step === 2
+                ? "Preview"
+                : active_step === 3
+                ? "Submit"
+                : "Next"
+            }
             onClick={handleNextClick}
           />
         </div>
+        {active_step !== 0 && active_step !== 3 && (
+          <div>
+            <PreviousButton text="Save as Draft" width="168px" />
+          </div>
+        )}
       </div>
     </div>
   );

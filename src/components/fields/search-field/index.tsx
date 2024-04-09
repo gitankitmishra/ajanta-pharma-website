@@ -10,6 +10,8 @@ import { WhiteBellIcon } from "@/components/icons/whiteBellIcon";
 interface SearchFieldSectionProps {}
 
 const SearchFieldSection: FC<SearchFieldSectionProps> = () => {
+  //context data
+
   const router = useRouter();
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>("");
@@ -18,10 +20,11 @@ const SearchFieldSection: FC<SearchFieldSectionProps> = () => {
     useState<number>(-1);
   const [isSearchFocused, setIsSearchFocused] = useState<boolean>(false);
   const [clicked, setClicked] = useState(false);
+
   // hide searchbar when /team-performance page is open
-  const currentPath =usePathname()
+  const currentPath = usePathname();
   const hideSearch = currentPath === "/team-performance";
-  
+
   const handleChange = () => {
     router.push("/notification");
     setClicked(!clicked);
@@ -78,44 +81,45 @@ const SearchFieldSection: FC<SearchFieldSectionProps> = () => {
 
   return (
     <section className="search-field-main-section">
-      {!hideSearch && (<div className="search-container">
-        <input
-          type="text"
-          placeholder="Search..."
-          name="search"
-          className="search-input-field"
-          value={searchTerm}
-          onChange={handleInputChange}
-          onKeyDown={handleKeyDown}
-          onFocus={() => setIsSearchFocused(true)}
-          onBlur={() => setIsSearchFocused(false)}
-        />
-        {isSearchFocused && (
-          <div className="resultBox">
-            {filteredSuggestions.map((suggestion, index) => (
-              <div
-                key={index}
-                className={
-                  "suggestion " +
-                  (index === selectedSuggestionIndex ? "selected" : "")
-                }
-                onClick={() => handleSuggestionClick(index)}
-              >
-                {suggestion}
-              </div>
-            ))}
+      {!hideSearch && (
+        <div className="search-container">
+          <input
+            type="text"
+            placeholder="Search..."
+            name="search"
+            className="search-input-field"
+            value={searchTerm}
+            onChange={handleInputChange}
+            onKeyDown={handleKeyDown}
+            onFocus={() => setIsSearchFocused(true)}
+            onBlur={() => setIsSearchFocused(false)}
+          />
+          {isSearchFocused && (
+            <div className="resultBox">
+              {filteredSuggestions.map((suggestion, index) => (
+                <div
+                  key={index}
+                  className={
+                    "suggestion " +
+                    (index === selectedSuggestionIndex ? "selected" : "")
+                  }
+                  onClick={() => handleSuggestionClick(index)}
+                >
+                  {suggestion}
+                </div>
+              ))}
+            </div>
+          )}
+          <div className="search-icon">
+            <SearchIcon />
           </div>
-        )}
-        <div className="search-icon">
-          <SearchIcon />
         </div>
-      </div>
       )}
       <div
         className={`bell-icon ${clicked ? "clicked" : ""}`}
         onClick={handleChange}
       >
-       {clicked ? <WhiteBellIcon/>:<BellIcon/>} 
+        {clicked ? <WhiteBellIcon /> : <BellIcon />}
       </div>
       <div className="profile-icon">
         <ProfileIcon />

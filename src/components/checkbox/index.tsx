@@ -7,7 +7,7 @@ interface CheckboxProps {
   id?: string;
   value?: string;
   onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
-  isChecked: boolean; // Add isChecked prop
+  isChecked: boolean | undefined; // Add isChecked prop
   isEditable?: boolean;
   disabled?: boolean;
 }

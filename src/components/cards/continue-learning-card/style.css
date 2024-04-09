@@ -56,6 +56,11 @@
   font-weight: 600;
   line-height: 26px;
 }
+.continue-learning-card-course-time-text,
+.continue-learning-card-course-percentage-text,
+.continue-learning-card-course-progress-count-text {
+  font-family: "Open sans";
+}
 .continue-learning-card-course-resume-text,
 .continue-learning-card-course-start-again-text {
   color: #fe8100;

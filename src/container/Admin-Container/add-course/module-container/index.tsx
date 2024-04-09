@@ -9,6 +9,7 @@ import DownloadImg from "@/public/images/download.svg";
 import Image from "next/image";
 import ViewEyeIcon from "@/components/icons/view-eye-icon";
 import EyeIcon from "@/components/icons/eye-icon";
+import { CancelIcon } from "@/components/icons/cancel-icon";
 
 interface ModuleQuizStepSectionProps {}
 
@@ -27,7 +28,9 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
     handleFileSelect,
     handleDownloadExcel,
     handleexcelFileRead,
-    fileAssessmentUpload,
+    writeIntoFile,
+    handleCancelIcon,
+    visible,
   } = useContext(CourseContext) as CourseContextType;
 
   return (
@@ -47,9 +50,15 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
           </p>
         </div>
         <div className="module-div-section1-div3">
-          <p className="module-category-text">Course Code & Name</p>
+          <p className="module-category-text">Course Code </p>
           <p className="module-category-type-text">
-            {course_basic.course_code} - {course_basic.course_name}
+            {course_basic.course_code}
+          </p>
+        </div>
+        <div className="module-div-section1-div4">
+          <p className="module-category-text">Course Name</p>
+          <p className="module-category-type-text">
+            {course_basic.course_name}
           </p>
         </div>
       </div>
@@ -64,6 +73,7 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
                 <InputField
                   moduleValue={module.module_no.toString()}
                   onUpdate={handleModuleChange}
+                  disabled={true}
                 />
               </div>
               <div className="module-input-name">
@@ -86,7 +96,7 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
                   formatText={"File Format: mp4, ppt, pdf "}
                 />
               </div>
-              <div>
+              <div className="module-eye-icon">
                 <EyeIcon filesUploaded={filesUploaded} files={files} />
               </div>
             </div>
@@ -103,14 +113,15 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
                       ?.assessment_type
                   }
                   onChange={handleAssessmentTypeChange}
-                  placeholder="select assessment type"
+                  placeholder="Select assessment type"
                   options={[
                     "Multiple Choice Question",
                     "Signle Choice Question",
                     "True or false",
                     "Short Answer",
+                    "Not Applicable",
                   ]}
-                  valueLabel={["multiple", "single", "boolean", "short"]}
+                  valueLabel={["multiple", "single", "boolean", "short", "N/A"]}
                 />
               </div>
               <div className="module-input-name">
@@ -140,8 +151,24 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
                   formatText={"File Format: xls"}
                 />
               </div>
+              {visible && (
+                <div
+                  onClick={() => writeIntoFile(index)}
+                  className="module-input-view-btn"
+                >
+                  <span
+                    onClick={() => {
+                      handleCancelIcon();
+                    }}
+                  >
+                    <CancelIcon />
+                  </span>
+                  XLS
+                </div>
+              )}
+
               {course_assessment[index].assessment_data.length !== 0 ? (
-                <div>
+                <div className="module-eye-icon">
                   <EyeIcon files={[]} />
                 </div>
               ) : (
@@ -159,32 +186,39 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
           </>
         ))}
         <button className="module-sec-add-module-btn" onClick={handleAddModule}>
-          <PlusIcon />
-          Add Module
+          <span className="module-sec-add-module-btn-add-module">
+            <PlusIcon /> Add Module
+          </span>
         </button>
       </div>
       <div className="module-div-section3">
         <>
           <div className="module-radio-selction">
-            <div className="module-course-assessment">Course Assessment</div>
+            <div className="module-course-assessment">
+              Course Assessment{" "}
+              <span className="module-course-assessment-optional-span">
+                (Optional)
+              </span>
+            </div>
           </div>
           <div className="module-input">
             <div className="module-input-number">
               <label htmlFor="" className="module-container-labels">
-                Select Assessment Type
+                Select Pre Assessment Type
               </label>
               <DropdownInputField
                 id="pre"
                 value={course_assessment_main[0]?.assessment_type}
-                placeholder="select assessment type"
+                placeholder="Select pre assessment type"
                 onChange={handleAssessmentTypeChange}
                 options={[
                   "Multiple Choice Question",
                   "Signle Choice Question",
                   "True or false",
                   "Short Answer",
+                  "Not Applicable",
                 ]}
-                valueLabel={["multiple", "single", "boolean", "short"]}
+                valueLabel={["multiple", "single", "boolean", "short", "N/A"]}
               />
             </div>
             <div className="module-input-name">
@@ -212,8 +246,8 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
                 formatText={"File Format: xls"}
               />
             </div>
-            {course_assessment_main[0].assessment_data.length !== 0 ? (
-              <div>
+            {course_assessment_main[0]?.assessment_data.length !== 0 ? (
+              <div className="module-eye-icon">
                 <EyeIcon files={[]} />
               </div>
             ) : (
@@ -232,20 +266,21 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
           <div className="module-input">
             <div className="module-input-number">
               <label htmlFor="" className="module-container-labels">
-                Select Assessment Type
+                Select Post Assessment Type
               </label>
               <DropdownInputField
                 id="post"
                 value={course_assessment_main[1]?.assessment_type}
-                placeholder="select assessment type"
+                placeholder="Select post assessment type"
                 onChange={handleAssessmentTypeChange}
                 options={[
                   "Multiple Choice Question",
                   "Signle Choice Question",
                   "True or false",
                   "Short Answer",
+                  "Not Applicable",
                 ]}
-                valueLabel={["multiple", "single", "boolean", "short"]}
+                valueLabel={["multiple", "single", "boolean", "short", "N/A"]}
               />
             </div>
             <div className="module-input-name">
