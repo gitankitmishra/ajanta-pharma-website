@@ -40,7 +40,6 @@ const DropdownInputField: FC<DropdownInputFieldProps> = ({
   onChange,
 
   id,
-
   isEditable,
 }) => {
   const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {

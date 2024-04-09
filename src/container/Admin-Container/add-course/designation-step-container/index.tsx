@@ -53,6 +53,7 @@ const DesignationStepSection: FC<DesignationStepSectionProps> = () => {
                 value="Nuventa"
                 onChange={handleChangeDesignation}
                 isChecked={course_designation.division.includes("Nuventa")}
+                disabled={otherCategory}
               />
               <Checkbox
                 id="division"
@@ -60,6 +61,7 @@ const DesignationStepSection: FC<DesignationStepSectionProps> = () => {
                 value="Revance"
                 onChange={handleChangeDesignation}
                 isChecked={course_designation.division.includes("Revance")}
+                disabled={otherCategory}
               />
               <Checkbox
                 id="division"
@@ -67,6 +69,7 @@ const DesignationStepSection: FC<DesignationStepSectionProps> = () => {
                 value="Solesta"
                 onChange={handleChangeDesignation}
                 isChecked={course_designation.division.includes("Solesta")}
+                disabled={otherCategory}
               />
               <Checkbox
                 id="division"
@@ -74,6 +77,7 @@ const DesignationStepSection: FC<DesignationStepSectionProps> = () => {
                 value="Inovio"
                 onChange={handleChangeDesignation}
                 isChecked={course_designation.division.includes("Inovio")}
+                disabled={otherCategory}
               />
               <Checkbox
                 id="division"
@@ -81,6 +85,7 @@ const DesignationStepSection: FC<DesignationStepSectionProps> = () => {
                 value="Anvaxx"
                 onChange={handleChangeDesignation}
                 isChecked={course_designation.division.includes("Anvaxx")}
+                disabled={otherCategory}
               />
               <Checkbox
                 id="division"
@@ -88,6 +93,7 @@ const DesignationStepSection: FC<DesignationStepSectionProps> = () => {
                 value="Illuma"
                 onChange={handleChangeDesignation}
                 isChecked={course_designation.division.includes("Illuma")}
+                disabled={otherCategory}
               />
               <Checkbox
                 id="division"
@@ -95,6 +101,7 @@ const DesignationStepSection: FC<DesignationStepSectionProps> = () => {
                 value="Inyx"
                 onChange={handleChangeDesignation}
                 isChecked={course_designation.division.includes("Inyx")}
+                disabled={otherCategory}
               />
               <Checkbox
                 id="division"
@@ -102,6 +109,7 @@ const DesignationStepSection: FC<DesignationStepSectionProps> = () => {
                 value="Ansca"
                 onChange={handleChangeDesignation}
                 isChecked={course_designation.division.includes("Ansca")}
+                disabled={otherCategory}
               />
               <Checkbox
                 id="division"
@@ -109,6 +117,7 @@ const DesignationStepSection: FC<DesignationStepSectionProps> = () => {
                 value="Zillion"
                 onChange={handleChangeDesignation}
                 isChecked={course_designation.division.includes("Zillion")}
+                disabled={otherCategory}
               />
               <Checkbox
                 id="division"
@@ -116,6 +125,7 @@ const DesignationStepSection: FC<DesignationStepSectionProps> = () => {
                 value="Avecea"
                 onChange={handleChangeDesignation}
                 isChecked={course_designation.division.includes("Avecea")}
+                disabled={otherCategory}
               />
               <Checkbox
                 id="division"
@@ -123,6 +133,7 @@ const DesignationStepSection: FC<DesignationStepSectionProps> = () => {
                 value="Axys"
                 onChange={handleChangeDesignation}
                 isChecked={course_designation.division.includes("Axys")}
+                disabled={otherCategory}
               />
               <Checkbox
                 id="division"
@@ -130,6 +141,7 @@ const DesignationStepSection: FC<DesignationStepSectionProps> = () => {
                 value="Maxcor"
                 onChange={handleChangeDesignation}
                 isChecked={course_designation.division.includes("Maxcor")}
+                disabled={otherCategory}
               />
               <Checkbox
                 id="division"
@@ -137,6 +149,7 @@ const DesignationStepSection: FC<DesignationStepSectionProps> = () => {
                 value="Almiron"
                 onChange={handleChangeDesignation}
                 isChecked={course_designation.division.includes("Almiron")}
+                disabled={otherCategory}
               />
               <Checkbox
                 id="division"
@@ -144,6 +157,7 @@ const DesignationStepSection: FC<DesignationStepSectionProps> = () => {
                 value="Mexlon"
                 onChange={handleChangeDesignation}
                 isChecked={course_designation.division.includes("Mexlon")}
+                disabled={otherCategory}
               />
               <Checkbox
                 id="division"
@@ -151,6 +165,7 @@ const DesignationStepSection: FC<DesignationStepSectionProps> = () => {
                 value="Hospicare"
                 onChange={handleChangeDesignation}
                 isChecked={course_designation.division.includes("Hospicare")}
+                disabled={otherCategory}
               />
             </div>
           </>

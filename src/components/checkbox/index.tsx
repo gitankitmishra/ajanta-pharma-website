@@ -31,6 +31,7 @@ const Checkbox: FC<CheckboxProps> = ({
         value={text}
         onChange={onChange}
         readOnly={isEditable}
+        disabled={isEditable || disabled}
       />
       <label htmlFor="">{text}</label>
     </div>
