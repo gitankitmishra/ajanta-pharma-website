@@ -6,6 +6,7 @@ interface InputFieldStringProps {
   onChange: (newValue: string) => void;
   placeholder?: string;
   width?: string;
+  isEditable?: boolean;
   error?: string;
   readOnly?: boolean;
 }
@@ -16,6 +17,7 @@ const InputFieldString: FC<InputFieldStringProps> = ({
   className,
   placeholder,
   width,
+  isEditable,
   error = "",
 }) => {
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -25,13 +27,13 @@ const InputFieldString: FC<InputFieldStringProps> = ({
   return (
     <div className="module-input-name">
       <input
+        readOnly={isEditable}
         style={{ width: width }}
         type="text"
         value={value}
         onChange={handleChange}
         className={className}
         placeholder={placeholder}
-        readOnly={true}
       />
       <div
         className={`dropdown-field-error-message ${

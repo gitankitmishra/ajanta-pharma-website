@@ -7,7 +7,7 @@ interface DateInputFieldProps {
   onStartDateChange: (value: string) => void;
   onEndDateChange: (value: string) => void;
   error?: string;
-  readOnly?: boolean;
+  isEditable?: boolean;
 }
 
 const DateInputField: FC<DateInputFieldProps> = ({
@@ -15,8 +15,8 @@ const DateInputField: FC<DateInputFieldProps> = ({
   endDate,
   onStartDateChange,
   onEndDateChange,
+  isEditable,
   error = "",
-  readOnly,
 }) => {
   const [startSelected, setStartSelected] = useState(false);
   const [endSelected, setEndSelected] = useState(false);
@@ -46,7 +46,7 @@ const DateInputField: FC<DateInputFieldProps> = ({
           }`}
           value={startDate}
           onChange={handleStartDateChange}
-          readOnly
+          readOnly={isEditable}
         />
         <div
           className={`dropdown-field-error-message ${
@@ -65,7 +65,7 @@ const DateInputField: FC<DateInputFieldProps> = ({
           className="end-date-input-field "
           value={endDate}
           onChange={handleEndDateChange}
-          readOnly
+          readOnly={isEditable}
         />
       </div>
     </div>
