@@ -68,3 +68,7 @@
   font-weight: 600;
   line-height: 28px;
 }
+.designation-error-message{
+  color: red;
+  font-size: 12px;
+}
