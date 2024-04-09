@@ -84,30 +84,17 @@ const AdminCourseDeatilContainer: FC<
       setIsClicked(!isClicked);
       setButtonText({ edit: "Preview", discard: "Discard" });
     } else if (buttonText.edit === "Save") {
+      setIsEditable(false);
       updateCourse();
+    } else if (buttonText.edit === "Save") {
+      setIsEditable(false);
+      setIsClicked(isClicked);
+    } else if (buttonText.discard === "Preview") {
+      setIsEditable(false);
+      setIsClicked(isClicked);
     } else {
       setButtonText({ edit: "Save", discard: "Previous" });
     }
-  };
-
-  interface ModuleData {
-    moduleName: string;
-    moduleNo: string;
-    files: FileList | null;
-  }
-  const [modules, setModules] = useState<ModuleData[]>([
-    { moduleName: "", moduleNo: "", files: null },
-  ]);
-
-  const [assessmentOpt, setAssessmentOpt] = useState([
-    { assessmentType: "", assessmentName: "" },
-  ]);
-
-  const handleAddAssessment = () => {
-    setAssessmentOpt([
-      ...assessmentOpt,
-      { assessmentType: "", assessmentName: "" },
-    ]);
   };
 
   const breadcrumbItems = [
@@ -193,10 +180,10 @@ const AdminCourseDeatilContainer: FC<
               </label>
               <InputFieldString
                 className="input-field"
-                value={` ${course_basic.course_name}`}
+                value={`${course_basic.course_name}`}
                 onChange={(newValue: string) => {
-                  const [newName] = newValue.split(" ");
-                  handleChange("course_name", newName);
+                  const [newCode] = newValue.split(" ");
+                  handleChange("course_name", newCode);
                 }}
                 isEditable={!isEditable}
               />
@@ -656,17 +643,27 @@ const AdminCourseDeatilContainer: FC<
               <p className="admin-course-detail-text">Divisions </p>
             </div>
             <div className="admin-course-detail-checkbox-section">
-              {allDivisions.map((division, index) => (
-                <Checkbox
-                  key={index}
-                  id={`division-${index}`}
-                  text={division}
-                  value={division}
-                  onChange={handleChangeDesignation}
-                  isChecked={course_designation?.division?.includes(division)}
-                  disabled={!isEditable}
-                />
-              ))}
+              {allDivisions.map((division, index) =>
+                isEditable ? (
+                  <Checkbox
+                    key={index}
+                    id={`division`}
+                    text={division}
+                    value={division}
+                    onChange={handleChangeDesignation}
+                    isChecked={course_designation?.division.includes(division)}
+                    disabled={!isEditable}
+                  />
+                ) : (
+                  <Checkbox
+                    key={index}
+                    id={`division`}
+                    text={division}
+                    value={division}
+                    isChecked={course_designation?.division.includes(division)}
+                  />
+                )
+              )}
             </div>
           </div>
 
@@ -674,21 +671,32 @@ const AdminCourseDeatilContainer: FC<
             <div className="admin-course-detail-text-section">
               <p className="admin-course-detail-text"> Designation</p>
             </div>
-            <div className="admin-course-detail-checkbox-section2">
-              {allDesignation.map((designation, index) => (
-                <Checkbox
-                  key={index}
-                  id={`designation-${index}`}
-                  text={designation}
-                  value={designation}
-                  onChange={handleChangeDesignation}
-                  isChecked={course_designation?.designation.includes(
-                    designation
-                  )}
-                  isEditable={!isEditable}
-                  disabled={!isEditable}
-                />
-              ))}
+            <div className="admin-course-detail-checkbox-section">
+              {allDesignation.map((designation, index) =>
+                isEditable ? (
+                  <Checkbox
+                    key={index}
+                    id={`designation`}
+                    text={designation}
+                    value={designation}
+                    onChange={handleChangeDesignation}
+                    isChecked={course_designation?.designation.includes(
+                      designation
+                    )}
+                    disabled={!isEditable}
+                  />
+                ) : (
+                  <Checkbox
+                    key={index}
+                    id={`designation-${index}`}
+                    text={designation}
+                    value={designation}
+                    isChecked={course_designation?.designation.includes(
+                      designation
+                    )}
+                  />
+                )
+              )}
             </div>
           </div>
         </div>
@@ -703,7 +711,7 @@ const AdminCourseDeatilContainer: FC<
             <DropdownInputField
               value={course_basic.course_status}
               onValueChange={(value) => handleChange("course_status", value)}
-              options={["active", "inactive"]}
+              options={["Active", "Inactive"]}
               valueLabel={[""]}
               isEditable={!isEditable}
             />

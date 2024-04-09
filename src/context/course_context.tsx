@@ -768,14 +768,14 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     if (id === "division") {
       setCourseDesignation((prevState) => ({
         ...prevState,
-        division: prevState.division.includes(value)
+        division: prevState?.division.includes(value)
           ? prevState.division.filter((item) => item !== value)
           : [...prevState.division, value],
       }));
     } else {
       setCourseDesignation((prevState) => ({
         ...prevState,
-        designation: prevState.designation.includes(value)
+        designation: prevState?.designation.includes(value)
           ? prevState.designation.filter((item) => item !== value)
           : [...prevState.designation, value],
       }));
