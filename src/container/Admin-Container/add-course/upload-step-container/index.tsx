@@ -19,6 +19,7 @@ const UploadStepSection: FC<UploadStepSectionProps> = () => {
     course_assessment_main,
     course_module,
     course_designation,
+    writeIntoFile,
   } = useContext(CourseContext) as CourseContextType;
 
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -193,7 +194,12 @@ const UploadStepSection: FC<UploadStepSectionProps> = () => {
                       />
                     </div>
                     <div className="upload-section2-uploaded-file">
-                      <div className="uploaded-video-file">View</div>
+                      <div
+                        className="uploaded-video-file"
+                        onClick={() => writeIntoFile(index)}
+                      >
+                        View
+                      </div>
                       <div className="uploaded-video-file-text">
                         <span className="upload-file-name">Data</span>
                         <br />

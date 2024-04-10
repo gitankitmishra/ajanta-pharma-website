@@ -63,8 +63,6 @@ export type CourseContextType = {
   handleChangeDesignation(event: ChangeEvent<HTMLInputElement>): void;
   course_designation: CourseDesignation;
   publishDesignation(): void;
-  deserror: string;
-  isMedicalOrMarketing(): any;
 
   //pagination and the Admin All courses display part
   updatePageNo: (newPage: number) => void;
@@ -183,10 +181,8 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
       await uploadCourse();
       handleStepTwoDone();
     } else if (active_step === 2) {
-      handleShowError(() => {
-        publishDesignation();
-        handleStepThreeDone();
-      });
+      publishDesignation();
+      handleStepThreeDone();
     } else if (active_step === 3) {
       await uploadfromDraft();
       handleStepFourDone();
@@ -743,35 +739,6 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
       designation: [],
     });
 
-  // designation error
-  const [deserror, setDesError] = useState<string>("");
-  const handleShowError = (callback: any) => {
-    if (
-      (!course_designation.division ||
-        course_designation.division.length === 0) &&
-      (course_basic.course_category === "Medical" ||
-        course_basic.course_category === "Marketing")
-    ) {
-      setDesError("Select at least one division.");
-      setActiveStep(2);
-    } else {
-      if (
-        course_designation.division &&
-        course_designation.division.length > 0
-      ) {
-        setDesError("");
-        callback();
-      }
-    }
-  };
-
-  const isMedicalOrMarketing = () => {
-    return (
-      course_basic.course_category === "Medical" ||
-      course_basic.course_category === "Marketing"
-    );
-  };
-
   const handleChangeDesignation = (event: ChangeEvent<HTMLInputElement>) => {
     const { id, value } = event.target;
 
@@ -1093,8 +1060,6 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     course_designation,
     handleChangeDesignation,
     publishDesignation,
-    deserror,
-    isMedicalOrMarketing,
 
     //Pagination And All Courses Display
     updatePageNo,
