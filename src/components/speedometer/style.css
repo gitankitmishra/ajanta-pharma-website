@@ -1,0 +1,25 @@
+.speedometer-main-section {
+  width: 339px;
+  height: 246px;
+  border-radius: 8px;
+  border: 1px solid #fe8100;
+  background: #fff;
+  padding: 18px 30px;
+  box-shadow: 0px 2px 10px 0px rgba(0, 0, 0, 0.1);
+}
+.speedometer-heading-section{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.speedometer-header-text {
+  color: #000;
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 28px;
+}
+.speedometer-score-text-span {
+  color: #4f4f4f;
+  font-size: 16px;
+  font-weight: 400;
+}

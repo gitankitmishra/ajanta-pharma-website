@@ -16,6 +16,7 @@ import { CourseContext, CourseContextType } from "@/context/course_context";
 import TextAreaField from "@/components/fields/TextAreaField";
 import InputField from "@/components/fields/input-field";
 import UploadButton from "@/components/buttons/upload-button";
+import { CancelIcon } from "@/components/icons/cancel-icon";
 
 interface AdminCourseDeatilContainerProps {}
 
@@ -39,6 +40,8 @@ const AdminCourseDeatilContainer: FC<
     handleAssessmentTypeChange,
     updateCourse,
     openLink,
+    writeIntoFile,
+    handleCancelIcon,
   } = useContext(CourseContext) as CourseContextType;
   const allDivisions = [
     "CDC",
@@ -70,6 +73,9 @@ const AdminCourseDeatilContainer: FC<
     "SO",
   ];
 
+  const [fileName, setFileName] = useState("Video");
+  const [fileSize, setFileSize] = useState<number>(2.2);
+
   const [isClicked, setIsClicked] = useState(false);
   const [buttonText, setButtonText] = useState({
     edit: "Edit",
@@ -85,29 +91,13 @@ const AdminCourseDeatilContainer: FC<
       setButtonText({ edit: "Preview", discard: "Discard" });
     } else if (buttonText.edit === "Save") {
       updateCourse();
+    } else if (buttonText.edit === "Preview") {
+      setIsEditable(false);
+      setIsClicked(isClicked);
+      setButtonText({ edit: "Save", discard: "Previous" });
     } else {
       setButtonText({ edit: "Save", discard: "Previous" });
     }
-  };
-
-  interface ModuleData {
-    moduleName: string;
-    moduleNo: string;
-    files: FileList | null;
-  }
-  const [modules, setModules] = useState<ModuleData[]>([
-    { moduleName: "", moduleNo: "", files: null },
-  ]);
-
-  const [assessmentOpt, setAssessmentOpt] = useState([
-    { assessmentType: "", assessmentName: "" },
-  ]);
-
-  const handleAddAssessment = () => {
-    setAssessmentOpt([
-      ...assessmentOpt,
-      { assessmentType: "", assessmentName: "" },
-    ]);
   };
 
   const breadcrumbItems = [
@@ -178,14 +168,6 @@ const AdminCourseDeatilContainer: FC<
                 }}
                 isEditable={!isEditable}
               />
-              {/* <InputFieldString
-                placeholder="Enter Course Name"
-                width="80%"
-                value={`${course_basic.course_code}  ${course_basic.course_name}`}
-                onChange={(value) => handleChange("course_name", value)}
-                className="input-field"
-                isEditable={!isEditable}
-              /> */}
             </div>
             <div className="admin-course-detail-section1-div-sections">
               <label htmlFor="" className="admin-course-detail-section-labels">
@@ -193,33 +175,20 @@ const AdminCourseDeatilContainer: FC<
               </label>
               <InputFieldString
                 className="input-field"
-                value={` ${course_basic.course_name}`}
+                value={`${course_basic.course_name}`}
                 onChange={(newValue: string) => {
-                  const [newName] = newValue.split(" ");
-                  handleChange("course_name", newName);
+                  const [newCode] = newValue.split(" ");
+                  handleChange("course_name", newCode);
                 }}
                 isEditable={!isEditable}
               />
-              {/* <InputFieldString
-                placeholder="Enter Course Name"
-                width="80%"
-                value={`${course_basic.course_code}  ${course_basic.course_name}`}
-                onChange={(value) => handleChange("course_name", value)}
-                className="input-field"
-                isEditable={!isEditable}
-              /> */}
             </div>
           </div>
           <div className="admin-course-detail-div-section2">
             <label htmlFor="" className="admin-course-detail-section-labels">
               Learning Objective
             </label>
-            {/* <input
-              type="text"
-              className="admin-course-detail-learning-objective-input"
-              value={course_basic.course_objective}
-              disabled={!isEditable}
-            /> */}
+
             <TextAreaField
               placeholder="Enter Learning Objective"
               className="admin-course-detail-learning-objective-input"
@@ -253,11 +222,7 @@ const AdminCourseDeatilContainer: FC<
                   >
                     Module Number
                   </label>
-                  {/* <InputFieldString
-                      className="input-field"
-                      value={module.module_no}
-                      onChange={handleCourseCodeAndNameChange}
-                    /> */}
+
                   <InputField
                     moduleValue={module.module_no.toString()}
                     onUpdate={handleModuleChange}
@@ -271,11 +236,7 @@ const AdminCourseDeatilContainer: FC<
                   >
                     Module Name
                   </label>
-                  {/* <InputFieldString
-                      className="input-field"
-                      value={formData.courseCode + " " + formData.courseName}
-                      onChange={handleCourseCodeAndNameChange}
-                    /> */}
+
                   <InputField
                     id={`module_name-${index}`}
                     moduleValue={module.module_name}
@@ -284,18 +245,17 @@ const AdminCourseDeatilContainer: FC<
                   />
                 </div>
                 <div className="admin-course-detail-section2-admin-course-detailed-file">
-                  {!isEditable ? ( // addes isEditable functinality removed onclick by ankita
+                  {isEditable ? ( // addes isEditable functinality removed onclick by ankita
                     <div
                       className={`admin-course-detailed-video-file ${
                         isClicked ? "clicked" : "unClicked"
                       }`}
                     >
                       {/* <input type="text" className="admin-course-detailed-mp4" /> */}
-
                       <span
                         key={index}
                         className="admin-course-detailed-file-name"
-                        // onClick={() => openLink(index)}
+                        onClick={() => openLink(index)}
                       >
                         View
                       </span>
@@ -311,38 +271,43 @@ const AdminCourseDeatilContainer: FC<
                       <span
                         key={index}
                         className="admin-course-detailed-file-name"
-                        onClick={() => openLink(index)}
+                        // onClick={() => openLink(index)}
                       >
                         View
                       </span>
                     </div>
                   )}
+
                   <div className="admin-course-detailed-video-file-text">
                     <span className="admin-course-detail-file-name">
-                      video.mp4
+                      {fileName}
                     </span>
                     <br />
-                    <span className="admin-course-detail-file-size">2.2MB</span>
+                    <span className="admin-course-detail-file-size">
+                      {(fileSize / (1024 * 1024)).toFixed(2)} MB
+                    </span>
                   </div>
                 </div>
+
                 <div className="admin-course-detail-upload-btns">
                   <button
                     className={`admin-course-detail-upload-btn ${
                       isClicked ? "clicked" : "unClicked"
                     }`}
                     onClick={() => {
-                      // Check if the button is clickable based on isEditable state
                       if (isEditable) {
-                        // Simulate file input click
                         const fileInput = document.createElement("input");
                         fileInput.type = "file";
-                        fileInput.accept = ".mp4,.ppt,.pdf"; // Set accepted file types
+                        fileInput.accept = ".mp4,.ppt,.pdf";
                         fileInput.addEventListener("change", (event) => {
                           const selectedFile = (
                             event.target as HTMLInputElement
                           ).files?.[0];
                           if (selectedFile) {
                             handleFileSelect(selectedFile, index);
+                            setFileName(selectedFile.name);
+                            setFileSize(selectedFile.size);
+                            console.log("name = ", fileName, "size", fileSize);
                           }
                         });
                         fileInput.click();
@@ -417,14 +382,32 @@ const AdminCourseDeatilContainer: FC<
                   </div>
 
                   <div className="admin-course-detail-section2-admin-course-detailed-file">
-                    <div
+                    {/* <div
                       className={`admin-course-detailed-video-file ${
                         isClicked ? "clicked" : "unClicked"
                       }`}
                     >
-                      <span className="admin-course-detailed-file-name">
+                      <span
+                        className="admin-course-detailed-file-name"
+                        onClick={() => writeIntoFile(index)}
+                      >
                         XLS
                       </span>
+                      </div> */}
+                    <div
+                      onClick={() => writeIntoFile(index)}
+                      className={`admin-course-detailed-video-file ${
+                        isClicked ? "clicked" : "unClicked"
+                      }`}
+                    >
+                      <span
+                        onClick={() => {
+                          handleCancelIcon();
+                        }}
+                      >
+                        <CancelIcon />
+                      </span>
+                      XLS
                       {/* <input type="text" className="admin-course-detailed-mp4" /> */}
                     </div>
 
@@ -449,7 +432,7 @@ const AdminCourseDeatilContainer: FC<
                           // Simulate file input click
                           const fileInput = document.createElement("input");
                           fileInput.type = "file";
-                          fileInput.accept = ".xls"; // Set accepted file types
+                          fileInput.accept = ".xls";
                           fileInput.addEventListener("change", (event) => {
                             const selectedFile = (
                               event.target as HTMLInputElement
@@ -552,7 +535,7 @@ const AdminCourseDeatilContainer: FC<
             {course_assessment_main[0]?.assessment_name != "" && (
               <div className="admin-course-detail-section2">
                 {/* given input field by ankita connect backend for pre and post */}
-                <div className="dmin-course-detail-section2-div-sections">
+                {/* <div className="dmin-course-detail-section2-div-sections">
                   <label
                     htmlFor=""
                     className="admin-course-detail-section-labels"
@@ -560,7 +543,7 @@ const AdminCourseDeatilContainer: FC<
                     Course Assessment Type
                   </label>
                   <InputField />
-                </div>
+                </div> */}
                 <div className="admin-course-detail-section2-div-sections">
                   <label
                     htmlFor=""
@@ -595,13 +578,95 @@ const AdminCourseDeatilContainer: FC<
                     onUpdate={handleAssessmentNameChange}
                   />
                 </div>
+                <div className="admin-course-detail-section2-admin-course-detailed-file">
+                  {/* <div
+                      className={`admin-course-detailed-video-file ${
+                        isClicked ? "clicked" : "unClicked"
+                      }`}
+                    >
+                      <span
+                        className="admin-course-detailed-file-name"
+                        onClick={() => writeIntoFile(index)}
+                      >
+                        XLS
+                      </span>
+                      </div> */}
+                  <div
+                    onClick={() => writeIntoFile(0)}
+                    className={`admin-course-detailed-video-file ${
+                      isClicked ? "clicked" : "unClicked"
+                    }`}
+                  >
+                    <span
+                      onClick={() => {
+                        handleCancelIcon();
+                      }}
+                    >
+                      <CancelIcon />
+                    </span>
+                    XLS
+                    {/* <input type="text" className="admin-course-detailed-mp4" /> */}
+                  </div>
+
+                  <div className="admin-course-detailed-video-file-text">
+                    <span className="admin-course-detail-file-name">
+                      excel.xls
+                    </span>
+                    <br />
+                    <span className="admin-course-detail-file-size">2.2MB</span>
+                  </div>
+                </div>
+                <div className="admin-course-detail-upload-btns">
+                  <button
+                    className={`admin-course-detail-upload-btn ${
+                      isClicked ? "clicked" : "unClicked"
+                    }`}
+                    onClick={() => {
+                      // Check if the button is clickable based on isEditable state
+                      if (isEditable) {
+                        // Simulate file input click
+                        const fileInput = document.createElement("input");
+                        fileInput.type = "file";
+                        fileInput.accept = ".xls";
+                        fileInput.addEventListener("change", (event) => {
+                          const selectedFile = (
+                            event.target as HTMLInputElement
+                          ).files?.[0];
+                          if (selectedFile) {
+                            console.log("going to check");
+                            handleexcelFileRead(selectedFile, 0, "course");
+                          }
+                        });
+                        fileInput.click();
+                      }
+                    }}
+                  >
+                    Upload
+                  </button>
+
+                  {/* <UploadButton
+                      upload={"Upload Assessment"}
+                      uploadFile={() => (selectedFile: File) => {
+                        console.log("going to check");
+                        handleexcelFileRead(selectedFile, index, "module");
+                      }}
+                      onFileSelect={(selectedFile: File) => {
+                        handleexcelFileRead(selectedFile, index, "module");
+                      }}
+                      acceptedTypes=".xls"
+                      formatText={"File Format: xls"}
+                      className={`admin-course-detail-upload-btn ${
+                        isClicked ? "clicked" : "unClicked"
+                      }`}
+                    /> */}
+                </div>
               </div>
             )}
             {/* post  */}
             <div className="admin-course-detail-section2">
               {course_assessment_main[1]?.assessment_name != "" && (
                 <>
-                  <div className="dmin-course-detail-section2-div-sections">
+                  {/* <div className="dmin-course-detail-section2-div-sections">
                     <label
                       htmlFor=""
                       className="admin-course-detail-section-labels"
@@ -609,7 +674,7 @@ const AdminCourseDeatilContainer: FC<
                       Course Assessment Type
                     </label>
                     <InputField />
-                  </div>
+                  </div> */}
                   <div className="admin-course-detail-section2-div-sections">
                     <label
                       htmlFor=""
@@ -644,6 +709,90 @@ const AdminCourseDeatilContainer: FC<
                       onUpdate={handleAssessmentNameChange}
                     />
                   </div>
+                  <div className="admin-course-detail-section2-admin-course-detailed-file">
+                    {/* <div
+                      className={`admin-course-detailed-video-file ${
+                        isClicked ? "clicked" : "unClicked"
+                      }`}
+                    >
+                      <span
+                        className="admin-course-detailed-file-name"
+                        onClick={() => writeIntoFile(index)}
+                      >
+                        XLS
+                      </span>
+                      </div> */}
+                    <div
+                      onClick={() => writeIntoFile(1)}
+                      className={`admin-course-detailed-video-file ${
+                        isClicked ? "clicked" : "unClicked"
+                      }`}
+                    >
+                      <span
+                        onClick={() => {
+                          handleCancelIcon();
+                        }}
+                      >
+                        <CancelIcon />
+                      </span>
+                      XLS
+                      {/* <input type="text" className="admin-course-detailed-mp4" /> */}
+                    </div>
+
+                    <div className="admin-course-detailed-video-file-text">
+                      <span className="admin-course-detail-file-name">
+                        excel.xls
+                      </span>
+                      <br />
+                      <span className="admin-course-detail-file-size">
+                        2.2MB
+                      </span>
+                    </div>
+                  </div>
+                  <div className="admin-course-detail-upload-btns">
+                    <button
+                      className={`admin-course-detail-upload-btn ${
+                        isClicked ? "clicked" : "unClicked"
+                      }`}
+                      onClick={() => {
+                        // Check if the button is clickable based on isEditable state
+                        if (isEditable) {
+                          // Simulate file input click
+                          const fileInput = document.createElement("input");
+                          fileInput.type = "file";
+                          fileInput.accept = ".xls";
+                          fileInput.addEventListener("change", (event) => {
+                            const selectedFile = (
+                              event.target as HTMLInputElement
+                            ).files?.[0];
+                            if (selectedFile) {
+                              console.log("going to check");
+                              handleexcelFileRead(selectedFile, 1, "course");
+                            }
+                          });
+                          fileInput.click();
+                        }
+                      }}
+                    >
+                      Upload
+                    </button>
+
+                    {/* <UploadButton
+                      upload={"Upload Assessment"}
+                      uploadFile={() => (selectedFile: File) => {
+                        console.log("going to check");
+                        handleexcelFileRead(selectedFile, index, "module");
+                      }}
+                      onFileSelect={(selectedFile: File) => {
+                        handleexcelFileRead(selectedFile, index, "module");
+                      }}
+                      acceptedTypes=".xls"
+                      formatText={"File Format: xls"}
+                      className={`admin-course-detail-upload-btn ${
+                        isClicked ? "clicked" : "unClicked"
+                      }`}
+                    /> */}
+                  </div>
                 </>
               )}
             </div>
@@ -656,17 +805,27 @@ const AdminCourseDeatilContainer: FC<
               <p className="admin-course-detail-text">Divisions </p>
             </div>
             <div className="admin-course-detail-checkbox-section">
-              {allDivisions.map((division, index) => (
-                <Checkbox
-                  key={index}
-                  id={`division-${index}`}
-                  text={division}
-                  value={division}
-                  onChange={handleChangeDesignation}
-                  isChecked={course_designation?.division?.includes(division)}
-                  disabled={!isEditable}
-                />
-              ))}
+              {allDivisions.map((division, index) =>
+                isEditable ? (
+                  <Checkbox
+                    key={index}
+                    id={`division`}
+                    text={division}
+                    value={division}
+                    onChange={handleChangeDesignation}
+                    isChecked={course_designation?.division.includes(division)}
+                    disabled={!isEditable}
+                  />
+                ) : (
+                  <Checkbox
+                    key={index}
+                    id={`division`}
+                    text={division}
+                    value={division}
+                    isChecked={course_designation?.division.includes(division)}
+                  />
+                )
+              )}
             </div>
           </div>
 
@@ -674,21 +833,32 @@ const AdminCourseDeatilContainer: FC<
             <div className="admin-course-detail-text-section">
               <p className="admin-course-detail-text"> Designation</p>
             </div>
-            <div className="admin-course-detail-checkbox-section2">
-              {allDesignation.map((designation, index) => (
-                <Checkbox
-                  key={index}
-                  id={`designation-${index}`}
-                  text={designation}
-                  value={designation}
-                  onChange={handleChangeDesignation}
-                  isChecked={course_designation?.designation.includes(
-                    designation
-                  )}
-                  isEditable={!isEditable}
-                  disabled={!isEditable}
-                />
-              ))}
+            <div className="admin-course-detail-checkbox-section">
+              {allDesignation.map((designation, index) =>
+                isEditable ? (
+                  <Checkbox
+                    key={index}
+                    id={`designation`}
+                    text={designation}
+                    value={designation}
+                    onChange={handleChangeDesignation}
+                    isChecked={course_designation?.designation.includes(
+                      designation
+                    )}
+                    disabled={!isEditable}
+                  />
+                ) : (
+                  <Checkbox
+                    key={index}
+                    id={`designation-${index}`}
+                    text={designation}
+                    value={designation}
+                    isChecked={course_designation?.designation.includes(
+                      designation
+                    )}
+                  />
+                )
+              )}
             </div>
           </div>
         </div>
@@ -703,7 +873,7 @@ const AdminCourseDeatilContainer: FC<
             <DropdownInputField
               value={course_basic.course_status}
               onValueChange={(value) => handleChange("course_status", value)}
-              options={["active", "inactive"]}
+              options={["Active", "Inactive"]}
               valueLabel={[""]}
               isEditable={!isEditable}
             />
