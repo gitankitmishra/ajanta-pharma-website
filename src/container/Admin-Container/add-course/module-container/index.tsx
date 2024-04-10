@@ -98,7 +98,7 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
                   onUpdate={handleModuleChange}
                 />
               </div>
-              <div className="module-eye-icon">{/* <DownloadIcon /> */}</div>
+              <div className="module-eye-icon"><DownloadIcon /></div>
               <div className="module-input-uplaod-btn">
                 <UploadButton
                   upload={"Upload Course Material"}
