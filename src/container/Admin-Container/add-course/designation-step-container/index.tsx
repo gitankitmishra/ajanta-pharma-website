@@ -8,8 +8,12 @@ interface DesignationStepSectionProps {}
 
 const DesignationStepSection: FC<DesignationStepSectionProps> = () => {
   //calling the context here........
-  const { handleChangeDesignation, course_basic, course_designation } =
-    useContext(CourseContext) as CourseContextType;
+  const {
+    handleChangeDesignation,
+    course_basic,
+    course_designation,
+    ds_error,
+  } = useContext(CourseContext) as CourseContextType;
 
   return (
     <section className="designation-main-section">
@@ -21,6 +25,8 @@ const DesignationStepSection: FC<DesignationStepSectionProps> = () => {
               *Only applicable for Medical & Marketing*
             </span>
           </p>
+          {/* error */}
+          <div style={{ color: "red" }}>{ds_error}</div>
         </div>
         <div>
           {/* {course_basic.course_category === "Medical" ||

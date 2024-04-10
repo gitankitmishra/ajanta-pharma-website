@@ -63,6 +63,7 @@ export type CourseContextType = {
   handleChangeDesignation(event: ChangeEvent<HTMLInputElement>): void;
   course_designation: CourseDesignation;
   publishDesignation(): void;
+  ds_error: string;
 
   //pagination and the Admin All courses display part
   updatePageNo: (newPage: number) => void;
@@ -187,12 +188,16 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
           course_designation.division.length === 0) ||
         course_designation.designation.length === 0
       ) {
-        alert("Please select the checkBoxes");
+        // alert("Please select the checkBoxes");
+        setDsErrror("Please select atleast one checkbox");
         return;
       } else if (course_designation.designation.length === 0) {
-        alert("Please select the Designation");
+        // alert("");
+        setDsErrror("Please select atleast one checkbox");
+
         return;
       } else {
+        setDsErrror("");
         publishDesignation();
         handleStepThreeDone();
       }
@@ -752,6 +757,7 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
       designation: [],
     });
 
+  const [ds_error, setDsErrror] = useState<string>("");
   const handleChangeDesignation = (event: ChangeEvent<HTMLInputElement>) => {
     const { id, value } = event.target;
 
@@ -1069,6 +1075,7 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     course_designation,
     handleChangeDesignation,
     publishDesignation,
+    ds_error,
 
     //Pagination And All Courses Display
     updatePageNo,
