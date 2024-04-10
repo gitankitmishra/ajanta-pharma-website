@@ -738,8 +738,10 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
           endpoint: "api/admin/dashboard/uploadCourse",
           data: {
             course_module: updatedCourseModule,
-            course_assessment: course_assessment,
-            course_assessment_main: course_assessment_main,
+            course_assessment: [
+              ...course_assessment_main,
+              ...course_assessment,
+            ],
             course_code: course_basic.course_code,
           },
         });
