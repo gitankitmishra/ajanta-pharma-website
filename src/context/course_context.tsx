@@ -181,8 +181,21 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
       await uploadCourse();
       handleStepTwoDone();
     } else if (active_step === 2) {
-      publishDesignation();
-      handleStepThreeDone();
+      if (
+        ((course_basic.course_category === "Medical" ||
+          course_basic.course_category === "Marketing") &&
+          course_designation.division.length === 0) ||
+        course_designation.designation.length === 0
+      ) {
+        alert("Please select the checkBoxes");
+        return;
+      } else if (course_designation.designation.length === 0) {
+        alert("Please select the Designation");
+        return;
+      } else {
+        publishDesignation();
+        handleStepThreeDone();
+      }
     } else if (active_step === 3) {
       await uploadfromDraft();
       handleStepFourDone();
@@ -765,12 +778,8 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
   //api call for designation
   const publishDesignation = async () => {
     try {
-      if (course_designation.designation.length === 0) {
-        setActiveStep(2);
-        return;
-      }
-
       let responseUrl;
+
       if (course_designation.division.length > 0) {
         responseUrl = await fetchService({
           method: "PUT",
