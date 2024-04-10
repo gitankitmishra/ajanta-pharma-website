@@ -7,6 +7,7 @@ import PieChartCard from "@/components/cards/pieChart-card";
 import PerformersProgressbar from "@/components/progressbar/performers-progressbar";
 import CategoryProgressbar from "@/components/progressbar/category-progressbar";
 import SpeedometerChart from "@/components/speedometer";
+import Speedometer from "@/components/speedometer";
 
 interface TeamPerformanceProfileContainerProps {}
 
@@ -68,7 +69,7 @@ const TeamPerformanceProfileContainer: FunctionComponent<
       </div>
       {/* ------------------------ Speedometer Section------------------- */}
       <div className="team-performance-profile-speedometer-section">
-        <SpeedometerChart />
+        <Speedometer/>
       </div>
     </section>
   );
