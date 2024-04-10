@@ -71,12 +71,14 @@ const AdminCourseListTable: FC = () => {
                 <td className="admin-course-list-table-data">
                   <p
                     className={`admin-course-status-span ${
-                      course.course_basic?.isActive
+                      course.course_basic?.course_status === "active"
                         ? "status-active"
                         : "status-inactive"
                     }`}
                   >
-                    {course.course_basic?.isActive ? "Active" : "Inactive"}
+                    {course.course_basic?.course_status === "active"
+                      ? "Active"
+                      : "Inactive"}
                   </p>
                 </td>
                 <td className="admin-course-list-table-data admin-course-eye-icon">

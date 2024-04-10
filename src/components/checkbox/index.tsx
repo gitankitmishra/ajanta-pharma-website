@@ -7,7 +7,7 @@ interface CheckboxProps {
   id?: string;
   value?: string;
   onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
-  isChecked: boolean; // Add isChecked prop
+  isChecked: boolean | undefined; // Add isChecked prop
   isEditable?: boolean;
   disabled?: boolean;
 }
@@ -31,6 +31,7 @@ const Checkbox: FC<CheckboxProps> = ({
         value={text}
         onChange={onChange}
         readOnly={isEditable}
+        disabled={isEditable || disabled}
       />
       <label htmlFor="">{text}</label>
     </div>

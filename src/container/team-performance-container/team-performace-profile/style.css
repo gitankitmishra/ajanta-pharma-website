@@ -68,11 +68,11 @@
   display: flex;
   justify-content: space-between;
 }
-.team-performance-profile-speedometer-section {
+/* .team-performance-profile-speedometer-section {
   width: 339px;
   height: 246px;
   border-radius: 8px;
   border: 1px solid #fe8100;
   background: #fff;
   box-shadow: 0px 2px 10px 0px rgba(0, 0, 0, 0.1);
-}
+} */

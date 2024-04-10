@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 
 interface ViewEyeIcon1Props {
-  filesUploaded?: boolean;
+  filesUploaded?: boolean | File[];
   files: File[];
 }
 

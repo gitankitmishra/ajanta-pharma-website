@@ -36,7 +36,7 @@ const DropdownSubInputField: FC<DropdownInputFieldProps> = ({
         ]);
         break;
       case "Medical":
-        setTrainingTypeOptions(["Medical"]);
+        setTrainingTypeOptions(["Medical Updates"]);
         break;
       case "Marketing":
         setTrainingTypeOptions([
@@ -57,7 +57,7 @@ const DropdownSubInputField: FC<DropdownInputFieldProps> = ({
           "Negotiation Skills",
           "Personal Finance",
           "Personal Grooming",
-          "Self-Enrichment",
+          "Self Enrichment",
         ]);
         break;
       case "Classroom Training":
@@ -105,14 +105,14 @@ const DropdownSubInputField: FC<DropdownInputFieldProps> = ({
         <div className="custom-dropdown-arrow">
           <ArrowDown />
         </div>
-        </div>
-        <div
-          className={`custom-dropdown-field-error-message ${
-            error.length !== 0 && "custom-dropdown-field-error-display"
-          }`}
-        >
-          {error}
-        </div>
+      </div>
+      <div
+        className={`custom-dropdown-field-error-message ${
+          error.length !== 0 && "custom-dropdown-field-error-display"
+        }`}
+      >
+        {error}
+      </div>
     </>
   );
 };
