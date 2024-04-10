@@ -64,6 +64,7 @@ export type CourseContextType = {
   handleChangeDesignation(event: ChangeEvent<HTMLInputElement>): void;
   course_designation: CourseDesignation;
   publishDesignation(): void;
+  ds_error: string;
 
   //pagination and the Admin All courses display part
   updatePageNo: (newPage: number) => void;
@@ -184,8 +185,25 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
       await uploadCourse();
       handleStepTwoDone();
     } else if (active_step === 2) {
-      publishDesignation();
-      handleStepThreeDone();
+      if (
+        ((course_basic.course_category === "Medical" ||
+          course_basic.course_category === "Marketing") &&
+          course_designation.division.length === 0) ||
+        course_designation.designation.length === 0
+      ) {
+        // alert("Please select the checkBoxes");
+        setDsErrror("Please select atleast one checkbox");
+        return;
+      } else if (course_designation.designation.length === 0) {
+        // alert("");
+        setDsErrror("Please select atleast one checkbox");
+
+        return;
+      } else {
+        setDsErrror("");
+        publishDesignation();
+        handleStepThreeDone();
+      }
     } else if (active_step === 3) {
       await uploadfromDraft();
       handleStepFourDone();
@@ -771,6 +789,7 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
       designation: [],
     });
 
+  const [ds_error, setDsErrror] = useState<string>("");
   const handleChangeDesignation = (event: ChangeEvent<HTMLInputElement>) => {
     const { id, value } = event.target;
 
@@ -793,12 +812,8 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
   //api call for designation
   const publishDesignation = async () => {
     try {
-      if (course_designation.designation.length === 0) {
-        setActiveStep(2);
-        return;
-      }
-
       let responseUrl;
+
       if (course_designation.division.length > 0) {
         responseUrl = await fetchService({
           method: "PUT",
@@ -1089,6 +1104,7 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     course_designation,
     handleChangeDesignation,
     publishDesignation,
+    ds_error,
 
     //Pagination And All Courses Display
     updatePageNo,
