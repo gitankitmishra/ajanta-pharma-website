@@ -635,6 +635,8 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
 
   const handleFileSelect = (selectedFile: File, index: number) => {
     console.log("Selecting files for module...");
+    console.log("selected file...", selectedFile);
+
     const temp_files = files;
     temp_files[index] = selectedFile;
     setFiles(temp_files);
@@ -642,6 +644,13 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     const anyFilesUploaded = temp_files.some((file) => file !== undefined);
     setFilesUploaded(anyFilesUploaded);
   };
+
+  useEffect(() => {
+    console.log(
+      "module",
+      course_module.map((module) => module.module_material)
+    );
+  }, [course_module]);
 
   const handleAssessmentTypeChange = (
     event: ChangeEvent<HTMLSelectElement>
@@ -720,7 +729,8 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
 
   const openLink = (index: number) => {
     const link = course_module[index].module_material;
-    window.open(link, "_blank");
+    console.log("link....", link);
+    window.open(link);
   };
 
   // ***********************************************************************************************
@@ -904,13 +914,13 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
       if (responseData && responseData.data) {
         setCourseBasic(responseData.data.course_basic);
         //condition
-        const filteredCourseAssessment = Object.values(
+        const filteredCourseAssessment = Object?.values(
           responseData.data.course_assessment
         ).filter(
           (assessment: any) => assessment.assessment_category === "course"
         ) as CourseAssessment[];
 
-        const filteredModuleAssessment = Object.values(
+        const filteredModuleAssessment = Object?.values(
           responseData.data.course_assessment
         ).filter(
           (assessment: any) => assessment.assessment_category === "module"
