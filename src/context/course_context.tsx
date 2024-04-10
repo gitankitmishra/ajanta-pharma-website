@@ -86,7 +86,7 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
 }) => {
   const router = useRouter();
 
-  const [active_step, setActiveStep] = useState<number>(2);
+  const [active_step, setActiveStep] = useState<number>(0);
 
   const handleStepOneDone = async () => {
     let errors = {};
@@ -227,7 +227,7 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
   });
 
   const generateCourseCode = (
-    training: string,
+    category: string,
     prevID: number | null = null
   ): string => {
     const categoryTable: { [key: string]: string } = {
@@ -238,24 +238,21 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
       "Classroom Training": "CT",
     };
 
-     const trainingTable: { [key: string]: string } = {
-      // Competency
+    const trainingTable: { [key: string]: string } = {
+      //Competancy
       "Business Orientation": "BO",
       "Customer Orientation": "CO",
-      "Operational Excellence": "OE",
-      Leadership: "LE",
-      Communication: "COMM",
-
-      // Medical
-      "Medical Updates": "MU",
-
-      // Marketing
+      "Operational Excellence and Analytics": "",
+      Leadership: "L",
+      Communication: "C",
+      //medical
+      Medical: "ME",
+      //marketing
       "Brand Detailing": "BD",
       "Input Detailing": "ID",
-      "Knock Out Points": "KOP",
+      "Knock Out Points": "KP",
       "Regional IMS": "RIMS",
-
-      // Personal development
+      //Personal development
       "Time Management": "TM",
       "Critical Thinking": "CT",
       "Problem Solving": "PS",
@@ -264,9 +261,8 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
       "Negotiation Skills": "NS",
       "Personal Finance": "PF",
       "Personal Grooming": "PG",
-      "Self Enrichment": "SE",
-
-      // Classroom training
+      "Self-Enrichment": "SE",
+      //Classroom training
       "Medical Representative": "MR",
       Managers: "MGR",
     };
@@ -281,14 +277,16 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     } else {
       id = "01";
     }
-
     const courseCode: string = `${categoryTable[category]}-${month}${year}-${id}`;
     console.log("testtt", courseCode);
 
     return courseCode;
   };
 
-  const generateNewPrevID = async (prevID: number): Promise<number> => {
+  const generateNewPrevID = async (
+    value: string,
+    prevID: number
+  ): Promise<number> => {
     try {
       const response = await fetch(
         `${process.env.SERVER_URL}api/admin/dashboard/getCourseCodeCount`,
@@ -298,7 +296,7 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            courseCategory: course_basic.course_category,
+            courseCategory: value,
           }),
         }
       );
@@ -383,11 +381,12 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
       setCourseBasicError({ ...course_basic_error, [field]: "" });
     }
 
-    if (field === "course_training") {
+    if (field === "course_category") {
       try {
-
-        const newPrevID = await generateNewPrevID(0);
-
+        const newPrevID: number | string | any = await generateNewPrevID(
+          value,
+          0
+        );
         const newCourseCode = generateCourseCode(value, newPrevID);
         setCourseBasic((prev) => ({
           ...prev,
@@ -401,7 +400,6 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
       setCourseBasic((prev) => ({ ...prev, [field]: value }));
     }
   };
-
   // ***********************************************************************************************
 
   // ***********************************************************************************************
@@ -770,14 +768,14 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     if (id === "division") {
       setCourseDesignation((prevState) => ({
         ...prevState,
-        division: prevState?.division.includes(value)
+        division: prevState.division.includes(value)
           ? prevState.division.filter((item) => item !== value)
           : [...prevState.division, value],
       }));
     } else {
       setCourseDesignation((prevState) => ({
         ...prevState,
-        designation: prevState?.designation.includes(value)
+        designation: prevState.designation.includes(value)
           ? prevState.designation.filter((item) => item !== value)
           : [...prevState.designation, value],
       }));
@@ -834,7 +832,7 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
   const [pageSize, setPageSize] = useState(10);
   const [componentPage, setComponentPage] = useState(0);
   const [courseData, setCourseData] = useState<CourseDetails[] | null>(null);
-  const [keyName, setKeyName] = useState("course");
+
   const updatePageNo = (newPage: number) => {
     setPageNo(newPage);
     console.log("Value of the page no is ", newPage);
@@ -848,7 +846,7 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     setLoading(true);
     const response = await fetchService({
       method: "GET",
-      endpoint: `api/admin/dashboard/courseList?page=${pageNo}&pageSize=${pageSize}&key=${keyName}`,
+      endpoint: `api/admin/dashboard/courseList?page=${pageNo}&pageSize=${pageSize}`,
     });
     if (response.code === 200) {
       setCourseData(response.data.data);
