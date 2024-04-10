@@ -58,22 +58,20 @@
 .module-div-section3 {
   display: flex;
   flex-direction: column;
-  gap: 32px;
+  /* gap: 32px; */
   padding: 0 32px 120px 32px;
 }
 
 .module-input {
-  display: grid;
+  display: flex;
   grid-template-columns: repeat(4, 1fr);
   gap: 3rem;
   align-items: center;
 }
 
 .module-input-number,
-.module-input-name,
-.module-input-uplaod-btn {
+.module-input-name {
   width: 100%;
-  
 }
 .module-input-uplaod-btn {
   margin-top: 40px;
@@ -94,6 +92,7 @@
   font-size: 18px;
   font-weight: 600;
   line-height: 28px;
+  margin-bottom: 2rem;
 }
 .module-radio-btns {
   display: flex;
@@ -101,35 +100,65 @@
   gap: 10px;
 }
 
-.module-input-view-btn{
+.module-input-view-btn {
+  display: flex;
+  align-items: flex-end;
+  width: 50%;
+  height: 56px;
+  margin-top: 20px;
+}
+.module-input-view-btn-cancel-icon-span {
+  margin-bottom: 20px;
+  cursor: pointer;
+}
+.module-input-view-btn-area {
   display: flex;
   align-items: center;
   width: 90px;
-height: 56px;
-border-radius: 8px;
-border: 1px solid #FE8100;
-color: #000;
-font-size: 16px;
-font-weight: 400;
-line-height: 24px; 
+  height: 3rem;
+  border-radius: 8px;
+  border: 1px solid #fe8100;
+  color: #000;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
 }
-
-.module-course-assessment-optional-span{
+.module-input-view-text-area {
+  margin-left: 12px;
+  display: flex;
+  justify-content: left;
+  flex-direction: column;
+}
+.module-input-view-btn-file-name-text {
+  color: #000;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 24px;
+}
+.module-input-view-btn-file-size-text {
+  color: #7a7a7a;
+  font-family: "Open sans";
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+}
+.module-course-assessment-optional-span {
   color: #787878;
-font-size: 18px;
-font-weight: 400;
-line-height: 28px; 
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 28px;
 }
 
 .module-sec-add-module-btn-add-module {
   cursor: pointer;
   display: flex;
-    gap: 10px;
-    align-items: center;
+  gap: 10px;
+  align-items: center;
   justify-content: center;
 }
 
 .module-sec-add-module-btn {
+  margin-top: 20px;
   display: flex;
   gap: 6px;
   border: none;
@@ -167,14 +196,13 @@ line-height: 28px;
 }
 .module-download-image {
   margin: auto;
-}
-.module-download-image img {
-  width: 2vw;
-  height: 5vw;
   cursor: pointer;
 }
 .module-eye-icon {
+  width: 8vw;
+  height: 5vw;
   display: flex;
+  cursor: pointer;
   align-items: center;
   justify-content: center;
 }

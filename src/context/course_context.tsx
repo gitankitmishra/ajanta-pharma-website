@@ -38,6 +38,7 @@ export type CourseContextType = {
   course_module: CourseModule[];
   course_assessment: CourseAssessment[];
   handleAddModule: () => void;
+  handleDeleteModule: (index: number) => void;
   handleModuleChange: (event: ChangeEvent<HTMLInputElement>) => void;
   handleAssessmentNameChange: (event: ChangeEvent<HTMLInputElement>) => void;
   handleAssessmentTypeChange: (event: ChangeEvent<HTMLSelectElement>) => void;
@@ -84,7 +85,9 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
 }) => {
   const router = useRouter();
 
+
   const [active_step, setActiveStep] = useState<number>(0);
+
 
   const handleStepOneDone = async () => {
     let errors = {};
@@ -460,6 +463,7 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
         module_material: "",
         assessment_no: course_module.length,
       },
+      // setCourseModulecourse_module([...newlyAddedModules, newModuleIndex]);
     ]);
     setCourseAssessment([
       ...course_assessment,
@@ -473,7 +477,17 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
       },
     ]);
   };
+  const handleDeleteModule = (index: number) => {
+    // Remove module from course_module state
+    const updatedModules = course_module.filter((_, i) => i !== index);
+    setCourseModule(updatedModules);
 
+    // Remove corresponding assessment from course_assessment state
+    const updatedAssessments = course_assessment.filter(
+      (assessment) => assessment.assessment_no !== index
+    );
+    setCourseAssessment(updatedAssessments);
+  };
   //download excel
   const handleDownloadExcel = (index: number) => {
     let ws = XLSX.utils.json_to_sheet([]);
@@ -1039,6 +1053,7 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     course_module,
     course_assessment,
     handleAddModule,
+    handleDeleteModule,
     handleModuleChange,
     handleAssessmentNameChange,
     handleAssessmentTypeChange,
