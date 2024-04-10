@@ -617,11 +617,14 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
 
   const handleAssessmentNameChange = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.id === "pre" || event.target.id === "post") {
+      console.log("assessment main check");
       const temp: CourseAssessment[] = [...course_assessment_main];
       const index: number = event.target.id === "pre" ? 0 : 1;
       temp[index].assessment_name = event.target.value;
       setCourseAssessmentMain(temp);
     } else {
+      console.log("assessment check");
+
       const temp: CourseAssessment[] = [...course_assessment];
       const index: number = parseInt(event.target.id.split("-")[1]);
       temp[index].assessment_name = event.target.value;
@@ -640,13 +643,6 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     const anyFilesUploaded = temp_files.some((file) => file !== undefined);
     setFilesUploaded(anyFilesUploaded);
   };
-
-  useEffect(() => {
-    console.log(
-      "module",
-      course_module.map((module) => module.module_material)
-    );
-  }, [course_module]);
 
   const handleAssessmentTypeChange = (
     event: ChangeEvent<HTMLSelectElement>
@@ -700,25 +696,47 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
       }));
 
       setCourseModule(updatedCourseModule);
-      const response = await fetchService({
-        method: "Post",
-        endpoint: "api/admin/dashboard/uploadCourse",
-        data: {
-          course_module: updatedCourseModule,
-          course_assessment: {
-            ...course_assessment,
-            ...course_assessment_main,
+
+      if (
+        course_assessment_main[0].assessment_name &&
+        course_assessment_main[0].assessment_type !== ""
+      ) {
+        const response = await fetchService({
+          method: "Post",
+          endpoint: "api/admin/dashboard/uploadCourse",
+          data: {
+            course_module: updatedCourseModule,
+            course_assessment: course_assessment,
+            course_assessment_main: course_assessment_main,
+            course_code: course_basic.course_code,
           },
-          course_code: course_basic.course_code,
-        },
-      });
-      if (response.code == 200) {
-        const data = response;
-        console.log("data", data);
+        });
+        if (response.code === 200) {
+          const responseData = response;
+          console.log("data", responseData);
+        } else {
+          console.error(
+            "Length mismatch between data.code and course_module arrays"
+          );
+        }
       } else {
-        console.error(
-          "Length mismatch between data.code and course_module arrays"
-        );
+        const response = await fetchService({
+          method: "Post",
+          endpoint: "api/admin/dashboard/uploadCourse",
+          data: {
+            course_module: updatedCourseModule,
+            course_assessment: course_assessment,
+            course_code: course_basic.course_code,
+          },
+        });
+        if (response.code === 200) {
+          const responseData = response;
+          console.log("data", responseData);
+        } else {
+          console.error(
+            "Length mismatch between data.code and course_module arrays"
+          );
+        }
       }
     }
   };
@@ -758,10 +776,6 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
       }));
     }
   };
-
-  useEffect(() => {
-    console.log("course designation", course_designation);
-  }, [course_designation]);
   //api call for designation
   const publishDesignation = async () => {
     try {
