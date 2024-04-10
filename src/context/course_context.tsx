@@ -64,8 +64,6 @@ export type CourseContextType = {
   handleChangeDesignation(event: ChangeEvent<HTMLInputElement>): void;
   course_designation: CourseDesignation;
   publishDesignation(): void;
-  deserror: string;
-  isMedicalOrMarketing(): any;
 
   //pagination and the Admin All courses display part
   updatePageNo: (newPage: number) => void;
@@ -87,7 +85,9 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
 }) => {
   const router = useRouter();
 
-  const [active_step, setActiveStep] = useState<number>(3);
+
+  const [active_step, setActiveStep] = useState<number>(0);
+
 
   const handleStepOneDone = async () => {
     let errors = {};
@@ -184,10 +184,8 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
       await uploadCourse();
       handleStepTwoDone();
     } else if (active_step === 2) {
-      handleShowError(() => {
-        publishDesignation();
-        handleStepThreeDone();
-      });
+      publishDesignation();
+      handleStepThreeDone();
     } else if (active_step === 3) {
       await uploadfromDraft();
       handleStepFourDone();
@@ -228,7 +226,7 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
   });
 
   const generateCourseCode = (
-    category: string,
+    training: string,
     prevID: number | null = null
   ): string => {
     const categoryTable: { [key: string]: string } = {
@@ -240,20 +238,23 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     };
 
     const trainingTable: { [key: string]: string } = {
-      //Competancy
+      // Competency
       "Business Orientation": "BO",
       "Customer Orientation": "CO",
-      "Operational Excellence and Analytics": "",
-      Leadership: "L",
-      Communication: "C",
-      //medical
-      Medical: "ME",
-      //marketing
+      "Operational Excellence and Analytics": "OEAA",
+      Leadership: "LE",
+      Communication: "COMM",
+
+      // Medical
+      "Medical Updates": "MU",
+
+      // Marketing
       "Brand Detailing": "BD",
       "Input Detailing": "ID",
-      "Knock Out Points": "KP",
+      "Knock Out Points": "KOP",
       "Regional IMS": "RIMS",
-      //Personal development
+
+      // Personal development
       "Time Management": "TM",
       "Critical Thinking": "CT",
       "Problem Solving": "PS",
@@ -262,32 +263,32 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
       "Negotiation Skills": "NS",
       "Personal Finance": "PF",
       "Personal Grooming": "PG",
-      "Self-Enrichment": "SE",
-      //Classroom training
-      "Medical Representative": "MR",
+      "Self Enrichment": "SE",
+
+      // Classroom training
+      "Medical Representative": "MER",
       Managers: "MGR",
     };
-
     const currentDate: Date = new Date();
     const month: string = String(currentDate.getMonth() + 1).padStart(2, "0");
     const year: string = String(currentDate.getFullYear()).slice(-2);
-
     let id: string;
     if (prevID !== null && prevID !== undefined) {
       id = String(Number(prevID) + 1).padStart(2, "0");
     } else {
       id = "01";
     }
-    const courseCode: string = `${categoryTable[category]}-${month}${year}-${id}`;
+
+    const courseCode: string = `${
+      categoryTable[course_basic.course_category]
+    }-${trainingTable[training]}-${month}${year}-${id}`;
+
     console.log("testtt", courseCode);
 
     return courseCode;
   };
 
-  const generateNewPrevID = async (
-    value: string,
-    prevID: number
-  ): Promise<number> => {
+  const generateNewPrevID = async (prevID: number): Promise<number> => {
     try {
       const response = await fetch(
         `${process.env.SERVER_URL}api/admin/dashboard/getCourseCodeCount`,
@@ -297,7 +298,7 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            courseCategory: value,
+            courseCategory: course_basic.course_category,
           }),
         }
       );
@@ -382,12 +383,9 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
       setCourseBasicError({ ...course_basic_error, [field]: "" });
     }
 
-    if (field === "course_category") {
+    if (field === "course_training") {
       try {
-        const newPrevID: number | string | any = await generateNewPrevID(
-          value,
-          0
-        );
+        const newPrevID: number = await generateNewPrevID(0);
         const newCourseCode = generateCourseCode(value, newPrevID);
         setCourseBasic((prev) => ({
           ...prev,
@@ -755,35 +753,6 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
       designation: [],
     });
 
-  // designation error
-  const [deserror, setDesError] = useState<string>("");
-  const handleShowError = (callback: any) => {
-    if (
-      (!course_designation.division ||
-        course_designation.division.length === 0) &&
-      (course_basic.course_category === "Medical" ||
-        course_basic.course_category === "Marketing")
-    ) {
-      setDesError("Select at least one division.");
-      setActiveStep(2);
-    } else {
-      if (
-        course_designation.division &&
-        course_designation.division.length > 0
-      ) {
-        setDesError("");
-        callback();
-      }
-    }
-  };
-
-  const isMedicalOrMarketing = () => {
-    return (
-      course_basic.course_category === "Medical" ||
-      course_basic.course_category === "Marketing"
-    );
-  };
-
   const handleChangeDesignation = (event: ChangeEvent<HTMLInputElement>) => {
     const { id, value } = event.target;
 
@@ -878,7 +847,6 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
       console.log("error");
     }
   };
-
   // const fetchData = async () => {
   //   setLoading(true);
   //   try {
@@ -905,6 +873,10 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
   useEffect(() => {
     fetchData();
   }, [pageNo, pageSize]);
+
+  useEffect(() => {
+    console.log("Course Data", courseData);
+  }, [courseData]);
 
   //*/****************************************************************************************** */
 
@@ -1103,8 +1075,6 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     course_designation,
     handleChangeDesignation,
     publishDesignation,
-    deserror,
-    isMedicalOrMarketing,
 
     //Pagination And All Courses Display
     updatePageNo,
