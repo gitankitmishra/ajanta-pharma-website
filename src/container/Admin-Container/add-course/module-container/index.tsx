@@ -18,6 +18,7 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
   const {
     course_basic,
     course_module,
+    course_module_error,
     course_assessment,
     handleAddModule,
     handleDeleteModule,
@@ -106,6 +107,7 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
                   id={`module_name-${index}`}
                   moduleValue={module.module_name}
                   onUpdate={handleModuleChange}
+                  error={course_module_error.module_name}
                 />
               </div>
               <div className="module-eye-icon"><DownloadIcon /></div>

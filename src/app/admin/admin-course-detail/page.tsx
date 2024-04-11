@@ -6,10 +6,10 @@ interface AdminCourseDetailProps {}
 
 const AdminCourseDetail: FC<AdminCourseDetailProps> = () => {
   return (
-    <main>
+    <section>
       <AddCourseHeroSection />
       <AdminCourseDeatilContainer />
-    </main>
+    </section>
   );
 };
 
