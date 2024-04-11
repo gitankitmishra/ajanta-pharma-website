@@ -121,6 +121,7 @@
   color: #000;
   font-size: 16px;
   font-weight: 400;
+  cursor: pointer;
   line-height: 24px;
 }
 .module-input-view-text-area {
