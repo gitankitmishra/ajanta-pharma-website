@@ -301,9 +301,9 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
           <div className="module-radio-selction">
             <div className="module-course-assessment">
               Course Assessment{" "}
-              <span className="module-course-assessment-optional-span">
+              {/* <span className="module-course-assessment-optional-span">
                 (Optional)
-              </span>
+              </span> */}
             </div>
           </div>
           <div className="module-input">
