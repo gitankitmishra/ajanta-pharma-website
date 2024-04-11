@@ -24,7 +24,7 @@ export type CourseContextType = {
   course_basic_error: {
     [key: string]: string;
   };
-  handleNextClick: () => void;
+  handleNextClick: (index: number) => void;
   handlePreviousClick: () => void;
   active_step: number;
   searchTerm: string;
@@ -61,6 +61,9 @@ export type CourseContextType = {
   writeIntoFile: (index: number) => void;
   visible: boolean;
   handleCancelIcon: (index: number) => void;
+  course_module_error:{
+    [key: string]: string;
+  };
 
   // designation
   handleChangeDesignation(event: ChangeEvent<HTMLInputElement>): void;
@@ -88,9 +91,7 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
 }) => {
   const router = useRouter();
 
-
   const [active_step, setActiveStep] = useState<number>(1);
-
 
   const handleStepOneDone = async () => {
     let errors = {};
@@ -125,7 +126,38 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     setActiveStep(1);
   };
 
-  const handleStepTwoDone = () => {
+  const handleStepTwoDone = (index: number) => {
+    let errors = {};
+    if (course_module[index]?.module_name.trim().length === 0) {
+      errors = { ...errors, module_name: "Select module name" };
+    }
+
+    if (course_assessment[index]?.assessment_type.trim().length === 0) {
+      errors = { ...errors, assessment_type: "Select assessment type" };
+    }
+    // if (course_basic.course_training.trim().length === 0) {
+    //   errors = {
+    //     ...errors,
+    //     course_training: "Select course training type.",
+    //   };
+    // }
+    // if (course_basic.course_name.trim().length === 0) {
+    //   errors = { ...errors, course_name: "Enter course name." };
+    // }
+
+    // if (course_basic.course_objective.trim().length === 0) {
+    //   errors = { ...errors, course_objective: "Enter learning objective." };
+    // }
+
+    // if (course_basic.course_start_date.trim().length === 0) {
+    //   errors = { ...errors, course_start_date: "Select start date." };
+    // }
+
+    if (Object.keys(errors).length !== 0) {
+      setCourseModuleError(errors);
+      return;
+    }
+
     setActiveStep(2);
   };
 
@@ -151,13 +183,13 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     }
   };
 
-  const handleNextClick = async () => {
+  const handleNextClick = async (index: number) => {
     if (active_step === 0) {
       await handleApiCall();
       handleStepOneDone();
     } else if (active_step === 1) {
       await uploadCourse();
-      handleStepTwoDone();
+      handleStepTwoDone(index);
     } else if (active_step === 2) {
       if (
         ((course_basic.course_category === "Medical" ||
@@ -451,7 +483,12 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
       assessment_no: 0,
     },
   ]);
-
+  const [course_module_error, setCourseModuleError] = useState<{
+    [key: string]: string;
+  }>({
+    module_name: "",
+    assessment_type: "",
+  });
   const [files, setFiles] = useState<File[]>([]);
 
   const [filesUploaded, setFilesUploaded] = useState<boolean>(files.length > 0);
@@ -1118,6 +1155,7 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     //modules
     course_module,
     course_assessment,
+
     handleAddModule,
     handleDeleteModule,
     handleModuleChange,
@@ -1133,6 +1171,7 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     writeIntoFile,
     visible,
     handleCancelIcon,
+    course_module_error,
 
     //designation
     course_designation,
