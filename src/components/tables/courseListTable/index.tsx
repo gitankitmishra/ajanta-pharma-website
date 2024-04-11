@@ -17,6 +17,15 @@ const AdminCourseListTable: FC = () => {
   }
   const { courseData, getCourseData } = contextValue;
 
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isCategoryDropdownOpen, setIsCategoryDropdownOpen] = useState(false);
+
+  const toggleDropdown = () => {
+    setIsDropdownOpen(!isDropdownOpen);
+  };
+  const toggleCategoryDropdown = () => {
+    setIsCategoryDropdownOpen(!isCategoryDropdownOpen);
+  };
   return (
     <div className="admin-course-list-table-main-container">
       <table className="admin-course-list-table">
@@ -24,11 +33,90 @@ const AdminCourseListTable: FC = () => {
           <tr>
             <th className="admin-course-list-table-head">Course Code & Name</th>
             <th className="admin-course-list-table-head head-dropdown-icon">
-              Category <DropdownIcon />
+              Category{" "}
+              <div className="admin-course-list-table-category-dropdown-main-div">
+              <span
+                onClick={toggleCategoryDropdown}
+                className="admin-course-list-table-category-dropdown-icon-span"
+              >
+                <DropdownIcon />
+              </span>
+              {isCategoryDropdownOpen && (
+                <div className="admin-course-list-table-category-dropdown-content">
+                  <span
+                    className="admin-course-list-table-category-dropdown-content-span"
+                    onClick={toggleCategoryDropdown}
+                  >
+                    All
+                  </span>
+                  <span
+                    className="admin-course-list-table-category-dropdown-content-span"
+                    onClick={toggleCategoryDropdown}
+                  >
+                    Competency Based Skills
+                  </span>
+                  <span
+                    className="admin-course-list-table-category-dropdown-content-span"
+                    onClick={toggleCategoryDropdown}
+                  >
+                   Classroom Training
+                  </span>
+                  <span
+                    className="admin-course-list-table-category-dropdown-content-span"
+                    onClick={toggleCategoryDropdown}
+                  >
+                  Personal Development
+                  </span>
+                  <span
+                    className="admin-course-list-table-category-dropdown-content-span"
+                    onClick={toggleCategoryDropdown}
+                  >
+                  Medical
+                  </span>
+                  <span
+                    className="admin-course-list-table-category-dropdown-content-span"
+                    onClick={toggleCategoryDropdown}
+                  >
+                  Marketing
+                  </span>
+                </div>
+              )}
+              </div>
             </th>
             <th className="admin-course-list-table-head">Upload Date</th>
             <th className="admin-course-list-table-head head-dropdown-icon">
-              Status <DropdownIcon />
+              Status
+              <div className="admin-course-list-table-head-dropdown-main-div">
+                <span
+                  onClick={toggleDropdown}
+                  className="admin-course-list-table-head-dropdown-icon-span"
+                >
+                  <DropdownIcon />
+                </span>
+
+                {isDropdownOpen && (
+                  <div className="admin-course-list-table-head-dropdown-content">
+                    <span
+                      className="admin-course-list-table-head-dropdown-content-span"
+                      onClick={toggleDropdown}
+                    >
+                      All
+                    </span>
+                    <span
+                      className="admin-course-list-table-head-dropdown-content-span"
+                      onClick={toggleDropdown}
+                    >
+                      Active
+                    </span>
+                    <span
+                      className="admin-course-list-table-head-dropdown-content-span"
+                      onClick={toggleDropdown}
+                    >
+                      Inactive
+                    </span>
+                  </div>
+                )}
+              </div>
             </th>
             <th className="admin-course-list-table-head ">View</th>
           </tr>
