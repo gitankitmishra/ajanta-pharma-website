@@ -9,7 +9,6 @@ import { CourseContext, CourseContextType } from "@/context/course_context";
 const AdminCourseListTable: FC = () => {
   const contextValue = useContext(CourseContext);
 
- 
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isCategoryDropdownOpen, setIsCategoryDropdownOpen] = useState(false);
@@ -18,7 +17,7 @@ const AdminCourseListTable: FC = () => {
   // }, [searchTerm]);
 
   // const { handleCourseCodeChange } = useContext(EditCourseContext);
-  const { course_basic, searchTerm } = useContext(
+  const { course_basic, searchTerm, handleFilterCategoryChange, handleFitlerStatusChange, } = useContext(
     CourseContext
   ) as CourseContextType;
   if (!contextValue) {
@@ -36,19 +35,26 @@ const AdminCourseListTable: FC = () => {
   const toggleCategoryDropdown = () => {
     setIsCategoryDropdownOpen(!isCategoryDropdownOpen);
   };
+
+
   return (
     <div className="admin-course-list-table-main-container">
       <table className="admin-course-list-table">
         <thead className="admin-course-list-thead">
           <tr>
-            <th className="admin-course-list-table-head">
-              Course Code & Name <DropdownIcon />
+
+            < th className="admin-course-list-table-head">
+              Course Code & Name
+
             </th>
+
             <th className="admin-course-list-table-head head-dropdown-icon">
               Category{" "}
               <div className="admin-course-list-table-category-dropdown-main-div">
                 <span
-                  onClick={toggleCategoryDropdown}
+                  onClick={() => {
+                    toggleCategoryDropdown();
+                  }}
                   className="admin-course-list-table-category-dropdown-icon-span"
                 >
                   <DropdownIcon />
@@ -57,37 +63,47 @@ const AdminCourseListTable: FC = () => {
                   <div className="admin-course-list-table-category-dropdown-content">
                     <span
                       className="admin-course-list-table-category-dropdown-content-span"
-                      onClick={toggleCategoryDropdown}
+                      onClick={() => {
+                        handleFilterCategoryChange("");
+                        toggleCategoryDropdown();
+                      }}
                     >
                       All
                     </span>
                     <span
                       className="admin-course-list-table-category-dropdown-content-span"
-                      onClick={toggleCategoryDropdown}
+                      onClick={() => {
+                        handleFilterCategoryChange("Competency Based Skills");
+                        toggleCategoryDropdown();
+                      }}
                     >
                       Competency Based Skills
                     </span>
+
                     <span
                       className="admin-course-list-table-category-dropdown-content-span"
-                      onClick={toggleCategoryDropdown}
-                    >
-                      Classroom Training
-                    </span>
-                    <span
-                      className="admin-course-list-table-category-dropdown-content-span"
-                      onClick={toggleCategoryDropdown}
+                      onClick={() => {
+                        handleFilterCategoryChange("Personal Development");
+                        toggleCategoryDropdown();
+                      }}
                     >
                       Personal Development
                     </span>
                     <span
                       className="admin-course-list-table-category-dropdown-content-span"
-                      onClick={toggleCategoryDropdown}
+                      onClick={() => {
+                        handleFilterCategoryChange("Medical");
+                        toggleCategoryDropdown();
+                      }}
                     >
                       Medical
                     </span>
                     <span
                       className="admin-course-list-table-category-dropdown-content-span"
-                      onClick={toggleCategoryDropdown}
+                      onClick={() => {
+                        handleFilterCategoryChange("Marketing");
+                        toggleCategoryDropdown();
+                      }}
                     >
                       Marketing
                     </span>
@@ -110,19 +126,28 @@ const AdminCourseListTable: FC = () => {
                   <div className="admin-course-list-table-head-dropdown-content">
                     <span
                       className="admin-course-list-table-head-dropdown-content-span"
-                      onClick={toggleDropdown}
+                      onClick={() => {
+                        handleFitlerStatusChange(null);
+                        toggleDropdown();
+                      }}
                     >
                       All
                     </span>
                     <span
                       className="admin-course-list-table-head-dropdown-content-span"
-                      onClick={toggleDropdown}
+                      onClick={() => {
+                        handleFitlerStatusChange(true);
+                        toggleDropdown();
+                      }}
                     >
                       Active
                     </span>
                     <span
                       className="admin-course-list-table-head-dropdown-content-span"
-                      onClick={toggleDropdown}
+                      onClick={() => {
+                        handleFitlerStatusChange(false);
+                        toggleDropdown();
+                      }}
                     >
                       Inactive
                     </span>
@@ -150,11 +175,10 @@ const AdminCourseListTable: FC = () => {
               </td>
               <td className="admin-course-list-table-data">
                 <p
-                  className={`admin-course-status-span ${
-                    course.course_basic?.course_status === "active"
-                      ? "status-active"
-                      : "status-inactive"
-                  }`}
+                  className={`admin-course-status-span ${course.course_basic?.course_status === "active"
+                    ? "status-active"
+                    : "status-inactive"
+                    }`}
                 >
                   {course.course_basic?.course_status === "active"
                     ? "Active"
@@ -176,7 +200,7 @@ const AdminCourseListTable: FC = () => {
           ))}
         </tbody>
       </table>
-    </div>
+    </div >
   );
 };
 
