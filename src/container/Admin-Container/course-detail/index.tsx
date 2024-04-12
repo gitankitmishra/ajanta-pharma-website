@@ -387,7 +387,7 @@ const AdminCourseDeatilContainer: FC<
 
                     <div className="admin-course-detail-section2-admin-course-detailed-file">
                       <div
-                        onClick={() => writeIntoFile(index)}
+                        // onClick={(e) => writeIntoFile( index)}
                         className={`admin-course-detailed-video-file ${
                           isClicked ? "clicked" : "unClicked"
                         }`}
@@ -573,7 +573,7 @@ const AdminCourseDeatilContainer: FC<
                       </span>
                       </div> */}
                     <div
-                      onClick={() => writeIntoFile(0)}
+                      // onClick={() => writeIntoFile(0)}
                       className={`admin-course-detailed-video-file ${
                         isClicked ? "clicked" : "unClicked"
                       }`}
@@ -698,7 +698,7 @@ const AdminCourseDeatilContainer: FC<
                       </span>
                       </div> */}
                       <div
-                        onClick={() => writeIntoFile(1)}
+                        // onClick={() => writeIntoFile(1)}
                         className={`admin-course-detailed-video-file ${
                           isClicked ? "clicked" : "unClicked"
                         }`}

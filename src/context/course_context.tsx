@@ -57,13 +57,20 @@ export type CourseContextType = {
     category: string
   ) => void;
   openLink: (index: number) => void;
-  filesUploaded: boolean;
-  writeIntoFile: (index: number) => void;
+  filesUploaded: boolean[];
+  writeIntoFile: (id: string | null, index: number) => void;
   visible: boolean;
   handleCancelIcon: (index: number) => void;
+
+  uploadfromDraft: () => void;
+  handleCancelIconAssessment: (id: string | null, index: number) => void;
+  fileName: string;
+  fileSize: number;
+
   course_module_error:{
     [key: string]: string;
   };
+
 
   // designation
   handleChangeDesignation(event: ChangeEvent<HTMLInputElement>): void;
@@ -491,7 +498,10 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
   });
   const [files, setFiles] = useState<File[]>([]);
 
-  const [filesUploaded, setFilesUploaded] = useState<boolean>(files.length > 0);
+  const initialFilesUploadedState = Array(course_module.length).fill(false);
+  const [filesUploaded, setFilesUploaded] = useState<boolean[]>(
+    initialFilesUploadedState
+  );
 
   const [course_assessment, setCourseAssessment] = useState<CourseAssessment[]>(
     [
@@ -563,6 +573,7 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     );
     setCourseAssessment(updatedAssessments);
   };
+
   //download excel
   const handleDownloadExcel = (index: number) => {
     let ws = XLSX.utils.json_to_sheet([]);
@@ -642,15 +653,20 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
           const sheet = workbook.Sheets[sheetName];
           const excelData = XLSX.utils.sheet_to_json(sheet);
 
-          if (category === "course") {
-            course_assessment_main[index].assessment_data =
-              excelData as QuestionData[];
+          console.log(category);
 
-            console.log(course_assessment_main);
+          if (category === "course") {
+            const temp = course_assessment_main;
+
+            temp[index].assessment_data = excelData as QuestionData[];
+
+            setCourseAssessmentMain([...temp]);
           } else {
-            course_assessment[index].assessment_data =
-              excelData as QuestionData[];
-            console.log(course_assessment);
+            const temp = course_assessment;
+
+            temp[index].assessment_data = excelData as QuestionData[];
+
+            setCourseAssessment([...temp]);
           }
         }
       };
@@ -666,37 +682,72 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
   };
 
   //write the data from assessment data
-  const writeIntoFile = (index: number) => {
-    const assessmentData = course_assessment[index].assessment_data;
+  const writeIntoFile = (id: string | null, index: number) => {
+    if (id == "pre" || id == "post") {
+      const assessmentData = course_assessment_main[index]?.assessment_data;
 
-    if (!assessmentData || assessmentData.length === 0) {
-      console.error("No assessment data available to write into file.");
-      return;
+      if (!assessmentData || assessmentData.length === 0) {
+        console.error("No assessment data available to write into file.");
+        return;
+      }
+
+      const ws = XLSX.utils.json_to_sheet(assessmentData);
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(
+        wb,
+        ws,
+        `${course_basic.course_code}_${course_assessment_main[index]?.assessment_position}`
+      );
+      const fileName = `${course_basic.course_code}_${course_assessment_main[index]?.assessment_position}.xlsx`;
+      console.log("file name", fileName);
+
+      XLSX.writeFile(wb, fileName);
+    } else {
+      const assessmentData = course_assessment[index]?.assessment_data;
+
+      if (!assessmentData || assessmentData.length === 0) {
+        console.error("No assessment data available to write into file.");
+        return;
+      }
+
+      const ws = XLSX.utils.json_to_sheet(assessmentData);
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(
+        wb,
+        ws,
+        `${course_basic.course_code}_${course_module[index].module_no}`
+      );
+
+      XLSX.writeFile(
+        wb,
+        `${course_basic.course_code}_${course_module[index].module_no}.xlsx`
+      );
     }
-
-    const ws = XLSX.utils.json_to_sheet(assessmentData);
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(
-      wb,
-      ws,
-      `${course_basic.course_code}_${course_module[index].module_no}`
-    );
-
-    XLSX.writeFile(
-      wb,
-      `${course_basic.course_code}_${course_module[index].module_no}.xlsx`
-    );
   };
 
   const handleCancelIcon = (index: number) => {
-    const updatedCourseModule = [...course_module];
-    updatedCourseModule[index] = {
-      ...updatedCourseModule[index],
-      module_material: "",
-    };
-    setCourseModule(updatedCourseModule);
+    const temp = [...course_module];
+    temp[index].module_material = "";
+    setCourseModule(temp);
     setVisible(false);
-    setFilesUploaded(false);
+
+    // Create a new array with the updated filesUploaded state for the specific index
+    const updatedFilesUploaded = [...filesUploaded];
+    updatedFilesUploaded[index] = false;
+    setFilesUploaded(updatedFilesUploaded);
+  };
+  const handleCancelIconAssessment = (id: string | null, index: number) => {
+    if (id == "pre" || id == "post") {
+      const temp = [...course_assessment_main];
+      temp[index].assessment_data = [];
+      setCourseAssessmentMain(temp);
+      setVisible(false);
+    } else {
+      const temp = [...course_assessment];
+      temp[index].assessment_data = [];
+      setCourseAssessment(temp);
+      setVisible(false);
+    }
   };
 
   const handleModuleChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -728,17 +779,42 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     }
   };
 
+  const [fileName, setFileName] = useState<string>("Not selected");
+  const [fileSize, setFileSize] = useState<number>(0);
+
   const handleFileSelect = (selectedFile: File, index: number) => {
     console.log("Selecting files for module...");
     console.log("selected file...", selectedFile);
 
-    const temp_files = files;
+    const temp_files = [...files];
     temp_files[index] = selectedFile;
+
     setFiles(temp_files);
 
-    const anyFilesUploaded = temp_files.some((file) => file !== undefined);
-    setFilesUploaded(anyFilesUploaded);
+    // Check if any files are uploaded for the current module
+    const anyFilesUploaded =
+      selectedFile !== undefined && selectedFile !== null;
+
+    // Update filesUploaded for the specific module
+    setFilesUploaded((prevFilesUploaded) => {
+      const updatedFilesUploaded = [...prevFilesUploaded];
+      updatedFilesUploaded[index] = anyFilesUploaded;
+      return updatedFilesUploaded;
+    });
+
+    // Update fileName and fileSize only for the specific module
+    if (anyFilesUploaded) {
+      setFileName(selectedFile.name);
+      setFileSize(selectedFile.size);
+    } else {
+      setFileName("");
+      setFileSize(0);
+    }
   };
+
+  useEffect(() => {
+    console.log("filesssssssss", files);
+  }, [files]);
 
   const handleAssessmentTypeChange = (
     event: ChangeEvent<HTMLSelectElement>
@@ -840,6 +916,7 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
   };
 
   const openLink = (index: number) => {
+    console.log("check module url", course_module[index].module_material);
     const link = course_module[index].module_material;
     console.log("linkkkkk....", link);
     window.open(link);
@@ -969,10 +1046,6 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     fetchData();
   }, [pageNo, pageSize]);
 
-  useEffect(() => {
-    console.log("Course Data", courseData);
-  }, [courseData]);
-
   //*/****************************************************************************************** */
 
   //GET COURSE AND EDIT COURSE
@@ -1099,19 +1172,6 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     }
   };
 
-  useEffect(() => {
-    console.log("basic", course_basic.course_status);
-    console.log("module", course_module);
-    console.log("assessment", course_assessment);
-    console.log("assessment - main", course_assessment_main);
-    console.log("designation", course_designation);
-  }, [
-    course_basic,
-    course_assessment,
-    course_assessment_main,
-    course_designation,
-  ]);
-
   // ***********************************************************************************************
 
   // ***********************************************************************************************
@@ -1121,11 +1181,10 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
   const uploadfromDraft = async () => {
     console.log("uploading data");
     const response = await fetchService({
-      method: "GET",
+      method: "POST",
       endpoint: `api/admin/dashboard/pushData/${course_basic.course_code}`,
     });
     if (response.code == 200) {
-      alert("Data Published SuccessFully!!!");
       router.push("/admin/admin-courses");
       console.log("dataa", response.data);
       console.log("uploaded to course collection");
@@ -1171,6 +1230,11 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     writeIntoFile,
     visible,
     handleCancelIcon,
+
+    handleCancelIconAssessment,
+    fileName,
+    fileSize,
+
     course_module_error,
 
     //designation
@@ -1179,6 +1243,8 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     publishDesignation,
     ds_error,
 
+    //upload courses final stage api call
+    uploadfromDraft,
     //Pagination And All Courses Display
     updatePageNo,
     courseData,
