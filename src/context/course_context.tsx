@@ -24,7 +24,7 @@ export type CourseContextType = {
   course_basic_error: {
     [key: string]: string;
   };
-  handleNextClick: () => void;
+  handleNextClick: (index: number) => void;
   handlePreviousClick: () => void;
   active_step: number;
   searchTerm: string;
@@ -57,12 +57,22 @@ export type CourseContextType = {
     category: string
   ) => void;
   openLink: (index: number) => void;
-  filesUploaded: boolean;
+  filesUploaded: boolean[];
   writeIntoFile: (id: string | null, index: number) => void;
   visible: boolean;
   handleCancelIcon: (index: number) => void;
+
+  course_module_error: {
+
+
   uploadfromDraft: () => void;
   handleCancelIconAssessment: (id: string | null, index: number) => void;
+  fileName: string;
+  fileSize: number;
+
+    [key: string]: string;
+  };
+
 
   // designation
   handleChangeDesignation(event: ChangeEvent<HTMLInputElement>): void;
@@ -76,6 +86,9 @@ export type CourseContextType = {
   totalPages: number; // New property for total pages
   handleComponentPage: (value: number) => void;
 
+  handleFilterCategoryChange: (category: string) => void;
+  handleFitlerStatusChange: (category: boolean | null) => void;
+  handleFilterCourseChange: (course: string) => void;
   //GET AND EDIT COURSES
   getCourseData: (course_id: string) => void;
 
@@ -125,7 +138,38 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     setActiveStep(1);
   };
 
-  const handleStepTwoDone = () => {
+  const handleStepTwoDone = (index: number) => {
+    let errors = {};
+    if (course_module[index]?.module_name.trim().length === 0) {
+      errors = { ...errors, module_name: "Select module name" };
+    }
+
+    if (course_assessment[index]?.assessment_type.trim().length === 0) {
+      errors = { ...errors, assessment_type: "Select assessment type" };
+    }
+    // if (course_basic.course_training.trim().length === 0) {
+    //   errors = {
+    //     ...errors,
+    //     course_training: "Select course training type.",
+    //   };
+    // }
+    // if (course_basic.course_name.trim().length === 0) {
+    //   errors = { ...errors, course_name: "Enter course name." };
+    // }
+
+    // if (course_basic.course_objective.trim().length === 0) {
+    //   errors = { ...errors, course_objective: "Enter learning objective." };
+    // }
+
+    // if (course_basic.course_start_date.trim().length === 0) {
+    //   errors = { ...errors, course_start_date: "Select start date." };
+    // }
+
+    if (Object.keys(errors).length !== 0) {
+      setCourseModuleError(errors);
+      return;
+    }
+
     setActiveStep(2);
   };
 
@@ -151,13 +195,13 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     }
   };
 
-  const handleNextClick = async () => {
+  const handleNextClick = async (index: number) => {
     if (active_step === 0) {
       await handleApiCall();
       handleStepOneDone();
     } else if (active_step === 1) {
       await uploadCourse();
-      handleStepTwoDone();
+      handleStepTwoDone(index);
     } else if (active_step === 2) {
       if (
         ((course_basic.course_category === "Medical" ||
@@ -334,9 +378,8 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
       id = "01";
     }
 
-    const courseCode: string = `${
-      categoryTable[course_basic.course_category]
-    }-${trainingTable[training]}-${month}${year}-${id}`;
+    const courseCode: string = `${categoryTable[course_basic.course_category]
+      }-${trainingTable[training]}-${month}${year}-${id}`;
 
     console.log("testtt", courseCode);
 
@@ -451,10 +494,18 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
       assessment_no: 0,
     },
   ]);
-
+  const [course_module_error, setCourseModuleError] = useState<{
+    [key: string]: string;
+  }>({
+    module_name: "",
+    assessment_type: "",
+  });
   const [files, setFiles] = useState<File[]>([]);
 
-  const [filesUploaded, setFilesUploaded] = useState<boolean>(files.length > 0);
+  const initialFilesUploadedState = Array(course_module.length).fill(false);
+  const [filesUploaded, setFilesUploaded] = useState<boolean[]>(
+    initialFilesUploadedState
+  );
 
   const [course_assessment, setCourseAssessment] = useState<CourseAssessment[]>(
     [
@@ -526,6 +577,7 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     );
     setCourseAssessment(updatedAssessments);
   };
+
   //download excel
   const handleDownloadExcel = (index: number) => {
     let ws = XLSX.utils.json_to_sheet([]);
@@ -632,12 +684,7 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
       console.error("No file selected.");
     }
   };
-  useEffect(() => {
-    console.log(
-      "Assessment data check",
-      course_assessment[0].assessment_data.length
-    );
-  }, [course_assessment_main]);
+
   //write the data from assessment data
   const writeIntoFile = (id: string | null, index: number) => {
     if (id == "pre" || id == "post") {
@@ -685,11 +732,14 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
   const handleCancelIcon = (index: number) => {
     const temp = [...course_module];
     temp[index].module_material = "";
-    setCourseModule([...temp]);
+    setCourseModule(temp);
     setVisible(false);
-    setFilesUploaded(false);
-  };
 
+    // Create a new array with the updated filesUploaded state for the specific index
+    const updatedFilesUploaded = [...filesUploaded];
+    updatedFilesUploaded[index] = false;
+    setFilesUploaded(updatedFilesUploaded);
+  };
   const handleCancelIconAssessment = (id: string | null, index: number) => {
     if (id == "pre" || id == "post") {
       const temp = [...course_assessment_main];
@@ -733,16 +783,37 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     }
   };
 
+  const [fileName, setFileName] = useState<string>("Not selected");
+  const [fileSize, setFileSize] = useState<number>(0);
+
   const handleFileSelect = (selectedFile: File, index: number) => {
     console.log("Selecting files for module...");
     console.log("selected file...", selectedFile);
 
     const temp_files = [...files];
     temp_files[index] = selectedFile;
+
     setFiles(temp_files);
 
-    const anyFilesUploaded = temp_files.some((file) => file !== undefined);
-    setFilesUploaded(anyFilesUploaded);
+    // Check if any files are uploaded for the current module
+    const anyFilesUploaded =
+      selectedFile !== undefined && selectedFile !== null;
+
+    // Update filesUploaded for the specific module
+    setFilesUploaded((prevFilesUploaded) => {
+      const updatedFilesUploaded = [...prevFilesUploaded];
+      updatedFilesUploaded[index] = anyFilesUploaded;
+      return updatedFilesUploaded;
+    });
+
+    // Update fileName and fileSize only for the specific module
+    if (anyFilesUploaded) {
+      setFileName(selectedFile.name);
+      setFileSize(selectedFile.size);
+    } else {
+      setFileName("");
+      setFileSize(0);
+    }
   };
 
   useEffect(() => {
@@ -919,7 +990,7 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
   };
   // ***********************************************************************************************
 
-  //Pagination
+  //Pagination and Filter Logic api
   //All courses Display
   const [pageNo, setPageNo] = useState(1);
   const [loading, setLoading] = useState(false);
@@ -928,6 +999,35 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
   const [pageSize, setPageSize] = useState(10);
   const [componentPage, setComponentPage] = useState(0);
   const [courseData, setCourseData] = useState<CourseDetails[] | null>(null);
+  const [filterCategory, setFilterCategory] = useState<string>("");
+  const [filterStatus, setFilterStatus] = useState<boolean | null>(true);
+  const [filterCourse, setFilterCourse] = useState("course");
+
+
+  useEffect(() => {
+    console.log("Course category", filterCategory);
+    console.log("Course course", filterCourse);
+    console.log("Course status", filterStatus);
+
+  }, [filterCategory, filterCourse, filterStatus])
+
+  //handle function change
+  const handleFilterCategoryChange = (category: string) => {
+    // Update the filterCategory state
+    setFilterCategory(category);
+  };
+
+  const handleFitlerStatusChange = (status: boolean | null) => {
+    // Update the filterStatus state
+    setFilterStatus(status);
+  };
+
+  const handleFilterCourseChange = (course: string) => {
+    // Update the filterCourse state
+    setFilterCourse(course);
+  };
+
+
 
   const updatePageNo = (newPage: number) => {
     setPageNo(newPage);
@@ -942,7 +1042,7 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     setLoading(true);
     const response = await fetchService({
       method: "GET",
-      endpoint: `api/admin/dashboard/courseList?page=${pageNo}&pageSize=${pageSize}`,
+      endpoint: `api/admin/dashboard/filter?category=${filterCategory}&status=${filterStatus}&key=${filterCourse}&page=${pageNo}&pageSize=${pageSize}`
     });
     if (response.code === 200) {
       setCourseData(response.data.data);
@@ -1105,6 +1205,7 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     }
   };
 
+
   // ***********************************************************************************************
 
   // ***********************************************************************************************
@@ -1125,6 +1226,13 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
       console.log("error");
     }
   };
+  // ***********************************************************************************************
+
+
+
+
+
+
   // ***********************************************************************************************
   const course_values = {
     //common
@@ -1147,6 +1255,7 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     //modules
     course_module,
     course_assessment,
+
     handleAddModule,
     handleDeleteModule,
     handleModuleChange,
@@ -1162,7 +1271,12 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     writeIntoFile,
     visible,
     handleCancelIcon,
+
     handleCancelIconAssessment,
+    fileName,
+    fileSize,
+
+    course_module_error,
 
     //designation
     course_designation,
@@ -1177,6 +1291,9 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     courseData,
     totalPages,
     handleComponentPage,
+    handleFilterCategoryChange,
+    handleFitlerStatusChange,
+    handleFilterCourseChange,
 
     //GET COURSES
     getCourseData,
