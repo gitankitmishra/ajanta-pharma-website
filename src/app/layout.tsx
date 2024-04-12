@@ -29,7 +29,8 @@ export default function RootLayout({
       <html lang="en">
         <body className={`main-body ${raleway.className}`}>
           {!hideNavbar && <Navbar user_type="manager" />}
-          <main>{children}</main>
+          {/* <main>{children}</main> */}
+          {children}
         </body>
       </html>
     </CourseProvider>

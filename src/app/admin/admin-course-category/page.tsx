@@ -7,10 +7,10 @@ interface AdminCourseCategoryProps {}
 
 const AdminCourseCategory: FC<AdminCourseCategoryProps> = () => {
   return (
-    <section>
+    <main>
       <AdminCoursesHeroSection />
       <AdminCourseCategoryContainer/>
-    </section>
+    </main>
   );
 };
 

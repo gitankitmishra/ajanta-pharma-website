@@ -6,10 +6,10 @@ interface AdminNotificationProps {}
 
 const AdminNotification: FC<AdminNotificationProps> = () => {
   return (
-    <section>
+    <main>
       <AdminCoursesHeroSection />
       <AdminNotificationContainer />
-    </section>
+    </main>
   );
 };
 
