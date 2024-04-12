@@ -1,6 +1,5 @@
 import React, { useContext } from "react";
 import { Pagination } from "@mui/material";
-import { AdminCourcesContext } from "@/context/allCourses/courses_details";
 import { CourseContext } from "@/context/course_context";
 
 interface CustomPaginationProps {
@@ -16,13 +15,13 @@ const CustomPagination: React.FC<CustomPaginationProps> = ({ currentPage, onPage
     return null;
   }
 
-  const { updatePageNo,totalPages } = contextValue;
+  const { updatePageNo, totalPages } = contextValue;
   const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
     onPageChange(value);
     updatePageNo(value);
   };
 
-   
+
 
   return (
     <Pagination
@@ -52,7 +51,7 @@ const CustomPagination: React.FC<CustomPaginationProps> = ({ currentPage, onPage
           borderRadius: "12px", // Border radius of 12px
           width: "46px",
           height: "46px",
-          fontSize:"16px",
+          fontSize: "16px",
         },
         "& .MuiPaginationItem-icon": {
           borderRadius: "12px", // Border radius of 12px for arrow icons
@@ -61,10 +60,10 @@ const CustomPagination: React.FC<CustomPaginationProps> = ({ currentPage, onPage
         "& .Mui-selected": { backgroundColor: "#FE8100", color: "#fff" },
         borderRadius: "12px", // Border radius of the pagination component
         "& .css-19xm0h7-MuiButtonBase-root-MuiPaginationItem-root": {
-         width: "46px",
-         height: "46px",
-         borderRadius: "12px",
-         borderColor: "#fe8100",
+          width: "46px",
+          height: "46px",
+          borderRadius: "12px",
+          borderColor: "#fe8100",
         },
       }}
     />

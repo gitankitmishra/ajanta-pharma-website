@@ -62,12 +62,14 @@ export type CourseContextType = {
   visible: boolean;
   handleCancelIcon: (index: number) => void;
 
+  course_module_error: {
+
+
   uploadfromDraft: () => void;
   handleCancelIconAssessment: (id: string | null, index: number) => void;
   fileName: string;
   fileSize: number;
 
-  course_module_error:{
     [key: string]: string;
   };
 
@@ -84,6 +86,9 @@ export type CourseContextType = {
   totalPages: number; // New property for total pages
   handleComponentPage: (value: number) => void;
 
+  handleFilterCategoryChange: (category: string) => void;
+  handleFitlerStatusChange: (category: boolean | null) => void;
+  handleFilterCourseChange: (course: string) => void;
   //GET AND EDIT COURSES
   getCourseData: (course_id: string) => void;
 
@@ -373,9 +378,8 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
       id = "01";
     }
 
-    const courseCode: string = `${
-      categoryTable[course_basic.course_category]
-    }-${trainingTable[training]}-${month}${year}-${id}`;
+    const courseCode: string = `${categoryTable[course_basic.course_category]
+      }-${trainingTable[training]}-${month}${year}-${id}`;
 
     console.log("testtt", courseCode);
 
@@ -986,7 +990,7 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
   };
   // ***********************************************************************************************
 
-  //Pagination
+  //Pagination and Filter Logic api
   //All courses Display
   const [pageNo, setPageNo] = useState(1);
   const [loading, setLoading] = useState(false);
@@ -995,6 +999,35 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
   const [pageSize, setPageSize] = useState(10);
   const [componentPage, setComponentPage] = useState(0);
   const [courseData, setCourseData] = useState<CourseDetails[] | null>(null);
+  const [filterCategory, setFilterCategory] = useState<string>("");
+  const [filterStatus, setFilterStatus] = useState<boolean | null>(true);
+  const [filterCourse, setFilterCourse] = useState("course");
+
+
+  useEffect(() => {
+    console.log("Course category", filterCategory);
+    console.log("Course course", filterCourse);
+    console.log("Course status", filterStatus);
+
+  }, [filterCategory, filterCourse, filterStatus])
+
+  //handle function change
+  const handleFilterCategoryChange = (category: string) => {
+    // Update the filterCategory state
+    setFilterCategory(category);
+  };
+
+  const handleFitlerStatusChange = (status: boolean | null) => {
+    // Update the filterStatus state
+    setFilterStatus(status);
+  };
+
+  const handleFilterCourseChange = (course: string) => {
+    // Update the filterCourse state
+    setFilterCourse(course);
+  };
+
+
 
   const updatePageNo = (newPage: number) => {
     setPageNo(newPage);
@@ -1009,7 +1042,7 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     setLoading(true);
     const response = await fetchService({
       method: "GET",
-      endpoint: `api/admin/dashboard/courseList?page=${pageNo}&pageSize=${pageSize}`,
+      endpoint: `api/admin/dashboard/filter?category=${filterCategory}&status=${filterStatus}&key=${filterCourse}&page=${pageNo}&pageSize=${pageSize}`
     });
     if (response.code === 200) {
       setCourseData(response.data.data);
@@ -1172,6 +1205,7 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     }
   };
 
+
   // ***********************************************************************************************
 
   // ***********************************************************************************************
@@ -1192,6 +1226,13 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
       console.log("error");
     }
   };
+  // ***********************************************************************************************
+
+
+
+
+
+
   // ***********************************************************************************************
   const course_values = {
     //common
@@ -1250,6 +1291,9 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     courseData,
     totalPages,
     handleComponentPage,
+    handleFilterCategoryChange,
+    handleFitlerStatusChange,
+    handleFilterCourseChange,
 
     //GET COURSES
     getCourseData,
