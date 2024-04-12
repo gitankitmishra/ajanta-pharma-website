@@ -62,6 +62,7 @@ export type CourseContextType = {
   visible: boolean;
   handleCancelIcon: (index: number) => void;
   fileExtension: string[];
+
   uploadfromDraft: () => void;
   handleCancelIconAssessment: (id: string | null, index: number) => void;
   fileName: string[];
@@ -500,6 +501,7 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
   }>({
     module_name: "",
     module_file: "",
+    assessment_type: "",
   });
   const [files, setFiles] = useState<File[]>([]);
 
@@ -1278,6 +1280,7 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     visible,
     handleCancelIcon,
     fileExtension,
+
     handleCancelIconAssessment,
     fileName,
     fileSize,

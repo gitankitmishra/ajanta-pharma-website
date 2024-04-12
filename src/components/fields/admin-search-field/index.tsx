@@ -1,4 +1,3 @@
-"use client";
 import { SearchIcon } from "@/components/icons/search-icon";
 import { FC, useContext } from "react";
 import "./style.css";
