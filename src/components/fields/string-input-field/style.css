@@ -1,6 +1,6 @@
 .input-field {
     width: 87%;
-    height: 1.7rem;
+    height: 1.3rem !important;
     border-radius: 8px;
     background: rgba(254, 129, 0, 0.1);
     border: none;

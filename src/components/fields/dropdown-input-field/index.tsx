@@ -1,33 +1,53 @@
-import React, { ChangeEvent, FC, useState } from "react";
+import React, { ChangeEvent, FC, useEffect, useState } from "react";
+
 import "./style.css";
+
 import { ArrowDown } from "@/components/icons/arrow-down";
 
 interface DropdownInputFieldProps {
   value: string;
+
   onValueChange?: (selectedCategory: string) => void;
+
   options: string[];
+
   placeholder?: string;
+
   error?: string;
+
   valueLabel: string[];
+
   onChange?: (event: ChangeEvent<HTMLSelectElement>) => void;
+
   id?: string;
+
+  isEditable?: boolean;
 }
 
 const DropdownInputField: FC<DropdownInputFieldProps> = ({
   value,
+
   onValueChange,
+
   options,
+
   placeholder,
+
   error = "",
+
   valueLabel,
+
   onChange,
+
   id,
+  isEditable,
 }) => {
   const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     onValueChange!(event.target.value);
   };
 
   // Determine if an option is selected or not
+
   const isSelected = value !== "";
 
   return (
@@ -40,12 +60,14 @@ const DropdownInputField: FC<DropdownInputFieldProps> = ({
           className={`dropdown-select ${
             isSelected ? "selected" : "not-selected"
           }`}
+          disabled={isEditable}
         >
           {placeholder && (
             <option value="" disabled className="disable-dropdown-option">
               {placeholder}
             </option>
           )}
+
           {options.map((option, index) => {
             return (
               <option
@@ -58,10 +80,12 @@ const DropdownInputField: FC<DropdownInputFieldProps> = ({
             );
           })}
         </select>
+
         <div className="dropdown-arrow">
           <ArrowDown />
         </div>
       </div>
+
       <div
         className={`dropdown-field-error-message ${
           error.length !== 0 && "dropdown-field-error-display"

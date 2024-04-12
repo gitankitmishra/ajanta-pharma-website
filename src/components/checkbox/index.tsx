@@ -4,23 +4,34 @@ import "./style.css";
 
 interface CheckboxProps {
   text: string;
-  onChange: (value: string, isChecked: boolean) => void;
-  isChecked: boolean; // Add isChecked prop
+  id?: string;
+  value?: string;
+  onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
+  isChecked: boolean | undefined; // Add isChecked prop
+  isEditable?: boolean;
+  disabled?: boolean;
 }
 
-const Checkbox: FC<CheckboxProps> = ({ text, onChange, isChecked }) => {
-  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const checked = event.target.checked;
-    onChange(text, checked);
-  };
-
+const Checkbox: FC<CheckboxProps> = ({
+  text,
+  onChange,
+  isChecked,
+  id,
+  value,
+  isEditable,
+  disabled,
+}) => {
   return (
     <div className="checkbox-main-div">
       <input
+        id={id}
         type="checkbox"
         className="checkbox-input"
         checked={isChecked}
-        onChange={handleChange}
+        value={text}
+        onChange={onChange}
+        readOnly={isEditable}
+        disabled={isEditable || disabled}
       />
       <label htmlFor="">{text}</label>
     </div>

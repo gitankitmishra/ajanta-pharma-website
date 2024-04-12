@@ -3,11 +3,12 @@ import React, { FC, useEffect, useState, useMemo } from "react";
 import "./style.css";
 
 interface DropdownInputFieldProps {
-  value: string;
+  value?: string;
   onValueChange: (selectedCategory: string) => void;
   selectedCategory: string;
   placeholder?: string;
   error?: string;
+  isEditable?: boolean;
 }
 
 const DropdownSubInputField: FC<DropdownInputFieldProps> = ({
@@ -16,6 +17,7 @@ const DropdownSubInputField: FC<DropdownInputFieldProps> = ({
   selectedCategory,
   placeholder,
   error = "",
+  isEditable,
 }) => {
   const [trainingTypeOptions, setTrainingTypeOptions] = useState<string[]>([]);
   const [isNewCategorySelected, setIsNewCategorySelected] =
@@ -24,7 +26,7 @@ const DropdownSubInputField: FC<DropdownInputFieldProps> = ({
   useEffect(() => {
     // Set training type options based on selected category
     switch (selectedCategory) {
-      case "Competency-Based-Skills":
+      case "Competency Based Skills":
         setTrainingTypeOptions([
           "Business Orientation",
           "Customer Orientation",
@@ -34,7 +36,7 @@ const DropdownSubInputField: FC<DropdownInputFieldProps> = ({
         ]);
         break;
       case "Medical":
-        setTrainingTypeOptions(["Medical"]);
+        setTrainingTypeOptions(["Medical Updates"]);
         break;
       case "Marketing":
         setTrainingTypeOptions([
@@ -55,7 +57,7 @@ const DropdownSubInputField: FC<DropdownInputFieldProps> = ({
           "Negotiation Skills",
           "Personal Finance",
           "Personal Grooming",
-          "Self-Enrichment",
+          "Self Enrichment",
         ]);
         break;
       case "Classroom Training":
@@ -76,34 +78,41 @@ const DropdownSubInputField: FC<DropdownInputFieldProps> = ({
 
   return (
     <>
-      
+      <div className="custom-dropdown-input-field-container">
         <select
           value={value}
           onChange={handleChange}
-          className={`dropdown-select ${value ? "selected" : "not-selected"}`}
+          className={`custom-dropdown-select ${
+            value ? "selected" : "not-selected"
+          }`}
+          disabled={isEditable}
         >
           {isNewCategorySelected && placeholder && (
-            <option value="" className="dropdown-option">
+            <option value="" className="custom-dropdown-option">
               {placeholder}
             </option>
           )}
           {trainingTypeOptions.map((option) => (
-            <option key={option} value={option} className="dropdown-option">
+            <option
+              key={option}
+              value={option}
+              className="custom-dropdown-option"
+            >
               {option}
             </option>
           ))}
         </select>
+        <div className="custom-dropdown-arrow">
+          <ArrowDown />
+        </div>
+      </div>
       <div
-        className={`dropdown-field-error-message ${
-          error.length !== 0 && "dropdown-field-error-display"
+        className={`custom-dropdown-field-error-message ${
+          error.length !== 0 && "custom-dropdown-field-error-display"
         }`}
       >
         {error}
       </div>
-        <div className="custom-dropdown-arrow">
-          <ArrowDown />
-        </div>
-     
     </>
   );
 };

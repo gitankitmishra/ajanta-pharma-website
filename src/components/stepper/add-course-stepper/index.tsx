@@ -8,13 +8,11 @@ import UploadStepSection from "@/container/Admin-Container/add-course/upload-ste
 import PreviousButton from "@/components/buttons/previous-button";
 import NextButton from "@/components/buttons/next-button";
 import { useRouter } from "next/navigation";
-import BasicProvider, {
-  BasicContext,
-  BasicContextType,
-} from "@/context/course_update/basicInfo_context";
-import { DesignationContext } from "@/context/course_update/designation_context";
-import { ModuleContext } from "@/context/course_update/module_context";
+
 import { CourseContext, CourseContextType } from "@/context/course_context";
+import SuccessPopup from "@/components/popups/success-popup";
+import AddNotificationPopup from "@/components/popups/add-notification-popup";
+import ConfirmationPopup from "@/components/popups/add-courses-popup/confirmation-popup";
 
 type StepContent = {
   [key: string]: React.ReactNode;
@@ -28,40 +26,42 @@ const Stepper = () => {
   const handleCategoryChange = (value: string) => {
     setCategory(value);
   };
-  const basicContextApi = useContext(BasicContext);
   const { active_step, handleNextClick, handlePreviousClick } = useContext(
     CourseContext
   ) as CourseContextType; //Basic Context
-  const desingationContextApi = useContext(DesignationContext);
-  const { handleDraftSave }: any = basicContextApi;
-  const { publishDesignation }: any = desingationContextApi;
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
-  const moduleContextApi = useContext(ModuleContext);
-  const { mergedApi } = moduleContextApi;
+  const handleUploadClick = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
 
   //Logic to take the activeStep for the Draft login
-  const handleApiCall = () => {
-    switch (active_step) {
-      case 0:
-        // Call API for basic info
-        // Example: handleDraftSave for Basic Info
-        handleDraftSave();
-        break;
-      case 1:
-        // Call API for modules
-        // Example: mergeapi for Modules
-        mergedApi();
-        break;
-      case 2:
-        // Call API for designation
-        // Example: publishDesignation for Designation
-        publishDesignation();
+  // const handleApiCall = () => {
+  //   switch (active_step) {
+  //     case 0:
+  //       // Call API for basic info
+  //       // Example: handleDraftSave for Basic Info
+  //       handleDraftSave();
+  //       break;
+  //     case 1:
+  //       // Call API for modules
+  //       // Example: mergeapi for Modules
+  //       mergedApi();
+  //       break;
+  //     case 2:
+  //       // Call API for designation
+  //       // Example: publishDesignation for Designation
+  //       publishDesignation();
 
-        break;
-      default:
-        break;
-    }
-  };
+  //       break;
+  //     default:
+  //       break;
+  //   }
+  // };
 
   const stepContent: StepContent = {
     Basic: <BasicStepSection />,
@@ -127,9 +127,24 @@ const Stepper = () => {
             active_step === steps.length - 1 ? "disabled" : ""
           }`}
         >
-          <NextButton text="Next" onClick={handleNextClick} />
+          <NextButton
+            text={
+              active_step === 2
+                ? "Preview"
+                : active_step === 3
+                ? "Submit"
+                : "Next"
+            }
+            onClick={active_step === 3 ? handleUploadClick : handleNextClick}
+          />
         </div>
+        {active_step !== 0 && active_step !== 3 && (
+          <div>
+            <PreviousButton text="Save as Draft" width="168px" />
+          </div>
+        )}
       </div>
+      <ConfirmationPopup open={isModalOpen} onClose={handleCloseModal} />
     </div>
   );
 };

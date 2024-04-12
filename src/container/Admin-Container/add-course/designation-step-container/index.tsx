@@ -2,31 +2,18 @@
 import React, { FC, useState, useEffect, useContext } from "react";
 import "./style.css";
 import Checkbox from "@/components/checkbox";
-import PreviousButton from "@/components/buttons/previous-button";
-import NextButton from "@/components/buttons/next-button";
-import { DesignationContext } from "@/context/course_update/designation_context";
-import { BasicContext } from "@/context/course_update/basicInfo_context";
+import { CourseContext, CourseContextType } from "@/context/course_context";
 
-interface DesignationStepSectionProps {
-}
+interface DesignationStepSectionProps {}
 
 const DesignationStepSection: FC<DesignationStepSectionProps> = () => {
-  const contextValue = useContext(DesignationContext);
-  const basicContext=useContext(BasicContext);
-
-  if (!basicContext) {
-    return null;
-  }
-  if (!contextValue) {
-    // Handle the case when DesignationContext is null
-    return null; // or return a loading indicator or an error message
-  }
-
-  const { division, designation, handleDesignation, handleDivision } = contextValue;
-
-  const {formData}=basicContext
-
- 
+  //calling the context here........
+  const {
+    handleChangeDesignation,
+    course_basic,
+    course_designation,
+    ds_error,
+  } = useContext(CourseContext) as CourseContextType;
 
   return (
     <section className="designation-main-section">
@@ -38,94 +25,193 @@ const DesignationStepSection: FC<DesignationStepSectionProps> = () => {
               *Only applicable for Medical & Marketing*
             </span>
           </p>
+          {/* error */}
+          <div style={{ color: "red" }}>{ds_error}</div>
         </div>
-        <div className="designation-checkbox-section">
-          {formData.course_category === "Medical" || formData.course_category === "Marketing" ? (
-            <>
-              <div className="designation-checkbox-section">
-                <Checkbox
-                  text={"CDC"}
-                  onChange={handleDivision}
-                  isChecked={division.includes("CDC")}
-                />
-                <Checkbox
-                  text={"Nuventa"}
-                  onChange={handleDivision}
-                  isChecked={division.includes("Nuventa")}
-                />
-                <Checkbox
-                  text={"Revance"}
-                  onChange={handleDivision}
-                  isChecked={division.includes("Revance")}
-                />
-                <Checkbox
-                  text={"Solesta"}
-                  onChange={handleDivision}
-                  isChecked={division.includes("Solesta")}
-                />
-                <Checkbox
-                  text={"Inovio"}
-                  onChange={handleDivision}
-                  isChecked={division.includes("Inovio")}
-                />
-                <Checkbox
-                  text={"Anvaxx"}
-                  onChange={handleDivision}
-                  isChecked={division.includes("Anvaxx")}
-                />
-                <Checkbox
-                  text={"Illuma"}
-                  onChange={handleDivision}
-                  isChecked={division.includes("Illuma")}
-                />
-                <Checkbox
-                  text={"Inyx"}
-                  onChange={handleDivision}
-                  isChecked={division.includes("Inyx")}
-                />
-                <Checkbox
-                  text={"Ansca"}
-                  onChange={handleDivision}
-                  isChecked={division.includes("Ansca")}
-                />
-                <Checkbox
-                  text={"Zillion"}
-                  onChange={handleDivision}
-                  isChecked={division.includes("Zillion")}
-                />
-                <Checkbox
-                  text={"Avecea"}
-                  onChange={handleDivision}
-                  isChecked={division.includes("Avecea")}
-                />
-                <Checkbox
-                  text={"Axys"}
-                  onChange={handleDivision}
-                  isChecked={division.includes("Axys")}
-                />
-                <Checkbox
-                  text={"Maxcor"}
-                  onChange={handleDivision}
-                  isChecked={division.includes("Maxcor")}
-                />
-                <Checkbox
-                  text={"Almiron"}
-                  onChange={handleDivision}
-                  isChecked={division.includes("Almiron")}
-                />
-                <Checkbox
-                  text={"Mexlon"}
-                  onChange={handleDivision}
-                  isChecked={division.includes("Mexlon")}
-                />
-                <Checkbox
-                  text={"Hospicare"}
-                  onChange={handleDivision}
-                  isChecked={division.includes("Hospicare")}
-                />
-              </div>
-            </>
-          ) : null}
+        <div>
+          {/* {course_basic.course_category === "Medical" ||
+          course_basic.course_category === "Marketing" ? ( */}
+          <>
+            <div className="designation-checkbox-section">
+              <Checkbox
+                id="division"
+                text={"CDC"}
+                onChange={handleChangeDesignation}
+                value="CDC"
+                isChecked={course_designation.division.includes("CDC")}
+                disabled={
+                  course_basic.course_category !== "Medical" &&
+                  course_basic.course_category !== "Marketing"
+                }
+              />
+              <Checkbox
+                id="division"
+                text={"Nuventa"}
+                value="Nuventa"
+                onChange={handleChangeDesignation}
+                isChecked={course_designation.division.includes("Nuventa")}
+                disabled={
+                  course_basic.course_category !== "Medical" &&
+                  course_basic.course_category !== "Marketing"
+                }
+              />
+              <Checkbox
+                id="division"
+                text={"Revance"}
+                value="Revance"
+                onChange={handleChangeDesignation}
+                isChecked={course_designation.division.includes("Revance")}
+                disabled={
+                  course_basic.course_category !== "Medical" &&
+                  course_basic.course_category !== "Marketing"
+                }
+              />
+              <Checkbox
+                id="division"
+                text={"Solesta"}
+                value="Solesta"
+                onChange={handleChangeDesignation}
+                isChecked={course_designation.division.includes("Solesta")}
+                disabled={
+                  course_basic.course_category !== "Medical" &&
+                  course_basic.course_category !== "Marketing"
+                }
+              />
+              <Checkbox
+                id="division"
+                text={"Inovio"}
+                value="Inovio"
+                onChange={handleChangeDesignation}
+                isChecked={course_designation.division.includes("Inovio")}
+                disabled={
+                  course_basic.course_category !== "Medical" &&
+                  course_basic.course_category !== "Marketing"
+                }
+              />
+              <Checkbox
+                id="division"
+                text={"Anvaxx"}
+                value="Anvaxx"
+                onChange={handleChangeDesignation}
+                isChecked={course_designation.division.includes("Anvaxx")}
+                disabled={
+                  course_basic.course_category !== "Medical" &&
+                  course_basic.course_category !== "Marketing"
+                }
+              />
+              <Checkbox
+                id="division"
+                text={"Illuma"}
+                value="Illuma"
+                onChange={handleChangeDesignation}
+                isChecked={course_designation.division.includes("Illuma")}
+                disabled={
+                  course_basic.course_category !== "Medical" &&
+                  course_basic.course_category !== "Marketing"
+                }
+              />
+              <Checkbox
+                id="division"
+                text={"Inyx"}
+                value="Inyx"
+                onChange={handleChangeDesignation}
+                isChecked={course_designation.division.includes("Inyx")}
+                disabled={
+                  course_basic.course_category !== "Medical" &&
+                  course_basic.course_category !== "Marketing"
+                }
+              />
+              <Checkbox
+                id="division"
+                text={"Ansca"}
+                value="Ansca"
+                onChange={handleChangeDesignation}
+                isChecked={course_designation.division.includes("Ansca")}
+                disabled={
+                  course_basic.course_category !== "Medical" &&
+                  course_basic.course_category !== "Marketing"
+                }
+              />
+              <Checkbox
+                id="division"
+                text={"Zillion"}
+                value="Zillion"
+                onChange={handleChangeDesignation}
+                isChecked={course_designation.division.includes("Zillion")}
+                disabled={
+                  course_basic.course_category !== "Medical" &&
+                  course_basic.course_category !== "Marketing"
+                }
+              />
+              <Checkbox
+                id="division"
+                text={"Avecea"}
+                value="Avecea"
+                onChange={handleChangeDesignation}
+                isChecked={course_designation.division.includes("Avecea")}
+                disabled={
+                  course_basic.course_category !== "Medical" &&
+                  course_basic.course_category !== "Marketing"
+                }
+              />
+              <Checkbox
+                id="division"
+                text={"Axys"}
+                value="Axys"
+                onChange={handleChangeDesignation}
+                isChecked={course_designation.division.includes("Axys")}
+                disabled={
+                  course_basic.course_category !== "Medical" &&
+                  course_basic.course_category !== "Marketing"
+                }
+              />
+              <Checkbox
+                id="division"
+                text={"Maxcor"}
+                value="Maxcor"
+                onChange={handleChangeDesignation}
+                isChecked={course_designation.division.includes("Maxcor")}
+                disabled={
+                  course_basic.course_category !== "Medical" &&
+                  course_basic.course_category !== "Marketing"
+                }
+              />
+              <Checkbox
+                id="division"
+                text={"Almiron"}
+                value="Almiron"
+                onChange={handleChangeDesignation}
+                isChecked={course_designation.division.includes("Almiron")}
+                disabled={
+                  course_basic.course_category !== "Medical" &&
+                  course_basic.course_category !== "Marketing"
+                }
+              />
+              <Checkbox
+                id="division"
+                text={"Mexlon"}
+                value="Mexlon"
+                onChange={handleChangeDesignation}
+                isChecked={course_designation.division.includes("Mexlon")}
+                disabled={
+                  course_basic.course_category !== "Medical" &&
+                  course_basic.course_category !== "Marketing"
+                }
+              />
+              <Checkbox
+                id="division"
+                text={"Hospicare"}
+                value="Hospicare"
+                onChange={handleChangeDesignation}
+                isChecked={course_designation.division.includes("Hospicare")}
+                disabled={
+                  course_basic.course_category !== "Medical" &&
+                  course_basic.course_category !== "Marketing"
+                }
+              />
+            </div>
+          </>
+          {/* ) : null} */}
         </div>
       </div>
 
@@ -143,44 +229,64 @@ const DesignationStepSection: FC<DesignationStepSectionProps> = () => {
         </div>
         <div className="designation-checkbox-section2">
           <Checkbox
+            id="designation"
             text={"Cluster Head- Derma"}
-            onChange={handleDesignation}
-            isChecked={designation.includes("Cluster Head- Derma")}
+            value="Cluster Head- Derma"
+            onChange={handleChangeDesignation}
+            isChecked={course_designation.designation.includes(
+              "Cluster Head- Derma"
+            )}
           />
           <Checkbox
+            id="designation"
             text={"Cluster Head- Pain"}
-            onChange={handleDesignation}
-            isChecked={designation.includes("Cluster Head- Pain")}
+            onChange={handleChangeDesignation}
+            value="Cluster Head- Pain"
+            isChecked={course_designation.designation.includes(
+              "Cluster Head- Pain"
+            )}
           />
           <Checkbox
+            id="designation"
             text={"Sales Head"}
-            onChange={handleDesignation}
-            isChecked={designation.includes("Sales Head")}
+            value="Sales Head"
+            onChange={handleChangeDesignation}
+            isChecked={course_designation.designation.includes("Sales Head")}
           />
           <Checkbox
+            id="designation"
             text={"Sales Manager"}
-            onChange={handleDesignation}
-            isChecked={designation.includes("Sales Manager")}
+            value="Sales Manager"
+            onChange={handleChangeDesignation}
+            isChecked={course_designation.designation.includes("Sales Manager")}
           />
           <Checkbox
+            id="designation"
             text={"DSM"}
-            onChange={handleDesignation}
-            isChecked={designation.includes("DSM")}
+            value="DSM"
+            onChange={handleChangeDesignation}
+            isChecked={course_designation.designation.includes("DSM")}
           />
           <Checkbox
+            id="designation"
             text={"RSM"}
-            onChange={handleDesignation}
-            isChecked={designation.includes("RSM")}
+            value="RSM"
+            onChange={handleChangeDesignation}
+            isChecked={course_designation.designation.includes("RSM")}
           />
           <Checkbox
+            id="designation"
             text={"DM"}
-            onChange={handleDesignation}
-            isChecked={designation.includes("DM")}
+            value="DM"
+            onChange={handleChangeDesignation}
+            isChecked={course_designation.designation.includes("DM")}
           />
           <Checkbox
+            id="designation"
             text={"SO"}
-            onChange={handleDesignation}
-            isChecked={designation.includes("SO")}
+            value="SO"
+            onChange={handleChangeDesignation}
+            isChecked={course_designation.designation.includes("SO")}
           />
         </div>
       </div>

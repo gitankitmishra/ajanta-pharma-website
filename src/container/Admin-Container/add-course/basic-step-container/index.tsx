@@ -11,47 +11,18 @@ import InputFieldString from "@/components/fields/string-input-field";
 import DropdownInputField from "@/components/fields/dropdown-input-field";
 
 import DropdownSubInputField from "@/components/fields/dropdown-sub-input-field";
-import {
-  BasicContext,
-  BasicContextType,
-} from "@/context/course_update/basicInfo_context";
+
 import TextAreaField from "@/components/fields/TextAreaField";
 import { CourseContext, CourseContextType } from "@/context/course_context";
 
 interface BasicStepSectionProps {}
 
-interface FormData {
-  category: string;
-
-  trainingType: string;
-
-  courseCode: string;
-
-  courseName: string;
-
-  learningObjectives: string;
-
-  startDate: string;
-
-  endDate: string;
-}
-
 const BasicStepSection: FC<BasicStepSectionProps> = () => {
-  const contextValue = useContext(BasicContext);
   const { course_basic_error } = useContext(CourseContext) as CourseContextType;
 
   const { course_basic, handleChange } = useContext(
     CourseContext
   ) as CourseContextType;
-
-  if (!contextValue) {
-    return null;
-  }
-  // const { formData, handleChange }: BasicContextType = contextValue;
-
-  useEffect(() => {
-    localStorage.setItem("category", "Competency-Based Skills");
-  }, []);
 
   //handle change to update the error if the field is updated
 
@@ -75,7 +46,7 @@ const BasicStepSection: FC<BasicStepSectionProps> = () => {
               "Classroom Training",
             ]}
             error={course_basic_error.course_category}
-            valueLabel={[""]}
+            valueLabel={["Competency Based Skills"]}
           />
         </div>
 
@@ -99,8 +70,8 @@ const BasicStepSection: FC<BasicStepSectionProps> = () => {
           </label>
 
           <InputFieldString
-            readonly
-            width="80%"
+            readOnly={true}
+            width="86%"
             className="input-field"
             value={course_basic.course_code}
             onChange={(value) => handleChange("course_code", value)}
@@ -113,7 +84,7 @@ const BasicStepSection: FC<BasicStepSectionProps> = () => {
 
           <InputFieldString
             placeholder="Enter Course Name"
-            width="80%"
+            width="86%"
             value={course_basic.course_name}
             onChange={(value) => handleChange("course_name", value)}
             className="input-field"

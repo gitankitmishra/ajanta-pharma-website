@@ -2,19 +2,24 @@ import { FC, ChangeEvent, useEffect, useState } from "react";
 import "./style.css";
 
 interface InputFieldProps {
-  moduleValue: string;
+  moduleValue?: string;
   onChange?: (newModuleName: string[]) => void;
   onUpdate?: (event: ChangeEvent<HTMLInputElement>) => void;
   readOnly?: boolean;
   id?: string;
+  isEditable?: boolean;
+  disabled?: boolean;
+  text?: string;
 }
 
 const InputField: FC<InputFieldProps> = ({
-  readOnly = false,
   moduleValue,
   onChange,
   onUpdate,
   id,
+  isEditable,
+  disabled,
+  text
 }) => {
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const newValue = event.target.value;
@@ -29,7 +34,9 @@ const InputField: FC<InputFieldProps> = ({
         value={moduleValue}
         onChange={onUpdate ? onUpdate : handleChange}
         placeholder=""
-        readOnly={readOnly}
+        readOnly={isEditable}
+        disabled={disabled}
+        
       />
     </div>
   );

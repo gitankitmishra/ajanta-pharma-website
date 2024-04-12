@@ -7,7 +7,7 @@ export const EmployeeNavbar: NavbarType[] = [
     href: "/home",
   },
   {
-    value: "My-Courses",
+    value: "My Courses",
     href: "/my-courses",
   },
   {
@@ -15,7 +15,7 @@ export const EmployeeNavbar: NavbarType[] = [
     href: "/assessments",
   },
   {
-    value: "Certification",
+    value: "My Certifications",
     href: "/certification",
   },
   {
@@ -44,5 +44,31 @@ export const AdminNavbar: NavbarType[] = [
   {
     value: "Settings",
     href: "/admin-setting",
+  },
+];
+export const ManagerNavbar: NavbarType[] = [
+  {
+    value: "Home",
+    href: "/home",
+  },
+  {
+    value: "My Courses",
+    href: "/my-courses",
+  },
+  {
+    value: "Assessments",
+    href: "/assessments",
+  },
+  {
+    value: "My Certifications",
+    href: "/certification",
+  },
+  {
+    value: "Team Performance",
+    href: "/team-performance",
+  },
+  {
+    value: "Setting",
+    href: "/setting",
   },
 ];

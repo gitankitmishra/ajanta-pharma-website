@@ -1,0 +1,28 @@
+.my-certificate-profile-heading-section {
+    margin: 12px 40px 24px 40px;
+  }
+  .my-certificate-heading-text {
+    color: #1c1d1d;
+    font-size: 24px;
+    font-weight: 500;
+    text-decoration: underline;
+  }
+  .my-certificate-profile-card-section{
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+  }
+  .my-certificate-profile-empty-certificate-section{
+      height: 40vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 30px;
+      justify-content: center;
+  }
+  .my-certificate-profile-empty-certificate-text{
+      color: rgba(120, 120, 120, 0.60);
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 24px; 
+  }

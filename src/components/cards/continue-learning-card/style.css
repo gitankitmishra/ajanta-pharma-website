@@ -1,0 +1,84 @@
+.continue-learning-card-main-section {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  justify-content: space-around;
+  /* width: 1074px; */
+  height: 110px;
+  padding: 0 10px;
+  border-radius: 12px;
+  border: 1px solid rgba(254, 129, 0, 0.5);
+  box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.16);
+}
+.continue-learning-card-image-div {
+  width: 70px;
+  height: 70px;
+  border-radius: 8px;
+  background: lightgray -24.752px -23.365px / 168.66% 168.717% no-repeat;
+}
+.continue-learning-card-course-progressbar-div {
+  width: 200px;
+  height: 10px;
+  border-radius: 12px;
+  background: rgba(254, 129, 0, 0.1);
+  overflow: hidden;
+}
+
+.progress {
+  height: 100%;
+  background-color: #fe8100;
+}
+.continue-learning-card-course-resume-img,
+.continue-learning-card-course-restart-img {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background-color: #fe81001a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.continue-learning-card-course-code,
+.continue-learning-card-course-duration-text {
+  color: #787878;
+  text-shadow: 0px 3px 3px rgba(255, 255, 255, 0.16);
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+}
+.continue-learning-card-course-name,
+.continue-learning-card-course-time-text,
+.continue-learning-card-course-percentage-text,
+.continue-learning-card-course-progress-count-text {
+  color: #1c1d1d;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 26px;
+}
+.continue-learning-card-course-time-text,
+.continue-learning-card-course-percentage-text,
+.continue-learning-card-course-progress-count-text {
+  font-family: "Open sans";
+}
+.continue-learning-card-course-resume-text,
+.continue-learning-card-course-start-again-text {
+  color: #fe8100;
+  font-size: 18px;
+  font-weight: 400;
+}
+.continue-learning-card-course-resume-div,
+.continue-learning-card-course-restart-div {
+  margin-left: 44px;
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  align-items: center;
+}
+/* .continue-learning-card-course-duration-div {
+  margin-left: 24px;
+  margin-right: 24px;
+} */
+.continue-learning-card-course-div {
+  width: 220px;
+}

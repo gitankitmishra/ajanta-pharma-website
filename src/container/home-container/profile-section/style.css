@@ -1,0 +1,37 @@
+.home-profile-main-section {
+  padding: 12px 40px 40px 40px;
+}
+.home-profile-section-welcome-msg {
+  color: #fe8100;
+  font-size: 26px;
+  font-weight: 600;
+  line-height: 32px;
+  margin-bottom: 8px;
+}
+.home-profile-section-welcome-description {
+  color: #787878;
+  font-size: 16px;
+  font-weight: 400;
+}
+.home-profile-slider {
+    margin-top: 34px;
+  /* width: 1074px; */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 210px;
+  border-radius: 12px;
+  border: 1px solid rgba(254, 129, 0, 0.5);
+  background: linear-gradient(
+    90deg,
+    rgba(254, 129, 0, 0.1) 0%,
+    rgba(254, 129, 0, 0) 51.72%,
+    rgba(254, 129, 0, 0.1) 97.54%
+  );
+  box-shadow: 0px 3px 3px 0px rgba(254, 129, 0, 0.16);
+  /* text style */
+  color: #f98d4d;
+  font-size: 30px;
+  font-weight: 600;
+  line-height: 38px;
+}

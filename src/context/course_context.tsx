@@ -11,6 +11,13 @@ import {
   useEffect,
   useState,
 } from "react";
+import { QuestionData } from "@/types/QuestionData";
+
+import { fetchService } from "@/services/fetch_services";
+import { CourseDesignation } from "@/types/CourseDesignation";
+
+import { CourseDetails } from "@/types/AdminCourseInfo";
+import { fileURLToPath } from "url";
 
 export type CourseContextType = {
   // common
@@ -20,15 +27,23 @@ export type CourseContextType = {
   handleNextClick: () => void;
   handlePreviousClick: () => void;
   active_step: number;
+  searchTerm: string;
+  suggestions: string[];
+  filteredSuggestions: string[];
+  handleSearchData: (event: ChangeEvent<HTMLInputElement>) => void;
+  handleSuggestionClick: (suggesstion: string) => void;
 
   // basic
   course_basic: CourseBasic;
   handleChange: (field: keyof CourseBasic, value: string) => void;
+  handleDraftSave: () => void;
+  handleApiCall: () => void;
 
   // modules
   course_module: CourseModule[];
   course_assessment: CourseAssessment[];
   handleAddModule: () => void;
+  handleDeleteModule: (index: number) => void;
   handleModuleChange: (event: ChangeEvent<HTMLInputElement>) => void;
   handleAssessmentNameChange: (event: ChangeEvent<HTMLInputElement>) => void;
   handleAssessmentTypeChange: (event: ChangeEvent<HTMLSelectElement>) => void;
@@ -36,10 +51,36 @@ export type CourseContextType = {
   files: File[];
   handleFileSelect: (selectedFile: File, index: number) => void;
   handleDownloadExcel: (index: number) => void;
+  handleexcelFileRead: (
+    selectedFile: File,
+    index: number,
+    category: string
+  ) => void;
+  openLink: (index: number) => void;
+  filesUploaded: boolean;
+  writeIntoFile: (id: string | null, index: number) => void;
+  visible: boolean;
+  handleCancelIcon: (index: number) => void;
+  uploadfromDraft: () => void;
+  handleCancelIconAssessment: (id: string | null, index: number) => void;
 
   // designation
+  handleChangeDesignation(event: ChangeEvent<HTMLInputElement>): void;
+  course_designation: CourseDesignation;
+  publishDesignation(): void;
+  ds_error: string;
 
-  // publish
+  //pagination and the Admin All courses display part
+  updatePageNo: (newPage: number) => void;
+  courseData: any[] | null;
+  totalPages: number; // New property for total pages
+  handleComponentPage: (value: number) => void;
+
+  //GET AND EDIT COURSES
+  getCourseData: (course_id: string) => void;
+
+  //to edit
+  updateCourse: () => void;
 };
 
 export const CourseContext = createContext<CourseContextType | null>(null);
@@ -55,21 +96,21 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     let errors = {};
 
     if (course_basic.course_category.trim().length === 0) {
-      errors = { ...errors, course_category: "Select a course category." };
+      errors = { ...errors, course_category: "Select course category." };
     }
 
     if (course_basic.course_training.trim().length === 0) {
       errors = {
         ...errors,
-        course_training: "Select a course training type.",
+        course_training: "Select course training type.",
       };
     }
     if (course_basic.course_name.trim().length === 0) {
-      errors = { ...errors, course_name: "Enter a course name." };
+      errors = { ...errors, course_name: "Enter course name." };
     }
 
     if (course_basic.course_objective.trim().length === 0) {
-      errors = { ...errors, course_objective: "Enter a short description." };
+      errors = { ...errors, course_objective: "Enter learning objective." };
     }
 
     if (course_basic.course_start_date.trim().length === 0) {
@@ -96,14 +137,49 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     setActiveStep(4);
   };
 
-  const handleNextClick = () => {
+  const handleApiCall = () => {
+    switch (active_step) {
+      case 0:
+        handleDraftSave();
+        break;
+      case 1:
+        break;
+      case 2:
+        break;
+      default:
+        break;
+    }
+  };
+
+  const handleNextClick = async () => {
     if (active_step === 0) {
+      await handleApiCall();
       handleStepOneDone();
     } else if (active_step === 1) {
+      await uploadCourse();
       handleStepTwoDone();
     } else if (active_step === 2) {
-      handleStepThreeDone();
+      if (
+        ((course_basic.course_category === "Medical" ||
+          course_basic.course_category === "Marketing") &&
+          course_designation.division.length === 0) ||
+        course_designation.designation.length === 0
+      ) {
+        // alert("Please select the checkBoxes");
+        setDsErrror("Please select atleast one checkbox");
+        return;
+      } else if (course_designation.designation.length === 0) {
+        // alert("");
+        setDsErrror("Please select atleast one checkbox");
+
+        return;
+      } else {
+        setDsErrror("");
+        publishDesignation();
+        handleStepThreeDone();
+      }
     } else if (active_step === 3) {
+      await uploadfromDraft();
       handleStepFourDone();
     }
   };
@@ -116,17 +192,80 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     }
   };
 
+  //search api and another function
+  const [searchTerm, setSearchTerm] = useState<string>("");
+  const [suggestions, setSuggestions] = useState<string[]>([]);
+  const [filteredSuggestions, setFilteredSuggestions] = useState<string[]>([]);
+
+  useEffect(() => {
+    if (searchTerm.trim() !== "") {
+      fetchSuggestions();
+    } else {
+      setFilteredSuggestions([]);
+    }
+  }, [searchTerm]);
+
+  const fetchSuggestions = async () => {
+    try {
+      const response = await fetchService({
+        method: "GET",
+        endpoint: `api/admin/dashboard/search/?q=${searchTerm}`,
+      });
+
+      console.log("Response:", response.data.data);
+
+      if (response.code === 200) {
+        const suggestionsData = response.data.data;
+        console.log("Suggestions:", suggestionsData);
+
+        if (Array.isArray(suggestionsData)) {
+          const suggestions: any[] = suggestionsData.map((item) => ({
+            name: item.course_basic.course_name,
+            code: item.course_basic.course_code,
+            label: `${item.course_basic.course_code} - ${item.course_basic.course_name}`,
+          }));
+          console.log("Mapped Suggestions:", suggestions);
+
+          setSuggestions(suggestions);
+          setFilteredSuggestions(
+            suggestions.slice(0, 10).map((suggestion) => suggestion.label)
+          );
+        } else {
+          console.error("Error: No suggestions data found in the response");
+        }
+      } else {
+        console.error("Error fetching suggestions");
+      }
+    } catch (error) {
+      console.error("Error fetching suggestions:", error);
+    }
+  };
+
+  const handleSearchData = (event: ChangeEvent<HTMLInputElement>) => {
+    const { value } = event.target;
+    setSearchTerm(value);
+  };
+
+  const handleSuggestionClick = (suggestion: string) => {
+    setSearchTerm(suggestion);
+    setFilteredSuggestions([]);
+    const courseCode = suggestion.split(" - ")[0];
+    console.log("check the course code", courseCode);
+    getCourseData(courseCode);
+    router.push("/admin/admin-course-detail");
+  };
+
   // ***********************************************************************************************
   // course basic
   const [course_basic, setCourseBasic] = useState<CourseBasic>({
-    course_code: "CBS-0324-04",
-    course_name: "dfg",
-    course_category: "Competency-Based-Skills",
-    course_objective: "sdf",
-    course_training: "Business Orientation",
-    course_start_date: "9999-12-09",
+    course_code: "",
+    course_name: "",
+    course_category: "",
+    course_objective: "",
+    course_training: "",
+    course_start_date: "",
     course_end_date: "9999-12-09",
-    course_status: "active",
+    course_status: "inactive",
   });
 
   const [course_basic_error, setCourseBasicError] = useState<{
@@ -142,21 +281,52 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
   });
 
   const generateCourseCode = (
-    category: string,
+    training: string,
     prevID: number | null = null
   ): string => {
     const categoryTable: { [key: string]: string } = {
-      "Competency-Based-Skills": "CBS",
+      "Competency Based Skills": "CBS",
       Medical: "MED",
       Marketing: "MKT",
       "Personal Development": "PD",
       "Classroom Training": "CT",
     };
 
+    const trainingTable: { [key: string]: string } = {
+      // Competency
+      "Business Orientation": "BO",
+      "Customer Orientation": "CO",
+      "Operational Excellence and Analytics": "OEAA",
+      Leadership: "LE",
+      Communication: "COMM",
+
+      // Medical
+      "Medical Updates": "MU",
+
+      // Marketing
+      "Brand Detailing": "BD",
+      "Input Detailing": "ID",
+      "Knock Out Points": "KOP",
+      "Regional IMS": "RIMS",
+
+      // Personal development
+      "Time Management": "TM",
+      "Critical Thinking": "CT",
+      "Problem Solving": "PS",
+      "Creative Thinking": "CTH",
+      "Conflict Resolution": "CR",
+      "Negotiation Skills": "NS",
+      "Personal Finance": "PF",
+      "Personal Grooming": "PG",
+      "Self Enrichment": "SE",
+
+      // Classroom training
+      "Medical Representative": "MER",
+      Managers: "MGR",
+    };
     const currentDate: Date = new Date();
     const month: string = String(currentDate.getMonth() + 1).padStart(2, "0");
     const year: string = String(currentDate.getFullYear()).slice(-2);
-
     let id: string;
     if (prevID !== null && prevID !== undefined) {
       id = String(Number(prevID) + 1).padStart(2, "0");
@@ -164,24 +334,26 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
       id = "01";
     }
 
-    const courseCode: string = `${categoryTable[category]}-${month}${year}-${id}`;
+    const courseCode: string = `${
+      categoryTable[course_basic.course_category]
+    }-${trainingTable[training]}-${month}${year}-${id}`;
+
+    console.log("testtt", courseCode);
+
     return courseCode;
   };
 
-  const generateNewPrevID = async (
-    value: string,
-    prevID: number
-  ): Promise<number> => {
+  const generateNewPrevID = async (prevID: number): Promise<number> => {
     try {
       const response = await fetch(
-        "http://localhost:8000/api/admin/dashboard/getCourseCodeCount",
+        `${process.env.SERVER_URL}api/admin/dashboard/getCourseCodeCount`,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            courseCategory: value,
+            courseCategory: course_basic.course_category,
           }),
         }
       );
@@ -201,6 +373,48 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     }
   };
 
+  const handleDraftSave = async () => {
+    const response = await fetchService({
+      method: "POST",
+      endpoint: "api/admin/dashboard/draftBasicInfo",
+      data: {
+        course_basic: {
+          ...course_basic,
+        },
+      },
+    });
+    if (response.code == 200) {
+      const data = response.data;
+      console.log(data);
+    }
+  };
+
+  // const handleDraftSave = () => {
+  //   fetch(`${process.env.SERVER_URL}api/admin/dashboard/draftBasicInfo`, {
+  //     method: "POST",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //     body: JSON.stringify({
+  //       course_basic: {
+  //         ...course_basic,
+  //       },
+  //     }),
+  //   })
+  //     .then((response) => {
+  //       if (response.status === 200) {
+  //         console.log("Draft saved:", response);
+  //       }
+  //       return response.json();
+  //     })
+  //     .then((data) => {
+  //       alert(data.message);
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error saving draft:", error);
+  //     });
+  // };
+
   const handleChange = async (field: string, value: any) => {
     console.log(`&${field}&`);
     console.log("----------", course_basic_error[field]);
@@ -209,9 +423,9 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
       setCourseBasicError({ ...course_basic_error, [field]: "" });
     }
 
-    if (field === "course_category") {
+    if (field === "course_training") {
       try {
-        const newPrevID = await generateNewPrevID(value, 0);
+        const newPrevID: number = await generateNewPrevID(0);
         const newCourseCode = generateCourseCode(value, newPrevID);
         setCourseBasic((prev) => ({
           ...prev,
@@ -240,6 +454,8 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
 
   const [files, setFiles] = useState<File[]>([]);
 
+  const [filesUploaded, setFilesUploaded] = useState<boolean>(files.length > 0);
+
   const [course_assessment, setCourseAssessment] = useState<CourseAssessment[]>(
     [
       {
@@ -252,6 +468,8 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
       },
     ]
   );
+
+  const [visible, setVisible] = useState<boolean>(true);
 
   const [course_assessment_main, setCourseAssessmentMain] = useState<
     CourseAssessment[]
@@ -283,6 +501,7 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
         module_material: "",
         assessment_no: course_module.length,
       },
+      // setCourseModulecourse_module([...newlyAddedModules, newModuleIndex]);
     ]);
     setCourseAssessment([
       ...course_assessment,
@@ -296,7 +515,17 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
       },
     ]);
   };
+  const handleDeleteModule = (index: number) => {
+    // Remove module from course_module state
+    const updatedModules = course_module.filter((_, i) => i !== index);
+    setCourseModule(updatedModules);
 
+    // Remove corresponding assessment from course_assessment state
+    const updatedAssessments = course_assessment.filter(
+      (assessment) => assessment.assessment_no !== index
+    );
+    setCourseAssessment(updatedAssessments);
+  };
   //download excel
   const handleDownloadExcel = (index: number) => {
     let ws = XLSX.utils.json_to_sheet([]);
@@ -351,7 +580,128 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
       `${course_assessment[index].assessment_type}`
     );
 
-    XLSX.writeFile(wb, "assessment.xlsx");
+    XLSX.writeFile(
+      wb,
+      `${course_basic.course_code}_${course_module[index].module_no}.xlsx`
+    );
+  };
+
+  //read excel file ->
+  const handleexcelFileRead = (
+    selectedFile: File,
+    index: number,
+    category: string
+  ) => {
+    if (selectedFile) {
+      const file = selectedFile;
+      const reader = new FileReader();
+
+      reader.onload = (event) => {
+        const target = event.target;
+        if (target && target.result) {
+          const data = new Uint8Array(target.result as ArrayBuffer);
+          const workbook = XLSX.read(data, { type: "array" });
+          const sheetName = workbook.SheetNames[0];
+          const sheet = workbook.Sheets[sheetName];
+          const excelData = XLSX.utils.sheet_to_json(sheet);
+
+          console.log(category);
+
+          if (category === "course") {
+            const temp = course_assessment_main;
+
+            temp[index].assessment_data = excelData as QuestionData[];
+
+            setCourseAssessmentMain([...temp]);
+          } else {
+            const temp = course_assessment;
+
+            temp[index].assessment_data = excelData as QuestionData[];
+
+            setCourseAssessment([...temp]);
+          }
+        }
+      };
+
+      reader.onerror = (event) => {
+        console.error("Error reading file:", event.target?.error);
+      };
+
+      reader.readAsArrayBuffer(file);
+    } else {
+      console.error("No file selected.");
+    }
+  };
+  useEffect(() => {
+    console.log(
+      "Assessment data check",
+      course_assessment[0].assessment_data.length
+    );
+  }, [course_assessment_main]);
+  //write the data from assessment data
+  const writeIntoFile = (id: string | null, index: number) => {
+    if (id == "pre" || id == "post") {
+      const assessmentData = course_assessment_main[index]?.assessment_data;
+
+      if (!assessmentData || assessmentData.length === 0) {
+        console.error("No assessment data available to write into file.");
+        return;
+      }
+
+      const ws = XLSX.utils.json_to_sheet(assessmentData);
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(
+        wb,
+        ws,
+        `${course_basic.course_code}_${course_assessment_main[index]?.assessment_position}`
+      );
+      const fileName = `${course_basic.course_code}_${course_assessment_main[index]?.assessment_position}.xlsx`;
+      console.log("file name", fileName);
+
+      XLSX.writeFile(wb, fileName);
+    } else {
+      const assessmentData = course_assessment[index]?.assessment_data;
+
+      if (!assessmentData || assessmentData.length === 0) {
+        console.error("No assessment data available to write into file.");
+        return;
+      }
+
+      const ws = XLSX.utils.json_to_sheet(assessmentData);
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(
+        wb,
+        ws,
+        `${course_basic.course_code}_${course_module[index].module_no}`
+      );
+
+      XLSX.writeFile(
+        wb,
+        `${course_basic.course_code}_${course_module[index].module_no}.xlsx`
+      );
+    }
+  };
+
+  const handleCancelIcon = (index: number) => {
+    const temp = [...course_module];
+    temp[index].module_material = "";
+    setCourseModule([...temp]);
+    setVisible(false);
+    setFilesUploaded(false);
+  };
+
+  const handleCancelIconAssessment = (id: string | null, index: number) => {
+    if (id == "pre" || id == "post") {
+      const temp = [...course_assessment_main];
+      temp[index].assessment_data = [];
+      setCourseAssessmentMain(temp);
+      setVisible(false);
+    } else {
+      const temp = [...course_assessment];
+      temp[index].assessment_data = [];
+      setCourseAssessment(temp);
+      setVisible(false);
+    }
   };
 
   const handleModuleChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -359,15 +709,23 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     const index: number = parseInt(event.target.id.split("-")[1]);
     temp[index].module_name = event.target.value;
     setCourseModule(temp);
+    //assessment
+    const temp2: CourseAssessment[] = [...course_assessment];
+    const index2: number = parseInt(event.target.id.split("-")[1]);
+    temp2[index2].assessment_name = event.target.value;
+    setCourseAssessment(temp2);
   };
 
   const handleAssessmentNameChange = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.id === "pre" || event.target.id === "post") {
+      console.log("assessment main check");
       const temp: CourseAssessment[] = [...course_assessment_main];
       const index: number = event.target.id === "pre" ? 0 : 1;
       temp[index].assessment_name = event.target.value;
       setCourseAssessmentMain(temp);
     } else {
+      console.log("assessment check");
+
       const temp: CourseAssessment[] = [...course_assessment];
       const index: number = parseInt(event.target.id.split("-")[1]);
       temp[index].assessment_name = event.target.value;
@@ -377,10 +735,19 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
 
   const handleFileSelect = (selectedFile: File, index: number) => {
     console.log("Selecting files for module...");
-    const temp_files = files;
+    console.log("selected file...", selectedFile);
+
+    const temp_files = [...files];
     temp_files[index] = selectedFile;
     setFiles(temp_files);
+
+    const anyFilesUploaded = temp_files.some((file) => file !== undefined);
+    setFilesUploaded(anyFilesUploaded);
   };
+
+  useEffect(() => {
+    console.log("filesssssssss", files);
+  }, [files]);
 
   const handleAssessmentTypeChange = (
     event: ChangeEvent<HTMLSelectElement>
@@ -407,20 +774,381 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
       setCourseAssessment(temp);
     }
   };
+
+  //api calling
+  const uploadCourse = async () => {
+    const formdata = new FormData();
+    formdata.append("file_path", `course_material/${course_basic.course_code}`);
+
+    files.forEach((file, index) => {
+      formdata.append("files", file);
+      formdata.append("files_name", `files-${course_module[index].module_no}`);
+    });
+
+    const responseUrl = await fetchService({
+      method: "POST",
+      endpoint: "api/admin/dashboard/uploadAllFile",
+      data: formdata,
+    });
+
+    if (responseUrl.code === 200) {
+      const data = responseUrl;
+      console.log("check", data.data.urls);
+
+      const updatedCourseModule = course_module.map((module, index) => ({
+        ...module,
+        module_material: data.data.urls[index],
+      }));
+
+      setCourseModule(updatedCourseModule);
+
+      if (
+        course_assessment_main[0].assessment_name &&
+        course_assessment_main[0].assessment_type !== ""
+      ) {
+        const response = await fetchService({
+          method: "Post",
+          endpoint: "api/admin/dashboard/uploadCourse",
+          data: {
+            course_module: updatedCourseModule,
+            course_assessment: [
+              ...course_assessment_main,
+              ...course_assessment,
+            ],
+            course_code: course_basic.course_code,
+          },
+        });
+        if (response.code === 200) {
+          const responseData = response;
+          console.log("data", responseData);
+        } else {
+          console.error(
+            "Length mismatch between data.code and course_module arrays"
+          );
+        }
+      } else {
+        const response = await fetchService({
+          method: "Post",
+          endpoint: "api/admin/dashboard/uploadCourse",
+          data: {
+            course_module: updatedCourseModule,
+            course_assessment: course_assessment,
+            course_code: course_basic.course_code,
+          },
+        });
+        if (response.code === 200) {
+          const responseData = response;
+          console.log("data", responseData);
+        } else {
+          console.error(
+            "Length mismatch between data.code and course_module arrays"
+          );
+        }
+      }
+    }
+  };
+
+  const openLink = (index: number) => {
+    console.log("check module url", course_module[index].module_material);
+    const link = course_module[index].module_material;
+    console.log("linkkkkk....", link);
+    window.open(link);
+  };
+
   // ***********************************************************************************************
 
+  // ***********************************************************************************************
+  //designation
+  const [course_designation, setCourseDesignation] =
+    useState<CourseDesignation>({
+      division: [],
+      designation: [],
+    });
+
+  const [ds_error, setDsErrror] = useState<string>("");
+  const handleChangeDesignation = (event: ChangeEvent<HTMLInputElement>) => {
+    const { id, value } = event.target;
+
+    if (id === "division") {
+      setCourseDesignation((prevState) => ({
+        ...prevState,
+        division: prevState.division.includes(value)
+          ? prevState.division.filter((item) => item !== value)
+          : [...prevState.division, value],
+      }));
+    } else {
+      setCourseDesignation((prevState) => ({
+        ...prevState,
+        designation: prevState.designation.includes(value)
+          ? prevState.designation.filter((item) => item !== value)
+          : [...prevState.designation, value],
+      }));
+    }
+  };
+  //api call for designation
+  const publishDesignation = async () => {
+    try {
+      let responseUrl;
+
+      if (course_designation.division.length > 0) {
+        responseUrl = await fetchService({
+          method: "PUT",
+          endpoint: `api/admin/dashboard/draftDesignation/${course_basic.course_code}`,
+          data: {
+            division: course_designation.division,
+            designation: course_designation.designation,
+          },
+        });
+      } else {
+        responseUrl = await fetchService({
+          method: "PUT",
+          endpoint: `api/admin/dashboard/draftDesignation/${course_basic.course_code}`,
+          data: {
+            designation: course_designation.designation,
+          },
+        });
+      }
+      console.log("data check", course_basic.course_category);
+
+      if (!responseUrl) {
+        throw new Error("Failed to publish designation");
+      }
+    } catch (error: any) {
+      console.error("Error:", error.message);
+    }
+  };
+  // ***********************************************************************************************
+
+  //Pagination
+  //All courses Display
+  const [pageNo, setPageNo] = useState(1);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<Error | null>(null);
+  const [totalPages, setTotalPages] = useState(0); // Initialize total pages to 0
+  const [pageSize, setPageSize] = useState(10);
+  const [componentPage, setComponentPage] = useState(0);
+  const [courseData, setCourseData] = useState<CourseDetails[] | null>(null);
+
+  const updatePageNo = (newPage: number) => {
+    setPageNo(newPage);
+    console.log("Value of the page no is ", newPage);
+  };
+
+  const handleComponentPage = (value: number) => {
+    setComponentPage(value);
+  };
+
+  const fetchData = async () => {
+    setLoading(true);
+    const response = await fetchService({
+      method: "GET",
+      endpoint: `api/admin/dashboard/courseList?page=${pageNo}&pageSize=${pageSize}`,
+    });
+    if (response.code === 200) {
+      setCourseData(response.data.data);
+      setTotalPages(response.data.totalPages);
+      setLoading(false);
+    } else {
+      console.log("error");
+    }
+  };
+  // const fetchData = async () => {
+  //   setLoading(true);
+  //   try {
+  //     const url = `${process.env.SERVER_URL}api/admin/dashboard/courseList?page=${pageNo}&pageSize=${pageSize}`;
+  //     const response = await fetch(url, {
+  //       method: "GET",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //     });
+  //     if (!response.ok) {
+  //       throw new Error("Network response was not ok");
+  //     }
+  //     const data = await response.json();
+  //     setCourseData(data.data); // Set courseData to data.data from the response
+  //     setTotalPages(data.totalPages); // Set totalPages from the response
+  //     setLoading(false);
+  //   } catch (error: any) {
+  //     setError(error);
+  //     setLoading(false);
+  //   }
+  // };
+
+  useEffect(() => {
+    fetchData();
+  }, [pageNo, pageSize]);
+
+  //*/****************************************************************************************** */
+
+  //GET COURSE AND EDIT COURSE
+  const [course_id, setCourseCode] = useState("");
+  const [data, setData] = useState<any>([]);
+
+  const handleCourseCodeChange = (value: string) => {
+    setCourseCode(value);
+  };
+
+  const getCourseData = async (course_id: string) => {
+    const response = await fetchService({
+      method: "GET",
+      endpoint: `api/admin/dashboard/getCourseByCode/${course_id}`,
+    });
+    if (response.code === 200) {
+      const responseData = response.data;
+      if (responseData && responseData.data) {
+        setCourseBasic(responseData.data.course_basic);
+        //condition
+        const filteredCourseAssessment = Object?.values(
+          responseData.data.course_assessment
+        ).filter(
+          (assessment: any) => assessment.assessment_category === "course"
+        ) as CourseAssessment[];
+
+        const filteredModuleAssessment = Object?.values(
+          responseData.data.course_assessment
+        ).filter(
+          (assessment: any) => assessment.assessment_category === "module"
+        ) as CourseAssessment[];
+
+        setCourseAssessment(filteredCourseAssessment);
+        setCourseAssessmentMain(filteredModuleAssessment);
+        setCourseModule(responseData.data.course_module);
+        setCourseDesignation(responseData.data.course_designation);
+      }
+    } else {
+      console.log("error");
+    }
+  };
+
+  // const getCourseData = async (course_id: string): Promise<void> => {
+  //   try {
+  //     const response = await fetch(
+  //       `${process.env.SERVER_URL}api/admin/dashboard/getCourseByCode/${course_id}`,
+  //       {
+  //         method: "GET",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //       }
+  //     );
+  //     if (!response.ok) {
+  //       throw new Error("Network response was not ok");
+  //     }
+  //     const responseData = await response.json();
+
+  //     // Check if the response data contains 'data' and 'course_basic' properties
+  //     if (responseData && responseData.data && responseData.data.course_basic) {
+  //       setCourseBasic(responseData.data.course_basic);
+  //       // setCourseAssessment(Object.values(responseData.data.course_assessment));
+
+  //       //condition
+  //       const filteredCourseAssessment = Object.values(
+  //         responseData.data.course_assessment
+  //       ).filter(
+  //         (assessment: any) => assessment.assessment_category === "course"
+  //       ) as CourseAssessment[];
+
+  //       const filteredModuleAssessment = Object.values(
+  //         responseData.data.course_assessment
+  //       ).filter(
+  //         (assessment: any) => assessment.assessment_category === "module"
+  //       ) as CourseAssessment[];
+
+  //       setCourseAssessment(filteredCourseAssessment);
+  //       setCourseAssessmentMain(filteredModuleAssessment);
+  //       setCourseModule(responseData.data.course_module);
+  //       setCourseDesignation(responseData.data.course_designation);
+
+  //       console.log("responssssssss", responseData.data);
+  //       console.log("assessment main", course_assessment_main);
+  //     } else {
+  //       console.error("Invalid response format:", responseData);
+  //     }
+  //   } catch (error) {
+  //     console.error("Error fetching data:", error);
+  //   }
+  // };
+
+  // ***********************************************************************************************
+
+  //api to update the data or edit
+  const updateCourse = async () => {
+    console.log("button upload");
+    console.log("testt");
+
+    const response = await fetchService({
+      method: "PUT",
+      endpoint: `api/admin/dashboard/editCourse/${course_basic.course_code}`,
+      data: {
+        course_designation: {
+          ...course_designation,
+        },
+        course_basic: {
+          ...course_basic,
+        },
+        course_assessment: {
+          ...course_assessment,
+          ...course_assessment_main,
+        },
+        course_module: {
+          ...course_module,
+        },
+      },
+    });
+
+    if (response.code === 200) {
+      const data = response;
+      console.log(data);
+    } else {
+      console.log("error");
+    }
+  };
+
+  // ***********************************************************************************************
+
+  // ***********************************************************************************************
+  //upload(draft -> upload)
+
+  //api calling
+  const uploadfromDraft = async () => {
+    console.log("uploading data");
+    const response = await fetchService({
+      method: "POST",
+      endpoint: `api/admin/dashboard/pushData/${course_basic.course_code}`,
+    });
+    if (response.code == 200) {
+      router.push("/admin/admin-courses");
+      console.log("dataa", response.data);
+      console.log("uploaded to course collection");
+    } else {
+      console.log("error");
+    }
+  };
+  // ***********************************************************************************************
   const course_values = {
+    //common
+    searchTerm,
+    filteredSuggestions,
+    suggestions,
+    handleSearchData,
+    handleSuggestionClick,
+
+    //basic
     course_basic,
     handleChange,
     course_basic_error,
     handleNextClick,
     handlePreviousClick,
     active_step,
+    handleDraftSave,
+    handleApiCall,
 
     //modules
     course_module,
     course_assessment,
     handleAddModule,
+    handleDeleteModule,
     handleModuleChange,
     handleAssessmentNameChange,
     handleAssessmentTypeChange,
@@ -428,6 +1156,33 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     files,
     handleFileSelect,
     handleDownloadExcel,
+    handleexcelFileRead,
+    openLink,
+    filesUploaded,
+    writeIntoFile,
+    visible,
+    handleCancelIcon,
+    handleCancelIconAssessment,
+
+    //designation
+    course_designation,
+    handleChangeDesignation,
+    publishDesignation,
+    ds_error,
+
+    //upload courses final stage api call
+    uploadfromDraft,
+    //Pagination And All Courses Display
+    updatePageNo,
+    courseData,
+    totalPages,
+    handleComponentPage,
+
+    //GET COURSES
+    getCourseData,
+
+    //edit
+    updateCourse,
   };
   return (
     <CourseContext.Provider value={course_values}>

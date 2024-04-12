@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import { Pagination } from "@mui/material";
-import { CourseDetailsContext } from "@/context/allCourses/courses_details";
+import { AdminCourcesContext } from "@/context/allCourses/courses_details";
+import { CourseContext } from "@/context/course_context";
 
 interface CustomPaginationProps {
   currentPage: number;
@@ -8,7 +9,7 @@ interface CustomPaginationProps {
 }
 
 const CustomPagination: React.FC<CustomPaginationProps> = ({ currentPage, onPageChange }) => {
-  const contextValue = useContext(CourseDetailsContext);
+  const contextValue = useContext(CourseContext);
 
   if (!contextValue) {
     console.error("Context Error: While calling from the CustomPagination Component");

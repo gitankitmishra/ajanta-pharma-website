@@ -4,142 +4,47 @@ import InputField from "@/components/fields/input-field";
 import UploadButton from "@/components/buttons/upload-button";
 import DropdownInputField from "@/components/fields/dropdown-input-field";
 import { PlusIcon } from "@/components/icons/plus-icon";
-import { ModuleContext } from "@/context/course_update/module_context";
-
-import * as XLSX from "xlsx";
-
-import { BasicContext } from "@/context/course_update/basicInfo_context";
 import { CourseContext, CourseContextType } from "@/context/course_context";
 import DownloadImg from "@/public/images/download.svg";
 import Image from "next/image";
+import ViewEyeIcon from "@/components/icons/view-eye-icon";
+import EyeIcon from "@/components/icons/eye-icon";
+import { CancelIcon } from "@/components/icons/cancel-icon";
+import { DownloadIcon } from "@/components/icons/download-icon";
 
 interface ModuleQuizStepSectionProps {}
 
 const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
-  const contextValue = useContext(ModuleContext);
-  if (!contextValue) {
-    return null;
-  }
-  const basicContextValue = useContext(BasicContext);
-  if (!basicContextValue) {
-    return null;
-  }
-  const { formData } = basicContextValue;
-  if (!formData) {
-    return null; // Or some other loading state if needed
-  }
-
-  // Now you can safely destructure formData
-  const {
-    course_category,
-    course_training,
-    course_code: basicCourseCode,
-    course_name,
-  } = formData;
-  const {
-    modules,
-    handleChangeModuleNum,
-    handleChangeModuleName,
-    // handleFileSelect,
-    // handleAddModule,
-    //assessment
-    assessment,
-    handleAssessmentFileNameChange,
-    //handleAssessmentTypeChange,
-    handleexcelFileSelect,
-    handleChangeAssessmentName,
-    //optional assessment
-    assessmentOpt,
-    handleRadioChange,
-    handleoptAssessmentTypeChange,
-    handleoptAssessmentFileNameChange,
-    handleoptexcelFileSelect,
-    handleAddAssessment,
-    mergedApi,
-  } = contextValue;
-
   const {
     course_basic,
     course_module,
     course_assessment,
     handleAddModule,
+    handleDeleteModule,
     handleModuleChange,
     handleAssessmentNameChange,
     handleAssessmentTypeChange,
     course_assessment_main,
     files,
+    filesUploaded,
     handleFileSelect,
     handleDownloadExcel,
+    handleexcelFileRead,
+    writeIntoFile,
+    handleCancelIcon,
+    openLink,
+    handleCancelIconAssessment,
+    visible,
   } = useContext(CourseContext) as CourseContextType;
 
-  interface ModuleData {
-    moduleName: string;
-    moduleNo: string;
-    files: FileList | null;
-  }
-  const [moduleName, setModuleName] = useState<string[]>([]);
-  const [moduleNo, setModuleNo] = useState<string[]>([]);
-  // const [files, setFiles] = useState<FileList | null>(null);
-  const [courseCode, setCourseCode] = useState<string>("");
+  const [fileName, setFileName] = useState<string>("Not selected");
+  const [fileSize, setFileSize] = useState<number>(0);
 
-  useEffect(() => {
-    console.log("Modules data", modules);
-  }, [modules]);
-
-  //upload an assessment
-  interface AssessmentData {
-    assessmentFileName: string;
-    assessmentFileType: string;
-    excelFile: FileList | null;
-  }
-
-  const [assessmentFileName, setassessmentFileName] = useState<string[]>([]);
-  const [assessmentFileType, setassessmentFileType] = useState<string[]>([]);
-  const [excelFile, setexcelFile] = useState<FileList | null>(null);
-  // const [assessment, setAssessment] = useState<AssessmentData[]>([
-  //   { assessmentFileName: "", assessmentFileType: "", excelFile: null },
-  // ]);
-
-  useEffect(() => {
-    console.log("assessmentFileName:", assessmentFileName);
-    console.log("assessmentFileType:", assessmentFileType);
-    console.log("excelFile:", excelFile);
-  }, [assessmentFileName, assessmentFileType, excelFile]);
-
-  useEffect(() => {
-    console.log("Assessment data", assessment);
-  }, [assessment]);
-
-  //optional assessment api
-
-  const handleexcelFileRead = (selectedFile: FileList | null) => {
-    if (selectedFile && selectedFile.length > 0) {
-      const file = selectedFile[0];
-      const reader = new FileReader();
-
-      reader.onload = (event) => {
-        if (event.target) {
-          const data = new Uint8Array(event.target.result as ArrayBuffer);
-          const workbook = XLSX.read(data, { type: "array" });
-          const sheetName = workbook.SheetNames[0];
-          const sheet = workbook.Sheets[sheetName];
-          const excelData = XLSX.utils.sheet_to_json(sheet);
-          console.log("Excel file content:", excelData);
-        }
-      };
-
-      reader.onerror = (event) => {
-        console.error("Error reading file:", event.target?.error);
-      };
-
-      reader.readAsArrayBuffer(file);
-    } else {
-      console.error("No file selected.");
-    }
-  };
-
-  const [optexcelFile, setoptexcelFile] = useState<FileList | null>(null);
-  const [selectedAssessment, setSelectedAssessment] = useState<string>("");
+  const fileNameWithoutExtension = fileName.substring(
+    0,
+    fileName.lastIndexOf(".")
+  );
+  const fileExtension = fileName.substring(fileName.lastIndexOf(".") + 1);
 
   return (
     <section className="module-main-section">
@@ -158,23 +63,40 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
           </p>
         </div>
         <div className="module-div-section1-div3">
-          <p className="module-category-text">Course Code & Name</p>
+          <p className="module-category-text">Course Code </p>
           <p className="module-category-type-text">
-            {course_basic.course_code} - {course_basic.course_name}
+            {course_basic.course_code}
+          </p>
+        </div>
+        <div className="module-div-section1-div4">
+          <p className="module-category-text">Course Name</p>
+          <p className="module-category-type-text">
+            {course_basic.course_name}
           </p>
         </div>
       </div>
       <div className="module-div-section2">
         {course_module.map((module, index) => (
           <>
+            {module.module_no > 1 && (
+              <button
+                className="module-sec-add-module-btn"
+                onClick={() => handleDeleteModule(index)}
+              >
+                <span className="module-sec-add-module-btn-add-module">
+                  <CancelIcon /> Module 0{module.module_no.toString()}
+                </span>
+              </button>
+            )}
             <div className="module-input">
               <div className="module-input-number">
                 <label htmlFor="" className="module-container-labels">
                   Module Number
                 </label>
                 <InputField
-                  moduleValue={module.module_no.toString()}
+                  moduleValue={module.module_no?.toString()}
                   onUpdate={handleModuleChange}
+                  disabled={true}
                 />
               </div>
               <div className="module-input-name">
@@ -187,20 +109,54 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
                   onUpdate={handleModuleChange}
                 />
               </div>
+              <div className="module-eye-icon">
+                <DownloadIcon />
+              </div>
               <div className="module-input-uplaod-btn">
                 <UploadButton
                   upload={"Upload Course Material"}
-                  // onFileSelect={(selectedFile) =>
-                  //   handleFileSelect(selectedFile, index)
-                  // }
-                  onFileSelect={(selectedFile) => {
+                  onFileSelect={(selectedFile: File) => {
                     handleFileSelect(selectedFile, index);
+                    setFileName(selectedFile.name);
+                    setFileSize(selectedFile.size);
                   }}
                   acceptedTypes=".mp4,.ppt,.pdf"
                   formatText={"File Format: mp4, ppt, pdf "}
                 />
               </div>
+              <div className="module-input-view-btn">
+                <div className="module-input-view-btn-area">
+                  {filesUploaded ? (
+                    <span
+                      className="module-input-view-btn-cancel-icon-span"
+                      onClick={() => {
+                        handleCancelIcon(index);
+                        setFileName("");
+                        setFileSize(0);
+                      }}
+                    >
+                      <CancelIcon />
+                    </span>
+                  ) : null}
+
+                  <span
+                    className="module-view-btn-xls-text"
+                    onClick={() => openLink(index)}
+                  >
+                    MP4
+                  </span>
+                </div>
+                <div className="module-input-view-text-area">
+                  <span className="module-input-view-btn-file-name-text">
+                    {fileExtension}
+                  </span>
+                  <span className="module-input-view-btn-file-size-text">
+                    {(fileSize / (1024 * 1024)).toFixed(2)}MB
+                  </span>
+                </div>
+              </div>
             </div>
+
             <div className="module-input">
               <div className="module-input-number">
                 <label htmlFor="" className="module-container-labels">
@@ -211,17 +167,18 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
                   id={`assessment_type-${index}`}
                   value={
                     course_assessment[module.assessment_no as number]
-                      .assessment_type
+                      ?.assessment_type
                   }
                   onChange={handleAssessmentTypeChange}
-                  placeholder="select assessment type"
+                  placeholder="Select assessment type"
                   options={[
                     "Multiple Choice Question",
                     "Signle Choice Question",
                     "True or false",
                     "Short Answer",
+                    "Not Applicable",
                   ]}
-                  valueLabel={["multiple", "single", "boolean", "short"]}
+                  valueLabel={["multiple", "single", "boolean", "short", "N/A"]}
                 />
               </div>
               <div className="module-input-name">
@@ -232,58 +189,128 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
                   id={`assessment_name-${index}`}
                   moduleValue={
                     course_assessment[module.assessment_no as number]
-                      .assessment_name
+                      ?.assessment_name
                   }
                   onUpdate={handleAssessmentNameChange}
                 />
               </div>
+              <div className="module-eye-icon">
+                {course_assessment[index]?.assessment_data.length !== 0 ? (
+                  <div className="module-download-image">
+                    <span onClick={() => handleDownloadExcel(index)}>
+                      <DownloadIcon />
+                    </span>
+                    {/* <Image
+                    src={DownloadIcon}
+                    alt="Download"
+                    width={27}
+                    height={24}
+                    onClick={() => handleDownloadExcel(index)}
+                  /> */}
+                  </div>
+                ) : (
+                  <></>
+                )}
+              </div>
               <div className="module-input-uplaod-btn">
                 <UploadButton
                   upload={"Upload Assessment"}
-                  onFileSelect={() => ""}
+                  uploadFile={() => (selectedFile: File) => {
+                    console.log("going to check");
+                    handleexcelFileRead(selectedFile, index, "module");
+                  }}
+                  onFileSelect={(selectedFile: File) => {
+                    handleexcelFileRead(selectedFile, index, "module");
+                  }}
                   acceptedTypes=".xls"
                   formatText={"File Format: xls"}
                 />
               </div>
-              <td className="download_image">
-                <Image
-                  src={DownloadImg}
-                  alt="Download"
-                  width={27}
-                  height={24}
-                  onClick={() => handleDownloadExcel(index)}
-                />
-              </td>
+              <div className="module-input-view-btn">
+                <div className="module-input-view-btn-area">
+                  {course_assessment[index]?.assessment_data.length > 0 ? (
+                    <span
+                      className="module-input-view-btn-cancel-icon-span"
+                      onClick={() => {
+                        handleCancelIconAssessment(null, index);
+                      }}
+                    >
+                      <CancelIcon />
+                    </span>
+                  ) : (
+                    <></>
+                  )}
+
+                  <span
+                    id="module"
+                    className="module-view-btn-xls-text"
+                    onClick={() => writeIntoFile(null, index)}
+                  >
+                    XLS
+                  </span>
+                </div>
+                <div className="module-input-view-text-area">
+                  <span className="module-input-view-btn-file-name-text">
+                    excel.xls
+                  </span>
+                  <span className="module-input-view-btn-file-size-text">
+                    2.2MB
+                  </span>
+                </div>
+              </div>
+              {/* {visible && (
+                <div
+                  onClick={() => writeIntoFile(index)}
+                  className="module-input-view-btn"
+                >
+                  <span
+                    onClick={() => {
+                      handleCancelIcon();
+                    }}
+                  >
+                    <CancelIcon />
+                  </span>
+                  XLS
+                </div>
+              )} */}
             </div>
           </>
         ))}
+
         <button className="module-sec-add-module-btn" onClick={handleAddModule}>
-          <PlusIcon />
-          Add Module
+          <span className="module-sec-add-module-btn-add-module">
+            <PlusIcon /> Add Module
+          </span>
         </button>
       </div>
       <div className="module-div-section3">
         <>
           <div className="module-radio-selction">
-            <div className="module-course-assessment">Course Assessment</div>
+            <div className="module-course-assessment">
+              Course Assessment{" "}
+              <span className="module-course-assessment-optional-span">
+                (Optional)
+              </span>
+            </div>
           </div>
           <div className="module-input">
             <div className="module-input-number">
               <label htmlFor="" className="module-container-labels">
-                Select Assessment Type
+                Select Pre-Assessment Type
               </label>
               <DropdownInputField
                 id="pre"
                 value={course_assessment_main[0]?.assessment_type}
-                placeholder="select assessment type"
+                placeholder="Select pre assessment type"
                 onChange={handleAssessmentTypeChange}
                 options={[
                   "Multiple Choice Question",
                   "Signle Choice Question",
                   "True or false",
                   "Short Answer",
+                  "Not Applicable",
                 ]}
-                valueLabel={["multiple", "single", "boolean", "short"]}
+                valueLabel={["multiple", "single", "boolean", "short", "N/A"]}
               />
             </div>
             <div className="module-input-name">
@@ -292,39 +319,96 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
               </label>
               <InputField
                 id="pre"
-                moduleValue={course_assessment_main[0].assessment_name}
+                moduleValue={course_assessment_main[0]?.assessment_name}
                 onUpdate={handleAssessmentNameChange}
               />
             </div>
+            <div className="module-eye-icon">
+              <span onClick={() => handleDownloadExcel(0)}>
+                <DownloadIcon />
+              </span>
+            </div>
             <div className="module-input-uplaod-btn">
               <UploadButton
-                upload={"Upload Course Material"}
-                onFileSelect={(selectedFiles) =>
-                  handleoptexcelFileSelect(selectedFiles, 0)
-                }
+                id="pre"
+                upload={"Upload Assessment"}
+                uploadFile={() => (selectedFile: File) => {
+                  console.log("going to check");
+                  handleexcelFileRead(selectedFile, 0, "course");
+                }}
+                onFileSelect={(selectedFile: File) => {
+                  handleexcelFileRead(selectedFile, 0, "course");
+                }}
                 acceptedTypes=".xls"
                 formatText={"File Format: xls"}
               />
             </div>
+            <div className="module-input-view-btn">
+              <div className="module-input-view-btn-area">
+                {course_assessment_main[0]?.assessment_data.length > 0 ? (
+                  <span
+                    className="module-input-view-btn-cancel-icon-span"
+                    onClick={() => {
+                      handleCancelIconAssessment("pre", 0);
+                    }}
+                  >
+                    <CancelIcon />
+                  </span>
+                ) : (
+                  <></>
+                )}
+
+                <span
+                  className="module-view-btn-xls-text"
+                  onClick={() => writeIntoFile("pre", 0)}
+                >
+                  XLS
+                </span>
+              </div>
+              <div className="module-input-view-text-area">
+                <span className="module-input-view-btn-file-name-text">
+                  excel.xls
+                </span>
+                <span className="module-input-view-btn-file-size-text">
+                  2.2MB
+                </span>
+              </div>
+            </div>
+            {/* {course_assessment_main[0]?.assessment_data.length !== 0 ? (
+              <div className="module-eye-icon">
+                <EyeIcon files={[]} />
+              </div>
+            ) : (
+              <td className="module-download-image">
+                <Image
+                  src={DownloadImg}
+                  alt="Download"
+                  width={27}
+                  height={24}
+                  onClick={() => handleDownloadExcel(0)}
+                />
+              </td>
+            )} */}
           </div>
 
           <div className="module-input">
             <div className="module-input-number">
               <label htmlFor="" className="module-container-labels">
-                Select Assessment Type
+                Select Post-Assessment Type
               </label>
               <DropdownInputField
                 id="post"
                 value={course_assessment_main[1]?.assessment_type}
-                placeholder="select assessment type"
+                placeholder="Select post assessment type"
                 onChange={handleAssessmentTypeChange}
                 options={[
                   "Multiple Choice Question",
                   "Signle Choice Question",
                   "True or false",
                   "Short Answer",
+                  "Not Applicable",
                 ]}
-                valueLabel={["multiple", "single", "boolean", "short"]}
+                valueLabel={["multiple", "single", "boolean", "short", "N/A"]}
               />
             </div>
             <div className="module-input-name">
@@ -332,30 +416,63 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
                 Assessment Name
               </label>
               <InputField
-                moduleValue={course_assessment_main[1].assessment_name}
+                moduleValue={course_assessment_main[1]?.assessment_name}
                 id="post"
                 onUpdate={handleAssessmentNameChange}
               />
             </div>
+            <div className="module-eye-icon">
+              <span onClick={() => handleDownloadExcel(0)}>
+                <DownloadIcon />
+              </span>
+            </div>
             <div className="module-input-uplaod-btn">
               <UploadButton
-                upload={"Upload Course Material"}
-                onFileSelect={(selectedFiles) =>
-                  handleoptexcelFileSelect(selectedFiles, 0)
-                }
+                id="post"
+                upload={"Upload Assessment"}
+                uploadFile={() => (selectedFile: File) => {
+                  handleexcelFileRead(selectedFile, 1, "course");
+                }}
+                onFileSelect={(selectedFile: File) => {
+                  handleexcelFileRead(selectedFile, 1, "course");
+                }}
                 acceptedTypes=".xls"
                 formatText={"File Format: xls"}
               />
             </div>
+            <div className="module-input-view-btn">
+              <div className="module-input-view-btn-area">
+                {course_assessment_main[1]?.assessment_data.length > 0 ? (
+                  <span
+                    className="module-input-view-btn-cancel-icon-span"
+                    onClick={() => {
+                      handleCancelIconAssessment("post", 1);
+                    }}
+                  >
+                    <CancelIcon />
+                  </span>
+                ) : (
+                  <></>
+                )}
+
+                <span
+                  className="module-view-btn-xls-text"
+                  onClick={() => writeIntoFile("post", 1)}
+                >
+                  XLS
+                </span>
+              </div>
+              <div className="module-input-view-text-area">
+                <span className="module-input-view-btn-file-name-text">
+                  excel.xls
+                </span>
+                <span className="module-input-view-btn-file-size-text">
+                  2.2MB
+                </span>
+              </div>
+            </div>
           </div>
         </>
-        {/* <button
-          className="module-sec-add-module-btn"
-          onClick={handleAddAssessment}
-        >
-          <PlusIcon />
-          Add Assessment
-        </button> */}
       </div>
     </section>
   );
