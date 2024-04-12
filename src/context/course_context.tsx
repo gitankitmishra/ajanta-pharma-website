@@ -27,6 +27,11 @@ export type CourseContextType = {
   handleNextClick: () => void;
   handlePreviousClick: () => void;
   active_step: number;
+  searchTerm: string;
+  suggestions: string[];
+  filteredSuggestions: string[];
+  handleSearchData: (event: ChangeEvent<HTMLInputElement>) => void;
+  handleSuggestionClick: (suggesstion: string) => void;
 
   // basic
   course_basic: CourseBasic;
@@ -53,12 +58,11 @@ export type CourseContextType = {
   ) => void;
   openLink: (index: number) => void;
   filesUploaded: boolean;
-  searchTerm: string;
-  searchNameData: (event: ChangeEvent<HTMLInputElement>) => void;
-  filteredData: (course: CourseBasic) => void;
-  writeIntoFile: (index: number) => void;
+  writeIntoFile: (id: string | null, index: number) => void;
   visible: boolean;
-  handleCancelIcon: () => void;
+  handleCancelIcon: (index: number) => void;
+  uploadfromDraft: () => void;
+  handleCancelIconAssessment: (id: string | null, index: number) => void;
 
   // designation
   handleChangeDesignation(event: ChangeEvent<HTMLInputElement>): void;
@@ -86,9 +90,7 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
 }) => {
   const router = useRouter();
 
-
-  const [active_step, setActiveStep] = useState<number>(0);
-
+  const [active_step, setActiveStep] = useState<number>(1);
 
   const handleStepOneDone = async () => {
     let errors = {};
@@ -138,44 +140,16 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
   const handleApiCall = () => {
     switch (active_step) {
       case 0:
-        // Call API for basic info
-        // Example: handleDraftSave for Basic Info
         handleDraftSave();
         break;
       case 1:
-        // Call API for modules
-        // Example: mergeapi for Modules
-        // mergedApi();
         break;
       case 2:
-        // Call API for designation
-        // Example: publishDesignation for Designation
-        // publishDesignation();
-
         break;
       default:
         break;
     }
   };
-  // const handleNextClick = async () => {
-  //   if (active_step === 0) {
-  //     await handleApiCall();
-  //     handleStepOneDone();
-  //   } else if (active_step === 1) {
-  //     await uploadCourse();
-  //     handleStepTwoDone();
-  //   } else if (active_step === 2) {
-  //     handleShowError(() => {
-  //       if (deserror === "") {
-  //         publishDesignation().then(() => handleStepThreeDone());
-  //       }
-  //     });
-  //   } else if (active_step === 3) {
-  //     await uploadfromDraft();
-  //     console.log("step 3");
-  //     handleStepFourDone();
-  //   }
-  // };
 
   const handleNextClick = async () => {
     if (active_step === 0) {
@@ -216,6 +190,69 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     } else {
       setActiveStep((prevActiveStep) => prevActiveStep - 1);
     }
+  };
+
+  //search api and another function
+  const [searchTerm, setSearchTerm] = useState<string>("");
+  const [suggestions, setSuggestions] = useState<string[]>([]);
+  const [filteredSuggestions, setFilteredSuggestions] = useState<string[]>([]);
+
+  useEffect(() => {
+    if (searchTerm.trim() !== "") {
+      fetchSuggestions();
+    } else {
+      setFilteredSuggestions([]);
+    }
+  }, [searchTerm]);
+
+  const fetchSuggestions = async () => {
+    try {
+      const response = await fetchService({
+        method: "GET",
+        endpoint: `api/admin/dashboard/search/?q=${searchTerm}`,
+      });
+
+      console.log("Response:", response.data.data);
+
+      if (response.code === 200) {
+        const suggestionsData = response.data.data;
+        console.log("Suggestions:", suggestionsData);
+
+        if (Array.isArray(suggestionsData)) {
+          const suggestions: any[] = suggestionsData.map((item) => ({
+            name: item.course_basic.course_name,
+            code: item.course_basic.course_code,
+            label: `${item.course_basic.course_code} - ${item.course_basic.course_name}`,
+          }));
+          console.log("Mapped Suggestions:", suggestions);
+
+          setSuggestions(suggestions);
+          setFilteredSuggestions(
+            suggestions.slice(0, 10).map((suggestion) => suggestion.label)
+          );
+        } else {
+          console.error("Error: No suggestions data found in the response");
+        }
+      } else {
+        console.error("Error fetching suggestions");
+      }
+    } catch (error) {
+      console.error("Error fetching suggestions:", error);
+    }
+  };
+
+  const handleSearchData = (event: ChangeEvent<HTMLInputElement>) => {
+    const { value } = event.target;
+    setSearchTerm(value);
+  };
+
+  const handleSuggestionClick = (suggestion: string) => {
+    setSearchTerm(suggestion);
+    setFilteredSuggestions([]);
+    const courseCode = suggestion.split(" - ")[0];
+    console.log("check the course code", courseCode);
+    getCourseData(courseCode);
+    router.push("/admin/admin-course-detail");
   };
 
   // ***********************************************************************************************
@@ -336,21 +373,6 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     }
   };
 
-  const [searchTerm, setSearchTerm] = useState<string>("");
-  const searchNameData = (event: ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value.toLowerCase();
-    setSearchTerm(value);
-  };
-
-  const filteredData: any = [course_basic].filter(
-    (course: CourseBasic) =>
-      course.course_name.toLowerCase().includes(searchTerm) ||
-      course.course_code.toLowerCase().includes(searchTerm)
-  );
-
-  useEffect(() => {
-    console.log("test the search", fileURLToPath);
-  }, [searchTerm]);
   const handleDraftSave = async () => {
     const response = await fetchService({
       method: "POST",
@@ -433,8 +455,6 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
   const [files, setFiles] = useState<File[]>([]);
 
   const [filesUploaded, setFilesUploaded] = useState<boolean>(files.length > 0);
-
-  console.log("checking..", filesUploaded);
 
   const [course_assessment, setCourseAssessment] = useState<CourseAssessment[]>(
     [
@@ -585,15 +605,20 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
           const sheet = workbook.Sheets[sheetName];
           const excelData = XLSX.utils.sheet_to_json(sheet);
 
-          if (category === "course") {
-            course_assessment_main[index].assessment_data =
-              excelData as QuestionData[];
+          console.log(category);
 
-            console.log(course_assessment_main);
+          if (category === "course") {
+            const temp = course_assessment_main;
+
+            temp[index].assessment_data = excelData as QuestionData[];
+
+            setCourseAssessmentMain([...temp]);
           } else {
-            course_assessment[index].assessment_data =
-              excelData as QuestionData[];
-            console.log(course_assessment);
+            const temp = course_assessment;
+
+            temp[index].assessment_data = excelData as QuestionData[];
+
+            setCourseAssessment([...temp]);
           }
         }
       };
@@ -607,32 +632,76 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
       console.error("No file selected.");
     }
   };
-
+  useEffect(() => {
+    console.log(
+      "Assessment data check",
+      course_assessment[0].assessment_data.length
+    );
+  }, [course_assessment_main]);
   //write the data from assessment data
-  const writeIntoFile = (index: number) => {
-    const assessmentData = course_assessment[index].assessment_data;
+  const writeIntoFile = (id: string | null, index: number) => {
+    if (id == "pre" || id == "post") {
+      const assessmentData = course_assessment_main[index]?.assessment_data;
 
-    if (!assessmentData || assessmentData.length === 0) {
-      console.error("No assessment data available to write into file.");
-      return;
+      if (!assessmentData || assessmentData.length === 0) {
+        console.error("No assessment data available to write into file.");
+        return;
+      }
+
+      const ws = XLSX.utils.json_to_sheet(assessmentData);
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(
+        wb,
+        ws,
+        `${course_basic.course_code}_${course_assessment_main[index]?.assessment_position}`
+      );
+      const fileName = `${course_basic.course_code}_${course_assessment_main[index]?.assessment_position}.xlsx`;
+      console.log("file name", fileName);
+
+      XLSX.writeFile(wb, fileName);
+    } else {
+      const assessmentData = course_assessment[index]?.assessment_data;
+
+      if (!assessmentData || assessmentData.length === 0) {
+        console.error("No assessment data available to write into file.");
+        return;
+      }
+
+      const ws = XLSX.utils.json_to_sheet(assessmentData);
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(
+        wb,
+        ws,
+        `${course_basic.course_code}_${course_module[index].module_no}`
+      );
+
+      XLSX.writeFile(
+        wb,
+        `${course_basic.course_code}_${course_module[index].module_no}.xlsx`
+      );
     }
-
-    const ws = XLSX.utils.json_to_sheet(assessmentData);
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(
-      wb,
-      ws,
-      `${course_basic.course_code}_${course_module[index].module_no}`
-    );
-
-    XLSX.writeFile(
-      wb,
-      `${course_basic.course_code}_${course_module[index].module_no}.xlsx`
-    );
   };
 
-  const handleCancelIcon = () => {
+  const handleCancelIcon = (index: number) => {
+    const temp = [...course_module];
+    temp[index].module_material = "";
+    setCourseModule([...temp]);
     setVisible(false);
+    setFilesUploaded(false);
+  };
+
+  const handleCancelIconAssessment = (id: string | null, index: number) => {
+    if (id == "pre" || id == "post") {
+      const temp = [...course_assessment_main];
+      temp[index].assessment_data = [];
+      setCourseAssessmentMain(temp);
+      setVisible(false);
+    } else {
+      const temp = [...course_assessment];
+      temp[index].assessment_data = [];
+      setCourseAssessment(temp);
+      setVisible(false);
+    }
   };
 
   const handleModuleChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -668,13 +737,17 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     console.log("Selecting files for module...");
     console.log("selected file...", selectedFile);
 
-    const temp_files = files;
+    const temp_files = [...files];
     temp_files[index] = selectedFile;
     setFiles(temp_files);
 
     const anyFilesUploaded = temp_files.some((file) => file !== undefined);
     setFilesUploaded(anyFilesUploaded);
   };
+
+  useEffect(() => {
+    console.log("filesssssssss", files);
+  }, [files]);
 
   const handleAssessmentTypeChange = (
     event: ChangeEvent<HTMLSelectElement>
@@ -776,8 +849,9 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
   };
 
   const openLink = (index: number) => {
+    console.log("check module url", course_module[index].module_material);
     const link = course_module[index].module_material;
-    console.log("link....", link);
+    console.log("linkkkkk....", link);
     window.open(link);
   };
 
@@ -905,10 +979,6 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     fetchData();
   }, [pageNo, pageSize]);
 
-  useEffect(() => {
-    console.log("Course Data", courseData);
-  }, [courseData]);
-
   //*/****************************************************************************************** */
 
   //GET COURSE AND EDIT COURSE
@@ -1035,19 +1105,6 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     }
   };
 
-  useEffect(() => {
-    console.log("basic", course_basic.course_status);
-    console.log("module", course_module);
-    console.log("assessment", course_assessment);
-    console.log("assessment - main", course_assessment_main);
-    console.log("designation", course_designation);
-  }, [
-    course_basic,
-    course_assessment,
-    course_assessment_main,
-    course_designation,
-  ]);
-
   // ***********************************************************************************************
 
   // ***********************************************************************************************
@@ -1057,11 +1114,10 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
   const uploadfromDraft = async () => {
     console.log("uploading data");
     const response = await fetchService({
-      method: "GET",
+      method: "POST",
       endpoint: `api/admin/dashboard/pushData/${course_basic.course_code}`,
     });
     if (response.code == 200) {
-      alert("Data Published SuccessFully!!!");
       router.push("/admin/admin-courses");
       console.log("dataa", response.data);
       console.log("uploaded to course collection");
@@ -1071,6 +1127,14 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
   };
   // ***********************************************************************************************
   const course_values = {
+    //common
+    searchTerm,
+    filteredSuggestions,
+    suggestions,
+    handleSearchData,
+    handleSuggestionClick,
+
+    //basic
     course_basic,
     handleChange,
     course_basic_error,
@@ -1095,12 +1159,10 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     handleexcelFileRead,
     openLink,
     filesUploaded,
-    filteredData,
-    searchNameData,
-    searchTerm,
     writeIntoFile,
     visible,
     handleCancelIcon,
+    handleCancelIconAssessment,
 
     //designation
     course_designation,
@@ -1108,6 +1170,8 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     publishDesignation,
     ds_error,
 
+    //upload courses final stage api call
+    uploadfromDraft,
     //Pagination And All Courses Display
     updatePageNo,
     courseData,

@@ -10,6 +10,9 @@ import NextButton from "@/components/buttons/next-button";
 import { useRouter } from "next/navigation";
 
 import { CourseContext, CourseContextType } from "@/context/course_context";
+import SuccessPopup from "@/components/popups/success-popup";
+import AddNotificationPopup from "@/components/popups/add-notification-popup";
+import ConfirmationPopup from "@/components/popups/add-courses-popup/confirmation-popup";
 
 type StepContent = {
   [key: string]: React.ReactNode;
@@ -26,6 +29,15 @@ const Stepper = () => {
   const { active_step, handleNextClick, handlePreviousClick } = useContext(
     CourseContext
   ) as CourseContextType; //Basic Context
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+
+  const handleUploadClick = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
 
   //Logic to take the activeStep for the Draft login
   // const handleApiCall = () => {
@@ -123,7 +135,7 @@ const Stepper = () => {
                 ? "Submit"
                 : "Next"
             }
-            onClick={handleNextClick}
+            onClick={active_step === 3 ? handleUploadClick : handleNextClick}
           />
         </div>
         {active_step !== 0 && active_step !== 3 && (
@@ -132,6 +144,7 @@ const Stepper = () => {
           </div>
         )}
       </div>
+      <ConfirmationPopup open={isModalOpen} onClose={handleCloseModal} />
     </div>
   );
 };
