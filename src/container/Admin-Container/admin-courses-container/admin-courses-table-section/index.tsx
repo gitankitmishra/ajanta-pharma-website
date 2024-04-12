@@ -14,7 +14,7 @@ const AdminCoursesTableSection: FC<AdminCoursesTableSectionProps> = () => {
   const [isCourseDropDown, setIsCourseDropDown] = useState(false);
 
 
-  const { handleFilterCourseChange } = useContext(CourseContext) as CourseContextType;
+  const { handleFilterCourseChange, filterCourse } = useContext(CourseContext) as CourseContextType;
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
     // Add logic here to fetch data for the new page, etc.
@@ -26,6 +26,7 @@ const AdminCoursesTableSection: FC<AdminCoursesTableSectionProps> = () => {
     <section>
       <div className="admin-courses-text-btn-section">
         <p className="admin-courses-course-list-text">Course List</p>
+        <p>{filterCourse}</p>
         <div className="admin-course-list-table-category-dropdown-main-div">
           <span
             onClick={toggleCourseDropDown}
@@ -35,7 +36,6 @@ const AdminCoursesTableSection: FC<AdminCoursesTableSectionProps> = () => {
           </span>
           {isCourseDropDown && (
             <div className="admin-course-list-table-category-dropdown-content">
-
               <span
                 className="admin-course-list-table-category-dropdown-content-span"
                 onClick={() => {
