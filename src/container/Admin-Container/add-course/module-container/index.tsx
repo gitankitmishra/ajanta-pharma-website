@@ -38,16 +38,16 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
     visible,
     fileName,
     fileSize,
+    fileExtension,
   } = useContext(CourseContext) as CourseContextType;
 
   // const [fileName, setFileName] = useState<string>("Not selected");
   // const [fileSize, setFileSize] = useState<number>(0);
 
-  const fileNameWithoutExtension = fileName.substring(
+  const fileNameWithoutExtension = fileName[0]?.substring(
     0,
     fileName.lastIndexOf(".")
   );
-  const fileExtension = fileName.substring(fileName.lastIndexOf(".") + 1);
 
   return (
     <section className="module-main-section">
@@ -143,15 +143,15 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
                     className="module-view-btn-xls-text"
                     onClick={() => openLink(index)}
                   >
-                    MP4
+                    {fileName[index]}
                   </span>
                 </div>
                 <div className="module-input-view-text-area">
                   <span className="module-input-view-btn-file-name-text">
-                    {fileExtension}
+                    {fileExtension[index]}
                   </span>
                   <span className="module-input-view-btn-file-size-text">
-                    {(fileSize / (1024 * 1024)).toFixed(2)}MB
+                    {(fileSize[index] / (1024 * 1024)).toFixed(2)}MB
                   </span>
                 </div>
               </div>
