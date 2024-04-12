@@ -1005,18 +1005,18 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     }
   };
 
-  useEffect(() => {
-    console.log("basic", course_basic.course_status);
-    console.log("module", course_module);
-    console.log("assessment", course_assessment);
-    console.log("assessment - main", course_assessment_main);
-    console.log("designation", course_designation);
-  }, [
-    course_basic,
-    course_assessment,
-    course_assessment_main,
-    course_designation,
-  ]);
+  // useEffect(() => {
+  //   console.log("basic", course_basic.course_status);
+  //   console.log("module", course_module);
+  //   console.log("assessment", course_assessment);
+  //   console.log("assessment - main", course_assessment_main);
+  //   console.log("designation", course_designation);
+  // }, [
+  //   course_basic,
+  //   course_assessment,
+  //   course_assessment_main,
+  //   course_designation,
+  // ]);
 
   // ***********************************************************************************************
 

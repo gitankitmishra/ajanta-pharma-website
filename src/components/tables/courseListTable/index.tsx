@@ -13,9 +13,9 @@ const AdminCourseListTable: FC = () => {
     CourseContext
   ) as CourseContextType;
 
-  useEffect(() => {
-    console.log("-----------------", filteredData);
-  }, [searchTerm]);
+  // useEffect(() => {
+  //   console.log("-----------------", filteredData);
+  // }, [searchTerm]);
 
   // const { handleCourseCodeChange } = useContext(EditCourseContext);
 
@@ -84,7 +84,7 @@ const AdminCourseListTable: FC = () => {
                 <td className="admin-course-list-table-data admin-course-eye-icon">
                   <Link href={`/admin/admin-course-detail/`}>
                     {/* ${course._id} Need a context to hold this value to use this id to view the course 
-          for an edit logic */}
+           for an edit logic */}
                     <ViewEyeIcon
                       onClick={() =>
                         getCourseData(course.course_basic.course_code)
