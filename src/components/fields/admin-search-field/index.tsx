@@ -1,10 +1,10 @@
-"use client"
+"use client";
 import { SearchIcon } from "@/components/icons/search-icon";
 import { FC, useContext } from "react";
 import "./style.css";
 import { BellIcon } from "@/components/icons/bell-icon";
 import { ProfileIcon } from "@/components/icons/profile-icon";
-import { CourseContext, Co4urseContextType } from "@/context/course_context";
+import { CourseContext, CourseContextType } from "@/context/course_context";
 
 interface AdminSearchFieldSectionProps {}
 

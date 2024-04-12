@@ -61,16 +61,15 @@ export type CourseContextType = {
   writeIntoFile: (id: string | null, index: number) => void;
   visible: boolean;
   handleCancelIcon: (index: number) => void;
-
+  fileExtension: string[];
   uploadfromDraft: () => void;
   handleCancelIconAssessment: (id: string | null, index: number) => void;
-  fileName: string;
-  fileSize: number;
+  fileName: string[];
+  fileSize: number[];
 
-  course_module_error:{
+  course_module_error: {
     [key: string]: string;
   };
-
 
   // designation
   handleChangeDesignation(event: ChangeEvent<HTMLInputElement>): void;
@@ -101,7 +100,7 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
 }) => {
   const router = useRouter();
 
-  const [active_step, setActiveStep] = useState<number>(0);
+  const [active_step, setActiveStep] = useState<number>(1);
 
   const handleStepOneDone = async () => {
     let errors = {};
@@ -495,11 +494,12 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
       assessment_no: 0,
     },
   ]);
+
   const [course_module_error, setCourseModuleError] = useState<{
     [key: string]: string;
   }>({
     module_name: "",
-    assessment_type: "",
+    module_file: "",
   });
   const [files, setFiles] = useState<File[]>([]);
 
@@ -732,6 +732,8 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
 
   const handleCancelIcon = (index: number) => {
     const temp = [...course_module];
+    console.log("aj", temp);
+
     temp[index].module_material = "";
     setCourseModule(temp);
     setVisible(false);
@@ -784,8 +786,11 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     }
   };
 
-  const [fileName, setFileName] = useState<string>("Not selected");
-  const [fileSize, setFileSize] = useState<number>(0);
+  // const [fileName, setFileName] = useState<string>("Not selected");
+  // const [fileSize, setFileSize] = useState<number>(0);
+  const [fileName, setFileName] = useState<string[]>([]);
+  const [fileSize, setFileSize] = useState<number[]>([]);
+  const [fileExtension, setFileExtension] = useState<string[]>([]);
 
   const handleFileSelect = (selectedFile: File, index: number) => {
     console.log("Selecting files for module...");
@@ -808,13 +813,27 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     });
 
     // Update fileName and fileSize only for the specific module
-    if (anyFilesUploaded) {
-      setFileName(selectedFile.name);
-      setFileSize(selectedFile.size);
-    } else {
-      setFileName("");
-      setFileSize(0);
-    }
+    setFileName((prevFileName) => {
+      const updatedFileName = [...prevFileName];
+      updatedFileName[index] = selectedFile.name;
+      return updatedFileName;
+    });
+
+    setFileSize((prevFileSize) => {
+      const updatedFileSize = [...prevFileSize];
+      updatedFileSize[index] = selectedFile.size;
+      return updatedFileSize;
+    });
+
+    // Set fileExtension for the specific module
+    const extension = selectedFile.name.substring(
+      selectedFile.name.lastIndexOf(".") + 1
+    );
+    setFileExtension((prevFileExtension) => {
+      const updatedFileExtension = [...prevFileExtension];
+      updatedFileExtension[index] = extension;
+      return updatedFileExtension;
+    });
   };
 
   useEffect(() => {
@@ -919,6 +938,10 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
       }
     }
   };
+
+  //Validation Check
+
+  const [link, setLink] = useState<string>("");
 
   const openLink = (index: number) => {
     console.log("check module url", course_module[index].module_material);
@@ -1254,7 +1277,7 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     writeIntoFile,
     visible,
     handleCancelIcon,
-
+    fileExtension,
     handleCancelIconAssessment,
     fileName,
     fileSize,
