@@ -17,7 +17,7 @@ const AdminCourseListTable: FC = () => {
   // }, [searchTerm]);
 
   // const { handleCourseCodeChange } = useContext(EditCourseContext);
-  const { course_basic, searchTerm, handleFilterCategoryChange, handleFitlerStatusChange, } = useContext(
+  const { course_basic, searchTerm, handleFilterCategoryChange, handleFitlerStatusChange, filterCategory, filterStatus } = useContext(
     CourseContext
   ) as CourseContextType;
   if (!contextValue) {
@@ -49,7 +49,7 @@ const AdminCourseListTable: FC = () => {
             </th>
 
             <th className="admin-course-list-table-head head-dropdown-icon">
-              Category{" "}
+              Category{"   "}{filterCategory}
               <div className="admin-course-list-table-category-dropdown-main-div">
                 <span
                   onClick={() => {
@@ -113,7 +113,7 @@ const AdminCourseListTable: FC = () => {
             </th>
             <th className="admin-course-list-table-head">Upload Date</th>
             <th className="admin-course-list-table-head head-dropdown-icon">
-              Status
+              Status{" "} {filterStatus}
               <div className="admin-course-list-table-head-dropdown-main-div">
                 <span
                   onClick={toggleDropdown}
@@ -127,7 +127,7 @@ const AdminCourseListTable: FC = () => {
                     <span
                       className="admin-course-list-table-head-dropdown-content-span"
                       onClick={() => {
-                        handleFitlerStatusChange(null);
+                        handleFitlerStatusChange("");
                         toggleDropdown();
                       }}
                     >
@@ -136,7 +136,7 @@ const AdminCourseListTable: FC = () => {
                     <span
                       className="admin-course-list-table-head-dropdown-content-span"
                       onClick={() => {
-                        handleFitlerStatusChange(true);
+                        handleFitlerStatusChange("active");
                         toggleDropdown();
                       }}
                     >
@@ -145,7 +145,7 @@ const AdminCourseListTable: FC = () => {
                     <span
                       className="admin-course-list-table-head-dropdown-content-span"
                       onClick={() => {
-                        handleFitlerStatusChange(false);
+                        handleFitlerStatusChange("inactive");
                         toggleDropdown();
                       }}
                     >

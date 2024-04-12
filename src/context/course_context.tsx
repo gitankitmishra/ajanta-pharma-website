@@ -61,14 +61,9 @@ export type CourseContextType = {
   writeIntoFile: (id: string | null, index: number) => void;
   visible: boolean;
   handleCancelIcon: (index: number) => void;
+  uploadfromDraft: () => Promise<void>
 
   course_module_error: {
-
-
-  uploadfromDraft: () => void;
-  handleCancelIconAssessment: (id: string | null, index: number) => void;
-  fileName: string;
-  fileSize: number;
 
     [key: string]: string;
   };
@@ -85,9 +80,12 @@ export type CourseContextType = {
   courseData: any[] | null;
   totalPages: number; // New property for total pages
   handleComponentPage: (value: number) => void;
+  filterStatus: string;
+  filterCategory: string;
+  filterCourse: string;
 
   handleFilterCategoryChange: (category: string) => void;
-  handleFitlerStatusChange: (category: boolean | null) => void;
+  handleFitlerStatusChange: (category: string) => void;
   handleFilterCourseChange: (course: string) => void;
   //GET AND EDIT COURSES
   getCourseData: (course_id: string) => void;
@@ -223,7 +221,6 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
         handleStepThreeDone();
       }
     } else if (active_step === 3) {
-      await uploadfromDraft();
       handleStepFourDone();
     }
   };
@@ -1000,16 +997,11 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
   const [componentPage, setComponentPage] = useState(0);
   const [courseData, setCourseData] = useState<CourseDetails[] | null>(null);
   const [filterCategory, setFilterCategory] = useState<string>("");
-  const [filterStatus, setFilterStatus] = useState<boolean | null>(true);
-  const [filterCourse, setFilterCourse] = useState("course");
+  const [filterStatus, setFilterStatus] = useState<string>("");
+  const [filterCourse, setFilterCourse] = useState<string>("course");
 
 
-  useEffect(() => {
-    console.log("Course category", filterCategory);
-    console.log("Course course", filterCourse);
-    console.log("Course status", filterStatus);
 
-  }, [filterCategory, filterCourse, filterStatus])
 
   //handle function change
   const handleFilterCategoryChange = (category: string) => {
@@ -1017,7 +1009,7 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     setFilterCategory(category);
   };
 
-  const handleFitlerStatusChange = (status: boolean | null) => {
+  const handleFitlerStatusChange = (status: string) => {
     // Update the filterStatus state
     setFilterStatus(status);
   };
@@ -1042,10 +1034,15 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     setLoading(true);
     const response = await fetchService({
       method: "GET",
-      endpoint: `api/admin/dashboard/filter?category=${filterCategory}&status=${filterStatus}&key=${filterCourse}&page=${pageNo}&pageSize=${pageSize}`
+      endpoint: `api/admin/dashboard/filter?category=${filterCategory || ''}&status=${filterStatus || ''}&key=${filterCourse || ''}&page=${pageNo}&pageSize=${pageSize}`
+
     });
+
     if (response.code === 200) {
-      setCourseData(response.data.data);
+      console.log("response", response.data.data.data);
+
+
+      setCourseData(response.data.data.data);
       setTotalPages(response.data.totalPages);
       setLoading(false);
     } else {
@@ -1055,7 +1052,7 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
   // const fetchData = async () => {
   //   setLoading(true);
   //   try {
-  //     const url = `${process.env.SERVER_URL}api/admin/dashboard/courseList?page=${pageNo}&pageSize=${pageSize}`;
+  //     const url = `${ process.env.SERVER_URL } api / admin / dashboard / courseList ? page = ${ pageNo }& pageSize=${ pageSize } `;
   //     const response = await fetch(url, {
   //       method: "GET",
   //       headers: {
@@ -1077,7 +1074,7 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
 
   useEffect(() => {
     fetchData();
-  }, [pageNo, pageSize]);
+  }, [pageNo, pageSize, filterCourse, filterCategory, filterStatus]);
 
   //*/****************************************************************************************** */
 
@@ -1092,7 +1089,7 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
   const getCourseData = async (course_id: string) => {
     const response = await fetchService({
       method: "GET",
-      endpoint: `api/admin/dashboard/getCourseByCode/${course_id}`,
+      endpoint: `api / admin / dashboard / getCourseByCode / ${course_id} `,
     });
     if (response.code === 200) {
       const responseData = response.data;
@@ -1124,7 +1121,7 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
   // const getCourseData = async (course_id: string): Promise<void> => {
   //   try {
   //     const response = await fetch(
-  //       `${process.env.SERVER_URL}api/admin/dashboard/getCourseByCode/${course_id}`,
+  //       `${ process.env.SERVER_URL } api / admin / dashboard / getCourseByCode / ${ course_id } `,
   //       {
   //         method: "GET",
   //         headers: {
@@ -1179,7 +1176,7 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
 
     const response = await fetchService({
       method: "PUT",
-      endpoint: `api/admin/dashboard/editCourse/${course_basic.course_code}`,
+      endpoint: `api / admin / dashboard / editCourse / ${course_basic.course_code} `,
       data: {
         course_designation: {
           ...course_designation,
@@ -1215,8 +1212,10 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
   const uploadfromDraft = async () => {
     console.log("uploading data");
     const response = await fetchService({
+
       method: "POST",
       endpoint: `api/admin/dashboard/pushData/${course_basic.course_code}`,
+
     });
     if (response.code == 200) {
       router.push("/admin/admin-courses");
@@ -1273,8 +1272,6 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     handleCancelIcon,
 
     handleCancelIconAssessment,
-    fileName,
-    fileSize,
 
     course_module_error,
 
@@ -1294,6 +1291,9 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     handleFilterCategoryChange,
     handleFitlerStatusChange,
     handleFilterCourseChange,
+    filterStatus,
+    filterCategory,
+    filterCourse,
 
     //GET COURSES
     getCourseData,
