@@ -61,13 +61,17 @@ export type CourseContextType = {
   writeIntoFile: (id: string | null, index: number) => void;
   visible: boolean;
   handleCancelIcon: (index: number) => void;
-  uploadfromDraft: () => Promise<void>
+  fileExtension: string[];
+
+  uploadfromDraft: () => void;
+  handleCancelIconAssessment: (id: string | null, index: number) => void;
+  fileName: string[];
+  fileSize: number[];
 
   course_module_error: {
 
     [key: string]: string;
   };
-
 
   // designation
   handleChangeDesignation(event: ChangeEvent<HTMLInputElement>): void;
@@ -92,6 +96,9 @@ export type CourseContextType = {
 
   //to edit
   updateCourse: () => void;
+
+  //dashboard
+  getCountdata: any;
 };
 
 export const CourseContext = createContext<CourseContextType | null>(null);
@@ -456,8 +463,7 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
   // };
 
   const handleChange = async (field: string, value: any) => {
-    console.log(`&${field}&`);
-    console.log("----------", course_basic_error[field]);
+    console.log(`&${value}&`);
     if (course_basic_error[field] !== "") {
       console.log("field", field);
       setCourseBasicError({ ...course_basic_error, [field]: "" });
@@ -479,6 +485,9 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
       setCourseBasic((prev) => ({ ...prev, [field]: value }));
     }
   };
+  useEffect(() => {
+    handleChange;
+  }, []);
   // ***********************************************************************************************
 
   // ***********************************************************************************************
@@ -491,10 +500,12 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
       assessment_no: 0,
     },
   ]);
+
   const [course_module_error, setCourseModuleError] = useState<{
     [key: string]: string;
   }>({
     module_name: "",
+    module_file: "",
     assessment_type: "",
   });
   const [files, setFiles] = useState<File[]>([]);
@@ -728,6 +739,8 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
 
   const handleCancelIcon = (index: number) => {
     const temp = [...course_module];
+    console.log("aj", temp);
+
     temp[index].module_material = "";
     setCourseModule(temp);
     setVisible(false);
@@ -780,8 +793,11 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     }
   };
 
-  const [fileName, setFileName] = useState<string>("Not selected");
-  const [fileSize, setFileSize] = useState<number>(0);
+  // const [fileName, setFileName] = useState<string>("Not selected");
+  // const [fileSize, setFileSize] = useState<number>(0);
+  const [fileName, setFileName] = useState<string[]>([]);
+  const [fileSize, setFileSize] = useState<number[]>([]);
+  const [fileExtension, setFileExtension] = useState<string[]>([]);
 
   const handleFileSelect = (selectedFile: File, index: number) => {
     console.log("Selecting files for module...");
@@ -804,13 +820,27 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     });
 
     // Update fileName and fileSize only for the specific module
-    if (anyFilesUploaded) {
-      setFileName(selectedFile.name);
-      setFileSize(selectedFile.size);
-    } else {
-      setFileName("");
-      setFileSize(0);
-    }
+    setFileName((prevFileName) => {
+      const updatedFileName = [...prevFileName];
+      updatedFileName[index] = selectedFile.name;
+      return updatedFileName;
+    });
+
+    setFileSize((prevFileSize) => {
+      const updatedFileSize = [...prevFileSize];
+      updatedFileSize[index] = selectedFile.size;
+      return updatedFileSize;
+    });
+
+    // Set fileExtension for the specific module
+    const extension = selectedFile.name.substring(
+      selectedFile.name.lastIndexOf(".") + 1
+    );
+    setFileExtension((prevFileExtension) => {
+      const updatedFileExtension = [...prevFileExtension];
+      updatedFileExtension[index] = extension;
+      return updatedFileExtension;
+    });
   };
 
   useEffect(() => {
@@ -915,6 +945,10 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
       }
     }
   };
+
+  //Validation Check
+
+  const [link, setLink] = useState<string>("");
 
   const openLink = (index: number) => {
     console.log("check module url", course_module[index].module_material);
@@ -1194,7 +1228,7 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
       },
     });
 
-    if (response.code === 200) {
+    if (response.code == 200) {
       const data = response;
       console.log(data);
     } else {
@@ -1225,6 +1259,25 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
       console.log("error");
     }
   };
+
+  // ***********************************************************************************************
+  //dashboard api
+  const [getCountdata, setGetCountdata] = useState<any>("");
+  const getCount = async () => {
+    const response = await fetchService({
+      method: "GET",
+      endpoint: "api/admin/dashboard/countCourseandCategory",
+    });
+    if (response.code == 200) {
+      const data = response.data;
+      console.log(data);
+      setGetCountdata(data);
+    }
+  };
+
+  useEffect(() => {
+    getCount();
+  }, []);
   // ***********************************************************************************************
 
 
@@ -1270,6 +1323,7 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     writeIntoFile,
     visible,
     handleCancelIcon,
+    fileExtension,
 
     handleCancelIconAssessment,
 
@@ -1300,6 +1354,9 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
 
     //edit
     updateCourse,
+
+    //dashboard
+    getCountdata,
   };
   return (
     <CourseContext.Provider value={course_values}>
