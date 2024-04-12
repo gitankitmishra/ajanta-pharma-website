@@ -18,6 +18,7 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
   const {
     course_basic,
     course_module,
+    course_module_error,
     course_assessment,
     handleAddModule,
     handleDeleteModule,
@@ -35,10 +36,12 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
     openLink,
     handleCancelIconAssessment,
     visible,
+    fileName,
+    fileSize,
   } = useContext(CourseContext) as CourseContextType;
 
-  const [fileName, setFileName] = useState<string>("Not selected");
-  const [fileSize, setFileSize] = useState<number>(0);
+  // const [fileName, setFileName] = useState<string>("Not selected");
+  // const [fileSize, setFileSize] = useState<number>(0);
 
   const fileNameWithoutExtension = fileName.substring(
     0,
@@ -107,6 +110,7 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
                   id={`module_name-${index}`}
                   moduleValue={module.module_name}
                   onUpdate={handleModuleChange}
+                  error={course_module_error.module_name}
                 />
               </div>
               <div className="module-eye-icon">
@@ -117,8 +121,6 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
                   upload={"Upload Course Material"}
                   onFileSelect={(selectedFile: File) => {
                     handleFileSelect(selectedFile, index);
-                    setFileName(selectedFile.name);
-                    setFileSize(selectedFile.size);
                   }}
                   acceptedTypes=".mp4,.ppt,.pdf"
                   formatText={"File Format: mp4, ppt, pdf "}
@@ -126,13 +128,11 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
               </div>
               <div className="module-input-view-btn">
                 <div className="module-input-view-btn-area">
-                  {filesUploaded ? (
+                  {filesUploaded[index] ? (
                     <span
                       className="module-input-view-btn-cancel-icon-span"
                       onClick={() => {
                         handleCancelIcon(index);
-                        setFileName("");
-                        setFileSize(0);
                       }}
                     >
                       <CancelIcon />
@@ -288,9 +288,9 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
           <div className="module-radio-selction">
             <div className="module-course-assessment">
               Course Assessment{" "}
-              <span className="module-course-assessment-optional-span">
+              {/* <span className="module-course-assessment-optional-span">
                 (Optional)
-              </span>
+              </span> */}
             </div>
           </div>
           <div className="module-input">

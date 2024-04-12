@@ -8,12 +8,9 @@
   font-family: "Raleway";
 }
 
-.main-body {
-  display: flex;
-  /* width: 100vw; */
-}
 .main-body main {
-  width: 79vw;
+  margin-left: 21vw;
+  /* width: 79vw; */
   /* position: fixed;
   margin-left: 21vw; */
 }
