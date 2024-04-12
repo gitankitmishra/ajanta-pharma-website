@@ -196,7 +196,7 @@ const UploadStepSection: FC<UploadStepSectionProps> = () => {
                     <div className="upload-section2-uploaded-file">
                       <div
                         className="uploaded-video-file"
-                        onClick={() => writeIntoFile(index)}
+                        onClick={() => writeIntoFile(null, index)}
                       >
                         View
                       </div>
