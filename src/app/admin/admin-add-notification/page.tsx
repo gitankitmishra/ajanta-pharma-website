@@ -6,10 +6,10 @@ import { FC } from "react";
 interface AdminAddNotificationProps {}
 
 const AdminAddNotification: FC<AdminAddNotificationProps> = () => {
-  return <section>
+  return <main>
     <AdminCoursesHeroSection/>
     <AddNotificationContainer/>
-  </section>;
+  </main>;
 };
 
 export default AdminAddNotification;

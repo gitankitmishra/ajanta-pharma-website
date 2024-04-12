@@ -24,9 +24,14 @@ export type CourseContextType = {
   course_basic_error: {
     [key: string]: string;
   };
-  handleNextClick: () => void;
+  handleNextClick: (index: number) => void;
   handlePreviousClick: () => void;
   active_step: number;
+  searchTerm: string;
+  suggestions: string[];
+  filteredSuggestions: string[];
+  handleSearchData: (event: ChangeEvent<HTMLInputElement>) => void;
+  handleSuggestionClick: (suggesstion: string) => void;
 
   // basic
   course_basic: CourseBasic;
@@ -38,6 +43,7 @@ export type CourseContextType = {
   course_module: CourseModule[];
   course_assessment: CourseAssessment[];
   handleAddModule: () => void;
+  handleDeleteModule: (index: number) => void;
   handleModuleChange: (event: ChangeEvent<HTMLInputElement>) => void;
   handleAssessmentNameChange: (event: ChangeEvent<HTMLInputElement>) => void;
   handleAssessmentTypeChange: (event: ChangeEvent<HTMLSelectElement>) => void;
@@ -52,12 +58,12 @@ export type CourseContextType = {
   ) => void;
   openLink: (index: number) => void;
   filesUploaded: boolean;
-  searchTerm: string;
-  searchNameData: (event: ChangeEvent<HTMLInputElement>) => void;
-  filteredData: (course: CourseBasic) => void;
   writeIntoFile: (index: number) => void;
   visible: boolean;
-  handleCancelIcon: () => void;
+  handleCancelIcon: (index: number) => void;
+  course_module_error:{
+    [key: string]: string;
+  };
 
   // designation
   handleChangeDesignation(event: ChangeEvent<HTMLInputElement>): void;
@@ -85,7 +91,7 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
 }) => {
   const router = useRouter();
 
-  const [active_step, setActiveStep] = useState<number>(0);
+  const [active_step, setActiveStep] = useState<number>(1);
 
   const handleStepOneDone = async () => {
     let errors = {};
@@ -120,7 +126,38 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     setActiveStep(1);
   };
 
-  const handleStepTwoDone = () => {
+  const handleStepTwoDone = (index: number) => {
+    let errors = {};
+    if (course_module[index]?.module_name.trim().length === 0) {
+      errors = { ...errors, module_name: "Select module name" };
+    }
+
+    if (course_assessment[index]?.assessment_type.trim().length === 0) {
+      errors = { ...errors, assessment_type: "Select assessment type" };
+    }
+    // if (course_basic.course_training.trim().length === 0) {
+    //   errors = {
+    //     ...errors,
+    //     course_training: "Select course training type.",
+    //   };
+    // }
+    // if (course_basic.course_name.trim().length === 0) {
+    //   errors = { ...errors, course_name: "Enter course name." };
+    // }
+
+    // if (course_basic.course_objective.trim().length === 0) {
+    //   errors = { ...errors, course_objective: "Enter learning objective." };
+    // }
+
+    // if (course_basic.course_start_date.trim().length === 0) {
+    //   errors = { ...errors, course_start_date: "Select start date." };
+    // }
+
+    if (Object.keys(errors).length !== 0) {
+      setCourseModuleError(errors);
+      return;
+    }
+
     setActiveStep(2);
   };
 
@@ -135,52 +172,24 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
   const handleApiCall = () => {
     switch (active_step) {
       case 0:
-        // Call API for basic info
-        // Example: handleDraftSave for Basic Info
         handleDraftSave();
         break;
       case 1:
-        // Call API for modules
-        // Example: mergeapi for Modules
-        // mergedApi();
         break;
       case 2:
-        // Call API for designation
-        // Example: publishDesignation for Designation
-        // publishDesignation();
-
         break;
       default:
         break;
     }
   };
-  // const handleNextClick = async () => {
-  //   if (active_step === 0) {
-  //     await handleApiCall();
-  //     handleStepOneDone();
-  //   } else if (active_step === 1) {
-  //     await uploadCourse();
-  //     handleStepTwoDone();
-  //   } else if (active_step === 2) {
-  //     handleShowError(() => {
-  //       if (deserror === "") {
-  //         publishDesignation().then(() => handleStepThreeDone());
-  //       }
-  //     });
-  //   } else if (active_step === 3) {
-  //     await uploadfromDraft();
-  //     console.log("step 3");
-  //     handleStepFourDone();
-  //   }
-  // };
 
-  const handleNextClick = async () => {
+  const handleNextClick = async (index: number) => {
     if (active_step === 0) {
       await handleApiCall();
       handleStepOneDone();
     } else if (active_step === 1) {
       await uploadCourse();
-      handleStepTwoDone();
+      handleStepTwoDone(index);
     } else if (active_step === 2) {
       if (
         ((course_basic.course_category === "Medical" ||
@@ -213,6 +222,69 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     } else {
       setActiveStep((prevActiveStep) => prevActiveStep - 1);
     }
+  };
+
+  //search api and another function
+  const [searchTerm, setSearchTerm] = useState<string>("");
+  const [suggestions, setSuggestions] = useState<string[]>([]);
+  const [filteredSuggestions, setFilteredSuggestions] = useState<string[]>([]);
+
+  useEffect(() => {
+    if (searchTerm.trim() !== "") {
+      fetchSuggestions();
+    } else {
+      setFilteredSuggestions([]);
+    }
+  }, [searchTerm]);
+
+  const fetchSuggestions = async () => {
+    try {
+      const response = await fetchService({
+        method: "GET",
+        endpoint: `api/admin/dashboard/search/?q=${searchTerm}`,
+      });
+
+      console.log("Response:", response.data.data);
+
+      if (response.code === 200) {
+        const suggestionsData = response.data.data;
+        console.log("Suggestions:", suggestionsData);
+
+        if (Array.isArray(suggestionsData)) {
+          const suggestions: any[] = suggestionsData.map((item) => ({
+            name: item.course_basic.course_name,
+            code: item.course_basic.course_code,
+            label: `${item.course_basic.course_code} - ${item.course_basic.course_name}`,
+          }));
+          console.log("Mapped Suggestions:", suggestions);
+
+          setSuggestions(suggestions);
+          setFilteredSuggestions(
+            suggestions.slice(0, 10).map((suggestion) => suggestion.label)
+          );
+        } else {
+          console.error("Error: No suggestions data found in the response");
+        }
+      } else {
+        console.error("Error fetching suggestions");
+      }
+    } catch (error) {
+      console.error("Error fetching suggestions:", error);
+    }
+  };
+
+  const handleSearchData = (event: ChangeEvent<HTMLInputElement>) => {
+    const { value } = event.target;
+    setSearchTerm(value);
+  };
+
+  const handleSuggestionClick = (suggestion: string) => {
+    setSearchTerm(suggestion);
+    setFilteredSuggestions([]);
+    const courseCode = suggestion.split(" - ")[0];
+    console.log("check the course code", courseCode);
+    getCourseData(courseCode);
+    router.push("/admin/admin-course-detail");
   };
 
   // ***********************************************************************************************
@@ -333,21 +405,6 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     }
   };
 
-  const [searchTerm, setSearchTerm] = useState<string>("");
-  const searchNameData = (event: ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value.toLowerCase();
-    setSearchTerm(value);
-  };
-
-  const filteredData: any = [course_basic].filter(
-    (course: CourseBasic) =>
-      course.course_name.toLowerCase().includes(searchTerm) ||
-      course.course_code.toLowerCase().includes(searchTerm)
-  );
-
-  useEffect(() => {
-    console.log("test the search", fileURLToPath);
-  }, [searchTerm]);
   const handleDraftSave = async () => {
     const response = await fetchService({
       method: "POST",
@@ -426,12 +483,15 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
       assessment_no: 0,
     },
   ]);
-
+  const [course_module_error, setCourseModuleError] = useState<{
+    [key: string]: string;
+  }>({
+    module_name: "",
+    assessment_type: "",
+  });
   const [files, setFiles] = useState<File[]>([]);
 
   const [filesUploaded, setFilesUploaded] = useState<boolean>(files.length > 0);
-
-  console.log("checking..", filesUploaded);
 
   const [course_assessment, setCourseAssessment] = useState<CourseAssessment[]>(
     [
@@ -478,6 +538,7 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
         module_material: "",
         assessment_no: course_module.length,
       },
+      // setCourseModulecourse_module([...newlyAddedModules, newModuleIndex]);
     ]);
     setCourseAssessment([
       ...course_assessment,
@@ -491,7 +552,17 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
       },
     ]);
   };
+  const handleDeleteModule = (index: number) => {
+    // Remove module from course_module state
+    const updatedModules = course_module.filter((_, i) => i !== index);
+    setCourseModule(updatedModules);
 
+    // Remove corresponding assessment from course_assessment state
+    const updatedAssessments = course_assessment.filter(
+      (assessment) => assessment.assessment_no !== index
+    );
+    setCourseAssessment(updatedAssessments);
+  };
   //download excel
   const handleDownloadExcel = (index: number) => {
     let ws = XLSX.utils.json_to_sheet([]);
@@ -617,8 +688,15 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     );
   };
 
-  const handleCancelIcon = () => {
+  const handleCancelIcon = (index: number) => {
+    const updatedCourseModule = [...course_module];
+    updatedCourseModule[index] = {
+      ...updatedCourseModule[index],
+      module_material: "",
+    };
+    setCourseModule(updatedCourseModule);
     setVisible(false);
+    setFilesUploaded(false);
   };
 
   const handleModuleChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -635,11 +713,14 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
 
   const handleAssessmentNameChange = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.id === "pre" || event.target.id === "post") {
+      console.log("assessment main check");
       const temp: CourseAssessment[] = [...course_assessment_main];
       const index: number = event.target.id === "pre" ? 0 : 1;
       temp[index].assessment_name = event.target.value;
       setCourseAssessmentMain(temp);
     } else {
+      console.log("assessment check");
+
       const temp: CourseAssessment[] = [...course_assessment];
       const index: number = parseInt(event.target.id.split("-")[1]);
       temp[index].assessment_name = event.target.value;
@@ -658,13 +739,6 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     const anyFilesUploaded = temp_files.some((file) => file !== undefined);
     setFilesUploaded(anyFilesUploaded);
   };
-
-  useEffect(() => {
-    console.log(
-      "module",
-      course_module.map((module) => module.module_material)
-    );
-  }, [course_module]);
 
   const handleAssessmentTypeChange = (
     event: ChangeEvent<HTMLSelectElement>
@@ -718,32 +792,56 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
       }));
 
       setCourseModule(updatedCourseModule);
-      const response = await fetchService({
-        method: "Post",
-        endpoint: "api/admin/dashboard/uploadCourse",
-        data: {
-          course_module: updatedCourseModule,
-          course_assessment: {
-            ...course_assessment,
-            ...course_assessment_main,
+
+      if (
+        course_assessment_main[0].assessment_name &&
+        course_assessment_main[0].assessment_type !== ""
+      ) {
+        const response = await fetchService({
+          method: "Post",
+          endpoint: "api/admin/dashboard/uploadCourse",
+          data: {
+            course_module: updatedCourseModule,
+            course_assessment: [
+              ...course_assessment_main,
+              ...course_assessment,
+            ],
+            course_code: course_basic.course_code,
           },
-          course_code: course_basic.course_code,
-        },
-      });
-      if (response.code == 200) {
-        const data = response;
-        console.log("data", data);
+        });
+        if (response.code === 200) {
+          const responseData = response;
+          console.log("data", responseData);
+        } else {
+          console.error(
+            "Length mismatch between data.code and course_module arrays"
+          );
+        }
       } else {
-        console.error(
-          "Length mismatch between data.code and course_module arrays"
-        );
+        const response = await fetchService({
+          method: "Post",
+          endpoint: "api/admin/dashboard/uploadCourse",
+          data: {
+            course_module: updatedCourseModule,
+            course_assessment: course_assessment,
+            course_code: course_basic.course_code,
+          },
+        });
+        if (response.code === 200) {
+          const responseData = response;
+          console.log("data", responseData);
+        } else {
+          console.error(
+            "Length mismatch between data.code and course_module arrays"
+          );
+        }
       }
     }
   };
 
   const openLink = (index: number) => {
     const link = course_module[index].module_material;
-    console.log("link....", link);
+    console.log("linkkkkk....", link);
     window.open(link);
   };
 
@@ -777,10 +875,6 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
       }));
     }
   };
-
-  useEffect(() => {
-    console.log("course designation", course_designation);
-  }, [course_designation]);
   //api call for designation
   const publishDesignation = async () => {
     try {
@@ -1041,6 +1135,14 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
   };
   // ***********************************************************************************************
   const course_values = {
+    //common
+    searchTerm,
+    filteredSuggestions,
+    suggestions,
+    handleSearchData,
+    handleSuggestionClick,
+
+    //basic
     course_basic,
     handleChange,
     course_basic_error,
@@ -1053,7 +1155,9 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     //modules
     course_module,
     course_assessment,
+
     handleAddModule,
+    handleDeleteModule,
     handleModuleChange,
     handleAssessmentNameChange,
     handleAssessmentTypeChange,
@@ -1064,12 +1168,10 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     handleexcelFileRead,
     openLink,
     filesUploaded,
-    filteredData,
-    searchNameData,
-    searchTerm,
     writeIntoFile,
     visible,
     handleCancelIcon,
+    course_module_error,
 
     //designation
     course_designation,

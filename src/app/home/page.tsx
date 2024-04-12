@@ -9,12 +9,12 @@ interface HomeProps {}
 
 const Home: FunctionComponent<HomeProps> = () => {
   return (
-    <section  className="home-section-main-container">
+    <main  className="home-section-main-container">
       <HomeHeroSection />
       <HomeProfileSection />
       <HomeContinueLearningSection/>
       <HomeAssignedCoursesSection/>
-    </section>
+    </main>
   );
 };
 

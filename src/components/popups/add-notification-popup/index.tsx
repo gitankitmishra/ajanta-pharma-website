@@ -19,7 +19,7 @@ const AddNotificationPopup: FC<AddNotificationPopupProps> = ({
 }) => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const togglePopup = () => {
-    setIsPopupOpen(!isPopupOpen);
+    setIsPopupOpen(true);
   };
   return (
     <div className="add-notification-popup-main-container">

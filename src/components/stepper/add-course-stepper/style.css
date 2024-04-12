@@ -1,6 +1,7 @@
-.main-body main {
+/* .main-body main {
   width: 100% !important;
-}
+  margin-left: 0 !important;
+} */
 .stepper-container {
   margin-bottom: 20px;
   display: flex;
