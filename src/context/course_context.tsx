@@ -83,6 +83,9 @@ export type CourseContextType = {
 
   //to edit
   updateCourse: () => void;
+
+  //dashboard
+  getCountdata: any;
 };
 
 export const CourseContext = createContext<CourseContextType | null>(null);
@@ -92,7 +95,7 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
 }) => {
   const router = useRouter();
 
-  const [active_step, setActiveStep] = useState<number>(1);
+  const [active_step, setActiveStep] = useState<number>(0);
 
   const handleStepOneDone = async () => {
     let errors = {};
@@ -418,8 +421,7 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
   // };
 
   const handleChange = async (field: string, value: any) => {
-    console.log(`&${field}&`);
-    console.log("----------", course_basic_error[field]);
+    console.log(`&${value}&`);
     if (course_basic_error[field] !== "") {
       console.log("field", field);
       setCourseBasicError({ ...course_basic_error, [field]: "" });
@@ -441,6 +443,9 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
       setCourseBasic((prev) => ({ ...prev, [field]: value }));
     }
   };
+  useEffect(() => {
+    handleChange;
+  }, []);
   // ***********************************************************************************************
 
   // ***********************************************************************************************
@@ -1122,7 +1127,7 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
       },
     });
 
-    if (response.code === 200) {
+    if (response.code == 200) {
       const data = response;
       console.log(data);
     } else {
@@ -1150,6 +1155,25 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
       console.log("error");
     }
   };
+
+  // ***********************************************************************************************
+  //dashboard api
+  const [getCountdata, setGetCountdata] = useState<any>("");
+  const getCount = async () => {
+    const response = await fetchService({
+      method: "GET",
+      endpoint: "api/admin/dashboard/countCourseandCategory",
+    });
+    if (response.code == 200) {
+      const data = response.data;
+      console.log(data);
+      setGetCountdata(data);
+    }
+  };
+
+  useEffect(() => {
+    getCount();
+  }, []);
   // ***********************************************************************************************
   const course_values = {
     //common
@@ -1210,6 +1234,9 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
 
     //edit
     updateCourse,
+
+    //dashboard
+    getCountdata,
   };
   return (
     <CourseContext.Provider value={course_values}>

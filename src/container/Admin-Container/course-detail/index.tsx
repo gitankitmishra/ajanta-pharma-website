@@ -17,6 +17,7 @@ import TextAreaField from "@/components/fields/TextAreaField";
 import InputField from "@/components/fields/input-field";
 import UploadButton from "@/components/buttons/upload-button";
 import { CancelIcon } from "@/components/icons/cancel-icon";
+import SuccessPopup from "@/components/popups/success-popup";
 
 interface AdminCourseDeatilContainerProps {}
 
@@ -76,14 +77,18 @@ const AdminCourseDeatilContainer: FC<
 
   const [fileName, setFileName] = useState("Video");
   const [fileSize, setFileSize] = useState<number>(2.2);
-
   const [isClicked, setIsClicked] = useState(false);
   const [buttonText, setButtonText] = useState({
     edit: "Edit",
     discard: "Back",
   });
+  const [popupvisible, setPopupVisible] = useState<boolean>(false);
 
   //usestate Call
+
+  const popupClose = () => {
+    setPopupVisible(false);
+  };
 
   const handleEditClick = () => {
     if (buttonText.edit === "Edit") {
@@ -92,6 +97,7 @@ const AdminCourseDeatilContainer: FC<
       setButtonText({ edit: "Preview", discard: "Discard" });
     } else if (buttonText.edit === "Save") {
       updateCourse();
+      setPopupVisible(true);
     } else if (buttonText.edit === "Preview") {
       setIsEditable(false);
       setIsClicked(isClicked);
@@ -827,10 +833,11 @@ const AdminCourseDeatilContainer: FC<
               Course Status
             </label>
             <DropdownInputField
+              id="status"
               value={course_basic.course_status}
               onValueChange={(value) => handleChange("course_status", value)}
-              options={["Active", "Inactive"]}
-              valueLabel={[""]}
+              options={["active", "inactive"]}
+              valueLabel={["active", "inactive"]}
               isEditable={!isEditable}
             />
           </div>
@@ -840,6 +847,13 @@ const AdminCourseDeatilContainer: FC<
           <NextButton text={buttonText.edit} onClick={handleEditClick} />
         </div>
       </div>
+      {popupvisible && (
+        <SuccessPopup
+          onClose={popupClose}
+          open
+          text="Course has been edited Successfully!"
+        />
+      )}
     </section>
   );
 };
