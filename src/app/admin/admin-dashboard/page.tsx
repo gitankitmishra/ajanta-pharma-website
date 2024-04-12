@@ -11,7 +11,7 @@ const Dashboard: FC<DashboardProps> = () => {
   const [currentPage, setCurrentPage] = useState(1);
 
   return (
-    <>
+    <main>
       <DashboardHeroSection />
       <DashboardProfileSection />
       <AdminCourseListTable
@@ -23,7 +23,7 @@ const Dashboard: FC<DashboardProps> = () => {
       // view={<ViewEyeIcon />}
       // currentPage={currentPage}
       />
-    </>
+    </main>
   );
 };
 

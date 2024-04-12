@@ -18,6 +18,7 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
   const {
     course_basic,
     course_module,
+    course_module_error,
     course_assessment,
     handleAddModule,
     handleDeleteModule,
@@ -109,6 +110,7 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
                   id={`module_name-${index}`}
                   moduleValue={module.module_name}
                   onUpdate={handleModuleChange}
+                  error={course_module_error.module_name}
                 />
               </div>
               <div className="module-eye-icon">
@@ -286,9 +288,9 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
           <div className="module-radio-selction">
             <div className="module-course-assessment">
               Course Assessment{" "}
-              <span className="module-course-assessment-optional-span">
+              {/* <span className="module-course-assessment-optional-span">
                 (Optional)
-              </span>
+              </span> */}
             </div>
           </div>
           <div className="module-input">
