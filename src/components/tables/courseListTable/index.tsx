@@ -17,7 +17,7 @@ const AdminCourseListTable: FC = () => {
   // }, [searchTerm]);
 
   // const { handleCourseCodeChange } = useContext(EditCourseContext);
-  const { course_basic, searchTerm, handleFilterCategoryChange, handleFitlerStatusChange, filterCategory, filterStatus } = useContext(
+  const { course_basic, searchTerm, handleFilterCategoryChange, handleFitlerStatusChange, filterCategory, filterStatus, filterCourse } = useContext(
     CourseContext
   ) as CourseContextType;
   if (!contextValue) {
@@ -159,46 +159,70 @@ const AdminCourseListTable: FC = () => {
           </tr>
         </thead>
         <tbody className="admin-course-list-tbody">
-          {courseData?.map((course: any, index: number) => (
-            <tr key={index}>
-              <td className="admin-course-list-table-data admin-course-list-table-data-name-and-code">
-                {course.course_basic?.course_code} -{" "}
-                {course.course_basic?.course_name}
+          {courseData && courseData.length === 0 ? (
+            <tr className="no-data-found">
+              <td colSpan={5}>
+                No Data Found for
+                {filterCategory && (
+                  <>
+                    {"     "}
+                    <span className="highlight1">    Category</span>=
+                    <span className="highlight2">  {filterCategory}</span> /
+                  </>
+                )}
+                {filterStatus && (
+                  <>
+                    {" "}
+                    <span className="highlight1">Status</span>   =
+                    <span className="highlight2">  {filterStatus}</span> /
+                  </>
+                )}
+                {filterCourse && (
+                  <>
+                    {" "}
+                    <span className="highlight1">CourseType</span> =
+                    <span className="highlight2">   {filterCourse}</span>
+                  </>
+                )}
               </td>
-              <td className="admin-course-list-table-data">
-                {course.course_basic?.course_category}
-              </td>
-              <td className="admin-course-list-table-data admin-course-list-table-data-name-and-code">
-                {new Date(
-                  course.course_basic.course_start_date
-                ).toLocaleDateString()}
-              </td>
-              <td className="admin-course-list-table-data">
-                <p
-                  className={`admin-course-status-span ${course.course_basic?.course_status === "active"
-                    ? "status-active"
-                    : "status-inactive"
-                    }`}
-                >
-                  {course.course_basic?.course_status === "active"
-                    ? "Active"
-                    : "Inactive"}
-                </p>
-              </td>
-              <td className="admin-course-list-table-data admin-course-eye-icon">
-                <Link href={`/admin/admin-course-detail/`}>
-                  {/* ${course._id} Need a context to hold this value to use this id to view the course 
-          for an edit logic */}
-                  <ViewEyeIcon
-                    onClick={() =>
-                      getCourseData(course.course_basic.course_code)
-                    }
-                  />
-                </Link>
-              </td>
+
             </tr>
-          ))}
+          ) : (
+            courseData?.map((course: any, index: number) => (
+              <tr key={index}>
+                <td className="admin-course-list-table-data admin-course-list-table-data-name-and-code">
+                  {course.course_basic?.course_code} - {course.course_basic?.course_name}
+                </td>
+                <td className="admin-course-list-table-data">
+                  {course.course_basic?.course_category}
+                </td>
+                <td className="admin-course-list-table-data admin-course-list-table-data-name-and-code">
+                  {new Date(course.course_basic.course_start_date).toLocaleDateString()}
+                </td>
+                <td className="admin-course-list-table-data">
+                  <p
+                    className={`admin-course-status-span ${course.course_basic?.course_status === "active"
+                      ? "status-active"
+                      : "status-inactive"
+                      }`}
+                  >
+                    {course.course_basic?.course_status === "active" ? "Active" : "Inactive"}
+                  </p>
+                </td>
+                <td className="admin-course-list-table-data admin-course-eye-icon">
+                  <Link href={`/admin/admin-course-detail/`}>
+                    {/* ${course._id} Need a context to hold this value to use this id to view the course 
+      for an edit logic */}
+                    <ViewEyeIcon
+                      onClick={() => getCourseData(course.course_basic.course_code)}
+                    />
+                  </Link>
+                </td>
+              </tr>
+            ))
+          )}
         </tbody>
+
       </table>
     </div >
   );
