@@ -1,6 +1,6 @@
+"use client";
 import { DropdownIcon } from "@/components/icons/dropdown-icon";
-import ViewEyeIcon from "@/components/icons/view-eye-icon";
-import { FC } from "react";
+import { FC, useState } from "react";
 import "./style.css";
 
 interface TeamReportTableProps {
@@ -9,9 +9,10 @@ interface TeamReportTableProps {
   courseCode: string;
   courseName: string;
   status: string;
-  view: JSX.Element;
+  attempts: number;
   currentPage: number;
   date: string;
+  score: number;
 }
 
 const data: TeamReportTableProps[] = [
@@ -19,100 +20,111 @@ const data: TeamReportTableProps[] = [
     empName: "XYZ",
     courseCode: "PD2",
     image: "",
-    date:"31/01/2024",
+    date: "31/01/2024",
     courseName: "Critical Thinking",
-    status: "Active",
-    view: <ViewEyeIcon />,
+    status: "Complete",
+    attempts: 1,
+    score: 30,
     currentPage: 0,
   },
   {
     empName: "XYZ",
     image: "",
-    date:"31/01/2024",
+    date: "31/01/2024",
     courseCode: "PD2",
     courseName: "Creative Thinking",
-    status: "Inactive",
-    view: <ViewEyeIcon />,
+    status: "Not Complete",
+    attempts: 4,
+    score: 0,
     currentPage: 0,
   },
   {
     empName: "XYZ",
     image: "",
-    date:"31/01/2024",
+    date: "31/01/2024",
     courseCode: "PD2",
     courseName: "Innovative Thinking",
-    status: "Active",
-    view: <ViewEyeIcon />,
+    status: "Complete",
+    attempts: 2,
+
+    score: 60,
     currentPage: 0,
   },
   {
     empName: "XYZ",
     image: "",
     courseCode: "PD2",
-    date:"31/01/2024",
+    date: "31/01/2024",
     courseName: "Problem Solving",
-    status: "Inactive",
-    view: <ViewEyeIcon />,
+    status: "Complete",
+    attempts: 1,
+    score: 90,
     currentPage: 0,
   },
   {
     empName: "XYZ",
     image: "",
-    date:"31/01/2024",
+    date: "31/01/2024",
     courseCode: "PD2",
     courseName: "Business Etiquette",
-    status: "Inactive",
-    view: <ViewEyeIcon />,
+    status: "Complete",
+    attempts: 5,
+    score: 20,
     currentPage: 0,
   },
   {
     empName: "XYZ",
     image: "",
-    date:"31/01/2024",
+    date: "31/01/2024",
     courseCode: "PD2",
     courseName: "Strategic Thinking",
-    status: "Inactive",
-    view: <ViewEyeIcon />,
+    status: "Complete",
+    attempts: 8,
+    score: 30,
     currentPage: 0,
   },
   {
     empName: "XYZ",
     image: "",
-    date:"31/01/2024",
+    date: "31/01/2024",
     courseCode: "PD2",
     courseName: "Lateral Thinking",
-    status: "Inactive",
-    view: <ViewEyeIcon />,
+    status: "Not Complete",
+    attempts: 3,
+    score: 60,
     currentPage: 0,
   },
   {
     empName: "XYZ",
     image: "",
-    date:"31/01/2024",
+    date: "31/01/2024",
     courseCode: "PD2",
     courseName: "Clinical Studies",
-    status: "Inactive",
-    view: <ViewEyeIcon />,
+    status: "Not Complete",
+    attempts: 5,
+    score: 70,
     currentPage: 0,
   },
   {
     empName: "XYZ",
     image: "",
-    date:"31/01/2024",
+    date: "31/01/2024",
     courseCode: "PD2",
     courseName: "Brand Detailing",
-    status: "Inactive",
-    view: <ViewEyeIcon />,
+    status: "Complete",
+    attempts: 2,
+    score: 80,
     currentPage: 0,
   },
   {
     empName: "XYZ",
     image: "",
-    date:"31/01/2024",
+    date: "31/01/2024",
     courseCode: "PD2",
     courseName: "Regional IMS",
-    status: "Inactive",
-    view: <ViewEyeIcon />,
+    status: "Complete",
+    attempts: 4,
+    score: 60,
     currentPage: 0,
   },
 ];
@@ -156,11 +168,13 @@ const TeamReportTable: FC<TeamReportTableProps> = () => {
                   {person.courseName}
                 </span>
               </td>
-              <td className="team-report-table-data team-report-table-date-data">{person.date}</td>
+              <td className="team-report-table-data team-report-table-number-data">
+                {person.date}
+              </td>
               <td className="team-report-table-data">
                 <p
                   className={`team-report-status-span ${
-                    person.status === "Active"
+                    person.status === "Complete"
                       ? "team-report-status-active"
                       : "team-report-status-inactive"
                   }`}
@@ -168,8 +182,25 @@ const TeamReportTable: FC<TeamReportTableProps> = () => {
                   {person.status}
                 </p>
               </td>
-
-              <td className="team-report-table-data">{person.view}</td>
+              {person.status === "Complete" ? (
+                <>
+                  <td className="team-report-table-data team-report-table-number-data">
+                    0{person.attempts}
+                  </td>
+                  <td className="team-report-table-data team-report-table-number-data">
+                    {person.score}%
+                  </td>
+                </>
+              ) : (
+                <>
+                  <td className="team-report-table-data team-report-table-number-data">
+                    -
+                  </td>
+                  <td className="team-report-table-data team-report-table-number-data">
+                    -
+                  </td>
+                </>
+              )}
             </tr>
           ))}
         </tbody>

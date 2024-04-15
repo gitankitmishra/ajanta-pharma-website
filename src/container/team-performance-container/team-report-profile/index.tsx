@@ -43,8 +43,9 @@ const TeamReportProfile: FunctionComponent<TeamReportProfileProps> = () => {
           date="31/2/2023"
           courseName={"Competency Based Skills"}
           status={"Active"}
-          view={<ViewEyeIcon />}
+          attempts={2}
           currentPage={currentPage}
+          score={720}
         />
       </div>
     </div>
