@@ -1,12 +1,14 @@
-import { FC } from "react";
+import { FC, useContext } from "react";
 import "./style.css";
 import StatusCard from "@/components/cards/statusCard";
-import Question from "@/public/images/question-mark.svg"
+import Question from "@/public/images/question-mark.svg";
+import { CourseContext, CourseContextType } from "@/context/course_context";
 
 interface DashboardProfileSectionProps {}
 
 const DashboardProfileSection: FC<DashboardProfileSectionProps> = () => {
-  
+  const { getCountdata } = useContext(CourseContext) as CourseContextType;
+
   return (
     <section className="dashboard-profile-main-section">
       <div className="dashboard-profile-texts">
@@ -16,17 +18,25 @@ const DashboardProfileSection: FC<DashboardProfileSectionProps> = () => {
         </p>
       </div>
       <div className="dashboard-profile-cards">
-        <StatusCard  title={"Total Courses"} count={100}  imageUrl={Question}
+        <StatusCard
+          title={"Total Courses"}
+          count={getCountdata.course}
+          imageUrl={Question}
           width={32}
           height={32}
-          />
-        <StatusCard  title={"Total Categories"} count={5}  imageUrl={Question}
+        />
+        <StatusCard
+          title={"Total Categories"}
+          count={getCountdata.category}
+          imageUrl={Question}
           width={32}
           height={32}
-          />
+        />
       </div>
       <div className="dashboard-profile-add-text">
-        <p className="dashboard-profile-added-course-text">Recently Added Courses</p>
+        <p className="dashboard-profile-added-course-text">
+          Recently Added Courses
+        </p>
       </div>
     </section>
   );

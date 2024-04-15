@@ -1,13 +1,22 @@
 "use client";
-import { FC, useState } from "react";
+import { FC, useContext, useState } from "react";
 import "./style.css";
 import { ProfileIcon } from "@/components/icons/profile-icon";
 import { SearchIcon } from "@/components/icons/search-icon";
 import { CalendarIcon } from "@/components/icons/calendar-icon";
+import { CourseContext, CourseContextType } from "@/context/course_context";
 
 interface DasboardSearchFieldProps {}
 
 const DasboardSearchField: FC<DasboardSearchFieldProps> = () => {
+  const {
+    searchTerm,
+    handleSearchData,
+    filteredSuggestions,
+    handleSuggestionClick,
+  } = useContext(CourseContext) as CourseContextType;
+  const [selectedSuggestionIndex, setSelectedSuggestionIndex] =
+    useState<number>(-1);
   return (
     <section className="dashboard-search-field-main-section">
       <div className="dashboard-search-container">
@@ -15,8 +24,28 @@ const DasboardSearchField: FC<DasboardSearchFieldProps> = () => {
           type="text"
           placeholder="Search..."
           name="search"
+          value={searchTerm}
+          onChange={handleSearchData}
           className="dashboard-search-input-field"
         />
+        {filteredSuggestions.length > 0 && (
+          <div className="dashboard-resultBox">
+            {filteredSuggestions.map((suggestion, index) => (
+              <div
+                key={index}
+                className={
+                  "dashboard-suggestion " +
+                  (index === selectedSuggestionIndex
+                    ? "dashboard-selected"
+                    : "")
+                }
+                onClick={() => handleSuggestionClick(suggestion)}
+              >
+                {suggestion}
+              </div>
+            ))}
+          </div>
+        )}
         <div className="dashboard-search-icon">
           <SearchIcon />
         </div>

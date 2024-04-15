@@ -1,10 +1,10 @@
-"use client"
+"use client";
 import { SearchIcon } from "@/components/icons/search-icon";
-import { FC, useContext } from "react";
+import { FC, useContext, useState } from "react";
 import "./style.css";
 import { BellIcon } from "@/components/icons/bell-icon";
 import { ProfileIcon } from "@/components/icons/profile-icon";
-import { CourseContext, Co4urseContextType } from "@/context/course_context";
+import { CourseContext, CourseContextType } from "@/context/course_context";
 
 interface AdminSearchFieldSectionProps {}
 
@@ -15,6 +15,8 @@ const AdminSearchFieldSection: FC<AdminSearchFieldSectionProps> = () => {
     filteredSuggestions,
     handleSuggestionClick,
   } = useContext(CourseContext) as CourseContextType;
+  const [selectedSuggestionIndex, setSelectedSuggestionIndex] =
+    useState<number>(-1);
   return (
     <section className="admin-search-field-main-section">
       <div className="admin-search-container">
@@ -26,18 +28,25 @@ const AdminSearchFieldSection: FC<AdminSearchFieldSectionProps> = () => {
           onChange={handleSearchData}
           className="admin-search-input-field"
         />
+        {filteredSuggestions.length > 0 && (
+          <div className="admin-resultBox">
+            {filteredSuggestions.map((suggestion, index) => (
+              <div
+                key={index}
+                className={
+                  "admin-suggestion " +
+                  (index === selectedSuggestionIndex ? "admin-selected" : "")
+                }
+                onClick={() => handleSuggestionClick(suggestion)}
+              >
+                {suggestion}
+              </div>
+            ))}
+          </div>
+        )}
         <div className="admin-search-icon">
           <SearchIcon />
         </div>
-        {filteredSuggestions.length > 0 && (
-          <ul className="suggestions-dropdown">
-            {filteredSuggestions.map((suggestion, index) => (
-              <li key={index} onClick={() => handleSuggestionClick(suggestion)}>
-                {suggestion}
-              </li>
-            ))}
-          </ul>
-        )}
       </div>
 
       <div className="admin-profile-icon">

@@ -5,6 +5,7 @@ import { FC } from "react";
 
 interface AdminAddCourseProps {}
 
+
 const AdminAddCourse: FC<AdminAddCourseProps> = () => {
   return (
     <section>
