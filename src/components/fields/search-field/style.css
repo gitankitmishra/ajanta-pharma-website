@@ -43,7 +43,7 @@
   cursor: pointer;
 }
 .bell-icon.clicked {
-  background-color: #FE8100;
+  background-color: #fe8100;
 }
 .resultBox {
   height: 205px;
@@ -71,6 +71,7 @@
 .suggestion {
   padding: 16px;
   cursor: pointer;
+  font-family: "Open sans";
   border-bottom: 1px solid #78787833;
 }
 
