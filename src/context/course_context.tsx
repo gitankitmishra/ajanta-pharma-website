@@ -69,6 +69,7 @@ export type CourseContextType = {
   fileSize: number[];
 
   course_module_error: {
+
     [key: string]: string;
   };
 
@@ -83,7 +84,13 @@ export type CourseContextType = {
   courseData: any[] | null;
   totalPages: number; // New property for total pages
   handleComponentPage: (value: number) => void;
+  filterStatus: string;
+  filterCategory: string;
+  filterCourse: string;
 
+  handleFilterCategoryChange: (category: string) => void;
+  handleFitlerStatusChange: (category: string) => void;
+  handleFilterCourseChange: (course: string) => void;
   //GET AND EDIT COURSES
   getCourseData: (course_id: string) => void;
 
@@ -221,7 +228,6 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
         handleStepThreeDone();
       }
     } else if (active_step === 3) {
-      await uploadfromDraft();
       handleStepFourDone();
     }
   };
@@ -376,9 +382,8 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
       id = "01";
     }
 
-    const courseCode: string = `${
-      categoryTable[course_basic.course_category]
-    }-${trainingTable[training]}-${month}${year}-${id}`;
+    const courseCode: string = `${categoryTable[course_basic.course_category]
+      }-${trainingTable[training]}-${month}${year}-${id}`;
 
     console.log("testtt", courseCode);
 
@@ -1016,7 +1021,7 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
   };
   // ***********************************************************************************************
 
-  //Pagination
+  //Pagination and Filter Logic api
   //All courses Display
   const [pageNo, setPageNo] = useState(1);
   const [loading, setLoading] = useState(false);
@@ -1025,6 +1030,30 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
   const [pageSize, setPageSize] = useState(10);
   const [componentPage, setComponentPage] = useState(0);
   const [courseData, setCourseData] = useState<CourseDetails[] | null>(null);
+  const [filterCategory, setFilterCategory] = useState<string>("");
+  const [filterStatus, setFilterStatus] = useState<string>("");
+  const [filterCourse, setFilterCourse] = useState<string>("course");
+
+
+
+
+  //handle function change
+  const handleFilterCategoryChange = (category: string) => {
+    // Update the filterCategory state
+    setFilterCategory(category);
+  };
+
+  const handleFitlerStatusChange = (status: string) => {
+    // Update the filterStatus state
+    setFilterStatus(status);
+  };
+
+  const handleFilterCourseChange = (course: string) => {
+    // Update the filterCourse state
+    setFilterCourse(course);
+  };
+
+
 
   const updatePageNo = (newPage: number) => {
     setPageNo(newPage);
@@ -1039,10 +1068,15 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     setLoading(true);
     const response = await fetchService({
       method: "GET",
-      endpoint: `api/admin/dashboard/courseList?page=${pageNo}&pageSize=${pageSize}`,
+      endpoint: `api/admin/dashboard/filter?category=${filterCategory || ''}&status=${filterStatus || ''}&key=${filterCourse || ''}&page=${pageNo}&pageSize=${pageSize}`
+
     });
+
     if (response.code === 200) {
-      setCourseData(response.data.data);
+      console.log("response", response.data.data.data);
+
+
+      setCourseData(response.data.data.data);
       setTotalPages(response.data.totalPages);
       setLoading(false);
     } else {
@@ -1052,7 +1086,7 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
   // const fetchData = async () => {
   //   setLoading(true);
   //   try {
-  //     const url = `${process.env.SERVER_URL}api/admin/dashboard/courseList?page=${pageNo}&pageSize=${pageSize}`;
+  //     const url = `${ process.env.SERVER_URL } api / admin / dashboard / courseList ? page = ${ pageNo }& pageSize=${ pageSize } `;
   //     const response = await fetch(url, {
   //       method: "GET",
   //       headers: {
@@ -1074,7 +1108,7 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
 
   useEffect(() => {
     fetchData();
-  }, [pageNo, pageSize]);
+  }, [pageNo, pageSize, filterCourse, filterCategory, filterStatus]);
 
   //*/****************************************************************************************** */
 
@@ -1089,7 +1123,7 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
   const getCourseData = async (course_id: string) => {
     const response = await fetchService({
       method: "GET",
-      endpoint: `api/admin/dashboard/getCourseByCode/${course_id}`,
+      endpoint: `api / admin / dashboard / getCourseByCode / ${course_id} `,
     });
     if (response.code === 200) {
       const responseData = response.data;
@@ -1121,7 +1155,7 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
   // const getCourseData = async (course_id: string): Promise<void> => {
   //   try {
   //     const response = await fetch(
-  //       `${process.env.SERVER_URL}api/admin/dashboard/getCourseByCode/${course_id}`,
+  //       `${ process.env.SERVER_URL } api / admin / dashboard / getCourseByCode / ${ course_id } `,
   //       {
   //         method: "GET",
   //         headers: {
@@ -1176,7 +1210,7 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
 
     const response = await fetchService({
       method: "PUT",
-      endpoint: `api/admin/dashboard/editCourse/${course_basic.course_code}`,
+      endpoint: `api / admin / dashboard / editCourse / ${course_basic.course_code} `,
       data: {
         course_designation: {
           ...course_designation,
@@ -1202,6 +1236,7 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     }
   };
 
+
   // ***********************************************************************************************
 
   // ***********************************************************************************************
@@ -1211,8 +1246,10 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
   const uploadfromDraft = async () => {
     console.log("uploading data");
     const response = await fetchService({
+
       method: "POST",
       endpoint: `api/admin/dashboard/pushData/${course_basic.course_code}`,
+
     });
     if (response.code == 200) {
       router.push("/admin/admin-courses");
@@ -1241,6 +1278,13 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
   useEffect(() => {
     getCount();
   }, []);
+  // ***********************************************************************************************
+
+
+
+
+
+
   // ***********************************************************************************************
   const course_values = {
     //common
@@ -1282,8 +1326,6 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     fileExtension,
 
     handleCancelIconAssessment,
-    fileName,
-    fileSize,
 
     course_module_error,
 
@@ -1300,6 +1342,12 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     courseData,
     totalPages,
     handleComponentPage,
+    handleFilterCategoryChange,
+    handleFitlerStatusChange,
+    handleFilterCourseChange,
+    filterStatus,
+    filterCategory,
+    filterCourse,
 
     //GET COURSES
     getCourseData,
