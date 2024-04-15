@@ -44,11 +44,6 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
   // const [fileName, setFileName] = useState<string>("Not selected");
   // const [fileSize, setFileSize] = useState<number>(0);
 
-  const fileNameWithoutExtension = fileName[0]?.substring(
-    0,
-    fileName.lastIndexOf(".")
-  );
-
   return (
     <section className="module-main-section">
       <div className="module-div-section1">
@@ -110,12 +105,10 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
                   id={`module_name-${index}`}
                   moduleValue={module.module_name}
                   onUpdate={handleModuleChange}
-                  error={course_module_error.module_name}
+                  error={course_module_error[index]?.module_name}
                 />
               </div>
-              <div className="module-eye-icon">
-                <DownloadIcon />
-              </div>
+
               <div className="module-input-uplaod-btn">
                 <UploadButton
                   upload={"Upload Course Material"}
@@ -124,6 +117,7 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
                   }}
                   acceptedTypes=".mp4,.ppt,.pdf"
                   formatText={"File Format: mp4, ppt, pdf "}
+                  error={course_module_error[index]?.module_material}
                 />
               </div>
               <div className="module-input-view-btn">

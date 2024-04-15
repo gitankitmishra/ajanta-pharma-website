@@ -15,6 +15,8 @@ const DasboardSearchField: FC<DasboardSearchFieldProps> = () => {
     filteredSuggestions,
     handleSuggestionClick,
   } = useContext(CourseContext) as CourseContextType;
+  const [selectedSuggestionIndex, setSelectedSuggestionIndex] =
+    useState<number>(-1);
   return (
     <section className="dashboard-search-field-main-section">
       <div className="dashboard-search-container">
@@ -26,18 +28,27 @@ const DasboardSearchField: FC<DasboardSearchFieldProps> = () => {
           onChange={handleSearchData}
           className="dashboard-search-input-field"
         />
+        {filteredSuggestions.length > 0 && (
+          <div className="dashboard-resultBox">
+            {filteredSuggestions.map((suggestion, index) => (
+              <div
+                key={index}
+                className={
+                  "dashboard-suggestion " +
+                  (index === selectedSuggestionIndex
+                    ? "dashboard-selected"
+                    : "")
+                }
+                onClick={() => handleSuggestionClick(suggestion)}
+              >
+                {suggestion}
+              </div>
+            ))}
+          </div>
+        )}
         <div className="dashboard-search-icon">
           <SearchIcon />
         </div>
-        {filteredSuggestions.length > 0 && (
-          <ul className="suggestions-dropdown">
-            {filteredSuggestions.map((suggestion, index) => (
-              <li key={index} onClick={() => handleSuggestionClick(suggestion)}>
-                {suggestion}
-              </li>
-            ))}
-          </ul>
-        )}
       </div>
       <div className="dashboard-calendar-icon">
         <CalendarIcon />
