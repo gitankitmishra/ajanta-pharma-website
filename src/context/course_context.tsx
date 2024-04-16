@@ -62,16 +62,12 @@ export type CourseContextType = {
   visible: boolean;
   handleCancelIcon: (index: number) => void;
   fileExtension: string[];
-
+  course_module_error: CourseModule[];
+  course_assessment_error: CourseAssessment[];
+  course_assessment_main_error: CourseAssessment[];
   uploadfromDraft: () => void;
   handleCancelIconAssessment: (id: string | null, index: number) => void;
-  fileName: string[];
   fileSize: number[];
-
-  course_module_error: {
-
-    [key: string]: string;
-  };
 
   // designation
   handleChangeDesignation(event: ChangeEvent<HTMLInputElement>): void;
@@ -108,7 +104,7 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
 }) => {
   const router = useRouter();
 
-  const [active_step, setActiveStep] = useState<number>(1);
+  const [active_step, setActiveStep] = useState<number>(0);
 
   const handleStepOneDone = async () => {
     let errors = {};
@@ -143,38 +139,7 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     setActiveStep(1);
   };
 
-  const handleStepTwoDone = (index: number) => {
-    let errors = {};
-    if (course_module[index]?.module_name.trim().length === 0) {
-      errors = { ...errors, module_name: "Select module name" };
-    }
-
-    if (course_assessment[index]?.assessment_type.trim().length === 0) {
-      errors = { ...errors, assessment_type: "Select assessment type" };
-    }
-    // if (course_basic.course_training.trim().length === 0) {
-    //   errors = {
-    //     ...errors,
-    //     course_training: "Select course training type.",
-    //   };
-    // }
-    // if (course_basic.course_name.trim().length === 0) {
-    //   errors = { ...errors, course_name: "Enter course name." };
-    // }
-
-    // if (course_basic.course_objective.trim().length === 0) {
-    //   errors = { ...errors, course_objective: "Enter learning objective." };
-    // }
-
-    // if (course_basic.course_start_date.trim().length === 0) {
-    //   errors = { ...errors, course_start_date: "Select start date." };
-    // }
-
-    if (Object.keys(errors).length !== 0) {
-      setCourseModuleError(errors);
-      return;
-    }
-
+  const handleStepTwoDone = () => {
     setActiveStep(2);
   };
 
@@ -200,13 +165,23 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     }
   };
 
-  const handleNextClick = async (index: number) => {
+  const handleNextClick = async () => {
     if (active_step === 0) {
       await handleApiCall();
       handleStepOneDone();
     } else if (active_step === 1) {
-      await uploadCourse();
-      handleStepTwoDone(index);
+      const isModuleValid = validateModuleFields();
+      const isAssessmentValid = validateAssessmentFields();
+      const isAssessmentMainValid = validateAssessmentMainFields();
+      const isPageValid =
+        (isModuleValid && isAssessmentValid) || isAssessmentMainValid;
+
+      if (isPageValid) {
+        await uploadCourse();
+        handleStepTwoDone();
+      } else {
+        console.log("Errors in module or assessment. Cannot proceed.");
+      }
     } else if (active_step === 2) {
       if (
         ((course_basic.course_category === "Medical" ||
@@ -214,19 +189,13 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
           course_designation.division.length === 0) ||
         course_designation.designation.length === 0
       ) {
-        // alert("Please select the checkBoxes");
-        setDsErrror("Please select atleast one checkbox");
-        return;
-      } else if (course_designation.designation.length === 0) {
-        // alert("");
-        setDsErrror("Please select atleast one checkbox");
-
+        setDsErrror("Please select at least one checkbox");
         return;
       } else {
         setDsErrror("");
         publishDesignation();
-        handleStepThreeDone();
       }
+      handleStepThreeDone();
     } else if (active_step === 3) {
       handleStepFourDone();
     }
@@ -234,7 +203,7 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
 
   const handlePreviousClick = () => {
     if (active_step === 0) {
-      router.push("/admin/admin-courses"); // Navigate to the course page
+      router.push("/admin/admin-courses");
     } else {
       setActiveStep((prevActiveStep) => prevActiveStep - 1);
     }
@@ -382,8 +351,9 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
       id = "01";
     }
 
-    const courseCode: string = `${categoryTable[course_basic.course_category]
-      }-${trainingTable[training]}-${month}${year}-${id}`;
+    const courseCode: string = `${
+      categoryTable[course_basic.course_category]
+    }-${trainingTable[training]}-${month}${year}-${id}`;
 
     console.log("testtt", courseCode);
 
@@ -436,36 +406,8 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     }
   };
 
-  // const handleDraftSave = () => {
-  //   fetch(`${process.env.SERVER_URL}api/admin/dashboard/draftBasicInfo`, {
-  //     method: "POST",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     },
-  //     body: JSON.stringify({
-  //       course_basic: {
-  //         ...course_basic,
-  //       },
-  //     }),
-  //   })
-  //     .then((response) => {
-  //       if (response.status === 200) {
-  //         console.log("Draft saved:", response);
-  //       }
-  //       return response.json();
-  //     })
-  //     .then((data) => {
-  //       alert(data.message);
-  //     })
-  //     .catch((error) => {
-  //       console.error("Error saving draft:", error);
-  //     });
-  // };
-
   const handleChange = async (field: string, value: any) => {
-    console.log(`&${value}&`);
     if (course_basic_error[field] !== "") {
-      console.log("field", field);
       setCourseBasicError({ ...course_basic_error, [field]: "" });
     }
 
@@ -501,13 +443,15 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     },
   ]);
 
-  const [course_module_error, setCourseModuleError] = useState<{
-    [key: string]: string;
-  }>({
-    module_name: "",
-    module_file: "",
-    assessment_type: "",
-  });
+  const [course_module_error, setCourseModuleError] = useState<CourseModule[]>([
+    {
+      module_no: 1,
+      module_name: "",
+      module_material: "",
+      assessment_no: 0,
+    },
+  ]);
+
   const [files, setFiles] = useState<File[]>([]);
 
   const initialFilesUploadedState = Array(course_module.length).fill(false);
@@ -528,6 +472,30 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     ]
   );
 
+  const [course_assessment_error, setCourseAssessmentError] = useState<
+    CourseAssessment[]
+  >([
+    {
+      assessment_no: 0,
+      assessment_name: "",
+      assessment_category: "",
+      assessment_position: "",
+      assessment_type: "",
+      assessment_data: [],
+    },
+  ]);
+  const [course_assessment_main_error, setCourseAssessmentmainError] = useState<
+    CourseAssessment[]
+  >([
+    {
+      assessment_no: 0,
+      assessment_name: "",
+      assessment_category: "",
+      assessment_position: "",
+      assessment_type: "",
+      assessment_data: [],
+    },
+  ]);
   const [visible, setVisible] = useState<boolean>(true);
 
   const [course_assessment_main, setCourseAssessmentMain] = useState<
@@ -769,11 +737,248 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     const index: number = parseInt(event.target.id.split("-")[1]);
     temp[index].module_name = event.target.value;
     setCourseModule(temp);
+    setCourseModuleError((prevErrors) => {
+      const newErrors = [...prevErrors];
+      if (!event.target.value.trim()) {
+        newErrors[index] = {
+          ...newErrors[index],
+          module_name: "Enter module name.",
+        };
+      } else {
+        newErrors[index] = {
+          ...newErrors[index],
+          module_name: "",
+        };
+      }
+      return newErrors;
+    });
+
     //assessment
     const temp2: CourseAssessment[] = [...course_assessment];
     const index2: number = parseInt(event.target.id.split("-")[1]);
     temp2[index2].assessment_name = event.target.value;
     setCourseAssessment(temp2);
+    setCourseAssessmentError((prevErrors) => {
+      const newErrors = [...prevErrors];
+      if (!event.target.value.trim()) {
+        newErrors[index] = {
+          ...newErrors[index],
+          assessment_name: "Enter assessment name.",
+        };
+      } else {
+        newErrors[index] = {
+          ...newErrors[index],
+          assessment_name: "",
+        };
+      }
+      return newErrors;
+    });
+  };
+
+  const validateModuleFields = () => {
+    const errors: CourseModule[] = course_module.map((module, index) => {
+      const moduleErrors: CourseModule = { ...module };
+      if (!module.module_name.trim()) {
+        moduleErrors.module_name = "Enter module name.";
+      } else {
+        moduleErrors.module_name = "";
+        moduleErrors.assessment_no = 0;
+        moduleErrors.module_no = 0;
+      }
+
+      if (!files[index]) {
+        moduleErrors.module_material = "Upload file.";
+      } else {
+        moduleErrors.module_material = "";
+      }
+      return moduleErrors;
+    });
+
+    setCourseModuleError(errors);
+
+    const hasErrors = errors.some((error) => {
+      return Object.values(error).some(
+        (value) => value !== "" && value !== null && value !== 0
+      );
+    });
+
+    return !hasErrors;
+  };
+
+  //validation on assessment => harsha
+  const validateAssessmentFields = () => {
+    const errors: CourseAssessment[] = course_assessment.map(
+      (assessment, index) => {
+        const assessmentErrors: CourseAssessment = { ...assessment };
+
+        if (!assessment.assessment_name.trim()) {
+          assessmentErrors.assessment_name = "Enter assessment name.";
+        } else {
+          assessmentErrors.assessment_name = "";
+        }
+
+        assessmentErrors.assessment_category = "";
+
+        assessmentErrors.assessment_no = 0;
+        assessmentErrors.assessment_position = "";
+
+        if (
+          assessment.assessment_type === "boolean" ||
+          assessment.assessment_type === "single" ||
+          assessment.assessment_type === "multiple" ||
+          assessment.assessment_type === "short"
+        ) {
+          assessmentErrors.assessment_type = "";
+        } else {
+          assessmentErrors.assessment_type = "Invalid assessment type" as
+            | ""
+            | "boolean"
+            | "single"
+            | "multiple"
+            | "short";
+        }
+        if (!assessment.assessment_data.length) {
+          assessmentErrors.assessment_data = [];
+        } else {
+          assessmentErrors.assessment_data = [];
+        }
+
+        return assessmentErrors;
+      }
+    );
+
+    setCourseAssessmentError(errors);
+
+    const hasErrors = errors.some((error) => {
+      return (
+        error.assessment_name !== "" ||
+        error.assessment_category !== "" ||
+        error.assessment_data.length !== 0 ||
+        error.assessment_no !== 0 ||
+        error.assessment_position !== "" ||
+        error.assessment_type !== ""
+      );
+    });
+
+    return !hasErrors;
+  };
+
+  const [touchedAssessmentName, setTouchedAssessmentName] = useState<boolean[]>(
+    new Array(course_assessment_main.length).fill(false)
+  );
+  const [touchedAssessmentCategory, setTouchedAssessmentCategory] = useState<
+    boolean[]
+  >(new Array(course_assessment_main.length).fill(false));
+  const [touchedAssessmentData, setTouchedAssessmentData] = useState<boolean[]>(
+    new Array(course_assessment_main.length).fill(false)
+  );
+  const [touchedAssessmentType, setTouchedAssessmentType] = useState<boolean[]>(
+    new Array(course_assessment_main.length).fill(false)
+  );
+
+  // Functions to handle field interactions
+  const handleAssessmentmainNameChange = (index: number) => {
+    setTouchedAssessmentName((prevState) => {
+      const newState = [...prevState];
+      newState[index] = true;
+      return newState;
+    });
+  };
+
+  const handleAssessmentCategoryChange = (index: number) => {
+    setTouchedAssessmentCategory((prevState) => {
+      const newState = [...prevState];
+      newState[index] = true;
+      return newState;
+    });
+  };
+
+  const handleAssessmentDataChange = (index: number) => {
+    setTouchedAssessmentData((prevState) => {
+      const newState = [...prevState];
+      newState[index] = true;
+      return newState;
+    });
+  };
+
+  const handleAssessmentmainTypeChange = (index: number) => {
+    setTouchedAssessmentType((prevState) => {
+      const newState = [...prevState];
+      newState[index] = true;
+      return newState;
+    });
+  };
+
+  const validateAssessmentMainFields = () => {
+    const errors: CourseAssessment[] = course_assessment_main.map(
+      (assessment, index) => {
+        const assessmentErrors: CourseAssessment = { ...assessment };
+
+        // Check if the assessment name field is touched and empty
+        // Check if the assessment name field is touched and empty
+        if (
+          touchedAssessmentName[index] &&
+          !assessment.assessment_name.trim()
+        ) {
+          assessmentErrors.assessment_name = "Enter assessment name.";
+        } else {
+          assessmentErrors.assessment_name = "";
+        }
+
+        // Check if the assessment category field is touched and empty
+        if (
+          !assessment.assessment_category.trim() &&
+          touchedAssessmentCategory[index]
+        ) {
+          assessmentErrors.assessment_category = "";
+        } else {
+          assessmentErrors.assessment_category = "";
+        }
+
+        if (
+          !assessment.assessment_data.length &&
+          touchedAssessmentData[index]
+        ) {
+          assessmentErrors.assessment_data = [];
+        } else {
+          assessmentErrors.assessment_data = [];
+        }
+
+        if (
+          touchedAssessmentType[index] &&
+          (!assessment.assessment_type.trim() ||
+            !(
+              assessment.assessment_type === "boolean" ||
+              assessment.assessment_type === "single" ||
+              assessment.assessment_type === "multiple" ||
+              assessment.assessment_type === "short"
+            ))
+        ) {
+          assessmentErrors.assessment_type = "Invalid assessment type" as
+            | ""
+            | "boolean"
+            | "single"
+            | "multiple"
+            | "short";
+        } else {
+          assessmentErrors.assessment_type = "";
+        }
+
+        // Set other fields to default values
+        assessmentErrors.assessment_no = 0;
+        assessmentErrors.assessment_position = "";
+
+        return assessmentErrors;
+      }
+    );
+
+    setCourseAssessmentmainError(errors);
+
+    // Determine if there are any errors
+    const hasErrors = errors.some((error) =>
+      Object.values(error).some((value) => value !== "")
+    );
+    return !hasErrors;
   };
 
   const handleAssessmentNameChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -783,6 +988,21 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
       const index: number = event.target.id === "pre" ? 0 : 1;
       temp[index].assessment_name = event.target.value;
       setCourseAssessmentMain(temp);
+      setCourseAssessmentmainError((prevErrors) => {
+        const newErrors = [...prevErrors];
+        if (!event.target.value.trim()) {
+          newErrors[index] = {
+            ...newErrors[index],
+            assessment_name: "Enter assessment name.",
+          };
+        } else {
+          newErrors[index] = {
+            ...newErrors[index],
+            assessment_name: "",
+          };
+        }
+        return newErrors;
+      });
     } else {
       console.log("assessment check");
 
@@ -790,14 +1010,28 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
       const index: number = parseInt(event.target.id.split("-")[1]);
       temp[index].assessment_name = event.target.value;
       setCourseAssessment(temp);
+      setCourseAssessmentError((prevErrors) => {
+        const newErrors = [...prevErrors];
+        if (!event.target.value.trim()) {
+          newErrors[index] = {
+            ...newErrors[index],
+            assessment_name: "Enter assessment name.",
+          };
+        } else {
+          newErrors[index] = {
+            ...newErrors[index],
+            assessment_name: "",
+          };
+        }
+        return newErrors;
+      });
     }
   };
 
   // const [fileName, setFileName] = useState<string>("Not selected");
   // const [fileSize, setFileSize] = useState<number>(0);
-  const [fileName, setFileName] = useState<string[]>([]);
-  const [fileSize, setFileSize] = useState<number[]>([]);
-  const [fileExtension, setFileExtension] = useState<string[]>([]);
+  const [fileSize, setFileSize] = useState<number[]>([0]);
+  const [fileExtension, setFileExtension] = useState<string[]>(["NA"]);
 
   const handleFileSelect = (selectedFile: File, index: number) => {
     console.log("Selecting files for module...");
@@ -808,38 +1042,47 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
 
     setFiles(temp_files);
 
-    // Check if any files are uploaded for the current module
     const anyFilesUploaded =
       selectedFile !== undefined && selectedFile !== null;
 
-    // Update filesUploaded for the specific module
     setFilesUploaded((prevFilesUploaded) => {
       const updatedFilesUploaded = [...prevFilesUploaded];
       updatedFilesUploaded[index] = anyFilesUploaded;
       return updatedFilesUploaded;
     });
 
-    // Update fileName and fileSize only for the specific module
-    setFileName((prevFileName) => {
-      const updatedFileName = [...prevFileName];
-      updatedFileName[index] = selectedFile.name;
-      return updatedFileName;
-    });
-
+    // Set file size for the specific module
     setFileSize((prevFileSize) => {
       const updatedFileSize = [...prevFileSize];
-      updatedFileSize[index] = selectedFile.size;
+      updatedFileSize[index] = selectedFile ? selectedFile.size : 0;
       return updatedFileSize;
     });
 
-    // Set fileExtension for the specific module
-    const extension = selectedFile.name.substring(
-      selectedFile.name.lastIndexOf(".") + 1
-    );
+    // Set file extension for the specific module
+    const extension = selectedFile
+      ? selectedFile.name.substring(selectedFile.name.lastIndexOf(".") + 1)
+      : "NA";
     setFileExtension((prevFileExtension) => {
       const updatedFileExtension = [...prevFileExtension];
       updatedFileExtension[index] = extension;
       return updatedFileExtension;
+    });
+
+    //error
+    setCourseModuleError((prevErrors) => {
+      const newErrors = [...prevErrors];
+      if (!anyFilesUploaded) {
+        newErrors[index] = {
+          ...newErrors[index],
+          module_material: "Upload file.",
+        };
+      } else {
+        newErrors[index] = {
+          ...newErrors[index],
+          module_material: "",
+        };
+      }
+      return newErrors;
     });
   };
 
@@ -860,6 +1103,21 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
         | "boolean"
         | "short";
       setCourseAssessmentMain(temp);
+      setCourseAssessmentmainError((prevErrors) => {
+        const newErrors = [...prevErrors];
+        if (!event.target.value.trim()) {
+          newErrors[index] = {
+            ...newErrors[index],
+            assessment_type: "",
+          };
+        } else {
+          newErrors[index] = {
+            ...newErrors[index],
+            assessment_type: "",
+          };
+        }
+        return newErrors;
+      });
     } else {
       const temp: CourseAssessment[] = [...course_assessment];
       const index: number = parseInt(event.target.id.split("-")[1]);
@@ -870,8 +1128,56 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
         | "boolean"
         | "short";
       setCourseAssessment(temp);
+      setCourseAssessmentError((prevErrors) => {
+        const newErrors = [...prevErrors];
+        if (!event.target.value.trim()) {
+          newErrors[index] = {
+            ...newErrors[index],
+            assessment_type: "",
+          };
+        } else {
+          newErrors[index] = {
+            ...newErrors[index],
+            assessment_type: "",
+          };
+        }
+        return newErrors;
+      });
     }
   };
+
+  //update module file upload
+  const updateFileUpload = async (): Promise<any> => {
+    const formdata = new FormData();
+    formdata.append("file_path", `course_material/${course_basic.course_code}`);
+
+    files.forEach((file, index) => {
+      formdata.append("files", file);
+      formdata.append("files_name", `files-${course_module[index].module_no}`);
+    });
+
+    const responseUrl = await fetchService({
+      method: "POST",
+      endpoint: "api/admin/dashboard/uploadAllFile",
+      data: formdata,
+    });
+
+    if (responseUrl.code === 200) {
+      const data = responseUrl;
+      console.log("check", data.data.urls);
+
+      const updatedCourseModule = course_module.map((module, index) => ({
+        ...module,
+        module_material: data.data.urls[index],
+      }));
+
+      setCourseModule(updatedCourseModule);
+    }
+  };
+
+  useEffect(() => {
+    console.log("check module-------------", course_module);
+  }, [course_module]);
 
   //api calling
   const uploadCourse = async () => {
@@ -1034,9 +1340,6 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
   const [filterStatus, setFilterStatus] = useState<string>("");
   const [filterCourse, setFilterCourse] = useState<string>("course");
 
-
-
-
   //handle function change
   const handleFilterCategoryChange = (category: string) => {
     // Update the filterCategory state
@@ -1053,8 +1356,6 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     setFilterCourse(course);
   };
 
-
-
   const updatePageNo = (newPage: number) => {
     setPageNo(newPage);
     console.log("Value of the page no is ", newPage);
@@ -1068,13 +1369,15 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     setLoading(true);
     const response = await fetchService({
       method: "GET",
-      endpoint: `api/admin/dashboard/filter?category=${filterCategory || ''}&status=${filterStatus || ''}&key=${filterCourse || ''}&page=${pageNo}&pageSize=${pageSize}`
-
+      endpoint: `api/admin/dashboard/filter?category=${
+        filterCategory || ""
+      }&status=${filterStatus || ""}&key=${
+        filterCourse || ""
+      }&page=${pageNo}&pageSize=${pageSize}`,
     });
 
     if (response.code === 200) {
       console.log("response", response.data.data.data);
-
 
       setCourseData(response.data.data.data);
       setTotalPages(response.data.totalPages);
@@ -1083,28 +1386,6 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
       console.log("error");
     }
   };
-  // const fetchData = async () => {
-  //   setLoading(true);
-  //   try {
-  //     const url = `${ process.env.SERVER_URL } api / admin / dashboard / courseList ? page = ${ pageNo }& pageSize=${ pageSize } `;
-  //     const response = await fetch(url, {
-  //       method: "GET",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //     });
-  //     if (!response.ok) {
-  //       throw new Error("Network response was not ok");
-  //     }
-  //     const data = await response.json();
-  //     setCourseData(data.data); // Set courseData to data.data from the response
-  //     setTotalPages(data.totalPages); // Set totalPages from the response
-  //     setLoading(false);
-  //   } catch (error: any) {
-  //     setError(error);
-  //     setLoading(false);
-  //   }
-  // };
 
   useEffect(() => {
     fetchData();
@@ -1123,7 +1404,7 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
   const getCourseData = async (course_id: string) => {
     const response = await fetchService({
       method: "GET",
-      endpoint: `api / admin / dashboard / getCourseByCode / ${course_id} `,
+      endpoint: `api/admin/dashboard/getCourseByCode/${course_id}`,
     });
     if (response.code === 200) {
       const responseData = response.data;
@@ -1204,13 +1485,17 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
   // ***********************************************************************************************
 
   //api to update the data or edit
+
   const updateCourse = async () => {
     console.log("button upload");
     console.log("testt");
-
+    const checkFileUpload = await updateFileUpload();
+    if (!checkFileUpload) {
+      alert("something went wrong");
+    }
     const response = await fetchService({
       method: "PUT",
-      endpoint: `api / admin / dashboard / editCourse / ${course_basic.course_code} `,
+      endpoint: `api/admin/dashboard/editCourse/${course_basic.course_code}`,
       data: {
         course_designation: {
           ...course_designation,
@@ -1236,7 +1521,6 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     }
   };
 
-
   // ***********************************************************************************************
 
   // ***********************************************************************************************
@@ -1246,10 +1530,8 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
   const uploadfromDraft = async () => {
     console.log("uploading data");
     const response = await fetchService({
-
       method: "POST",
       endpoint: `api/admin/dashboard/pushData/${course_basic.course_code}`,
-
     });
     if (response.code == 200) {
       router.push("/admin/admin-courses");
@@ -1275,15 +1557,7 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     }
   };
 
-  useEffect(() => {
-    getCount();
-  }, []);
   // ***********************************************************************************************
-
-
-
-
-
 
   // ***********************************************************************************************
   const course_values = {
@@ -1305,9 +1579,12 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     handleApiCall,
 
     //modules
+    fileSize,
     course_module,
     course_assessment,
-
+    course_module_error,
+    course_assessment_error,
+    course_assessment_main_error,
     handleAddModule,
     handleDeleteModule,
     handleModuleChange,
@@ -1324,10 +1601,7 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     visible,
     handleCancelIcon,
     fileExtension,
-
     handleCancelIconAssessment,
-
-    course_module_error,
 
     //designation
     course_designation,

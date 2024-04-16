@@ -91,6 +91,9 @@ const AdminCourseDeatilContainer: FC<
   };
 
   const handleEditClick = () => {
+    console.log("buttonText.edit:", buttonText.edit);
+    console.log("buttonText.discard:", buttonText.discard);
+
     if (buttonText.edit === "Edit") {
       setIsEditable(true);
       setIsClicked(!isClicked);
@@ -102,7 +105,14 @@ const AdminCourseDeatilContainer: FC<
       setIsEditable(false);
       setIsClicked(isClicked);
       setButtonText({ edit: "Save", discard: "Previous" });
+    } else if (buttonText.discard === "Discard") {
+      console.log("Discard clicked");
+      setIsEditable(false);
+      setIsClicked(isClicked);
+      setButtonText({ edit: "Edit", discard: "Back" });
     } else {
+      setIsEditable(false);
+      setIsClicked(isClicked);
       setButtonText({ edit: "Save", discard: "Previous" });
     }
   };
@@ -118,8 +128,6 @@ const AdminCourseDeatilContainer: FC<
 
   //useState
   const [isEditable, setIsEditable] = useState(false);
-  console.log("check training", course_basic.course_training);
-  console.log("course assessment", course_assessment);
 
   return (
     <section className="admin-course-detail-container-main-section">
@@ -342,7 +350,6 @@ const AdminCourseDeatilContainer: FC<
           <div className="admin-course-detail-section2">
             {course_assessment?.map((assessment: any, index: number) => {
               if (assessment.assessment_data !== "") {
-                console.log("checkkkk", assessment);
                 return (
                   <>
                     <div

@@ -36,18 +36,11 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
     openLink,
     handleCancelIconAssessment,
     visible,
-    fileName,
     fileSize,
     fileExtension,
+    course_assessment_error,
+    course_assessment_main_error,
   } = useContext(CourseContext) as CourseContextType;
-
-  // const [fileName, setFileName] = useState<string>("Not selected");
-  // const [fileSize, setFileSize] = useState<number>(0);
-
-  const fileNameWithoutExtension = fileName[0]?.substring(
-    0,
-    fileName.lastIndexOf(".")
-  );
 
   return (
     <section className="module-main-section">
@@ -110,12 +103,10 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
                   id={`module_name-${index}`}
                   moduleValue={module.module_name}
                   onUpdate={handleModuleChange}
-                  error={course_module_error.module_name}
+                  error={course_module_error[index]?.module_name}
                 />
               </div>
-              <div className="module-eye-icon">
-                <DownloadIcon />
-              </div>
+
               <div className="module-input-uplaod-btn">
                 <UploadButton
                   upload={"Upload Course Material"}
@@ -124,6 +115,7 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
                   }}
                   acceptedTypes=".mp4,.ppt,.pdf"
                   formatText={"File Format: mp4, ppt, pdf "}
+                  error={course_module_error[index]?.module_material}
                 />
               </div>
               <div className="module-input-view-btn">
@@ -143,7 +135,7 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
                     className="module-view-btn-xls-text"
                     onClick={() => openLink(index)}
                   >
-                    {fileName[index]}
+                    MP4
                   </span>
                 </div>
                 <div className="module-input-view-text-area">
@@ -179,6 +171,7 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
                     "Not Applicable",
                   ]}
                   valueLabel={["multiple", "single", "boolean", "short", "N/A"]}
+                  error={course_assessment_error[index]?.assessment_type}
                 />
               </div>
               <div className="module-input-name">
@@ -192,25 +185,15 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
                       ?.assessment_name
                   }
                   onUpdate={handleAssessmentNameChange}
+                  error={course_assessment_error[index]?.assessment_name}
                 />
               </div>
               <div className="module-eye-icon">
-                {course_assessment[index]?.assessment_data.length !== 0 ? (
-                  <div className="module-download-image">
-                    <span onClick={() => handleDownloadExcel(index)}>
-                      <DownloadIcon />
-                    </span>
-                    {/* <Image
-                    src={DownloadIcon}
-                    alt="Download"
-                    width={27}
-                    height={24}
-                    onClick={() => handleDownloadExcel(index)}
-                  /> */}
-                  </div>
-                ) : (
-                  <></>
-                )}
+                <div className="module-download-image">
+                  <span onClick={() => handleDownloadExcel(index)}>
+                    <DownloadIcon />
+                  </span>
+                </div>
               </div>
               <div className="module-input-uplaod-btn">
                 <UploadButton
@@ -287,7 +270,7 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
         <>
           <div className="module-radio-selction">
             <div className="module-course-assessment">
-              Course Assessment{" "}
+              Course Assessment {""}
               {/* <span className="module-course-assessment-optional-span">
                 (Optional)
               </span> */}
@@ -311,6 +294,7 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
                   "Not Applicable",
                 ]}
                 valueLabel={["multiple", "single", "boolean", "short", "N/A"]}
+                error={course_assessment_main_error[0]?.assessment_type}
               />
             </div>
             <div className="module-input-name">
@@ -321,6 +305,7 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
                 id="pre"
                 moduleValue={course_assessment_main[0]?.assessment_name}
                 onUpdate={handleAssessmentNameChange}
+                error={course_assessment_main_error[0]?.assessment_name}
               />
             </div>
             <div className="module-eye-icon">
@@ -409,6 +394,7 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
                   "Not Applicable",
                 ]}
                 valueLabel={["multiple", "single", "boolean", "short", "N/A"]}
+                error={course_assessment_main_error[1]?.assessment_type}
               />
             </div>
             <div className="module-input-name">
@@ -419,6 +405,7 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
                 moduleValue={course_assessment_main[1]?.assessment_name}
                 id="post"
                 onUpdate={handleAssessmentNameChange}
+                error={course_assessment_main_error[1]?.assessment_name}
               />
             </div>
             <div className="module-eye-icon">

@@ -10,6 +10,7 @@ interface UploadButtonProps {
   formatText?: string;
   id?: string;
   className?: string;
+  error?: string;
 }
 
 const UploadButton: React.FC<UploadButtonProps> = ({
@@ -20,6 +21,7 @@ const UploadButton: React.FC<UploadButtonProps> = ({
   uploadFile,
   id,
   className,
+  error = "",
 }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -53,6 +55,13 @@ const UploadButton: React.FC<UploadButtonProps> = ({
         onChange={handleFileSelect}
         style={{ display: "none" }}
       />
+      <div
+        className={`dropdown-field-error-message ${
+          error.length !== 0 && "dropdown-field-error-display"
+        }`}
+      >
+        {error}
+      </div>
       <button className={`upload-btn ${className}`} onClick={handleClick}>
         {upload}
       </button>
