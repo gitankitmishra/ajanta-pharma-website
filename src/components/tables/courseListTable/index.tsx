@@ -49,7 +49,7 @@ const AdminCourseListTable: FC = () => {
 
             <th className="admin-course-list-table-head head-dropdown-icon">
               Category{"   "}
-              {filterCategory}
+
               <div className="admin-course-list-table-category-dropdown-main-div">
                 <span
                   onClick={() => {
@@ -113,7 +113,9 @@ const AdminCourseListTable: FC = () => {
             </th>
             <th className="admin-course-list-table-head">Upload Date</th>
             <th className="admin-course-list-table-head head-dropdown-icon">
-              Status {filterStatus}
+
+              Status{" "}
+
               <div className="admin-course-list-table-head-dropdown-main-div">
                 <span
                   onClick={toggleDropdown}

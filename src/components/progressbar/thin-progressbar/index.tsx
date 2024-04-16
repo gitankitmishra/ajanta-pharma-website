@@ -13,7 +13,7 @@ const ThinProgressbar: FunctionComponent<ThinProgressbarProps> = ({
     <div className="thin-progressbar-slide-main-section">
         <div className="thin-progressbar-slide-texts">
             <p className="thin-progressbar-slide-course-name-text">{courseName}</p>
-            <span className="thin-progressbar-slide-course-count">3/5</span>
+            <span className="thin-progressbar-slide-course-count">{progress}%</span>
         </div>
       <div className="thin-progressbar-slide-progress">
         <div
