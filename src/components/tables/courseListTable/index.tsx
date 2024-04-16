@@ -9,7 +9,6 @@ import { CourseContext, CourseContextType } from "@/context/course_context";
 const AdminCourseListTable: FC = () => {
   const contextValue = useContext(CourseContext);
 
-
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isCategoryDropdownOpen, setIsCategoryDropdownOpen] = useState(false);
   // useEffect(() => {
@@ -17,9 +16,15 @@ const AdminCourseListTable: FC = () => {
   // }, [searchTerm]);
 
   // const { handleCourseCodeChange } = useContext(EditCourseContext);
-  const { course_basic, searchTerm, handleFilterCategoryChange, handleFitlerStatusChange, filterCategory, filterStatus, filterCourse } = useContext(
-    CourseContext
-  ) as CourseContextType;
+  const {
+    course_basic,
+    searchTerm,
+    handleFilterCategoryChange,
+    handleFitlerStatusChange,
+    filterCategory,
+    filterStatus,
+    filterCourse,
+  } = useContext(CourseContext) as CourseContextType;
   if (!contextValue) {
     console.error(
       "Context Error: While calling from the CustomPagination Component"
@@ -28,7 +33,6 @@ const AdminCourseListTable: FC = () => {
   }
   const { courseData, getCourseData } = contextValue;
 
-
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
@@ -36,20 +40,16 @@ const AdminCourseListTable: FC = () => {
     setIsCategoryDropdownOpen(!isCategoryDropdownOpen);
   };
 
-
   return (
     <div className="admin-course-list-table-main-container">
       <table className="admin-course-list-table">
         <thead className="admin-course-list-thead">
           <tr>
-
-            < th className="admin-course-list-table-head">
-              Course Code & Name
-
-            </th>
+            <th className="admin-course-list-table-head">Course Code & Name</th>
 
             <th className="admin-course-list-table-head head-dropdown-icon">
-              Category{"   "}{filterCategory}
+              Category{"   "}
+              {filterCategory}
               <div className="admin-course-list-table-category-dropdown-main-div">
                 <span
                   onClick={() => {
@@ -113,7 +113,7 @@ const AdminCourseListTable: FC = () => {
             </th>
             <th className="admin-course-list-table-head">Upload Date</th>
             <th className="admin-course-list-table-head head-dropdown-icon">
-              Status{" "} {filterStatus}
+              Status {filterStatus}
               <div className="admin-course-list-table-head-dropdown-main-div">
                 <span
                   onClick={toggleDropdown}
@@ -166,47 +166,52 @@ const AdminCourseListTable: FC = () => {
                 {filterCategory && (
                   <>
                     {"     "}
-                    <span className="highlight1">    Category</span>=
-                    <span className="highlight2">  {filterCategory}</span> /
+                    <span className="highlight1"> Category</span>=
+                    <span className="highlight2"> {filterCategory}</span> /
                   </>
                 )}
                 {filterStatus && (
                   <>
                     {" "}
-                    <span className="highlight1">Status</span>   =
-                    <span className="highlight2">  {filterStatus}</span> /
+                    <span className="highlight1">Status</span> =
+                    <span className="highlight2"> {filterStatus}</span> /
                   </>
                 )}
                 {filterCourse && (
                   <>
                     {" "}
                     <span className="highlight1">CourseType</span> =
-                    <span className="highlight2">   {filterCourse}</span>
+                    <span className="highlight2"> {filterCourse}</span>
                   </>
                 )}
               </td>
-
             </tr>
           ) : (
             courseData?.map((course: any, index: number) => (
               <tr key={index}>
                 <td className="admin-course-list-table-data admin-course-list-table-data-name-and-code">
-                  {course.course_basic?.course_code} - {course.course_basic?.course_name}
+                  {course.course_basic?.course_code} -{" "}
+                  {course.course_basic?.course_name}
                 </td>
                 <td className="admin-course-list-table-data">
                   {course.course_basic?.course_category}
                 </td>
                 <td className="admin-course-list-table-data admin-course-list-table-data-name-and-code">
-                  {new Date(course.course_basic.course_start_date).toLocaleDateString()}
+                  {new Date(
+                    course.course_basic.course_start_date
+                  ).toLocaleDateString()}
                 </td>
                 <td className="admin-course-list-table-data">
                   <p
-                    className={`admin-course-status-span ${course.course_basic?.course_status === "active"
-                      ? "status-active"
-                      : "status-inactive"
-                      }`}
+                    className={`admin-course-status-span ${
+                      course.course_basic?.course_status === "active"
+                        ? "status-active"
+                        : "status-inactive"
+                    }`}
                   >
-                    {course.course_basic?.course_status === "active" ? "Active" : "Inactive"}
+                    {course.course_basic?.course_status === "active"
+                      ? "Active"
+                      : "Inactive"}
                   </p>
                 </td>
                 <td className="admin-course-list-table-data admin-course-eye-icon">
@@ -214,7 +219,9 @@ const AdminCourseListTable: FC = () => {
                     {/* ${course._id} Need a context to hold this value to use this id to view the course 
       for an edit logic */}
                     <ViewEyeIcon
-                      onClick={() => getCourseData(course.course_basic.course_code)}
+                      onClick={() =>
+                        getCourseData(course.course_basic.course_code)
+                      }
                     />
                   </Link>
                 </td>
@@ -222,9 +229,8 @@ const AdminCourseListTable: FC = () => {
             ))
           )}
         </tbody>
-
       </table>
-    </div >
+    </div>
   );
 };
 
