@@ -11,7 +11,7 @@
   margin-top: 23px;
 }
 .thin-progressbar-slide-progress {
-  background-color: #f2f2f2; /* Gray background for the progress bar */
+  background-color: #f2f2f2; 
   border-radius: 5px;
   width: 100%;
 }
