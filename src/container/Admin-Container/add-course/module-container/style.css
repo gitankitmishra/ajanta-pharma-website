@@ -196,14 +196,16 @@
   accent-color: #000;
 }
 .module-download-image {
-  margin: auto;
   cursor: pointer;
 }
 .module-eye-icon {
   width: 8vw;
   height: 5vw;
   display: flex;
-  cursor: pointer;
+  margin-top: 25px;
   align-items: center;
   justify-content: center;
+}
+.module-download-image-span {
+  cursor: pointer;
 }

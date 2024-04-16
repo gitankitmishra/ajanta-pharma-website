@@ -1,5 +1,5 @@
 "use client";
-import { FC, useState, useContext } from "react";
+import { FC, useState, useContext, useEffect } from "react";
 
 import "./style.css";
 import SuccessPopup from "@/components/popups/success-popup";
@@ -40,7 +40,9 @@ const UploadStepSection: FC<UploadStepSectionProps> = () => {
       return "";
     }
   };
-
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   return (
     <section className="upload-main-section">
       <p className="upload-preview-text">Preview</p>

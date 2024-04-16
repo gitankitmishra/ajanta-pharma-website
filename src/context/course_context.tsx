@@ -716,7 +716,9 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     // Create a new array with the updated filesUploaded state for the specific index
     const updatedFilesUploaded = [...filesUploaded];
     updatedFilesUploaded[index] = false;
-    setFilesUploaded(updatedFilesUploaded);
+    setFilesUploaded(updatedFilesUploaded)
+    setFileSize([0]);
+    setFileExtension(["NA"])
   };
   const handleCancelIconAssessment = (id: string | null, index: number) => {
     if (id == "pre" || id == "post") {
