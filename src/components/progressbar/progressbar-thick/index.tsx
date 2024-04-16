@@ -29,7 +29,7 @@ const ThickProgressbar: FunctionComponent<ThickProgressbarProps> = ({
           </p>
         </div>
       </div>
-      {`${progress}`}
+      <span className="thick-progressbar-progressvalue"> {`${progress}`}</span>
     </div>
   );
 };
