@@ -11,6 +11,7 @@ import ViewEyeIcon from "@/components/icons/view-eye-icon";
 import EyeIcon from "@/components/icons/eye-icon";
 import { CancelIcon } from "@/components/icons/cancel-icon";
 import { DownloadIcon } from "@/components/icons/download-icon";
+import { WhiteCancelIcon } from "@/components/icons/whiteCancelIcon";
 
 interface ModuleQuizStepSectionProps {}
 
@@ -41,7 +42,11 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
     course_assessment_error,
     course_assessment_main_error,
   } = useContext(CourseContext) as CourseContextType;
+  console.log("module error", course_module_error);
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   return (
     <section className="module-main-section">
       <div className="module-div-section1">
@@ -106,7 +111,13 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
                   error={course_module_error[index]?.module_name}
                 />
               </div>
-
+              <div className="module-eye-icon">
+                <div>
+                  {/* <span onClick={() => handleDownloadExcel(index)}>
+                    <DownloadIcon />
+                  </span> */}
+                </div>
+              </div>
               <div className="module-input-uplaod-btn">
                 <UploadButton
                   upload={"Upload Course Material"}
@@ -129,7 +140,11 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
                     >
                       <CancelIcon />
                     </span>
-                  ) : null}
+                  ) : (
+                    <span>
+                      <WhiteCancelIcon />
+                    </span>
+                  )}
 
                   <span
                     className="module-view-btn-xls-text"
@@ -190,7 +205,10 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
               </div>
               <div className="module-eye-icon">
                 <div className="module-download-image">
-                  <span onClick={() => handleDownloadExcel(index)}>
+                  <span
+                    className="module-download-image-span "
+                    onClick={() => handleDownloadExcel(index)}
+                  >
                     <DownloadIcon />
                   </span>
                 </div>
@@ -221,7 +239,11 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
                       <CancelIcon />
                     </span>
                   ) : (
-                    <></>
+                    <>
+                      <span>
+                        <WhiteCancelIcon />
+                      </span>
+                    </>
                   )}
 
                   <span
@@ -340,7 +362,12 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
                     <CancelIcon />
                   </span>
                 ) : (
-                  <></>
+                  <>
+                    {" "}
+                    <span>
+                      <WhiteCancelIcon />
+                    </span>
+                  </>
                 )}
 
                 <span
@@ -439,7 +466,12 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
                     <CancelIcon />
                   </span>
                 ) : (
-                  <></>
+                  <>
+                    {" "}
+                    <span>
+                      <WhiteCancelIcon />
+                    </span>
+                  </>
                 )}
 
                 <span
