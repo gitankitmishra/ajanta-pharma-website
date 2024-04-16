@@ -1146,6 +1146,39 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     }
   };
 
+  //update module file upload
+  const updateFileUpload = async (): Promise<any> => {
+    const formdata = new FormData();
+    formdata.append("file_path", `course_material/${course_basic.course_code}`);
+
+    files.forEach((file, index) => {
+      formdata.append("files", file);
+      formdata.append("files_name", `files-${course_module[index].module_no}`);
+    });
+
+    const responseUrl = await fetchService({
+      method: "POST",
+      endpoint: "api/admin/dashboard/uploadAllFile",
+      data: formdata,
+    });
+
+    if (responseUrl.code === 200) {
+      const data = responseUrl;
+      console.log("check", data.data.urls);
+
+      const updatedCourseModule = course_module.map((module, index) => ({
+        ...module,
+        module_material: data.data.urls[index],
+      }));
+
+      setCourseModule(updatedCourseModule);
+    }
+  };
+
+  useEffect(() => {
+    console.log("check module-------------", course_module);
+  }, [course_module]);
+
   //api calling
   const uploadCourse = async () => {
     const formdata = new FormData();
@@ -1353,28 +1386,6 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
       console.log("error");
     }
   };
-  // const fetchData = async () => {
-  //   setLoading(true);
-  //   try {
-  //     const url = `${ process.env.SERVER_URL } api / admin / dashboard / courseList ? page = ${ pageNo }& pageSize=${ pageSize } `;
-  //     const response = await fetch(url, {
-  //       method: "GET",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //     });
-  //     if (!response.ok) {
-  //       throw new Error("Network response was not ok");
-  //     }
-  //     const data = await response.json();
-  //     setCourseData(data.data); // Set courseData to data.data from the response
-  //     setTotalPages(data.totalPages); // Set totalPages from the response
-  //     setLoading(false);
-  //   } catch (error: any) {
-  //     setError(error);
-  //     setLoading(false);
-  //   }
-  // };
 
   useEffect(() => {
     fetchData();
@@ -1393,7 +1404,7 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
   const getCourseData = async (course_id: string) => {
     const response = await fetchService({
       method: "GET",
-      endpoint: `api / admin / dashboard / getCourseByCode / ${course_id} `,
+      endpoint: `api/admin/dashboard/getCourseByCode/${course_id}`,
     });
     if (response.code === 200) {
       const responseData = response.data;
@@ -1474,13 +1485,17 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
   // ***********************************************************************************************
 
   //api to update the data or edit
+
   const updateCourse = async () => {
     console.log("button upload");
     console.log("testt");
-
+    const checkFileUpload = await updateFileUpload();
+    if (!checkFileUpload) {
+      alert("something went wrong");
+    }
     const response = await fetchService({
       method: "PUT",
-      endpoint: `api / admin / dashboard / editCourse / ${course_basic.course_code} `,
+      endpoint: `api/admin/dashboard/editCourse/${course_basic.course_code}`,
       data: {
         course_designation: {
           ...course_designation,
@@ -1542,9 +1557,6 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     }
   };
 
-  useEffect(() => {
-    getCount();
-  }, []);
   // ***********************************************************************************************
 
   // ***********************************************************************************************

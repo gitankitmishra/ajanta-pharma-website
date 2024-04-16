@@ -8,15 +8,15 @@ import { CourseContext, CourseContextType } from "@/context/course_context";
 
 interface AdminSearchFieldSectionProps {}
 
-const AdminSearchFieldSection: FC<AdminSearchFieldSectionProps> = () => {
+const AdminSearchFieldSection: FC<AdminSearchFieldSectionProps> = ({}) => {
   const {
     searchTerm,
     handleSearchData,
     filteredSuggestions,
     handleSuggestionClick,
   } = useContext(CourseContext) as CourseContextType;
-  const [selectedSuggestionIndex, setSelectedSuggestionIndex] =
-    useState<number>(-1);
+
+
   return (
     <section className="admin-search-field-main-section">
       <div className="admin-search-container">
