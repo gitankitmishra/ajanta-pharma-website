@@ -23,7 +23,6 @@ const InputField: FC<InputFieldProps> = ({
   error = "",
   text,
 }) => {
-  console.log("-----------------", error);
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const newValue = event.target.value;
     onChange!([newValue]);
