@@ -23,6 +23,8 @@ const AdminCourseListTable: FC = () => {
     handleFitlerStatusChange,
     filterCategory,
     filterStatus,
+
+    filterCourse,
   } = useContext(CourseContext) as CourseContextType;
   if (!contextValue) {
     console.error(
@@ -159,46 +161,59 @@ const AdminCourseListTable: FC = () => {
           </tr>
         </thead>
         <tbody className="admin-course-list-tbody">
-          {courseData?.map((course: any, index: number) => (
-            <tr key={index}>
-              <td className="admin-course-list-table-data admin-course-list-table-data-name-and-code">
-                {course.course_basic?.course_code} -{" "}
-                {course.course_basic?.course_name}
-              </td>
-              <td className="admin-course-list-table-data">
-                {course.course_basic?.course_category}
-              </td>
-              <td className="admin-course-list-table-data admin-course-list-table-data-name-and-code">
-                {new Date(
-                  course.course_basic.course_start_date
-                ).toLocaleDateString()}
-              </td>
-              <td className="admin-course-list-table-data">
-                <p
-                  className={`admin-course-status-span ${
-                    course.course_basic?.course_status === "active"
-                      ? "status-active"
-                      : "status-inactive"
-                  }`}
-                >
-                  {course.course_basic?.course_status === "active"
-                    ? "Active"
-                    : "Inactive"}
-                </p>
-              </td>
-              <td className="admin-course-list-table-data admin-course-eye-icon">
-                <Link href={`/admin/admin-course-detail/`}>
-                  {/* ${course._id} Need a context to hold this value to use this id to view the course 
-          for an edit logic */}
-                  <ViewEyeIcon
-                    onClick={() =>
-                      getCourseData(course.course_basic.course_code)
-                    }
-                  />
-                </Link>
-              </td>
-            </tr>
-          ))}
+          {courseData
+            ?.filter(
+              (course: any) =>
+                course.course_basic && course.course_basic.course_start_date
+            )
+            .sort((a: any, b: any) => {
+              const dateA = new Date(a.course_basic.course_start_date);
+              const dateB = new Date(b.course_basic.course_start_date);
+              return dateB.getTime() - dateA.getTime();
+            })
+            .map((course: any, index: number) => (
+              <tr key={index}>
+                <td className="admin-course-list-table-data admin-course-list-table-data-name-and-code">
+                  {course.course_basic?.course_code} -{" "}
+                  {course.course_basic?.course_name}
+                </td>
+                <td className="admin-course-list-table-data">
+                  {course.course_basic?.course_category}
+                </td>
+                <td className="admin-course-list-table-data admin-course-list-table-data-name-and-code">
+                  {new Date(
+                    course.course_basic.course_upload_date
+                  ).toDateString()}
+                </td>
+                <td className="admin-course-list-table-data admin-course-list-table-data-name-and-code">
+                  {new Date(
+                    course.course_basic.course_start_date
+                  ).toLocaleDateString()}
+                </td>
+                <td className="admin-course-list-table-data">
+                  <p
+                    className={`admin-course-status-span ${
+                      course.course_basic?.course_status === "active"
+                        ? "status-active"
+                        : "status-inactive"
+                    }`}
+                  >
+                    {course.course_basic?.course_status === "active"
+                      ? "Active"
+                      : "Inactive"}
+                  </p>
+                </td>
+                <td className="admin-course-list-table-data admin-course-eye-icon">
+                  <Link href={`/admin/admin-course-detail/`}>
+                    <ViewEyeIcon
+                      onClick={() =>
+                        getCourseData(course.course_basic.course_code)
+                      }
+                    />
+                  </Link>
+                </td>
+              </tr>
+            ))}
         </tbody>
       </table>
     </div>
