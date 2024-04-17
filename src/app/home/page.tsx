@@ -1,4 +1,7 @@
 
+
+import AssignedCourseCard from "@/components/cards/assigned-course-card";
+import DashboardHeroSection from "@/container/Admin-Container/admin-dashboard-container/dasboard-hero-section";
 import HomeAssignedCoursesSection from "@/container/home-container/assigned-courses-section";
 import HomeContinueLearningSection from "@/container/home-container/continue-learning-section";
 import HomeHeroSection from "@/container/home-container/hero-section";
@@ -14,6 +17,8 @@ const Home: FunctionComponent<HomeProps> = () => {
       <HomeProfileSection />
       <HomeContinueLearningSection/>
       <HomeAssignedCoursesSection/>
+      <AssignedCourseCard percentage={70}/>
+     
     </main>
   );
 };

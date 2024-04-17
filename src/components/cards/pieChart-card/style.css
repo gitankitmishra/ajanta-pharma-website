@@ -1,6 +1,6 @@
 .piechart-card-main-section {
   width: 32vw;
-  height: 80vh;
+  height: 60vh;
   padding: 28px 24px;
   border-radius: 12px;
   border: 1px solid #fe8100;
@@ -43,4 +43,9 @@
   font-weight: 600;
   line-height: 28px;
   cursor: pointer;
+}
+.piechart-card-chart-part {
+  margin-left: 4vw;
+  width: 400px;
+  height: 400px;
 }

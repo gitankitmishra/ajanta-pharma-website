@@ -717,6 +717,8 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     const updatedFilesUploaded = [...filesUploaded];
     updatedFilesUploaded[index] = false;
     setFilesUploaded(updatedFilesUploaded);
+    setFileSize([0]);
+    setFileExtension(["NA"]);
   };
   const handleCancelIconAssessment = (id: string | null, index: number) => {
     if (id == "pre" || id == "post") {
@@ -1340,32 +1342,36 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     setComponentPage(value);
   };
 
-  const fetchData = async () => {
-    setLoading(true);
-    const response = await fetchService({
-      method: "GET",
-      endpoint: `api/admin/dashboard/filter?category=${
-        filterCategory || ""
-      }&status=${filterStatus || ""}&key=${
-        filterCourse || ""
-      }&page=${pageNo}&pageSize=${pageSize}`,
-    });
-
-    if (response.code === 200) {
-      console.log("response", response.data.data.data);
-
-      setCourseData(response.data.data.data);
-      setTotalPages(response.data.totalPages);
-      setLoading(false);
-    } else {
-      console.log("error");
-    }
-  };
+  const [check, setCheck] = useState(false);
 
   useEffect(() => {
-    fetchData();
-  }, [pageNo, pageSize, filterCourse, filterCategory, filterStatus]);
+    const fetchData = async () => {
+      setLoading(true);
+      const response = await fetchService({
+        method: "GET",
+        endpoint: `api/admin/dashboard/filter?category=${
+          filterCategory || ""
+        }&status=${filterStatus || ""}&key=${
+          filterCourse || ""
+        }&page=${pageNo}&pageSize=${pageSize}`,
+      });
 
+      if (response.code === 200) {
+        console.log("response", response.data.data.data);
+
+        setCourseData(response.data.data.data);
+        setTotalPages(response.data.totalPages);
+        setLoading(false);
+      } else {
+        console.log("error");
+      }
+    };
+    fetchData();
+  }, [pageNo, pageSize, filterCategory, filterCourse, filterStatus, check]);
+
+  // useEffect(() => {
+  //   fetchData();
+  // }, [pageNo, pageSize, filterCourse, filterCategory, filterStatus, course_basic]);
   //*/****************************************************************************************** */
 
   //GET COURSE AND EDIT COURSE
@@ -1464,9 +1470,9 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
   // ***********************************************************************************************
 
   //api to update the data or edit
-
   const updateCourse = async () => {
     console.log("api hit");
+
     if (
       course_assessment_main[0]?.assessment_name &&
       course_assessment_main[0]?.assessment_type !== ""
@@ -1501,6 +1507,8 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
       }
     }
   };
+
+  useEffect(() => {}, []);
 
   // ***********************************************************************************************
 

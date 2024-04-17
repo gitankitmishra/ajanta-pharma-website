@@ -8,10 +8,10 @@
   align-items: center;
   justify-content: space-between;
   margin-bottom: 20px;
-  margin-top: 26px;
+  margin-top: 23px;
 }
 .thin-progressbar-slide-progress {
-  background-color: #f2f2f2; /* Gray background for the progress bar */
+  background-color: #f2f2f2; 
   border-radius: 5px;
   width: 100%;
 }
@@ -43,6 +43,7 @@
 }
 .thin-progressbar-slide-course-count {
   color: #121212;
+  font-family: "Open sans";
   font-size: 12px;
   font-weight: 400;
   line-height: 21px;

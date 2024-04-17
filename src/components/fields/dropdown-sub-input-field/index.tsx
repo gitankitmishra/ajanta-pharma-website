@@ -76,6 +76,10 @@ const DropdownSubInputField: FC<DropdownInputFieldProps> = ({
     setIsNewCategorySelected(false);
   };
 
+  // Determine if an option is selected or not
+
+  const isSelected = value !== "";
+
   return (
     <>
       <div className="custom-dropdown-input-field-container">
@@ -83,7 +87,7 @@ const DropdownSubInputField: FC<DropdownInputFieldProps> = ({
           value={value}
           onChange={handleChange}
           className={`custom-dropdown-select ${
-            value ? "selected" : "not-selected"
+            isSelected ? "selected" : "not-selected"
           }`}
           disabled={isEditable}
         >
