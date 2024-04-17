@@ -104,7 +104,7 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
 }) => {
   const router = useRouter();
 
-  const [active_step, setActiveStep] = useState<number>(0);
+  const [active_step, setActiveStep] = useState<number>(1);
 
   const handleStepOneDone = async () => {
     let errors = {};
@@ -1155,7 +1155,6 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
 
     console.log("check module-------------", course_assessment);
   }, [course_assessment]);
-p
 
   //api calling
   const uploadCourse = async () => {

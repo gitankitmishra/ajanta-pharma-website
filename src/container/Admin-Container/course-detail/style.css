@@ -31,6 +31,27 @@ font-weight: 500;
   margin-bottom: 20px;
   margin-left: -30px;
 }
+.admin-course-detail-dlt-module-btn {
+  margin-top: 20px;
+  display: flex;
+  gap: 6px;
+  border: none;
+  outline: none;
+  background: transparent;
+  align-items: center;
+  color: #fe8100;
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 24px;
+  letter-spacing: 0.1px;
+}
+.admin-course-detail-dlt-module-btn-add-module {
+  cursor: pointer;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+}
 /*------------------------ admin-course-detail FILE CSS ------------------------------*/
 
 .admin-course-detail-section1-div-sections {

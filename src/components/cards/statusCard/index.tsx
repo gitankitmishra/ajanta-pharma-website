@@ -7,11 +7,17 @@ interface StatusCardProps {
   imageUrl: string;
   title: string;
   count: number;
-  width:number;
-  height:number;
+  width: number;
+  height: number;
 }
 
-const StatusCard: FC<StatusCardProps> = ({imageUrl,title,count,height,width}) => {
+const StatusCard: FC<StatusCardProps> = ({
+  imageUrl,
+  title,
+  count,
+  height,
+  width,
+}) => {
   // const imageUrlSrc = imageUrl.props.src;
   return (
     <div className="status-card-main-container">
@@ -20,7 +26,7 @@ const StatusCard: FC<StatusCardProps> = ({imageUrl,title,count,height,width}) =>
         <p className="status-card-text">{count}</p>
       </div>
       <div className="status-card-icon-part">
-      <Image src={imageUrl} alt="Image" width={width} height={height} /> 
+        <Image src={imageUrl} alt="Image" width={width} height={height} />
         {/* <StatusCardGraduationCapIcon /> */}
         {/* <span>{imageUrl}</span> */}
       </div>
