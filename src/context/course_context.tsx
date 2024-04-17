@@ -281,6 +281,7 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     course_objective: "",
     course_training: "",
     course_start_date: "",
+    course_upload_date: new Date(),
     course_end_date: "9999-12-09",
     course_status: "inactive",
   });
