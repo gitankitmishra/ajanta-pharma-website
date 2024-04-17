@@ -61,7 +61,7 @@ const Navbar: FunctionComponent<NavbarProps> = ({ user_type }) => {
                 {el.value === "Setting" && <SettingIcon />}
                 {el.value === "Dashboard" && <HomeIcon />}
                 {el.value === "Course Category" && <GraduationCapIcon />}
-                {el.value === "Course" && <AssessmentIcon />}
+                {el.value === "Courses" && <AssessmentIcon />}
                 {el.value === "Notification" && <CertificateIcon />}
                 {el.value === "Settings" && <SettingIcon />}
               </div>

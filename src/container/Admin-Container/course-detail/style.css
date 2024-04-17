@@ -17,6 +17,20 @@
   border: 1px solid rgba(254, 129, 0, 0.5);
 }
 
+.admin-course-detail-header-texts{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.admin-course-detail-star-msg{
+color: #1c1d1d;
+font-size: 16px;
+font-weight: 500;
+}
+.admin-course-detail-cancel-icon-span{
+  margin-bottom: 20px;
+  margin-left: -30px;
+}
 /*------------------------ admin-course-detail FILE CSS ------------------------------*/
 
 .admin-course-detail-section1-div-sections {
@@ -52,7 +66,7 @@
   display: flex;
 }
 .admin-course-detail-div-section {
-  gap: 32px;
+  gap: 1.2rem;
   display: flex;
   padding: 32px;
   flex-direction: column;

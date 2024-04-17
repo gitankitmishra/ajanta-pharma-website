@@ -30,9 +30,7 @@
 .custom-dropdown-select.not-selected {
   color: #787878; /* Change text color to grey when no option is selected */
 }
-.custom-dropdown-option.not-selected {
-  color: #787878;
-}
+
 .custom-dropdown-field-error-message {
   color: red;
   margin-top: 4px;

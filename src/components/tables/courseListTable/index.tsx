@@ -23,6 +23,7 @@ const AdminCourseListTable: FC = () => {
     handleFitlerStatusChange,
     filterCategory,
     filterStatus,
+
     filterCourse,
   } = useContext(CourseContext) as CourseContextType;
   if (!contextValue) {
@@ -112,6 +113,7 @@ const AdminCourseListTable: FC = () => {
               </div>
             </th>
             <th className="admin-course-list-table-head">Upload Date</th>
+            <th className="admin-course-list-table-head">Publish Date</th>
             <th className="admin-course-list-table-head head-dropdown-icon">
 
               Status{" "}
@@ -161,35 +163,17 @@ const AdminCourseListTable: FC = () => {
           </tr>
         </thead>
         <tbody className="admin-course-list-tbody">
-          {courseData && courseData.length === 0 ? (
-            <tr className="no-data-found">
-              <td colSpan={5}>
-                No Data Found for
-                {filterCategory && (
-                  <>
-                    {"     "}
-                    <span className="highlight1"> Category</span>=
-                    <span className="highlight2"> {filterCategory}</span> /
-                  </>
-                )}
-                {filterStatus && (
-                  <>
-                    {" "}
-                    <span className="highlight1">Status</span> =
-                    <span className="highlight2"> {filterStatus}</span> /
-                  </>
-                )}
-                {filterCourse && (
-                  <>
-                    {" "}
-                    <span className="highlight1">CourseType</span> =
-                    <span className="highlight2"> {filterCourse}</span>
-                  </>
-                )}
-              </td>
-            </tr>
-          ) : (
-            courseData?.map((course: any, index: number) => (
+          {courseData
+            ?.filter(
+              (course: any) =>
+                course.course_basic && course.course_basic.course_start_date
+            )
+            .sort((a: any, b: any) => {
+              const dateA = new Date(a.course_basic.course_start_date);
+              const dateB = new Date(b.course_basic.course_start_date);
+              return dateB.getTime() - dateA.getTime();
+            })
+            .map((course: any, index: number) => (
               <tr key={index}>
                 <td className="admin-course-list-table-data admin-course-list-table-data-name-and-code">
                   {course.course_basic?.course_code} -{" "}
@@ -197,6 +181,11 @@ const AdminCourseListTable: FC = () => {
                 </td>
                 <td className="admin-course-list-table-data">
                   {course.course_basic?.course_category}
+                </td>
+                <td className="admin-course-list-table-data admin-course-list-table-data-name-and-code">
+                  {new Date(
+                    course.course_basic.course_upload_date
+                  ).toDateString()}
                 </td>
                 <td className="admin-course-list-table-data admin-course-list-table-data-name-and-code">
                   {new Date(
@@ -218,8 +207,6 @@ const AdminCourseListTable: FC = () => {
                 </td>
                 <td className="admin-course-list-table-data admin-course-eye-icon">
                   <Link href={`/admin/admin-course-detail/`}>
-                    {/* ${course._id} Need a context to hold this value to use this id to view the course 
-      for an edit logic */}
                     <ViewEyeIcon
                       onClick={() =>
                         getCourseData(course.course_basic.course_code)
@@ -228,8 +215,7 @@ const AdminCourseListTable: FC = () => {
                   </Link>
                 </td>
               </tr>
-            ))
-          )}
+            ))}
         </tbody>
       </table>
     </div>
