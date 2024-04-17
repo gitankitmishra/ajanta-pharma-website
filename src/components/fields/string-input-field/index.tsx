@@ -9,6 +9,7 @@ interface InputFieldStringProps {
   isEditable?: boolean;
   error?: string;
   readOnly?: boolean;
+  fontFamily?: string;
 }
 
 const InputFieldString: FC<InputFieldStringProps> = ({
@@ -17,6 +18,7 @@ const InputFieldString: FC<InputFieldStringProps> = ({
   className,
   placeholder,
   width,
+  fontFamily,
   isEditable,
   error = "",
 }) => {
@@ -28,7 +30,7 @@ const InputFieldString: FC<InputFieldStringProps> = ({
     <div className="module-input-name">
       <input
         readOnly={isEditable}
-        style={{ width: width }}
+        style={{ width: width, fontFamily: fontFamily }}
         type="text"
         value={value}
         onChange={handleChange}
