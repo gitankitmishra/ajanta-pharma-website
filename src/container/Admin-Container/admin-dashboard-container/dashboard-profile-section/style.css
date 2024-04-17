@@ -18,9 +18,9 @@
 
 }
 .dashboard-profile-cards {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: repeat(2,1fr);
+  gap: 24px;
 }
 .dashboard-profile-added-course-text {
   color: #1c1d1d;
@@ -28,4 +28,7 @@
   font-weight: 500;
   text-decoration: underline;
   margin-top: 12px;
+}
+.dashboard-profile-cards a{
+  text-decoration: none;
 }
