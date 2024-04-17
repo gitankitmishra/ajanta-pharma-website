@@ -48,10 +48,10 @@ const UploadButton: React.FC<UploadButtonProps> = ({
         id={id}
         type="file"
         ref={fileInputRef}
-        accept={
-          acceptedTypes ||
-          ".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-        }
+        // accept={
+        //   acceptedTypes ||
+        //   ".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        // }
         onChange={handleFileSelect}
         style={{ display: "none" }}
       />

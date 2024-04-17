@@ -104,7 +104,7 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
 }) => {
   const router = useRouter();
 
-  const [active_step, setActiveStep] = useState<number>(1);
+  const [active_step, setActiveStep] = useState<number>(0);
 
   const handleStepOneDone = async () => {
     let errors = {};
@@ -454,7 +454,7 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
 
   const [files, setFiles] = useState<File[]>([]);
 
-  const initialFilesUploadedState = Array(course_module.length).fill(false);
+  const initialFilesUploadedState = Array(course_module?.length).fill(false);
   const [filesUploaded, setFilesUploaded] = useState<boolean[]>(
     initialFilesUploadedState
   );
@@ -826,7 +826,8 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
           assessment.assessment_type === "boolean" ||
           assessment.assessment_type === "single" ||
           assessment.assessment_type === "multiple" ||
-          assessment.assessment_type === "short"
+          assessment.assessment_type === "short" ||
+          assessment.assessment_type === "N/A"
         ) {
           assessmentErrors.assessment_type = "";
         } else {
@@ -835,7 +836,8 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
             | "boolean"
             | "single"
             | "multiple"
-            | "short";
+            | "short"
+            | "N/A";
         }
         if (!assessment.assessment_data.length) {
           assessmentErrors.assessment_data = [];
@@ -1101,7 +1103,8 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
         | "single"
         | "multiple"
         | "boolean"
-        | "short";
+        | "short"
+        | "N/A";
       setCourseAssessmentMain(temp);
       setCourseAssessmentmainError((prevErrors) => {
         const newErrors = [...prevErrors];
@@ -1126,7 +1129,8 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
         | "single"
         | "multiple"
         | "boolean"
-        | "short";
+        | "short"
+        | "N/A";
       setCourseAssessment(temp);
       setCourseAssessmentError((prevErrors) => {
         const newErrors = [...prevErrors];
@@ -1146,38 +1150,9 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     }
   };
 
-  //update module file upload
-  const updateFileUpload = async (): Promise<any> => {
-    const formdata = new FormData();
-    formdata.append("file_path", `course_material/${course_basic.course_code}`);
-
-    files.forEach((file, index) => {
-      formdata.append("files", file);
-      formdata.append("files_name", `files-${course_module[index].module_no}`);
-    });
-
-    const responseUrl = await fetchService({
-      method: "POST",
-      endpoint: "api/admin/dashboard/uploadAllFile",
-      data: formdata,
-    });
-
-    if (responseUrl.code === 200) {
-      const data = responseUrl;
-      console.log("check", data.data.urls);
-
-      const updatedCourseModule = course_module.map((module, index) => ({
-        ...module,
-        module_material: data.data.urls[index],
-      }));
-
-      setCourseModule(updatedCourseModule);
-    }
-  };
-
   useEffect(() => {
-    console.log("check module-------------", course_module);
-  }, [course_module]);
+    console.log("check module-------------", course_assessment);
+  }, [course_assessment]);
 
   //api calling
   const uploadCourse = async () => {
@@ -1280,7 +1255,7 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     if (id === "division") {
       setCourseDesignation((prevState) => ({
         ...prevState,
-        division: prevState.division.includes(value)
+        division: prevState.division?.includes(value)
           ? prevState.division.filter((item) => item !== value)
           : [...prevState.division, value],
       }));
@@ -1411,20 +1386,24 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
       if (responseData && responseData.data) {
         setCourseBasic(responseData.data.course_basic);
         //condition
-        const filteredCourseAssessment = Object?.values(
+        const filteredModuleAssessment = Array.isArray(
           responseData.data.course_assessment
-        ).filter(
-          (assessment: any) => assessment.assessment_category === "course"
-        ) as CourseAssessment[];
+        )
+          ? (responseData.data.course_assessment.filter(
+              (assessment: any) => assessment.assessment_category === "module"
+            ) as CourseAssessment[])
+          : [];
 
-        const filteredModuleAssessment = Object?.values(
-          responseData.data.course_assessment
-        ).filter(
-          (assessment: any) => assessment.assessment_category === "module"
-        ) as CourseAssessment[];
+        const filteredCourseAssessment = Array.isArray(
+          responseData.data.course_assessment_main
+        )
+          ? (responseData.data.course_assessment_main.filter(
+              (assessment: any) => assessment.assessment_category === "course"
+            ) as CourseAssessment[])
+          : [];
 
-        setCourseAssessment(filteredCourseAssessment);
-        setCourseAssessmentMain(filteredModuleAssessment);
+        setCourseAssessment(filteredModuleAssessment);
+        setCourseAssessmentMain(filteredCourseAssessment);
         setCourseModule(responseData.data.course_module);
         setCourseDesignation(responseData.data.course_designation);
       }
@@ -1487,37 +1466,30 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
   //api to update the data or edit
 
   const updateCourse = async () => {
-    console.log("button upload");
-    console.log("testt");
-    const checkFileUpload = await updateFileUpload();
-    if (!checkFileUpload) {
-      alert("something went wrong");
-    }
-    const response = await fetchService({
-      method: "PUT",
-      endpoint: `api/admin/dashboard/editCourse/${course_basic.course_code}`,
-      data: {
-        course_designation: {
-          ...course_designation,
+    if (
+      course_assessment_main[0].assessment_name &&
+      course_assessment_main[0].assessment_type !== ""
+    ) {
+      const response = await fetchService({
+        method: "PUT",
+        endpoint: `api/admin/dashboard/editCourse/${course_basic.course_code}`,
+        data: {
+          course_designation: {
+            ...course_designation,
+          },
+          course_basic: {
+            ...course_basic,
+          },
+          course_assessment: { ...course_assessment },
         },
-        course_basic: {
-          ...course_basic,
-        },
-        course_assessment: {
-          ...course_assessment,
-          ...course_assessment_main,
-        },
-        course_module: {
-          ...course_module,
-        },
-      },
-    });
+      });
 
-    if (response.code == 200) {
-      const data = response;
-      console.log(data);
-    } else {
-      console.log("error");
+      if (response.code == 200) {
+        const data = response;
+        console.log(data);
+      } else {
+        console.log("error");
+      }
     }
   };
 
@@ -1556,6 +1528,10 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
       setGetCountdata(data);
     }
   };
+
+  useEffect(() => {
+    getCount();
+  }, []);
 
   // ***********************************************************************************************
 

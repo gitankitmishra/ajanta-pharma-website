@@ -43,7 +43,9 @@ const AdminCourseDeatilContainer: FC<
     openLink,
     writeIntoFile,
     handleCancelIcon,
+    fileExtension,
     filesUploaded,
+    fileSize,
   } = useContext(CourseContext) as CourseContextType;
   const allDivisions = [
     "CDC",
@@ -76,7 +78,6 @@ const AdminCourseDeatilContainer: FC<
   ];
 
   const [fileName, setFileName] = useState("Video");
-  const [fileSize, setFileSize] = useState<number>(2.2);
   const [isClicked, setIsClicked] = useState(false);
   const [buttonText, setButtonText] = useState({
     edit: "Edit",
@@ -91,29 +92,45 @@ const AdminCourseDeatilContainer: FC<
   };
 
   const handleEditClick = () => {
-    console.log("buttonText.edit:", buttonText.edit);
-    console.log("buttonText.discard:", buttonText.discard);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    switch (buttonText.edit) {
+      case "Edit":
+        setIsEditable(true);
+        setIsClicked(!isClicked);
+        setButtonText({ edit: "Preview", discard: "Discard" });
+        break;
+      case "Save":
+        updateCourse();
+        setPopupVisible(true);
+        break;
+      case "Preview":
+        setIsEditable(false);
+        setIsClicked(isClicked);
+        setButtonText({ edit: "Save", discard: "Previous" });
+        break;
+      default:
+        // For the discard button
+        setIsEditable(false);
+        setIsClicked(!isClicked);
+        console.log("Discard clicked");
+        setButtonText({ edit: "Edit", discard: "Back" });
+        break;
+    }
+  };
 
-    if (buttonText.edit === "Edit") {
-      setIsEditable(true);
-      setIsClicked(!isClicked);
-      setButtonText({ edit: "Preview", discard: "Discard" });
-    } else if (buttonText.edit === "Save") {
-      updateCourse();
-      setPopupVisible(true);
-    } else if (buttonText.edit === "Preview") {
-      setIsEditable(false);
-      setIsClicked(isClicked);
-      setButtonText({ edit: "Save", discard: "Previous" });
-    } else if (buttonText.discard === "Discard") {
-      console.log("Discard clicked");
-      setIsEditable(false);
-      setIsClicked(isClicked);
-      setButtonText({ edit: "Edit", discard: "Back" });
-    } else {
-      setIsEditable(false);
-      setIsClicked(isClicked);
-      setButtonText({ edit: "Save", discard: "Previous" });
+  const handleDiscardButton = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    switch (buttonText.discard) {
+      case "Discard":
+        setIsEditable(false);
+        setIsClicked(isClicked);
+        setButtonText({ edit: "Edit", discard: "Back" });
+        break;
+      case "Previous":
+        setIsEditable(true);
+        setIsClicked(!isClicked);
+        setButtonText({ edit: "Preview", discard: "Discard" });
+        break;
     }
   };
 
@@ -191,10 +208,7 @@ const AdminCourseDeatilContainer: FC<
               <InputFieldString
                 className="input-field"
                 value={`${course_basic.course_name}`}
-                onChange={(newValue: string) => {
-                  const [newCode] = newValue.split(" ");
-                  handleChange("course_name", newCode);
-                }}
+                onChange={(value) => handleChange("course_name", value)}
                 isEditable={!isEditable}
               />
             </div>
@@ -229,128 +243,116 @@ const AdminCourseDeatilContainer: FC<
         <div className="admin-course-detail-div-section">
           {course_module?.map((module, index) => {
             return (
-              <div className="admin-course-detail-section2" key={index}>
-                <div className="admin-course-detail-section2-div-sections">
-                  <label
-                    htmlFor=""
-                    className="admin-course-detail-section-labels"
-                  >
-                    Module Number
-                  </label>
-
-                  <InputField
-                    moduleValue={module.module_no.toString()}
-                    onUpdate={handleModuleChange}
-                    isEditable={!isEditable}
-                  />
-                </div>
-                <div className="admin-course-detail-section2-div-sections">
-                  <label
-                    htmlFor=""
-                    className="admin-course-detail-section-labels"
-                  >
-                    Module Name
-                  </label>
-
-                  <InputField
-                    id={`module_name-${index}`}
-                    moduleValue={module.module_name}
-                    onUpdate={handleModuleChange}
-                    isEditable={!isEditable}
-                  />
-                </div>
-                <div className="admin-course-detail-section2-admin-course-detailed-file">
-                  {isEditable ? ( // addes isEditable functinality removed onclick by ankita
-                    <div
-                      className={`admin-course-detailed-video-file ${
-                        isClicked ? "clicked" : "unClicked"
-                      }`}
+              <>
+                <div className="admin-course-detail-section2" key={index}>
+                  <div className="admin-course-detail-section2-div-sections">
+                    <label
+                      htmlFor=""
+                      className="admin-course-detail-section-labels"
                     >
-                      {/* <input type="text" className="admin-course-detailed-mp4" /> */}
-                      <span
-                        key={index}
-                        className="admin-course-detailed-file-name"
-                        onClick={() => openLink(index)}
+                      Module Number
+                    </label>
+
+                    <InputField
+                      moduleValue={module.module_no.toString()}
+                      onUpdate={handleModuleChange}
+                      isEditable={!isEditable}
+                    />
+                  </div>
+                  <div className="admin-course-detail-section2-div-sections">
+                    <label
+                      htmlFor=""
+                      className="admin-course-detail-section-labels"
+                    >
+                      Module Name
+                    </label>
+
+                    <InputField
+                      id={`module_name-${index}`}
+                      moduleValue={module.module_name}
+                      onUpdate={handleModuleChange}
+                      isEditable={!isEditable}
+                    />
+                  </div>
+                  <div className="admin-course-detail-section2-admin-course-detailed-file">
+                    {isEditable ? ( // addes isEditable functinality removed onclick by ankita
+                      <div
+                        className={`admin-course-detailed-video-file ${
+                          isClicked ? "clicked" : "unClicked"
+                        }`}
                       >
-                        View
+                        {/* <input type="text" className="admin-course-detailed-mp4" /> */}
+                        <span
+                          key={index}
+                          className="admin-course-detailed-file-name"
+                          onClick={() => openLink(index)}
+                        >
+                          View
+                        </span>
+                      </div>
+                    ) : (
+                      <div
+                        className={`admin-course-detailed-video-file ${
+                          isClicked ? "clicked" : "unClicked"
+                        }`}
+                      >
+                        {/* <input type="text" className="admin-course-detailed-mp4" /> */}
+
+                        <span
+                          key={index}
+                          className="admin-course-detailed-file-name"
+                          // onClick={() => openLink(index)}
+                        >
+                          View
+                        </span>
+                      </div>
+                    )}
+
+                    <div className="admin-course-detailed-video-file-text">
+                      <span className="admin-course-detail-file-name">
+                        {fileExtension[index]}
+                      </span>
+                      <br />
+                      <span className="admin-course-detail-file-size">
+                        {(fileSize[index] / (1024 * 1024)).toFixed(2)}MB
                       </span>
                     </div>
-                  ) : (
-                    <div
-                      className={`admin-course-detailed-video-file ${
+                  </div>
+
+                  <div className="admin-course-detail-upload-btns">
+                    <button
+                      className={`admin-course-detail-upload-btn ${
                         isClicked ? "clicked" : "unClicked"
                       }`}
+                      onClick={() => {
+                        if (isEditable) {
+                          const fileInput = document.createElement("input");
+                          fileInput.type = "file";
+                          fileInput.accept = ".mp4,.ppt,.pdf";
+                          fileInput.addEventListener("change", (event) => {
+                            const selectedFile = (
+                              event.target as HTMLInputElement
+                            ).files?.[0];
+                            if (selectedFile) {
+                              handleFileSelect(selectedFile, index);
+                              console.log(
+                                "name = ",
+                                fileName,
+                                "size",
+                                fileSize
+                              );
+                            }
+                          });
+                          fileInput.click();
+                        }
+                      }}
                     >
-                      {/* <input type="text" className="admin-course-detailed-mp4" /> */}
-
-                      <span
-                        key={index}
-                        className="admin-course-detailed-file-name"
-                        // onClick={() => openLink(index)}
-                      >
-                        View
-                      </span>
-                    </div>
-                  )}
-
-                  <div className="admin-course-detailed-video-file-text">
-                    <span className="admin-course-detail-file-name">
-                      {fileName}
-                    </span>
-                    <br />
-                    <span className="admin-course-detail-file-size">
-                      {(fileSize / (1024 * 1024)).toFixed(2)} MB
-                    </span>
+                      Upload
+                    </button>
                   </div>
                 </div>
 
-                <div className="admin-course-detail-upload-btns">
-                  <button
-                    className={`admin-course-detail-upload-btn ${
-                      isClicked ? "clicked" : "unClicked"
-                    }`}
-                    onClick={() => {
-                      if (isEditable) {
-                        const fileInput = document.createElement("input");
-                        fileInput.type = "file";
-                        fileInput.accept = ".mp4,.ppt,.pdf";
-                        fileInput.addEventListener("change", (event) => {
-                          const selectedFile = (
-                            event.target as HTMLInputElement
-                          ).files?.[0];
-                          if (selectedFile) {
-                            handleFileSelect(selectedFile, index);
-                            setFileName(selectedFile.name);
-                            setFileSize(selectedFile.size);
-                            console.log("name = ", fileName, "size", fileSize);
-                          }
-                        });
-                        fileInput.click();
-                      }
-                    }}
-                  >
-                    Upload
-                  </button>
-
-                  {/* <UploadButton
-                    upload={"Upload"}
-                    onFileSelect={(selectedFile: File) => {
-                      handleFileSelect(selectedFile, index);
-                    }}
-                    acceptedTypes=".mp4,.ppt,.pdf"
-                    formatText={"File Format: mp4, ppt, pdf "}
-                    className={`admin-course-detail-upload-btn ${
-                      isClicked ? "clicked" : "unclicked"
-                    }`}
-                  /> */}
-                </div>
-              </div>
-            );
-          })}
-          <div className="admin-course-detail-section2">
-            {course_assessment?.map((assessment: any, index: number) => {
-              if (assessment.assessment_data !== "") {
-                return (
+                <div className="admin-course-detail-section2">
                   <>
                     <div
                       className="admin-course-detail-section2-div-sections"
@@ -364,7 +366,7 @@ const AdminCourseDeatilContainer: FC<
                       </label>
                       <DropdownInputField
                         id={`assessment_type-${index}`}
-                        value={assessment.assessment_type}
+                        value={course_assessment[index]?.assessment_type}
                         onChange={handleAssessmentTypeChange}
                         placeholder="select assessment type"
                         options={[
@@ -372,12 +374,14 @@ const AdminCourseDeatilContainer: FC<
                           "Single Choice Question",
                           "True or false",
                           "Short Answer",
+                          "Not Applicable",
                         ]}
                         valueLabel={[
                           "multiple",
                           "single",
                           "True or false",
                           "short",
+                          "N/A",
                         ]}
                         isEditable={!isEditable}
                       />
@@ -392,7 +396,7 @@ const AdminCourseDeatilContainer: FC<
                       </label>
                       <InputField
                         id={`assessment_name-${index}`}
-                        moduleValue={assessment.assessment_name}
+                        moduleValue={course_assessment[index]?.assessment_name}
                         onUpdate={handleAssessmentNameChange}
                         isEditable={!isEditable}
                       />
@@ -400,7 +404,7 @@ const AdminCourseDeatilContainer: FC<
 
                     <div className="admin-course-detail-section2-admin-course-detailed-file">
                       <div
-                        // onClick={(e) => writeIntoFile( index)}
+                        onClick={(e) => writeIntoFile(null, index)}
                         className={`admin-course-detailed-video-file ${
                           isClicked ? "clicked" : "unClicked"
                         }`}
@@ -413,7 +417,9 @@ const AdminCourseDeatilContainer: FC<
                           >
                             <CancelIcon />
                           </span>
-                        ) : null}
+                        ) : (
+                          <></>
+                        )}
                         XLS
                       </div>
 
@@ -460,13 +466,10 @@ const AdminCourseDeatilContainer: FC<
                       </button>
                     </div>
                   </>
-                );
-              } else {
-                return null;
-              }
-            })}
-          </div>
-
+                </div>
+              </>
+            );
+          })}
           <button
             className={`admin-course-detail-sec-add-module-btn ${
               isClicked ? "clicked" : "unClicked"
@@ -490,41 +493,6 @@ const AdminCourseDeatilContainer: FC<
           </button>
 
           <>
-            {/* <div className="admin-course-detail-section2-course-assessment">
-              <p className="admin-course-detail-course-assessment-text">
-                Course Assessment{" "}
-              </p>
-              <div className="admin-course-detail-assessment-radio-btns ">
-                    <input
-                      type="radio"
-                      id="pre"
-                      className={`admin-course-detail-assesment-radio-btn ${
-                        isClicked ? "clicked" : "unClicked"
-                      }`}
-                    />
-                    <label
-                      htmlFor="pre"
-                      className="admin-course-detail-selected-assessment"
-                    >
-                      Pre Assessment
-                    </label>
-                  </div>
-              <div className="admin-course-detail-assessment-radio-btns">
-                    <input
-                      type="radio"
-                      id="post-assessment"
-                      className={`admin-course-detail-assesment-radio-btn ${
-                        isClicked ? "clicked" : "unClicked"
-                      }`}
-                    />
-                    <label
-                      htmlFor="post-assessment"
-                      className="admin-course-detail-selected-assessment"
-                    >
-                      Post Assessment
-                    </label>
-                  </div>
-            </div> */}
             {course_assessment_main[0]?.assessment_data &&
               course_assessment_main[0]?.assessment_data.length > 0 && (
                 <div className="admin-course-detail-section2">
@@ -546,6 +514,7 @@ const AdminCourseDeatilContainer: FC<
                       Assessment Type
                     </label>
                     <DropdownInputField
+                      isEditable={!isEditable}
                       id="pre"
                       value={course_assessment_main[0]?.assessment_type}
                       placeholder="select assessment type"
@@ -555,8 +524,15 @@ const AdminCourseDeatilContainer: FC<
                         "Signle Choice Question",
                         "True or false",
                         "Short Answer",
+                        "Not Applicable",
                       ]}
-                      valueLabel={["multiple", "single", "boolean", "short"]}
+                      valueLabel={[
+                        "multiple",
+                        "single",
+                        "boolean",
+                        "short",
+                        "N/A",
+                      ]}
                     />
                   </div>
                   <div className="admin-course-detail-section2-div-sections">
@@ -570,23 +546,12 @@ const AdminCourseDeatilContainer: FC<
                       id="pre"
                       moduleValue={course_assessment_main[0]?.assessment_name}
                       onUpdate={handleAssessmentNameChange}
+                      isEditable={!isEditable}
                     />
                   </div>
                   <div className="admin-course-detail-section2-admin-course-detailed-file">
-                    {/* <div
-                      className={`admin-course-detailed-video-file ${
-                        isClicked ? "clicked" : "unClicked"
-                      }`}
-                    >
-                      <span
-                        className="admin-course-detailed-file-name"
-                        onClick={() => writeIntoFile(index)}
-                      >
-                        XLS
-                      </span>
-                      </div> */}
                     <div
-                      // onClick={() => writeIntoFile(0)}
+                      onClick={() => writeIntoFile("pre", 0)}
                       className={`admin-course-detailed-video-file ${
                         isClicked ? "clicked" : "unClicked"
                       }`}
@@ -639,22 +604,6 @@ const AdminCourseDeatilContainer: FC<
                     >
                       Upload
                     </button>
-
-                    {/* <UploadButton
-                      upload={"Upload Assessment"}
-                      uploadFile={() => (selectedFile: File) => {
-                        console.log("going to check");
-                        handleexcelFileRead(selectedFile, index, "module");
-                      }}
-                      onFileSelect={(selectedFile: File) => {
-                        handleexcelFileRead(selectedFile, index, "module");
-                      }}
-                      acceptedTypes=".xls"
-                      formatText={"File Format: xls"}
-                      className={`admin-course-detail-upload-btn ${
-                        isClicked ? "clicked" : "unClicked"
-                      }`}
-                    /> */}
                   </div>
                 </div>
               )}
@@ -672,6 +621,7 @@ const AdminCourseDeatilContainer: FC<
                       </label>
                       <DropdownInputField
                         id="post"
+                        isEditable={!isEditable}
                         value={course_assessment_main[1]?.assessment_type}
                         placeholder="select assessment type"
                         onChange={handleAssessmentTypeChange}
@@ -680,8 +630,15 @@ const AdminCourseDeatilContainer: FC<
                           "Signle Choice Question",
                           "True or false",
                           "Short Answer",
+                          "Not Applicable",
                         ]}
-                        valueLabel={["multiple", "single", "boolean", "short"]}
+                        valueLabel={[
+                          "multiple",
+                          "single",
+                          "boolean",
+                          "short",
+                          "N/A",
+                        ]}
                       />
                     </div>
                     <div className="admin-course-detail-section2-div-sections">
@@ -695,23 +652,12 @@ const AdminCourseDeatilContainer: FC<
                         id="post"
                         moduleValue={course_assessment_main[1]?.assessment_name}
                         onUpdate={handleAssessmentNameChange}
+                        isEditable={!isEditable}
                       />
                     </div>
                     <div className="admin-course-detail-section2-admin-course-detailed-file">
-                      {/* <div
-                      className={`admin-course-detailed-video-file ${
-                        isClicked ? "clicked" : "unClicked"
-                      }`}
-                    >
-                      <span
-                        className="admin-course-detailed-file-name"
-                        onClick={() => writeIntoFile(index)}
-                      >
-                        XLS
-                      </span>
-                      </div> */}
                       <div
-                        // onClick={() => writeIntoFile(1)}
+                        onClick={() => writeIntoFile("post", 1)}
                         className={`admin-course-detailed-video-file ${
                           isClicked ? "clicked" : "unClicked"
                         }`}
@@ -767,7 +713,6 @@ const AdminCourseDeatilContainer: FC<
             </div>
           </>
         </div>
-
         <div className="admin-course-detail-div-checkbox-main-section">
           <div className="admin-course-detail-main-div-section">
             <div className="admin-course-detail-text-section">
@@ -850,7 +795,10 @@ const AdminCourseDeatilContainer: FC<
           </div>
         </div>
         <div className="admin-course-detail-submit-buttons-section">
-          <PreviousButton text={buttonText.discard} />
+          <PreviousButton
+            text={buttonText.discard}
+            onClick={handleDiscardButton}
+          />
           <NextButton text={buttonText.edit} onClick={handleEditClick} />
         </div>
       </div>
