@@ -50,7 +50,6 @@ const AdminCourseListTable: FC = () => {
 
             <th className="admin-course-list-table-head head-dropdown-icon">
               Category{"   "}
-
               <div className="admin-course-list-table-category-dropdown-main-div">
                 <span
                   onClick={() => {
@@ -115,9 +114,7 @@ const AdminCourseListTable: FC = () => {
             <th className="admin-course-list-table-head">Upload Date</th>
             <th className="admin-course-list-table-head">Publish Date</th>
             <th className="admin-course-list-table-head head-dropdown-icon">
-
               Status{" "}
-
               <div className="admin-course-list-table-head-dropdown-main-div">
                 <span
                   onClick={toggleDropdown}
@@ -171,6 +168,7 @@ const AdminCourseListTable: FC = () => {
             .sort((a: any, b: any) => {
               const dateA = new Date(a.course_basic.course_start_date);
               const dateB = new Date(b.course_basic.course_start_date);
+              console.log("upload date", course_basic.course_upload_date);
               return dateB.getTime() - dateA.getTime();
             })
             .map((course: any, index: number) => (
@@ -184,8 +182,8 @@ const AdminCourseListTable: FC = () => {
                 </td>
                 <td className="admin-course-list-table-data admin-course-list-table-data-name-and-code">
                   {new Date(
-                    course.course_basic.course_upload_date
-                  ).toDateString()}
+                    course.course_basic.course_upload_date?._seconds * 1000
+                  ).toLocaleDateString()}
                 </td>
                 <td className="admin-course-list-table-data admin-course-list-table-data-name-and-code">
                   {new Date(
