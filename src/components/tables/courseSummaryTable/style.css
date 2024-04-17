@@ -22,6 +22,7 @@
   padding: 16px;
   padding-left: 50px;
   text-align: left;
+  height: 57px;
   border-right: 1px solid #e3e3e3;
 }
 .course-summary-table-head:first-child {
@@ -34,7 +35,9 @@
 .course-summary-table-head:last-child {
   border: none;
 }
-
+.course-summary-table-numbers-data{
+  font-family: "Open sans";
+}
 .course-summary-table-data {
   color: #1c1d1d;
   font-size: 16px;
@@ -45,6 +48,7 @@
   padding-left: 50px;
   border-right: 1px solid #e3e3e3;
   text-align: left;
+  height: 50px;
 }
 .head-dropdown-icon {
   display: flex;

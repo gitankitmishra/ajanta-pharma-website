@@ -75,7 +75,7 @@ const CourseSummaryTable: FunctionComponent<CourseSummaryTableProps> = () => {
               <td className="course-summary-table-data">
                 {course.courseCodeAndName}
               </td>
-              <td className="course-summary-table-data">
+              <td className="course-summary-table-data course-summary-table-numbers-data">
                 {course.completionDate}
               </td>
               <td className="course-summary-table-data">{course.category}</td>
@@ -85,7 +85,7 @@ const CourseSummaryTable: FunctionComponent<CourseSummaryTableProps> = () => {
                 {course.status}
               </td>
               <td
-                className={`course-summary-table-data ${course.status.toLowerCase()}`}
+                className={`course-summary-table-data course-summary-table-numbers-data ${course.status.toLowerCase()}`}
               >
                 {course.score != null ? course.score + "%" : "-"}
               </td>
