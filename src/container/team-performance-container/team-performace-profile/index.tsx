@@ -8,6 +8,7 @@ import PerformersProgressbar from "@/components/progressbar/performers-progressb
 import CategoryProgressbar from "@/components/progressbar/category-progressbar";
 import SpeedometerChart from "@/components/speedometer";
 import Speedometer from "@/components/speedometer";
+import Link from "next/link";
 
 interface TeamPerformanceProfileContainerProps {}
 
@@ -27,10 +28,12 @@ const TeamPerformanceProfileContainer: FunctionComponent<
           </p>
         </div>
         <div className="team-performance-profile-header-section-btn-part">
-          <button className="team-performance-profile-button">
-            <ListIcon />
-            Team Report
-          </button>
+          <Link href="/team-performance/team-report">
+            <button className="team-performance-profile-button">
+              <ListIcon />
+              Team Report
+            </button>
+          </Link>
         </div>
       </div>
       {/* ------------------------Search and Filter Section----------------------- */}
@@ -69,7 +72,7 @@ const TeamPerformanceProfileContainer: FunctionComponent<
       </div>
       {/* ------------------------ Speedometer Section------------------- */}
       <div className="team-performance-profile-speedometer-section">
-        <Speedometer/>
+        <Speedometer />
       </div>
     </section>
   );
