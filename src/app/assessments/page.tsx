@@ -1,12 +1,9 @@
+import { FunctionComponent } from "react";
 
-import React from 'react'
+interface AssessmentsProps {}
 
-interface Props {}
+const Assessments: FunctionComponent<AssessmentsProps> = () => {
+  return <main></main>;
+};
 
-const page = () => {
-  return <main>
-    
-  </main>
-}
-
-export default page
+export default Assessments;
