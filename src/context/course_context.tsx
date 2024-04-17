@@ -1264,7 +1264,7 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     } else {
       setCourseDesignation((prevState) => ({
         ...prevState,
-        designation: prevState.designation.includes(value)
+        designation: prevState?.designation.includes(value)
           ? prevState.designation.filter((item) => item !== value)
           : [...prevState.designation, value],
       }));
