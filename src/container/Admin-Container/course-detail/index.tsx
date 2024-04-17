@@ -42,6 +42,7 @@ const AdminCourseDeatilContainer: FC<
     updateCourse,
     openLink,
     writeIntoFile,
+    handleCancelIconAssessment,
     handleCancelIcon,
     fileExtension,
     filesUploaded,
@@ -146,11 +147,21 @@ const AdminCourseDeatilContainer: FC<
   //useState
   const [isEditable, setIsEditable] = useState(false);
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   return (
     <section className="admin-course-detail-container-main-section">
       <div className="admin-course-detail-breadcrumb-section">
         <Breadcrumb items={breadcrumbItems} />
-        <p className="admin-course-detail-text">Course Details</p>
+        <div className="admin-course-detail-header-texts">
+          <p className="admin-course-detail-text">Course Details</p>
+          <p className="admin-course-detail-star-msg">
+            *Please click the edit button located at the bottom of the page to
+            modify the course details.
+          </p>
+        </div>
       </div>
       <div className="admin-course-detail-details-main-section">
         <div className="admin-course-detail-div-section">
@@ -198,6 +209,7 @@ const AdminCourseDeatilContainer: FC<
                   const [newCode] = newValue.split(" ");
                   handleChange("course_code", newCode);
                 }}
+                fontFamily="Open sans"
                 isEditable={!isEditable}
               />
             </div>
@@ -409,18 +421,21 @@ const AdminCourseDeatilContainer: FC<
                           isClicked ? "clicked" : "unClicked"
                         }`}
                       >
-                        {filesUploaded ? (
+                        {filesUploaded && isEditable ? (
                           <span
+                            className="admin-course-detail-cancel-icon-span"
                             onClick={() => {
-                              handleCancelIcon(index);
+                              handleCancelIconAssessment(null, index);
                             }}
                           >
                             <CancelIcon />
                           </span>
+
                         ) : (
                           <></>
                         )}
                         XLS
+
                       </div>
 
                       <div className="admin-course-detailed-video-file-text">
@@ -487,7 +502,6 @@ const AdminCourseDeatilContainer: FC<
                 isClicked ? "clicked" : "unClicked"
               }`}
             >
-              {" "}
               Add Module
             </span>
           </button>
@@ -558,7 +572,7 @@ const AdminCourseDeatilContainer: FC<
                     >
                       <span
                         onClick={() => {
-                          handleCancelIcon(0);
+                          handleCancelIconAssessment("pre", 0);
                         }}
                       >
                         <CancelIcon />
@@ -664,7 +678,7 @@ const AdminCourseDeatilContainer: FC<
                       >
                         <span
                           onClick={() => {
-                            handleCancelIcon(1);
+                            handleCancelIconAssessment("post", 1);
                           }}
                         >
                           <CancelIcon />

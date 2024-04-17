@@ -351,9 +351,8 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
       id = "01";
     }
 
-    const courseCode: string = `${
-      categoryTable[course_basic.course_category]
-    }-${trainingTable[training]}-${month}${year}-${id}`;
+    const courseCode: string = `${categoryTable[course_basic.course_category]
+      }-${trainingTable[training]}-${month}${year}-${id}`;
 
     console.log("testtt", courseCode);
 
@@ -716,7 +715,9 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     // Create a new array with the updated filesUploaded state for the specific index
     const updatedFilesUploaded = [...filesUploaded];
     updatedFilesUploaded[index] = false;
-    setFilesUploaded(updatedFilesUploaded);
+    setFilesUploaded(updatedFilesUploaded)
+    setFileSize([0]);
+    setFileExtension(["NA"])
   };
   const handleCancelIconAssessment = (id: string | null, index: number) => {
     if (id == "pre" || id == "post") {
@@ -1151,8 +1152,10 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
   };
 
   useEffect(() => {
+
     console.log("check module-------------", course_assessment);
   }, [course_assessment]);
+p
 
   //api calling
   const uploadCourse = async () => {
@@ -1340,32 +1343,35 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     setComponentPage(value);
   };
 
-  const fetchData = async () => {
-    setLoading(true);
-    const response = await fetchService({
-      method: "GET",
-      endpoint: `api/admin/dashboard/filter?category=${
-        filterCategory || ""
-      }&status=${filterStatus || ""}&key=${
-        filterCourse || ""
-      }&page=${pageNo}&pageSize=${pageSize}`,
-    });
 
-    if (response.code === 200) {
-      console.log("response", response.data.data.data);
-
-      setCourseData(response.data.data.data);
-      setTotalPages(response.data.totalPages);
-      setLoading(false);
-    } else {
-      console.log("error");
-    }
-  };
+  const [check, setCheck] = useState(false);
 
   useEffect(() => {
-    fetchData();
-  }, [pageNo, pageSize, filterCourse, filterCategory, filterStatus]);
+    const fetchData = async () => {
+      setLoading(true);
+      const response = await fetchService({
+        method: "GET",
+        endpoint: `api/admin/dashboard/filter?category=${filterCategory || ""
+          }&status=${filterStatus || ""}&key=${filterCourse || ""
+          }&page=${pageNo}&pageSize=${pageSize}`,
+      });
 
+      if (response.code === 200) {
+        console.log("response", response.data.data.data);
+
+        setCourseData(response.data.data.data);
+        setTotalPages(response.data.totalPages);
+        setLoading(false);
+      } else {
+        console.log("error");
+      }
+    };
+    fetchData();
+  }, [pageNo, pageSize, filterCategory, filterCourse, filterStatus, check])
+
+  // useEffect(() => {
+  //   fetchData();
+  // }, [pageNo, pageSize, filterCourse, filterCategory, filterStatus, course_basic]);
   //*/****************************************************************************************** */
 
   //GET COURSE AND EDIT COURSE
@@ -1464,8 +1470,8 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
   // ***********************************************************************************************
 
   //api to update the data or edit
-
   const updateCourse = async () => {
+
     if (
       course_assessment_main[0].assessment_name &&
       course_assessment_main[0].assessment_type !== ""
@@ -1492,6 +1498,16 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
       }
     }
   };
+
+
+  useEffect(() => {
+
+  }, [])
+
+
+
+
+
 
   // ***********************************************************************************************
 
