@@ -50,7 +50,7 @@ const TeamPerformanceProfileContainer: FunctionComponent<
         </div>
       </div>
       {/* --------------------------Pie Chart Section--------------------------- */}
-      <div className="team-performance-profile-piechart-section">
+      {/* <div className="team-performance-profile-piechart-section">
         <div className="team-performance-profile-piechart">
           <PieChartCard
             labels={["Pune", "Nashik", "Mumbai", "Gujrat"]}
@@ -65,7 +65,7 @@ const TeamPerformanceProfileContainer: FunctionComponent<
             heading={" Designation Wise Status "}
           />
         </div>
-      </div>
+      </div> */}
       {/* -------------------Progress bar section ----------------------- */}
       <div className="team-performance-profile-progressbar-section">
         <PerformersProgressbar />

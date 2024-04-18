@@ -18,7 +18,11 @@ import InputField from "@/components/fields/input-field";
 import UploadButton from "@/components/buttons/upload-button";
 import { CancelIcon } from "@/components/icons/cancel-icon";
 import SuccessPopup from "@/components/popups/success-popup";
+
 import { useRouter } from "next/navigation";
+
+import Link from "next/link";
+
 
 interface AdminCourseDeatilContainerProps {}
 
@@ -37,6 +41,7 @@ const AdminCourseDeatilContainer: FC<
     handleChangeDesignation,
     handleModuleChange,
     handleAddModule,
+    handleDeleteModule,
     handleexcelFileRead,
     handleAssessmentNameChange,
     handleAssessmentTypeChange,
@@ -161,10 +166,22 @@ const AdminCourseDeatilContainer: FC<
         <Breadcrumb items={breadcrumbItems} />
         <div className="admin-course-detail-header-texts">
           <p className="admin-course-detail-text">Course Details</p>
-          <p className="admin-course-detail-star-msg">
-            *Please click the edit button located at the bottom of the page to
-            modify the course details.
-          </p>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "flex-end",
+              flexDirection: "column",
+              gap: "6px",
+            }}
+          >
+            <Link href={"/admin/admin-courses"}>
+              <NextButton text="Back to Courses" width="193px" />
+            </Link>
+            <p className="admin-course-detail-star-msg">
+              *Please click the edit button located at the bottom of the page to
+              modify the course details.
+            </p>
+          </div>
         </div>
       </div>
       <div className="admin-course-detail-details-main-section">
@@ -260,6 +277,16 @@ const AdminCourseDeatilContainer: FC<
           {course_module?.map((module, index) => {
             return (
               <>
+                {module.module_no > 1 && (
+                  <button
+                    className="admin-course-detail-dlt-module-btn"
+                    onClick={() => handleDeleteModule(index)}
+                  >
+                    <span className="admin-course-detail-dlt-module-btn-add-module">
+                      <CancelIcon /> Module 0{module.module_no.toString()}
+                    </span>
+                  </button>
+                )}
                 <div className="admin-course-detail-section2" key={index}>
                   <div className="admin-course-detail-section2-div-sections">
                     <label
@@ -487,6 +514,7 @@ const AdminCourseDeatilContainer: FC<
               </>
             );
           })}
+
           <button
             className={`admin-course-detail-sec-add-module-btn ${
               isClicked ? "clicked" : "unClicked"
