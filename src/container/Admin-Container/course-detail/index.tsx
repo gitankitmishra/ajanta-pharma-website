@@ -18,7 +18,11 @@ import InputField from "@/components/fields/input-field";
 import UploadButton from "@/components/buttons/upload-button";
 import { CancelIcon } from "@/components/icons/cancel-icon";
 import SuccessPopup from "@/components/popups/success-popup";
+
+import { useRouter } from "next/navigation";
+
 import Link from "next/link";
+
 
 interface AdminCourseDeatilContainerProps {}
 
@@ -120,10 +124,13 @@ const AdminCourseDeatilContainer: FC<
         break;
     }
   };
-
+  const router = useRouter();
   const handleDiscardButton = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
     switch (buttonText.discard) {
+      case "Back":
+        router.push("/admin/admin-courses");
+        break;
       case "Discard":
         setIsEditable(false);
         setIsClicked(isClicked);
