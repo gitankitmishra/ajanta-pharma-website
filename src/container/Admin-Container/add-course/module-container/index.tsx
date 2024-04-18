@@ -13,7 +13,7 @@ import { CancelIcon } from "@/components/icons/cancel-icon";
 import { DownloadIcon } from "@/components/icons/download-icon";
 import { WhiteCancelIcon } from "@/components/icons/whiteCancelIcon";
 
-interface ModuleQuizStepSectionProps {}
+interface ModuleQuizStepSectionProps { }
 
 const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
   const {
