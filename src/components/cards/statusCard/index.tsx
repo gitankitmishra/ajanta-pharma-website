@@ -23,7 +23,7 @@ const StatusCard: FC<StatusCardProps> = ({
     <div className="status-card-main-container">
       <div className="status-card-texts-part">
         <p className="status-card-text">{title}</p>
-        <p className="status-card-text">{count}</p>
+        <p className="status-card-text-count">{count}</p>
       </div>
       <div className="status-card-icon-part">
         <Image src={imageUrl} alt="Image" width={width} height={height} />

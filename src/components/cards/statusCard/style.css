@@ -2,27 +2,30 @@
 .status-card-main-container {
   display: flex;
   width: 93%;
-  height: 138px;
-  background-image: url("../../../public/images/dashboard-bg.svg");
+  height: 80px;
+  background-image: url("../../../public/images/bg-hover-img.svg");
   background-size: cover;
   background-repeat: no-repeat;
   background-position: 100%;
-  box-shadow: 0px 4px 4px 0px #fe81003d;
   border-radius: 12px;
   justify-content: space-between;
-  padding: 25px 20px;
-}
-.status-card-main-container:hover {
-  background-image: url("../../../public/images/bg-hover-img.svg");
+  padding: 30px 20px;
 }
 
 .status-card-texts-part {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
   flex-direction: column;
 }
 .status-card-texts-part .status-card-text {
   font-size: 20px;
+  font-weight: 500;
+  line-height: 23px;
+  letter-spacing: 0.05em;
+  color: #fff;
+}
+.status-card-text-count{
+  font-size: 32px;
   font-weight: 600;
   line-height: 23px;
   letter-spacing: 0em;
@@ -31,10 +34,11 @@
 }
 .status-card-icon-part {
   display: flex;
-  width: 40px;
-  height: 40px;
+  width: 45px;
+  height: 45px;
   border-radius: 8px;
-  background: #ffffff4d;
+  background: #ffffff3d;
   justify-content: center;
   align-items: center;
+  margin-top: 6px;
 }

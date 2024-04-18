@@ -23,7 +23,6 @@ import { useRouter } from "next/navigation";
 
 import Link from "next/link";
 
-
 interface AdminCourseDeatilContainerProps {}
 
 const AdminCourseDeatilContainer: FC<
@@ -488,7 +487,6 @@ const AdminCourseDeatilContainer: FC<
                             // Simulate file input click
                             const fileInput = document.createElement("input");
                             fileInput.type = "file";
-                            fileInput.accept = ".xls";
                             fileInput.addEventListener("change", (event) => {
                               const selectedFile = (
                                 event.target as HTMLInputElement
