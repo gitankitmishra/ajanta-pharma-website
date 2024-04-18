@@ -48,24 +48,28 @@ const UploadButton: React.FC<UploadButtonProps> = ({
         id={id}
         type="file"
         ref={fileInputRef}
-        accept={
-          acceptedTypes ||
-          ".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-        }
+        // accept={
+        //   acceptedTypes ||
+        //   ".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        // }
         onChange={handleFileSelect}
         style={{ display: "none" }}
       />
-      <div
-        className={`dropdown-field-error-message ${
-          error.length !== 0 && "dropdown-field-error-display"
-        }`}
-      >
-        {error}
-      </div>
+      
       <button className={`upload-btn ${className}`} onClick={handleClick}>
         {upload}
       </button>
-      <span className="upload-btn-format-type-text">{formatText} </span>
+      {error.length > 0 ? (
+         <div
+         className={`upload-btn-error-message ${
+           error.length !== 0 && "upload-btn-error-display"
+         }`}
+       >
+         {error}
+       </div>
+      ):<span className="upload-btn-format-type-text">{formatText} </span>}
+     
+      {/* <span className="upload-btn-format-type-text">{formatText} </span> */}
     </div>
   );
 };

@@ -15,6 +15,10 @@ const DesignationStepSection: FC<DesignationStepSectionProps> = () => {
     ds_error,
   } = useContext(CourseContext) as CourseContextType;
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   return (
     <section className="designation-main-section">
       <div className="designation-main-div-section">

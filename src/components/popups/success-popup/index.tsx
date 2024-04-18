@@ -5,7 +5,7 @@ import UncoloredAjantaLogo from "@/public/images/uncoloured-logo.svg";
 import SuccessPng from "@/components/icons/successIcon.svg";
 
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 interface SuccessPopupProps {
   open: boolean;
@@ -15,6 +15,8 @@ interface SuccessPopupProps {
 
 const SuccessPopup: FC<SuccessPopupProps> = ({ open, onClose, text }) => {
   const router = useRouter();
+  const routerPath = usePathname();
+
   useEffect(() => {
     let timer: NodeJS.Timeout;
 
@@ -22,7 +24,12 @@ const SuccessPopup: FC<SuccessPopupProps> = ({ open, onClose, text }) => {
       // Set a timer to close the popup after 2 seconds
       timer = setTimeout(() => {
         onClose();
-        router.push("/admin/admin-notification");
+        if (routerPath === "/admin/admin-course-detail") {
+          // Change the navigation path to dashboard if the current path is /admin/admin-course-detail
+          router.push("/admin/admin-courses");
+        } else {
+          router.push("/admin/admin-notification");
+        }
       }, 2000);
     }
 
@@ -31,18 +38,21 @@ const SuccessPopup: FC<SuccessPopupProps> = ({ open, onClose, text }) => {
   }, [open, onClose, router]);
 
   return (
-    <div className={`success-popup-main-container ${open ? "open" : ""}`}>
-      <div className="success-popup-logo">
-        <Image src={UncoloredAjantaLogo} alt="" width={220} height={64} />
+    <>
+      {/* <div className="success-popup-overlay"></div> */}
+      <div className={`success-popup-main-container ${open ? "open" : ""}`}>
+        <div className="success-popup-logo">
+          <Image src={UncoloredAjantaLogo} alt="" width={220} height={64} />
+        </div>
+        <div className="success-popup-success-icon">
+          <Image src={SuccessPng} width={572} height={60} alt="Success Image" />
+        </div>
+        <div className="success-popup-texts">
+          <p className="success-popup-text">{text}</p>
+          <p className="success-popup-second-text">Thank You!</p>
+        </div>
       </div>
-      <div className="success-popup-success-icon">
-        <Image src={SuccessPng} width={572} height={60} alt="Success Image" />
-      </div>
-      <div className="success-popup-texts">
-        <p className="success-popup-text">{text}</p>
-        <p className="success-popup-second-text">Thank You!</p>
-      </div>
-    </div>
+    </>
   );
 };
 
