@@ -487,7 +487,6 @@ const AdminCourseDeatilContainer: FC<
                             // Simulate file input click
                             const fileInput = document.createElement("input");
                             fileInput.type = "file";
-                            fileInput.accept = ".xls";
                             fileInput.addEventListener("change", (event) => {
                               const selectedFile = (
                                 event.target as HTMLInputElement
