@@ -22,24 +22,21 @@ const DashboardProfileSection: FC<DashboardProfileSectionProps> = () => {
         </p>
       </div>
       <div className="dashboard-profile-cards">
-        <Link href={"/admin/admin-courses"}>
-          <StatusCard
-            title={"Total Courses"}
-            count={getCountdata.course}
-            imageUrl={assessment}
-            width={32}
-            height={32}
-          />
-        </Link>
-        <Link href={"/admin/admin-course-category"}>
-          <StatusCard
-            title={"Total Categories"}
-            count={getCountdata.category}
-            imageUrl={StatusCardGraduationCapIcon}
-            width={32}
-            height={32}
-          />
-        </Link>
+        <StatusCard
+          title={"Total Courses"}
+          count={getCountdata.course}
+          imageUrl={assessment}
+          width={32}
+          height={32}
+        />
+
+        <StatusCard
+          title={"Total Categories"}
+          count={getCountdata.category}
+          imageUrl={StatusCardGraduationCapIcon}
+          width={32}
+          height={32}
+        />
       </div>
       <div className="dashboard-profile-add-text">
         <p className="dashboard-profile-added-course-text">
