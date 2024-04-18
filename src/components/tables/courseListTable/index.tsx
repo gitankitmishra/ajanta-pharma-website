@@ -175,14 +175,20 @@ const AdminCourseListTable: FC = () => {
                 <td className="admin-course-list-table-data admin-course-list-table-data-name-and-code">
                   {new Date(
                     course.course_basic.course_start_date
-                  ).toLocaleDateString()}
+                  ).toLocaleDateString("en-GB", {
+                    day: "numeric",
+                    month: "numeric",
+                    year: "numeric",
+                  })}
                 </td>
+
                 <td className="admin-course-list-table-data">
                   <p
-                    className={`admin-course-status-span ${course.course_basic?.course_status === "inactive"
-                      ? "status-inactive"
-                      : "status-active"
-                      }`}
+                    className={`admin-course-status-span ${
+                      course.course_basic?.course_status === "inactive"
+                        ? "status-inactive"
+                        : "status-active"
+                    }`}
                   >
                     {course.course_basic?.course_status === "inactive"
                       ? "Inactive"

@@ -306,26 +306,33 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
   //date conversion
   let uploadDate = "";
   let uploadDateTimestamp;
+
   if (course_basic.course_upload_date instanceof Date) {
     uploadDateTimestamp = course_basic.course_upload_date.getTime() / 1000;
 
-    if (uploadDateTimestamp !== undefined) {
+    if (!isNaN(uploadDateTimestamp)) {
       const uploadDateObj = new Date(uploadDateTimestamp * 1000);
-
-      if (!isNaN(uploadDateObj.getTime())) {
-        uploadDate = uploadDateObj.toLocaleDateString("en-US", {
-          month: "2-digit",
-          day: "2-digit",
-          year: "2-digit",
-        });
-      } else {
-        console.log("Invalid upload date");
-      }
+      uploadDate = uploadDateObj.toLocaleDateString("en-GB", {
+        day: "numeric",
+        month: "numeric",
+        year: "numeric",
+      });
     } else {
-      console.log("Upload date not available");
+      console.log("Invalid upload date");
+    }
+  } else if (course_basic.course_upload_date) {
+    const uploadDateObj = new Date(course_basic.course_upload_date);
+    if (!isNaN(uploadDateObj.getTime())) {
+      uploadDate = uploadDateObj.toLocaleDateString("en-GB", {
+        day: "numeric",
+        month: "numeric",
+        year: "numeric",
+      });
+    } else {
+      console.log("Invalid upload date");
     }
   } else {
-    console.error("course_basic.course_upload_date is not a Date object");
+    console.log("Upload date not available");
   }
 
   const generateCourseCode = (
@@ -382,8 +389,9 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
       id = "01";
     }
 
-    const courseCode: string = `${categoryTable[course_basic.course_category]
-      }-${trainingTable[training]}-${month}${year}-${id}`;
+    const courseCode: string = `${
+      categoryTable[course_basic.course_category]
+    }-${trainingTable[training]}-${month}${year}-${id}`;
 
     console.log("testtt", courseCode);
 
@@ -1185,7 +1193,6 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
   const [check, setCheck] = useState<boolean>(false);
   useEffect(() => {
     console.log("Course status ", check);
-
   }, [check]);
   useEffect(() => {
     console.log("check module-------------", course_assessment);
@@ -1237,12 +1244,10 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
         if (response.code === 200) {
           const responseData = response;
           console.log("data", responseData);
-
         } else {
           console.error(
             "Length mismatch between data.code and course_module arrays"
           );
-
         }
       } else {
         const response = await fetchService({
@@ -1265,7 +1270,6 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
       }
     }
   };
-
 
   //Validation Check
 
@@ -1385,9 +1389,11 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
       setLoading(true);
       const response = await fetchService({
         method: "GET",
-        endpoint: `api/admin/dashboard/filter?category=${filterCategory || ""
-          }&status=${filterStatus || ""}&key=${filterCourse || ""
-          }&page=${pageNo}&pageSize=${pageSize}`,
+        endpoint: `api/admin/dashboard/filter?category=${
+          filterCategory || ""
+        }&status=${filterStatus || ""}&key=${
+          filterCourse || ""
+        }&page=${pageNo}&pageSize=${pageSize}`,
       });
 
       if (response.code === 200) {
@@ -1407,7 +1413,6 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     //   setCheck(false);
     // }
   }, [pageNo, pageSize, filterCategory, filterCourse, filterStatus, check]);
-
 
   // useEffect(() => {
   //   fetchData();
@@ -1436,16 +1441,16 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
           responseData.data.course_assessment
         )
           ? (responseData.data.course_assessment.filter(
-            (assessment: any) => assessment.assessment_category === "module"
-          ) as CourseAssessment[])
+              (assessment: any) => assessment.assessment_category === "module"
+            ) as CourseAssessment[])
           : [];
 
         const filteredCourseAssessment = Array.isArray(
           responseData.data.course_assessment_main
         )
           ? (responseData.data.course_assessment_main.filter(
-            (assessment: any) => assessment.assessment_category === "course"
-          ) as CourseAssessment[])
+              (assessment: any) => assessment.assessment_category === "course"
+            ) as CourseAssessment[])
           : [];
 
         setCourseAssessment(filteredModuleAssessment);
@@ -1513,14 +1518,12 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
   const updateCourse = async () => {
     console.log("api hit");
 
-
     try {
-
       const data = {
         course_basic: { ...course_basic },
         course_designation: { ...course_designation },
         course_assessment: [...course_assessment],
-        course_module: { ...course_module }
+        course_module: { ...course_module },
       };
 
       const response = await fetch(
@@ -1540,10 +1543,8 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
         setCheck(true);
         setTimeout(() => {
           setCheck(false);
-
         }, 2000);
         return { success: true, data: responseData }; // Send data in response
-
       } else {
         setCheck(false);
 
@@ -1553,8 +1554,6 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
       return { success: false, error: error.message }; // Send error in response
     }
   };
-
-
 
   // ***********************************************************************************************
 
