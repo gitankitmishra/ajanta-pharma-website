@@ -21,7 +21,7 @@ import { fileURLToPath } from "url";
 
 export type CourseContextType = {
   //date
-  uploadDate: string;
+  upload_Date: string[];
   // common
   course_basic_error: {
     [key: string]: string;
@@ -286,7 +286,6 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     course_objective: "",
     course_training: "",
     course_start_date: "",
-    course_upload_date: new Date(),
     course_end_date: "9999-12-09",
     course_status: "inactive",
   });
@@ -302,38 +301,33 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     course_start_date: "",
     course_end_date: "",
   });
+  const [upload_Date, setUploadDate] = useState<string[]>([]);
 
   //date conversion
-  let uploadDate = "";
-  let uploadDateTimestamp;
+  // let uploadDate = "";
 
-  if (course_basic.course_upload_date instanceof Date) {
-    uploadDateTimestamp = course_basic.course_upload_date.getTime() / 1000;
+  // if (upload_Date instanceof Date) {
+  //   // Check if course_upload_date is a Date object
+  //   const uploadDateObj = upload_Date;
 
-    if (!isNaN(uploadDateTimestamp)) {
-      const uploadDateObj = new Date(uploadDateTimestamp * 1000);
-      uploadDate = uploadDateObj.toLocaleDateString("en-GB", {
-        day: "numeric",
-        month: "numeric",
-        year: "numeric",
-      });
-    } else {
-      console.log("Invalid upload date");
-    }
-  } else if (course_basic.course_upload_date) {
-    const uploadDateObj = new Date(course_basic.course_upload_date);
-    if (!isNaN(uploadDateObj.getTime())) {
-      uploadDate = uploadDateObj.toLocaleDateString("en-GB", {
-        day: "numeric",
-        month: "numeric",
-        year: "numeric",
-      });
-    } else {
-      console.log("Invalid upload date");
-    }
-  } else {
-    console.log("Upload date not available");
-  }
+  //   // Check if the date object is valid
+  //   if (!isNaN(uploadDateObj.getTime())) {
+  //     // If uploadDateObj is a valid Date object
+  //     const formattedDate = uploadDateObj.toLocaleDateString("en-GB", {
+  //       day: "numeric",
+  //       month: "numeric",
+  //       year: "numeric",
+  //     });
+  //     uploadDate = formattedDate;
+  //     console.log("date", uploadDate);
+  //   } else {
+  //     // If uploadDateObj is not a valid Date object
+  //     console.log("Invalid upload date format:", upload_Date);
+  //   }
+  // } else {
+  //   // If course_upload_date is not a Date object
+  //   console.log("Upload date is not a Date object:", upload_Date);
+  // }
 
   const generateCourseCode = (
     training: string,
@@ -1397,26 +1391,26 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
       });
 
       if (response.code === 200) {
-        console.log("response", response.data.data.data);
-
-        setLoading(true);
-        setCourseData(response.data.data.data);
+        console.log("response data:", response.data.data.data);
+        const courseData = response.data.data.data;
+        const uploadDates = courseData.map(
+          (course: any) => course.course_basic?.course_upload_date
+        );
+        console.log("Upload Dates:", uploadDates);
+        setCourseData(courseData);
+        setUploadDate(uploadDates);
         setTotalPages(response.data.totalPages);
+        setLoading(false);
       } else {
         console.log("error");
       }
     };
-    fetchData();
-    // if (check === true) {
-    //   fetchData();
-    // } else {
-    //   setCheck(false);
-    // }
-  }, [pageNo, pageSize, filterCategory, filterCourse, filterStatus, check]);
 
-  // useEffect(() => {
-  //   fetchData();
-  // }, [pageNo, pageSize, filterCourse, filterCategory, filterStatus, course_basic]);
+    fetchData();
+  }, [pageNo, pageSize, filterCategory, filterCourse, filterStatus]);
+
+  console.log("date check ", upload_Date);
+
   //*/****************************************************************************************** */
 
   //GET COURSE AND EDIT COURSE
@@ -1600,7 +1594,7 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
   // ***********************************************************************************************
   const course_values = {
     //date
-    uploadDate,
+    upload_Date,
 
     //common
     searchTerm,

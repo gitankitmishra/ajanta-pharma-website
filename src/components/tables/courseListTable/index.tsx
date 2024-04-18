@@ -15,7 +15,7 @@ const AdminCourseListTable: FC = () => {
   const {
     handleFilterCategoryChange,
     handleFitlerStatusChange,
-    uploadDate,
+    upload_Date,
     filterCategory,
     filterStatus,
     filterCourse,
@@ -107,7 +107,7 @@ const AdminCourseListTable: FC = () => {
               </div>
             </th>
             <th className="admin-course-list-table-head">Upload Date</th>
-            <th className="admin-course-list-table-head">Publish Date</th>
+            <th className="admin-course-list-table-head">Published Date</th>
             <th className="admin-course-list-table-head head-dropdown-icon">
               Status{" "}
               <div className="admin-course-list-table-head-dropdown-main-div">
@@ -167,9 +167,9 @@ const AdminCourseListTable: FC = () => {
                 return dateB.getTime() - dateA.getTime();
               })
               .map((course: any, index: number) => {
-                const uploadDate = new Date(
-                  course.course_basic.course_upload_date?._seconds * 1000
-                ).toLocaleDateString();
+                // const uploadDate = new Date(
+                //   course.course_basic.course_upload_date?._seconds * 1000
+                // ).toLocaleDateString();
 
                 return (
                   <tr key={index}>
@@ -183,8 +183,15 @@ const AdminCourseListTable: FC = () => {
                       {course.course_basic?.course_category}
                     </td>
                     <td className="admin-course-list-table-data admin-course-list-table-data-name-and-code">
-                      {uploadDate}
+                      {new Date(
+                        course.course_basic.course_upload_date
+                      ).toLocaleDateString("en-GB", {
+                        day: "numeric",
+                        month: "numeric",
+                        year: "numeric",
+                      })}
                     </td>
+
                     <td className="admin-course-list-table-data admin-course-list-table-data-name-and-code">
                       {new Date(
                         course.course_basic.course_start_date

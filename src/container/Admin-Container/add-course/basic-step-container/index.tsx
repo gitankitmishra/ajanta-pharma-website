@@ -29,7 +29,6 @@ const BasicStepSection: FC<BasicStepSectionProps> = () => {
   useEffect(() => {
     handleChange("course_category", "");
     handleChange("course_training", "");
-    handleChange("course_code", "");
     handleChange("course_name", "");
     handleChange("course_objective", "");
     handleChange("course_start_date", "");
