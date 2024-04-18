@@ -206,7 +206,7 @@ const AdminCourseListTable: FC = () => {
                 );
               })
           ) : (
-            <tr style={{ height: "50px" }}>
+            <tr style={{ height: "100px" }}>
               <td colSpan={6}>
                 <span>
                   {`No courses found for     `}
