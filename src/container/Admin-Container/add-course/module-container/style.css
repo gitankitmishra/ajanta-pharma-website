@@ -102,14 +102,21 @@
 
 .module-input-view-btn {
   display: flex;
+  flex-direction: column;
   align-items: flex-end;
   width: 50%;
   height: 56px;
   margin-top: 20px;
 }
+.module-input-view-btn-subdiv{
+  display: flex;
+}
 .module-input-view-btn-cancel-icon-span {
   margin-bottom: 20px;
   cursor: pointer;
+}
+.module-file-upload-successfull-msg{
+
 }
 .module-input-view-btn-area {
   display: flex;
