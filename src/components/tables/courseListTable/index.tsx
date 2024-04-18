@@ -11,21 +11,9 @@ const AdminCourseListTable: FC = () => {
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isCategoryDropdownOpen, setIsCategoryDropdownOpen] = useState(false);
-  // useEffect(() => {
-  //   console.log("-----------------", filteredData);
-  // }, [searchTerm]);
 
-  // const { handleCourseCodeChange } = useContext(EditCourseContext);
-  const {
-    course_basic,
-    searchTerm,
-    handleFilterCategoryChange,
-    handleFitlerStatusChange,
-    filterCategory,
-    filterStatus,
-
-    filterCourse,
-  } = useContext(CourseContext) as CourseContextType;
+  const { handleFilterCategoryChange, handleFitlerStatusChange, uploadDate, filterCategory, filterStatus, filterCourse } =
+    useContext(CourseContext) as CourseContextType;
   if (!contextValue) {
     console.error(
       "Context Error: While calling from the CustomPagination Component"
@@ -161,6 +149,7 @@ const AdminCourseListTable: FC = () => {
           </tr>
         </thead>
         <tbody className="admin-course-list-tbody">
+
           {courseData
             ?.filter(
               (course: any) =>
@@ -218,6 +207,7 @@ const AdminCourseListTable: FC = () => {
                 </td>
               </tr>
             ))}
+
         </tbody>
       </table>
     </div>
