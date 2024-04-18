@@ -6,6 +6,5 @@ export type CourseBasic = {
   course_objective: string;
   course_start_date: string;
   course_end_date: string;
-  course_upload_date: Date;
   course_status: "active" | "inactive";
 };
