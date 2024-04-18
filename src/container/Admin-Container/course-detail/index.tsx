@@ -52,6 +52,7 @@ const AdminCourseDeatilContainer: FC<
     fileExtension,
     filesUploaded,
     fileSize,
+    ds_error,
   } = useContext(CourseContext) as CourseContextType;
   const allDivisions = [
     "CDC",
