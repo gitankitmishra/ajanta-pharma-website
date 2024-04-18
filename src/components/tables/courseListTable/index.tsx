@@ -192,15 +192,14 @@ const AdminCourseListTable: FC = () => {
                 </td>
                 <td className="admin-course-list-table-data">
                   <p
-                    className={`admin-course-status-span ${
-                      course.course_basic?.course_status === "active"
-                        ? "status-active"
-                        : "status-inactive"
-                    }`}
+                    className={`admin-course-status-span ${course.course_basic?.course_status === "inactive"
+                      ? "status-inactive"
+                      : "status-active"
+                      }`}
                   >
-                    {course.course_basic?.course_status === "active"
-                      ? "Active"
-                      : "Inactive"}
+                    {course.course_basic?.course_status === "inactive"
+                      ? "Inactive"
+                      : "Active"}
                   </p>
                 </td>
                 <td className="admin-course-list-table-data admin-course-eye-icon">
