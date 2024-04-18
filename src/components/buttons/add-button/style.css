@@ -9,10 +9,10 @@
   border-radius: 32px;
   border: 1px solid #fe8100;
   /* text styling */
-  color: #fe8100;
+  color: #fff;
   font-size: 20px;
   font-weight: 600;
   line-height: 28px;
-  background: transparent;
+  background: #fe8100;
   cursor: pointer;
 }
