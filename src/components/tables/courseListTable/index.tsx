@@ -150,61 +150,97 @@ const AdminCourseListTable: FC = () => {
         </thead>
         <tbody className="admin-course-list-tbody">
 
-          {courseData
-            ?.filter(
-              (course: any) =>
-                course.course_basic && course.course_basic.course_start_date
-            )
-            .sort((a: any, b: any) => {
-              const dateA = new Date(a.course_basic.course_start_date);
-              const dateB = new Date(b.course_basic.course_start_date);
-              return dateB.getTime() - dateA.getTime();
-            })
-            .map((course: any, index: number) => (
-              <tr key={index}>
-                <td className="admin-course-list-table-data admin-course-list-table-data-name-and-code">
-                  {course.course_basic?.course_code}
-                </td>
-                <td className="admin-course-list-table-data admin-course-list-table-data-name-and-code">
+          {courseData && courseData.length > 0 ? (
+            courseData
+              .filter(
+                (course: any) =>
+                  course.course_basic && course.course_basic.course_start_date
+              )
+              .sort((a: any, b: any) => {
+                const dateA = new Date(a.course_basic.course_start_date);
+                const dateB = new Date(b.course_basic.course_start_date);
+                return dateB.getTime() - dateA.getTime();
+              })
+              .map((course: any, index: number) => {
+                const uploadDate = new Date(
+                  course.course_basic.course_upload_date?._seconds * 1000
+                ).toLocaleDateString();
 
-                  {course.course_basic?.course_name}
-                </td>
-                <td className="admin-course-list-table-data">
-                  {course.course_basic?.course_category}
-                </td>
-                <td className="admin-course-list-table-data admin-course-list-table-data-name-and-code">
-                  {new Date(
-                    course.course_basic.course_upload_date?._seconds * 1000
-                  ).toLocaleDateString()}
-                </td>
-                <td className="admin-course-list-table-data admin-course-list-table-data-name-and-code">
-                  {new Date(
-                    course.course_basic.course_start_date
-                  ).toLocaleDateString()}
-                </td>
-                <td className="admin-course-list-table-data">
-                  <p
-                    className={`admin-course-status-span ${course.course_basic?.course_status === "active"
-                        ? "status-active"
-                        : "status-inactive"
-                      }`}
-                  >
-                    {course.course_basic?.course_status === "active"
-                      ? "Active"
-                      : "Inactive"}
-                  </p>
-                </td>
-                <td className="admin-course-list-table-data admin-course-eye-icon">
-                  <Link href={`/admin/admin-course-detail/`}>
-                    <ViewEyeIcon
-                      onClick={() =>
-                        getCourseData(course.course_basic.course_code)
-                      }
-                    />
-                  </Link>
-                </td>
-              </tr>
-            ))}
+                return (
+                  <tr key={index}>
+                    <td className="admin-course-list-table-data admin-course-list-table-data-name-and-code">
+                      {course.course_basic?.course_code} -{" "}
+                      {course.course_basic?.course_name}
+                    </td>
+                    <td className="admin-course-list-table-data">
+                      {course.course_basic?.course_category}
+                    </td>
+                    <td className="admin-course-list-table-data admin-course-list-table-data-name-and-code">
+                      {uploadDate}
+                    </td>
+                    <td className="admin-course-list-table-data admin-course-list-table-data-name-and-code">
+                      {new Date(
+                        course.course_basic.course_start_date
+                      ).toLocaleDateString()}
+                    </td>
+                    <td className="admin-course-list-table-data">
+                      <p
+                        className={`admin-course-status-span ${course.course_basic?.course_status === "inactive"
+                          ? "status-inactive"
+                          : "status-active"
+                          }`}
+                      >
+                        {course.course_basic?.course_status === "inactive"
+                          ? "Inactive"
+                          : "Active"}
+                      </p>
+                    </td>
+                    <td className="admin-course-list-table-data admin-course-eye-icon">
+                      <Link href={`/admin/admin-course-detail/`}>
+                        <ViewEyeIcon
+                          onClick={() =>
+                            getCourseData(course.course_basic.course_code)
+                          }
+                        />
+                      </Link>
+                    </td>
+                  </tr>
+                );
+              })
+          ) : (
+            <tr style={{ height: "100px" }}>
+              <td colSpan={6}>
+                <span>
+                  {`No courses found for     `}
+                  {filterCourse &&
+                    <span>
+                      <span style={{ color: 'blue', fontWeight: 'bold' }}>Course Type:</span>
+                      <span style={{ color: 'black' }}>{filterCourse}</span>
+                      {filterCategory && <span> </span>}
+                    </span>
+                  }
+                  {filterCategory &&
+                    <span>
+                      {filterCourse && <span>  / </span>}
+                      <span style={{ color: 'green', fontWeight: 'bold' }}>Course Category:</span>
+                      <span style={{ color: 'black' }}>{filterCategory}</span>
+                      {filterStatus && <span> </span>}
+                    </span>
+                  }
+                  {filterStatus &&
+                    <span>
+                      {(filterCourse || filterCategory) && <span> / </span>}
+                      <span style={{ color: 'red', fontWeight: 'bold' }}>Course Status:</span>
+                      <span style={{ color: 'black' }}>{filterStatus}</span>
+                    </span>
+                  }
+                </span>
+              </td>
+            </tr>
+
+          )
+
+          }
 
         </tbody>
       </table>
