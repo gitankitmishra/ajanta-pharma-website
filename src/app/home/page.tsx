@@ -1,4 +1,7 @@
 
+
+import AssignedCourseCard from "@/components/cards/assigned-course-card";
+import DashboardHeroSection from "@/container/Admin-Container/admin-dashboard-container/dasboard-hero-section";
 import HomeAssignedCoursesSection from "@/container/home-container/assigned-courses-section";
 import HomeContinueLearningSection from "@/container/home-container/continue-learning-section";
 import HomeHeroSection from "@/container/home-container/hero-section";
@@ -9,12 +12,14 @@ interface HomeProps {}
 
 const Home: FunctionComponent<HomeProps> = () => {
   return (
-    <section  className="home-section-main-container">
+    <main  className="home-section-main-container">
       <HomeHeroSection />
       <HomeProfileSection />
       <HomeContinueLearningSection/>
       <HomeAssignedCoursesSection/>
-    </section>
+      <AssignedCourseCard percentage={70}/>
+     
+    </main>
   );
 };
 

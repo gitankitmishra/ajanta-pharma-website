@@ -22,3 +22,20 @@
   line-height: 20px;
   letter-spacing: 0.014px;
 }
+.upload-btn-error-message {
+  color: red;
+  margin-top: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  visibility: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  transform: translateY(-10px);
+  transition: transform 0.1s linear;
+}
+.upload-btn-error-display {
+  visibility: visible;
+  transform: translateY(0);
+}

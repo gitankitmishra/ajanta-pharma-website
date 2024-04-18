@@ -10,6 +10,7 @@ interface UploadButtonProps {
   formatText?: string;
   id?: string;
   className?: string;
+  error?: string;
 }
 
 const UploadButton: React.FC<UploadButtonProps> = ({
@@ -20,6 +21,7 @@ const UploadButton: React.FC<UploadButtonProps> = ({
   uploadFile,
   id,
   className,
+  error = "",
 }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -46,17 +48,28 @@ const UploadButton: React.FC<UploadButtonProps> = ({
         id={id}
         type="file"
         ref={fileInputRef}
-        accept={
-          acceptedTypes ||
-          ".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-        }
+        // accept={
+        //   acceptedTypes ||
+        //   ".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        // }
         onChange={handleFileSelect}
         style={{ display: "none" }}
       />
+      
       <button className={`upload-btn ${className}`} onClick={handleClick}>
         {upload}
       </button>
-      <span className="upload-btn-format-type-text">{formatText} </span>
+      {error.length > 0 ? (
+         <div
+         className={`upload-btn-error-message ${
+           error.length !== 0 && "upload-btn-error-display"
+         }`}
+       >
+         {error}
+       </div>
+      ):<span className="upload-btn-format-type-text">{formatText} </span>}
+     
+      {/* <span className="upload-btn-format-type-text">{formatText} </span> */}
     </div>
   );
 };

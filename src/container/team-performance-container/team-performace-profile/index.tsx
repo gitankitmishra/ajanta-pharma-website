@@ -3,11 +3,13 @@ import "./style.css";
 import { ListIcon } from "@/components/icons/list-icon";
 import ManagerSearchField from "@/components/fields/manager-search-field";
 import { FilterIcon } from "@/components/icons/filter-icon";
+import Link from "next/link";
+import HeadWiseheadSpeedometer from "@/components/speedometer/head-wise-speedometer";
+import HeadquarterSpeedometer from "@/components/speedometer/headquarter-speedometer";
+import TotalEnrollmentSpeedometer from "@/components/speedometer/total-enrollment-speedometer";
 import PieChartCard from "@/components/cards/pieChart-card";
 import PerformersProgressbar from "@/components/progressbar/performers-progressbar";
 import CategoryProgressbar from "@/components/progressbar/category-progressbar";
-import SpeedometerChart from "@/components/speedometer";
-import Speedometer from "@/components/speedometer";
 
 interface TeamPerformanceProfileContainerProps {}
 
@@ -27,10 +29,12 @@ const TeamPerformanceProfileContainer: FunctionComponent<
           </p>
         </div>
         <div className="team-performance-profile-header-section-btn-part">
-          <button className="team-performance-profile-button">
-            <ListIcon />
-            Team Report
-          </button>
+          <Link href="/team-performance/team-report">
+            <button className="team-performance-profile-button">
+              <ListIcon />
+              Team Report
+            </button>
+          </Link>
         </div>
       </div>
       {/* ------------------------Search and Filter Section----------------------- */}
@@ -64,12 +68,17 @@ const TeamPerformanceProfileContainer: FunctionComponent<
       </div> */}
       {/* -------------------Progress bar section ----------------------- */}
       <div className="team-performance-profile-progressbar-section">
-        {/* <PerformersProgressbar />
-        <CategoryProgressbar/> */}
+        <PerformersProgressbar />
+        <CategoryProgressbar/>
       </div>
       {/* ------------------------ Speedometer Section------------------- */}
       <div className="team-performance-profile-speedometer-section">
-        <Speedometer/>
+        <HeadWiseheadSpeedometer initialValue={0.8} text={"Team Wise"} />
+        <HeadquarterSpeedometer initialValue={0.2} text={"Headquarter"} />
+        <TotalEnrollmentSpeedometer
+          initialValue={0.6}
+          text={"Total Enrollment"}
+        />
       </div>
     </section>
   );

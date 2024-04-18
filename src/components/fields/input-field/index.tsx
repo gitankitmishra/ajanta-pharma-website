@@ -10,6 +10,7 @@ interface InputFieldProps {
   isEditable?: boolean;
   disabled?: boolean;
   text?: string;
+  error?: string;
 }
 
 const InputField: FC<InputFieldProps> = ({
@@ -19,7 +20,8 @@ const InputField: FC<InputFieldProps> = ({
   id,
   isEditable,
   disabled,
-  text
+  error = "",
+  text,
 }) => {
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const newValue = event.target.value;
@@ -36,8 +38,14 @@ const InputField: FC<InputFieldProps> = ({
         placeholder=""
         readOnly={isEditable}
         disabled={disabled}
-        
       />
+      <div
+        className={`dropdown-field-error-message ${
+          error.length !== 0 && "dropdown-field-error-display"
+        }`}
+      >
+        {error}
+      </div>
     </div>
   );
 };

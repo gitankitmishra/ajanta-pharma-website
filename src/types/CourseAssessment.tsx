@@ -5,6 +5,6 @@ export type CourseAssessment = {
   assessment_name: string;
   assessment_category: "module" | "course" | "";
   assessment_position: "pre" | "post" | "";
-  assessment_type: "single" | "multiple" | "boolean" | "short" | "";
+  assessment_type: "single" | "multiple" | "boolean" | "short" | "N/A" | "";
   assessment_data: QuestionData[];
 };

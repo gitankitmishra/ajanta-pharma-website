@@ -15,6 +15,10 @@ const DesignationStepSection: FC<DesignationStepSectionProps> = () => {
     ds_error,
   } = useContext(CourseContext) as CourseContextType;
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   return (
     <section className="designation-main-section">
       <div className="designation-main-div-section">
@@ -23,10 +27,12 @@ const DesignationStepSection: FC<DesignationStepSectionProps> = () => {
             Select Divisions{" "}
             <span className="designation-span">
               *Only applicable for Medical & Marketing*
+              {/* error */}
+              <span style={{ color: "red", marginLeft: "8px" }}>
+                {ds_error}
+              </span>
             </span>
           </p>
-          {/* error */}
-          <div style={{ color: "red" }}>{ds_error}</div>
         </div>
         <div>
           {/* {course_basic.course_category === "Medical" ||
