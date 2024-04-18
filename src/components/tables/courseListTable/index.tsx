@@ -46,7 +46,8 @@ const AdminCourseListTable: FC = () => {
       <table className="admin-course-list-table">
         <thead className="admin-course-list-thead">
           <tr>
-            <th className="admin-course-list-table-head">Course Code & Name</th>
+            <th className="admin-course-list-table-head">Course Code</th>
+            <th className="admin-course-list-table-head">Course Name</th>
 
             <th className="admin-course-list-table-head head-dropdown-icon">
               Category{"   "}
@@ -174,7 +175,10 @@ const AdminCourseListTable: FC = () => {
             .map((course: any, index: number) => (
               <tr key={index}>
                 <td className="admin-course-list-table-data admin-course-list-table-data-name-and-code">
-                  {course.course_basic?.course_code} -{" "}
+                  {course.course_basic?.course_code} 
+                </td>
+                <td className="admin-course-list-table-data admin-course-list-table-data-name-and-code">
+                 
                   {course.course_basic?.course_name}
                 </td>
                 <td className="admin-course-list-table-data">

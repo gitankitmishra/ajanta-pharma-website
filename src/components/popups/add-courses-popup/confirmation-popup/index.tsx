@@ -29,7 +29,7 @@ const ConfirmationPopup: FC<ConfirmationPopupProps> = ({ open, onClose }) => {
           <Image src={InfoIcon} width={572} height={60} alt="confirm Image" />
         </div>
         <div className="confirm-popup-texts-section">
-          <p className="confirm-popup-text">Are you sure you want to leave?</p>
+          <p className="confirm-popup-text">Are you sure you want to submit?</p>
           <p className="confirm-popup-subtitle-text">
             Going back will erase unsaved changes. Proceed anyway?
           </p>
