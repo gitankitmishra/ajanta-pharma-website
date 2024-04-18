@@ -44,7 +44,7 @@ const ContinueLearningCard: FunctionComponent<ContinueLearningCardProps> = ({
         <span className="continue-learning-card-course-percentage-text">{course_percentage}%</span>
       </div>
       <div className="continue-learning-card-course-progressbar-div">
-        <div className="progress" style={{ width: `${percentage}%` }}></div>
+        <div className="continue-learning-progress" style={{ width: `${percentage}%` }}></div>
       </div>
       <div className="continue-learning-card-course-progress-count-div">
         <span className="continue-learning-card-course-progress-count-text">{progress_count}/{total_progress_count}</span>
