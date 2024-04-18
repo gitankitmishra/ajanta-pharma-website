@@ -18,9 +18,10 @@
 
 }
 .dashboard-profile-cards {
+  width: 102%;
   display: grid;
   grid-template-columns: repeat(2,1fr);
-  gap: 24px;
+  gap: 8px;
 }
 .dashboard-profile-added-course-text {
   color: #1c1d1d;

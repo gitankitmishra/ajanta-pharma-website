@@ -11,7 +11,7 @@ export const PlusIcon = () => {
         <path
           id="Vector"
           d="M12 20V12M12 12V4M12 12H20M12 12H4"
-          stroke="#FE8100"
+          stroke="#fff"
           stroke-width="1.5"
           stroke-linecap="round"
           stroke-linejoin="round"

@@ -18,11 +18,11 @@
 .admin-course-list-table-head {
   background-color: #fe81001a;
   color: #1c1d1d;
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 600;
   line-height: 26px;
-  padding: 16px;
-  padding-left: 50px;
+  /* padding: 16px; */
+  padding-left: 20px;
   text-align: left;
   border-right: 1px solid #e3e3e3;
   height: 58px;
@@ -42,13 +42,13 @@
 }
 .admin-course-list-table-data {
   color: #1c1d1d;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 400;
   line-height: 18px;
   border-bottom: 1px solid #e3e3e3;
-  padding: 8px;
+  /* padding: 8px; */
   height: 50px;
-  padding-left: 50px;
+  padding-left: 20px;
   border-right: 1px solid #e3e3e3;
   text-align: left;
 }
@@ -65,6 +65,7 @@
   width: 72px;
   height: 30px;
   display: flex;
+  font-weight: 600;
   align-items: center;
   justify-content: center;
 }
@@ -74,6 +75,7 @@
   width: 84px;
   height: 30px;
   border-radius: 4px;
+  font-weight: 600;
   background: rgba(255, 0, 0, 0.1);
   display: flex;
   align-items: center;
@@ -86,8 +88,8 @@
 .admin-course-list-table-head-dropdown-icon-span,
 .admin-course-list-table-category-dropdown-icon-span {
   cursor: pointer;
+  margin-right: 15px;
 }
-
 .admin-course-list-table-head-dropdown-main-div,
 .admin-course-list-table-category-dropdown-main-div {
   position: relative;
@@ -96,10 +98,10 @@
 
 .admin-course-list-table-head-dropdown-content {
   position: absolute;
-  padding: 0 24px;
+  padding: 0 14px;
   min-width: 7.5vw;
   left: -8vw;
-  top: 58px;
+  top: 48px;
   overflow: auto;
   border-radius: 0px 0px 16px 16px;
   border: 1px solid rgba(254, 129, 0, 0.5);
@@ -109,10 +111,10 @@
 }
 .admin-course-list-table-category-dropdown-content {
   position: absolute;
-  padding: 0 24px;
+  padding: 0 14px;
   min-width: 11.3vw;
   left: -12vw;
-  top: 58px;
+  top: 48px;
   overflow: auto;
   border-radius: 0px 0px 16px 16px;
   border: 1px solid rgba(254, 129, 0, 0.5);
@@ -138,26 +140,26 @@
 
 .admin-course-list-table-head-dropdown-content
   .admin-course-list-table-head-dropdown-content-span {
-  padding: 12px 0;
+  padding: 6px 0;
   text-decoration: none;
   display: block;
   color: #787878;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 400;
   line-height: 24px;
-  border-bottom: 2px solid #92929233;
+  border-bottom: 1px solid #92929233;
   cursor: pointer;
 }
 .admin-course-list-table-category-dropdown-content
   .admin-course-list-table-category-dropdown-content-span {
-  padding: 12px 0;
+  padding: 6px 0;
   text-decoration: none;
   display: block;
   color: #787878;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 400;
   line-height: 24px;
-  border-bottom: 2px solid #92929233;
+  border-bottom: 1px solid #92929233;
   cursor: pointer;
 }
 .admin-course-list-table-head-dropdown-content

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { FC, useContext, useEffect, useState } from "react";
+import React, { FC, useContext, useEffect } from "react";
 
 import "./style.css";
 
@@ -26,6 +26,13 @@ const BasicStepSection: FC<BasicStepSectionProps> = () => {
 
   //handle change to update the error if the field is updated
 
+  useEffect(() => {
+    handleChange("course_category", "");
+    handleChange("course_training", "");
+    handleChange("course_name", "");
+    handleChange("course_objective", "");
+    handleChange("course_start_date", "");
+  }, []);
   return (
     <section className="basic-main-section">
       <div className="basic-div-section1">

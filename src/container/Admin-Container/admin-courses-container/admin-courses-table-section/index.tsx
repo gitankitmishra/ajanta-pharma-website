@@ -6,59 +6,61 @@ import AddButton from "@/components/buttons/add-button";
 import "./style.css";
 import { DropdownIcon } from "@/components/icons/dropdown-icon";
 import { CourseContext, CourseContextType } from "@/context/course_context";
+import { ArrowDown } from "@/components/icons/arrow-down";
 
-interface AdminCoursesTableSectionProps { }
+interface AdminCoursesTableSectionProps {}
 
 const AdminCoursesTableSection: FC<AdminCoursesTableSectionProps> = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [isCourseDropDown, setIsCourseDropDown] = useState(false);
 
-
-  const { handleFilterCourseChange, filterCourse } = useContext(CourseContext) as CourseContextType;
+  const { handleFilterCourseChange, filterCourse } = useContext(
+    CourseContext
+  ) as CourseContextType;
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
     // Add logic here to fetch data for the new page, etc.
   };
   const toggleCourseDropDown = () => {
-    setIsCourseDropDown(!isCourseDropDown)
-  }
+    setIsCourseDropDown(!isCourseDropDown);
+  };
   return (
     <section>
       <div className="admin-courses-text-btn-section">
         <p className="admin-courses-course-list-text">Course List</p>
-        <p>{filterCourse}</p>
-        <div className="admin-course-list-table-category-dropdown-main-div">
-          <span
-            onClick={toggleCourseDropDown}
-            className="admin-course-list-table-category-dropdown-icon-span"
-          >
-            <DropdownIcon />
-          </span>
-          {isCourseDropDown && (
-            <div className="admin-course-list-table-category-dropdown-content">
-              <span
-                className="admin-course-list-table-category-dropdown-content-span"
-                onClick={() => {
-                  handleFilterCourseChange("course");
-                  toggleCourseDropDown();
-                }}
-              >
-                Course
-              </span>
-              <span
-                className="admin-course-list-table-category-dropdown-content-span"
-                onClick={() => {
-                  handleFilterCourseChange("course_draft");
-                  toggleCourseDropDown();
-                }}
 
-              >
-                Course Draft
-              </span>
-            </div>
-          )}
-        </div>
         <div className="admin-courses-add-course-btn">
+          <div className="admin-courses-dropdown">
+            <p className="admin-courses-filter-dropdown">{filterCourse}</p>
+            <span
+              onClick={toggleCourseDropDown}
+              className="admin-courses-dropdown-icon-span"
+            >
+              <ArrowDown />
+            </span>
+            {isCourseDropDown && (
+              <div className="admin-courses-dropdown-content">
+                <span
+                  className="admin-courses-dropdown-content-span"
+                  onClick={() => {
+                    handleFilterCourseChange("course");
+                    toggleCourseDropDown();
+                  }}
+                >
+                  Course
+                </span>
+                <span
+                  className="admin-courses-dropdown-content-span"
+                  onClick={() => {
+                    handleFilterCourseChange("course_draft");
+                    toggleCourseDropDown();
+                  }}
+                >
+                  Course Draft
+                </span>
+              </div>
+            )}
+          </div>
           <Link href="/admin/admin-add-course">
             <AddButton text="Add Course" />
           </Link>

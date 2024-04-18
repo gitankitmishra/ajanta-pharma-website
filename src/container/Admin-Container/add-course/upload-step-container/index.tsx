@@ -2,7 +2,6 @@
 import { FC, useState, useContext, useEffect } from "react";
 
 import "./style.css";
-import SuccessPopup from "@/components/popups/success-popup";
 
 import { CourseContext, CourseContextType } from "@/context/course_context";
 import Checkbox from "@/components/checkbox";
@@ -22,15 +21,7 @@ const UploadStepSection: FC<UploadStepSectionProps> = () => {
     writeIntoFile,
   } = useContext(CourseContext) as CourseContextType;
 
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-
-  const handleUploadClick = () => {
-    setIsModalOpen(true);
-  };
-
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-  };
+  
 
   const extractFileExtension = (filename: any) => {
     const parts = filename?.split("/");
@@ -331,7 +322,7 @@ const UploadStepSection: FC<UploadStepSectionProps> = () => {
         </div>
       </div>
 
-      <SuccessPopup open={isModalOpen} onClose={handleCloseModal} text="" />
+      {/* <SuccessPopup open={isModalOpen} onClose={handleCloseModal} text="" /> */}
     </section>
   );
 };

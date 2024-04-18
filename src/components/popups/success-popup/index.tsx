@@ -39,7 +39,7 @@ const SuccessPopup: FC<SuccessPopupProps> = ({ open, onClose, text }) => {
 
   return (
     <>
-      {/* <div className="success-popup-overlay"></div> */}
+      <div className="success-popup-overlay"></div>
       <div className={`success-popup-main-container ${open ? "open" : ""}`}>
         <div className="success-popup-logo">
           <Image src={UncoloredAjantaLogo} alt="" width={220} height={64} />

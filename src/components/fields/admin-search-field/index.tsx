@@ -14,8 +14,8 @@ const AdminSearchFieldSection: FC<AdminSearchFieldSectionProps> = ({}) => {
     handleSearchData,
     filteredSuggestions,
     handleSuggestionClick,
+    selectedSuggestionIndex,
   } = useContext(CourseContext) as CourseContextType;
-
 
   return (
     <section className="admin-search-field-main-section">
@@ -37,7 +37,7 @@ const AdminSearchFieldSection: FC<AdminSearchFieldSectionProps> = ({}) => {
                   "admin-suggestion " +
                   (index === selectedSuggestionIndex ? "admin-selected" : "")
                 }
-                onClick={() => handleSuggestionClick(suggestion)}
+                onClick={() => handleSuggestionClick(index, suggestion)}
               >
                 {suggestion}
               </div>

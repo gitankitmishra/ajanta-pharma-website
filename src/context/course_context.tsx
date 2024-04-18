@@ -20,6 +20,8 @@ import { CourseDetails } from "@/types/AdminCourseInfo";
 import { fileURLToPath } from "url";
 
 export type CourseContextType = {
+  //date
+  upload_Date: string[];
   // common
   course_basic_error: {
     [key: string]: string;
@@ -31,7 +33,8 @@ export type CourseContextType = {
   suggestions: string[];
   filteredSuggestions: string[];
   handleSearchData: (event: ChangeEvent<HTMLInputElement>) => void;
-  handleSuggestionClick: (suggesstion: string) => void;
+  selectedSuggestionIndex: number;
+  handleSuggestionClick: (index: number, suggesstion: string) => void;
 
   // basic
   course_basic: CourseBasic;
@@ -104,7 +107,7 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
 }) => {
   const router = useRouter();
 
-  const [active_step, setActiveStep] = useState<number>(0);
+  const [active_step, setActiveStep] = useState<number>(3);
 
   const handleStepOneDone = async () => {
     let errors = {};
@@ -213,7 +216,8 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [filteredSuggestions, setFilteredSuggestions] = useState<string[]>([]);
-
+  const [selectedSuggestionIndex, setSelectedSuggestionIndex] =
+    useState<number>(-1);
   useEffect(() => {
     if (searchTerm.trim() !== "") {
       fetchSuggestions();
@@ -263,9 +267,10 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     setSearchTerm(value);
   };
 
-  const handleSuggestionClick = (suggestion: string) => {
+  const handleSuggestionClick = (index: number, suggestion: string) => {
     setSearchTerm(suggestion);
     setFilteredSuggestions([]);
+    setSelectedSuggestionIndex(index);
     const courseCode = suggestion.split(" - ")[0];
     console.log("check the course code", courseCode);
     getCourseData(courseCode);
@@ -281,7 +286,6 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     course_objective: "",
     course_training: "",
     course_start_date: "",
-    course_upload_date: new Date(),
     course_end_date: "9999-12-09",
     course_status: "inactive",
   });
@@ -297,6 +301,33 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     course_start_date: "",
     course_end_date: "",
   });
+  const [upload_Date, setUploadDate] = useState<string[]>([]);
+
+  //date conversion
+  // let uploadDate = "";
+
+  // if (upload_Date instanceof Date) {
+  //   // Check if course_upload_date is a Date object
+  //   const uploadDateObj = upload_Date;
+
+  //   // Check if the date object is valid
+  //   if (!isNaN(uploadDateObj.getTime())) {
+  //     // If uploadDateObj is a valid Date object
+  //     const formattedDate = uploadDateObj.toLocaleDateString("en-GB", {
+  //       day: "numeric",
+  //       month: "numeric",
+  //       year: "numeric",
+  //     });
+  //     uploadDate = formattedDate;
+  //     console.log("date", uploadDate);
+  //   } else {
+  //     // If uploadDateObj is not a valid Date object
+  //     console.log("Invalid upload date format:", upload_Date);
+  //   }
+  // } else {
+  //   // If course_upload_date is not a Date object
+  //   console.log("Upload date is not a Date object:", upload_Date);
+  // }
 
   const generateCourseCode = (
     training: string,
@@ -1153,6 +1184,10 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     }
   };
 
+  const [check, setCheck] = useState<boolean>(false);
+  useEffect(() => {
+    console.log("Course status ", check);
+  }, [check]);
   useEffect(() => {
     console.log("check module-------------", course_assessment);
   }, [course_assessment]);
@@ -1343,8 +1378,6 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     setComponentPage(value);
   };
 
-  const [check, setCheck] = useState(false);
-
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
@@ -1358,21 +1391,26 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
       });
 
       if (response.code === 200) {
-        console.log("response", response.data.data.data);
-
-        setCourseData(response.data.data.data);
+        console.log("response data:", response.data.data.data);
+        const courseData = response.data.data.data;
+        const uploadDates = courseData.map(
+          (course: any) => course.course_basic?.course_upload_date
+        );
+        console.log("Upload Dates:", uploadDates);
+        setCourseData(courseData);
+        setUploadDate(uploadDates);
         setTotalPages(response.data.totalPages);
         setLoading(false);
       } else {
         console.log("error");
       }
     };
-    fetchData();
-  }, [pageNo, pageSize, filterCategory, filterCourse, filterStatus, check]);
 
-  // useEffect(() => {
-  //   fetchData();
-  // }, [pageNo, pageSize, filterCourse, filterCategory, filterStatus, course_basic]);
+    fetchData();
+  }, [pageNo, pageSize, filterCategory, filterCourse, filterStatus]);
+
+  console.log("date check ", upload_Date);
+
   //*/****************************************************************************************** */
 
   //GET COURSE AND EDIT COURSE
@@ -1474,42 +1512,42 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
   const updateCourse = async () => {
     console.log("api hit");
 
-    if (
-      course_assessment_main[0]?.assessment_name &&
-      course_assessment_main[0]?.assessment_type !== ""
-    ) {
-      try {
-        const data = {
-          course_designation: { ...course_designation },
-          course_basic: { ...course_basic },
-          course_assessment: [...course_assessment],
-        };
+    try {
+      const data = {
+        course_basic: { ...course_basic },
+        course_designation: { ...course_designation },
+        course_assessment: [...course_assessment],
+        course_module: { ...course_module },
+      };
 
-        const response = await fetch(
-          `${process.env.SERVER_URL}api/admin/dashboard/editCourse/${course_basic.course_code}`,
-          {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(data),
-          }
-        );
-
-        const responseData = await response.json(); // Parse response JSON
-
-        if (response.ok) {
-          return { success: true, data: responseData }; // Send data in response
-        } else {
-          return { success: false, error: responseData }; // Send error in response
+      const response = await fetch(
+        `http://localhost:8000/api/admin/dashboard/editCourse/${course_basic.course_code}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
         }
-      } catch (error: any) {
-        return { success: false, error: error.message }; // Send error in response
+      );
+
+      const responseData = await response.json(); // Parse response JSON
+
+      if (response.ok) {
+        setCheck(true);
+        setTimeout(() => {
+          setCheck(false);
+        }, 2000);
+        return { success: true, data: responseData }; // Send data in response
+      } else {
+        setCheck(false);
+
+        return { success: false, error: responseData }; // Send error in response
       }
+    } catch (error: any) {
+      return { success: false, error: error.message }; // Send error in response
     }
   };
-
-  useEffect(() => {}, []);
 
   // ***********************************************************************************************
 
@@ -1555,10 +1593,14 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
 
   // ***********************************************************************************************
   const course_values = {
+    //date
+    upload_Date,
+
     //common
     searchTerm,
     filteredSuggestions,
     suggestions,
+    selectedSuggestionIndex,
     handleSearchData,
     handleSuggestionClick,
 
