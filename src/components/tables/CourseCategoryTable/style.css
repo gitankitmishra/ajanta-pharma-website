@@ -48,6 +48,7 @@
 }
 
 .course-category-head-dropdown-icon {
+  margin-right: 15px;
   display: flex;
   align-items: center;
   justify-content: space-between;

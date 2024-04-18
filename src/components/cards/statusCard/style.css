@@ -1,7 +1,7 @@
 
 .status-card-main-container {
   display: flex;
-  width: 93%;
+  width: 90%;
   height: 80px;
   background-image: url("../../../public/images/bg-hover-img.svg");
   background-size: cover;
