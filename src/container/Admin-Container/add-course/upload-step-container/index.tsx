@@ -21,8 +21,6 @@ const UploadStepSection: FC<UploadStepSectionProps> = () => {
     writeIntoFile,
   } = useContext(CourseContext) as CourseContextType;
 
-  
-
   const extractFileExtension = (filename: any) => {
     const parts = filename?.split("/");
     if (parts.length > 1) {
@@ -207,8 +205,8 @@ const UploadStepSection: FC<UploadStepSectionProps> = () => {
       </div>
 
       {/* Check if assessment_name is not empty */}
-      {(course_assessment_main[0].assessment_name !== "" ||
-        course_assessment_main[1].assessment_name !== "") && (
+      {(course_assessment_main[0]?.assessment_name !== "" ||
+        course_assessment_main[1]?.assessment_name !== "") && (
         <div className="upload-section2-course-assessment">
           <p className="upload-course-assessment-text">Course Assessment </p>
         </div>
