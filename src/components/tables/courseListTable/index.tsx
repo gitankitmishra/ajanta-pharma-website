@@ -174,7 +174,9 @@ const AdminCourseListTable: FC = () => {
                 return (
                   <tr key={index}>
                     <td className="admin-course-list-table-data admin-course-list-table-data-name-and-code">
-                      {course.course_basic?.course_code} -{" "}
+                      {course.course_basic?.course_code}
+                    </td>
+                    <td className="admin-course-list-table-data admin-course-list-table-data-name-and-code">
                       {course.course_basic?.course_name}
                     </td>
                     <td className="admin-course-list-table-data">
