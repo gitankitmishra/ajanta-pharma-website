@@ -50,6 +50,7 @@ const DesignationStepSection: FC<DesignationStepSectionProps> = () => {
                   course_basic.course_category !== "Marketing"
                 }
               />
+              
               <Checkbox
                 id="division"
                 text={"Nuventa"}
