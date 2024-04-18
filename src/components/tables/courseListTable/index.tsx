@@ -11,21 +11,9 @@ const AdminCourseListTable: FC = () => {
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isCategoryDropdownOpen, setIsCategoryDropdownOpen] = useState(false);
-  // useEffect(() => {
-  //   console.log("-----------------", filteredData);
-  // }, [searchTerm]);
 
-  // const { handleCourseCodeChange } = useContext(EditCourseContext);
-  const {
-    course_basic,
-    searchTerm,
-    handleFilterCategoryChange,
-    handleFitlerStatusChange,
-    filterCategory,
-    filterStatus,
-
-    filterCourse,
-  } = useContext(CourseContext) as CourseContextType;
+  const { handleFilterCategoryChange, handleFitlerStatusChange, uploadDate } =
+    useContext(CourseContext) as CourseContextType;
   if (!contextValue) {
     console.error(
       "Context Error: While calling from the CustomPagination Component"
@@ -168,7 +156,7 @@ const AdminCourseListTable: FC = () => {
             .sort((a: any, b: any) => {
               const dateA = new Date(a.course_basic.course_start_date);
               const dateB = new Date(b.course_basic.course_start_date);
-              console.log("upload date", course_basic.course_upload_date);
+
               return dateB.getTime() - dateA.getTime();
             })
             .map((course: any, index: number) => (
@@ -181,10 +169,9 @@ const AdminCourseListTable: FC = () => {
                   {course.course_basic?.course_category}
                 </td>
                 <td className="admin-course-list-table-data admin-course-list-table-data-name-and-code">
-                  {new Date(
-                    course.course_basic.course_upload_date?._seconds * 1000
-                  ).toLocaleDateString()}
+                  {uploadDate}
                 </td>
+
                 <td className="admin-course-list-table-data admin-course-list-table-data-name-and-code">
                   {new Date(
                     course.course_basic.course_start_date

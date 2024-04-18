@@ -14,9 +14,9 @@ const DasboardSearchField: FC<DasboardSearchFieldProps> = () => {
     handleSearchData,
     filteredSuggestions,
     handleSuggestionClick,
+    selectedSuggestionIndex,
   } = useContext(CourseContext) as CourseContextType;
-  const [selectedSuggestionIndex, setSelectedSuggestionIndex] =
-    useState<number>(-1);
+
   return (
     <section className="dashboard-search-field-main-section">
       <div className="dashboard-search-container">
@@ -39,7 +39,7 @@ const DasboardSearchField: FC<DasboardSearchFieldProps> = () => {
                     ? "dashboard-selected"
                     : "")
                 }
-                onClick={() => handleSuggestionClick(suggestion)}
+                onClick={() => handleSuggestionClick(index, suggestion)}
               >
                 {suggestion}
               </div>
