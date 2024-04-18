@@ -299,7 +299,7 @@ const AdminCourseDeatilContainer: FC<
                       if (isEditable) {
                         const fileInput = document.createElement("input");
                         fileInput.type = "file";
-                        fileInput.accept = ".mp4,.ppt,.pdf";
+
                         fileInput.addEventListener("change", (event) => {
                           const selectedFile = (
                             event.target as HTMLInputElement
