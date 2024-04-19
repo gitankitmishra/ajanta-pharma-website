@@ -14,7 +14,7 @@ import { DownloadIcon } from "@/components/icons/download-icon";
 import { WhiteCancelIcon } from "@/components/icons/whiteCancelIcon";
 import { OrangePlusIcon } from "@/components/icons/orange-plus-icon";
 
-interface ModuleQuizStepSectionProps {}
+interface ModuleQuizStepSectionProps { }
 
 const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
   const {
