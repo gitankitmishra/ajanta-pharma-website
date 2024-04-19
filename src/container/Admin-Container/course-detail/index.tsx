@@ -22,6 +22,7 @@ import SuccessPopup from "@/components/popups/success-popup";
 import { useRouter } from "next/navigation";
 
 import Link from "next/link";
+import { OrangePlusIcon } from "@/components/icons/orange-plus-icon";
 
 interface AdminCourseDeatilContainerProps {}
 
@@ -52,6 +53,7 @@ const AdminCourseDeatilContainer: FC<
     fileExtension,
     filesUploaded,
     fileSize,
+    ds_error,
   } = useContext(CourseContext) as CourseContextType;
   const allDivisions = [
     "CDC",
@@ -524,7 +526,7 @@ const AdminCourseDeatilContainer: FC<
               }
             }}
           >
-            {isClicked ? <PlusIcon /> : <GreyPlusIcon />}
+            {isClicked ? <OrangePlusIcon /> : <GreyPlusIcon />}
             <span
               className={`admin-course-detail-add-module-span-text ${
                 isClicked ? "clicked" : "unClicked"
@@ -830,8 +832,8 @@ const AdminCourseDeatilContainer: FC<
               id="status"
               value={course_basic.course_status}
               onValueChange={(value) => handleChange("course_status", value)}
-              options={["active", "inactive"]}
-              valueLabel={["active", "inactive"]}
+              options={["Active", "Inactive"]}
+              valueLabel={["Active", "Inactive"]}
               isEditable={!isEditable}
             />
           </div>

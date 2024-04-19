@@ -12,8 +12,14 @@ const AdminCourseListTable: FC = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isCategoryDropdownOpen, setIsCategoryDropdownOpen] = useState(false);
 
-  const { handleFilterCategoryChange, handleFitlerStatusChange, uploadDate, filterCategory, filterStatus, filterCourse } =
-    useContext(CourseContext) as CourseContextType;
+  const {
+    handleFilterCategoryChange,
+    handleFitlerStatusChange,
+    upload_Date,
+    filterCategory,
+    filterStatus,
+    filterCourse,
+  } = useContext(CourseContext) as CourseContextType;
   if (!contextValue) {
     console.error(
       "Context Error: While calling from the CustomPagination Component"
@@ -101,7 +107,7 @@ const AdminCourseListTable: FC = () => {
               </div>
             </th>
             <th className="admin-course-list-table-head">Upload Date</th>
-            <th className="admin-course-list-table-head">Publish Date</th>
+            <th className="admin-course-list-table-head">Published Date</th>
             <th className="admin-course-list-table-head head-dropdown-icon">
               Status{" "}
               <div className="admin-course-list-table-head-dropdown-main-div">
@@ -149,7 +155,6 @@ const AdminCourseListTable: FC = () => {
           </tr>
         </thead>
         <tbody className="admin-course-list-tbody">
-
           {courseData && courseData.length > 0 ? (
             courseData
               .filter(
@@ -162,33 +167,47 @@ const AdminCourseListTable: FC = () => {
                 return dateB.getTime() - dateA.getTime();
               })
               .map((course: any, index: number) => {
-                const uploadDate = new Date(
-                  course.course_basic.course_upload_date?._seconds * 1000
-                ).toLocaleDateString();
+                // const uploadDate = new Date(
+                //   course.course_basic.course_upload_date?._seconds * 1000
+                // ).toLocaleDateString();
 
                 return (
                   <tr key={index}>
                     <td className="admin-course-list-table-data admin-course-list-table-data-name-and-code">
-                      {course.course_basic?.course_code} -{" "}
+                      {course.course_basic?.course_code}
+                    </td>
+                    <td className="admin-course-list-table-data admin-course-list-table-data-name-and-code">
                       {course.course_basic?.course_name}
                     </td>
                     <td className="admin-course-list-table-data">
                       {course.course_basic?.course_category}
                     </td>
                     <td className="admin-course-list-table-data admin-course-list-table-data-name-and-code">
-                      {uploadDate}
+                      {new Date(
+                        course.course_basic.course_upload_date
+                      ).toLocaleDateString("en-GB", {
+                        day: "numeric",
+                        month: "numeric",
+                        year: "numeric",
+                      })}
                     </td>
+
                     <td className="admin-course-list-table-data admin-course-list-table-data-name-and-code">
                       {new Date(
                         course.course_basic.course_start_date
-                      ).toLocaleDateString()}
+                      ).toLocaleDateString("en-GB", {
+                        day: "numeric",
+                        month: "numeric",
+                        year: "numeric",
+                      })}
                     </td>
                     <td className="admin-course-list-table-data">
                       <p
-                        className={`admin-course-status-span ${course.course_basic?.course_status === "inactive"
-                          ? "status-inactive"
-                          : "status-active"
-                          }`}
+                        className={`admin-course-status-span ${
+                          course.course_basic?.course_status === "inactive"
+                            ? "status-inactive"
+                            : "status-active"
+                        }`}
                       >
                         {course.course_basic?.course_status === "inactive"
                           ? "Inactive"
@@ -212,36 +231,38 @@ const AdminCourseListTable: FC = () => {
               <td colSpan={6}>
                 <span>
                   {`No courses found for     `}
-                  {filterCourse &&
+                  {filterCourse && (
                     <span>
-                      <span style={{ color: 'blue', fontWeight: 'bold' }}>Course Type:</span>
-                      <span style={{ color: 'black' }}>{filterCourse}</span>
+                      <span style={{ color: "blue", fontWeight: "bold" }}>
+                        Course Type:
+                      </span>
+                      <span style={{ color: "black" }}>{filterCourse}</span>
                       {filterCategory && <span> </span>}
                     </span>
-                  }
-                  {filterCategory &&
+                  )}
+                  {filterCategory && (
                     <span>
-                      {filterCourse && <span>  / </span>}
-                      <span style={{ color: 'green', fontWeight: 'bold' }}>Course Category:</span>
-                      <span style={{ color: 'black' }}>{filterCategory}</span>
+                      {filterCourse && <span> / </span>}
+                      <span style={{ color: "green", fontWeight: "bold" }}>
+                        Course Category:
+                      </span>
+                      <span style={{ color: "black" }}>{filterCategory}</span>
                       {filterStatus && <span> </span>}
                     </span>
-                  }
-                  {filterStatus &&
+                  )}
+                  {filterStatus && (
                     <span>
                       {(filterCourse || filterCategory) && <span> / </span>}
-                      <span style={{ color: 'red', fontWeight: 'bold' }}>Course Status:</span>
-                      <span style={{ color: 'black' }}>{filterStatus}</span>
+                      <span style={{ color: "red", fontWeight: "bold" }}>
+                        Course Status:
+                      </span>
+                      <span style={{ color: "black" }}>{filterStatus}</span>
                     </span>
-                  }
+                  )}
                 </span>
               </td>
             </tr>
-
-          )
-
-          }
-
+          )}
         </tbody>
       </table>
     </div>

@@ -12,6 +12,7 @@ import EyeIcon from "@/components/icons/eye-icon";
 import { CancelIcon } from "@/components/icons/cancel-icon";
 import { DownloadIcon } from "@/components/icons/download-icon";
 import { WhiteCancelIcon } from "@/components/icons/whiteCancelIcon";
+import { OrangePlusIcon } from "@/components/icons/orange-plus-icon";
 
 interface ModuleQuizStepSectionProps { }
 
@@ -130,36 +131,48 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
                 />
               </div>
               <div className="module-input-view-btn">
-                <div className="module-input-view-btn-area">
-                  {filesUploaded[index] ? (
-                    <span
-                      className="module-input-view-btn-cancel-icon-span"
-                      onClick={() => {
-                        handleCancelIcon(index);
-                      }}
-                    >
-                      <CancelIcon />
-                    </span>
-                  ) : (
-                    <span>
-                      <WhiteCancelIcon />
-                    </span>
-                  )}
+                <div className="module-input-view-btn-subdiv">
+                  <div className="module-input-view-btn-area">
+                    {filesUploaded[index] ? (
+                      <span
+                        className="module-input-view-btn-cancel-icon-span"
+                        onClick={() => {
+                          handleCancelIcon(index);
+                        }}
+                      >
+                        <CancelIcon />
+                      </span>
+                    ) : (
+                      <span>
+                        <WhiteCancelIcon />
+                      </span>
+                    )}
 
-                  <span
-                    className="module-view-btn-xls-text"
-                    onClick={() => openLink(index)}
-                  >
-                    MP4
-                  </span>
+                    <span
+                      className="module-view-btn-xls-text"
+                      onClick={() => openLink(index)}
+                    >
+                      MP4
+                    </span>
+                  </div>
+
+                  <div className="module-input-view-text-area">
+                    <span className="module-input-view-btn-file-name-text">
+                      {fileExtension[index]}
+                    </span>
+                    <span className="module-input-view-btn-file-size-text">
+                      {(fileSize[index] / (1024 * 1024)).toFixed(2)}MB
+                    </span>
+                  </div>
                 </div>
-                <div className="module-input-view-text-area">
-                  <span className="module-input-view-btn-file-name-text">
-                    {fileExtension[index]}
-                  </span>
-                  <span className="module-input-view-btn-file-size-text">
-                    {(fileSize[index] / (1024 * 1024)).toFixed(2)}MB
-                  </span>
+                <div>
+                  {filesUploaded[index] ? (
+                    <div className="module-file-upload-successfull-msg">
+                      Course file uploaded successfull!
+                    </div>
+                  ) : (
+                    <></>
+                  )}
                 </div>
               </div>
             </div>
@@ -228,39 +241,50 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
                 />
               </div>
               <div className="module-input-view-btn">
-                <div className="module-input-view-btn-area">
-                  {course_assessment[index]?.assessment_data.length > 0 ? (
-                    <span
-                      className="module-input-view-btn-cancel-icon-span"
-                      onClick={() => {
-                        handleCancelIconAssessment(null, index);
-                      }}
-                    >
-                      <CancelIcon />
-                    </span>
-                  ) : (
-                    <>
-                      <span>
-                        <WhiteCancelIcon />
+                <div className="module-input-view-btn-subdiv">
+                  <div className="module-input-view-btn-area">
+                    {course_assessment[index]?.assessment_data.length > 0 ? (
+                      <span
+                        className="module-input-view-btn-cancel-icon-span"
+                        onClick={() => {
+                          handleCancelIconAssessment(null, index);
+                        }}
+                      >
+                        <CancelIcon />
                       </span>
-                    </>
-                  )}
+                    ) : (
+                      <>
+                        <span>
+                          <WhiteCancelIcon />
+                        </span>
+                      </>
+                    )}
 
-                  <span
-                    id="module"
-                    className="module-view-btn-xls-text"
-                    onClick={() => writeIntoFile(null, index)}
-                  >
-                    XLS
-                  </span>
+                    <span
+                      id="module"
+                      className="module-view-btn-xls-text"
+                      onClick={() => writeIntoFile(null, index)}
+                    >
+                      XLS
+                    </span>
+                  </div>
+                  <div className="module-input-view-text-area">
+                    <span className="module-input-view-btn-file-name-text">
+                      excel.xls
+                    </span>
+                    <span className="module-input-view-btn-file-size-text">
+                      2.2MB
+                    </span>
+                  </div>
                 </div>
-                <div className="module-input-view-text-area">
-                  <span className="module-input-view-btn-file-name-text">
-                    excel.xls
-                  </span>
-                  <span className="module-input-view-btn-file-size-text">
-                    2.2MB
-                  </span>
+                <div>
+                  {course_assessment[index]?.assessment_data.length > 0 ? (
+                    <div className="module-file-upload-successfull-msg">
+                      Assessment file uploaded successfull!
+                    </div>
+                  ) : (
+                    <></>
+                  )}
                 </div>
               </div>
               {/* {visible && (
@@ -284,7 +308,7 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
 
         <button className="module-sec-add-module-btn" onClick={handleAddModule}>
           <span className="module-sec-add-module-btn-add-module">
-            <PlusIcon /> Add Module
+            <OrangePlusIcon /> Add Module
           </span>
         </button>
       </div>
@@ -351,41 +375,53 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
               />
             </div>
             <div className="module-input-view-btn">
-              <div className="module-input-view-btn-area">
-                {course_assessment_main[0]?.assessment_data.length > 0 ? (
-                  <span
-                    className="module-input-view-btn-cancel-icon-span"
-                    onClick={() => {
-                      handleCancelIconAssessment("pre", 0);
-                    }}
-                  >
-                    <CancelIcon />
-                  </span>
-                ) : (
-                  <>
-                    {" "}
-                    <span>
-                      <WhiteCancelIcon />
+              <div className="module-input-view-btn-subdiv">
+                <div className="module-input-view-btn-area">
+                  {course_assessment_main[0]?.assessment_data.length > 0 ? (
+                    <span
+                      className="module-input-view-btn-cancel-icon-span"
+                      onClick={() => {
+                        handleCancelIconAssessment("pre", 0);
+                      }}
+                    >
+                      <CancelIcon />
                     </span>
-                  </>
-                )}
+                  ) : (
+                    <>
+                      {" "}
+                      <span>
+                        <WhiteCancelIcon />
+                      </span>
+                    </>
+                  )}
 
-                <span
-                  className="module-view-btn-xls-text"
-                  onClick={() => writeIntoFile("pre", 0)}
-                >
-                  XLS
-                </span>
+                  <span
+                    className="module-view-btn-xls-text"
+                    onClick={() => writeIntoFile("pre", 0)}
+                  >
+                    XLS
+                  </span>
+                </div>
+                <div className="module-input-view-text-area">
+                  <span className="module-input-view-btn-file-name-text">
+                    excel.xls
+                  </span>
+                  <span className="module-input-view-btn-file-size-text">
+                    2.2MB
+                  </span>
+                </div>
               </div>
-              <div className="module-input-view-text-area">
-                <span className="module-input-view-btn-file-name-text">
-                  excel.xls
-                </span>
-                <span className="module-input-view-btn-file-size-text">
-                  2.2MB
-                </span>
+              <div>
+                {course_assessment_main[0]?.assessment_data.length > 0 ? (
+                  <div className="module-file-upload-successfull-msg">
+                    Assessment file uploaded successfull!
+                  </div>
+                ) : (
+                  <></>
+                )}
               </div>
             </div>
+
             {/* {course_assessment_main[0]?.assessment_data.length !== 0 ? (
               <div className="module-eye-icon">
                 <EyeIcon files={[]} />
@@ -455,39 +491,50 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
               />
             </div>
             <div className="module-input-view-btn">
-              <div className="module-input-view-btn-area">
-                {course_assessment_main[1]?.assessment_data.length > 0 ? (
-                  <span
-                    className="module-input-view-btn-cancel-icon-span"
-                    onClick={() => {
-                      handleCancelIconAssessment("post", 1);
-                    }}
-                  >
-                    <CancelIcon />
-                  </span>
-                ) : (
-                  <>
-                    {" "}
-                    <span>
-                      <WhiteCancelIcon />
+              <div className="module-input-view-btn-subdiv">
+                <div className="module-input-view-btn-area">
+                  {course_assessment_main[1]?.assessment_data.length > 0 ? (
+                    <span
+                      className="module-input-view-btn-cancel-icon-span"
+                      onClick={() => {
+                        handleCancelIconAssessment("post", 1);
+                      }}
+                    >
+                      <CancelIcon />
                     </span>
-                  </>
-                )}
+                  ) : (
+                    <>
+                      {" "}
+                      <span>
+                        <WhiteCancelIcon />
+                      </span>
+                    </>
+                  )}
 
-                <span
-                  className="module-view-btn-xls-text"
-                  onClick={() => writeIntoFile("post", 1)}
-                >
-                  XLS
-                </span>
+                  <span
+                    className="module-view-btn-xls-text"
+                    onClick={() => writeIntoFile("post", 1)}
+                  >
+                    XLS
+                  </span>
+                </div>
+                <div className="module-input-view-text-area">
+                  <span className="module-input-view-btn-file-name-text">
+                    excel.xls
+                  </span>
+                  <span className="module-input-view-btn-file-size-text">
+                    2.2MB
+                  </span>
+                </div>
               </div>
-              <div className="module-input-view-text-area">
-                <span className="module-input-view-btn-file-name-text">
-                  excel.xls
-                </span>
-                <span className="module-input-view-btn-file-size-text">
-                  2.2MB
-                </span>
+              <div>
+                {course_assessment_main[1]?.assessment_data.length > 0 ? (
+                  <div className="module-file-upload-successfull-msg">
+                    Assessment file uploaded successfull!
+                  </div>
+                ) : (
+                  <></>
+                )}
               </div>
             </div>
           </div>

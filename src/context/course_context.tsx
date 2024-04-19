@@ -21,7 +21,7 @@ import { fileURLToPath } from "url";
 
 export type CourseContextType = {
   //date
-  uploadDate: string;
+  upload_Date: string[];
   // common
   course_basic_error: {
     [key: string]: string;
@@ -286,7 +286,6 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     course_objective: "",
     course_training: "",
     course_start_date: "",
-    course_upload_date: new Date(),
     course_end_date: "9999-12-09",
     course_status: "inactive",
   });
@@ -302,34 +301,10 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     course_start_date: "",
     course_end_date: "",
   });
-
-  //date conversion
-  let uploadDate = "";
-  let uploadDateTimestamp;
-  if (course_basic.course_upload_date instanceof Date) {
-    uploadDateTimestamp = course_basic.course_upload_date.getTime() / 1000;
-
-    if (uploadDateTimestamp !== undefined) {
-      const uploadDateObj = new Date(uploadDateTimestamp * 1000);
-
-      if (!isNaN(uploadDateObj.getTime())) {
-        uploadDate = uploadDateObj.toLocaleDateString("en-US", {
-          month: "2-digit",
-          day: "2-digit",
-          year: "2-digit",
-        });
-      } else {
-        console.log("Invalid upload date");
-      }
-    } else {
-      console.log("Upload date not available");
-    }
-  } else {
-    console.error("course_basic.course_upload_date is not a Date object");
-  }
+  const [upload_Date, setUploadDate] = useState<string[]>([]);
 
   const generateCourseCode = (
-    training: string,
+    training: string | undefined,
     prevID: number | null = null
   ): string => {
     const categoryTable: { [key: string]: string } = {
@@ -372,6 +347,7 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
       "Medical Representative": "MER",
       Managers: "MGR",
     };
+
     const currentDate: Date = new Date();
     const month: string = String(currentDate.getMonth() + 1).padStart(2, "0");
     const year: string = String(currentDate.getFullYear()).slice(-2);
@@ -382,8 +358,14 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
       id = "01";
     }
 
-    const courseCode: string = `${categoryTable[course_basic.course_category]
-      }-${trainingTable[training]}-${month}${year}-${id}`;
+    const categoryCode = course_basic.course_category
+      ? categoryTable[course_basic.course_category]
+      : "";
+    const trainingCode = training ? trainingTable[training] : "";
+    const courseCode: string =
+      categoryCode && trainingCode
+        ? `${categoryCode}-${trainingCode}-${month}${year}-${id}`
+        : "";
 
     console.log("testtt", courseCode);
 
@@ -760,7 +742,7 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     updatedFilesUploaded[index] = false;
     setFilesUploaded(updatedFilesUploaded);
     setFileSize([0]);
-    setFileExtension(["NA"]);
+    setFileExtension(["File"]);
   };
   const handleCancelIconAssessment = (id: string | null, index: number) => {
     if (id == "pre" || id == "post") {
@@ -1056,7 +1038,7 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
   // const [fileName, setFileName] = useState<string>("Not selected");
   // const [fileSize, setFileSize] = useState<number>(0);
   const [fileSize, setFileSize] = useState<number[]>([0]);
-  const [fileExtension, setFileExtension] = useState<string[]>(["NA"]);
+  const [fileExtension, setFileExtension] = useState<string[]>(["File"]);
 
   const handleFileSelect = (selectedFile: File, index: number) => {
     console.log("Selecting files for module...");
@@ -1179,7 +1161,6 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
   const [check, setCheck] = useState<boolean>(false);
   useEffect(() => {
     console.log("Course status ", check);
-
   }, [check]);
   useEffect(() => {
     console.log("check module-------------", course_assessment);
@@ -1231,12 +1212,10 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
         if (response.code === 200) {
           const responseData = response;
           console.log("data", responseData);
-
         } else {
           console.error(
             "Length mismatch between data.code and course_module arrays"
           );
-
         }
       } else {
         const response = await fetchService({
@@ -1259,7 +1238,6 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
       }
     }
   };
-
 
   //Validation Check
 
@@ -1381,33 +1359,34 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
       setLoading(true);
       const response = await fetchService({
         method: "GET",
-        endpoint: `api/admin/dashboard/filter?category=${filterCategory || ""
-          }&status=${filterStatus || ""}&key=${filterCourse || ""
-          }&page=${pageNo}&pageSize=${pageSize}`,
+        endpoint: `api/admin/dashboard/filter?category=${
+          filterCategory || ""
+        }&status=${filterStatus || ""}&key=${
+          filterCourse || ""
+        }&page=${pageNo}&pageSize=${pageSize}`,
       });
 
       if (response.code === 200) {
-        console.log("response", response.data.data.data);
-
-        setLoading(true);
-        setCourseData(response.data.data.data);
+        console.log("response data:", response.data.data.data);
+        const courseData = response.data.data.data;
+        const uploadDates = courseData.map(
+          (course: any) => course.course_basic?.course_upload_date
+        );
+        console.log("Upload Dates:", uploadDates);
+        setCourseData(courseData);
+        setUploadDate(uploadDates);
         setTotalPages(response.data.totalPages);
+        setLoading(false);
       } else {
         console.log("error");
       }
     };
+
     fetchData();
-    // if (check === true) {
-    //   fetchData();
-    // } else {
-    //   setCheck(false);
-    // }
-  }, [pageNo, pageSize, filterCategory, filterCourse, filterStatus, check]);
+  }, [pageNo, pageSize, filterCategory, filterCourse, filterStatus]);
 
+  console.log("date check ", upload_Date);
 
-  // useEffect(() => {
-  //   fetchData();
-  // }, [pageNo, pageSize, filterCourse, filterCategory, filterStatus, course_basic]);
   //*/****************************************************************************************** */
 
   //GET COURSE AND EDIT COURSE
@@ -1432,16 +1411,16 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
           responseData.data.course_assessment
         )
           ? (responseData.data.course_assessment.filter(
-            (assessment: any) => assessment.assessment_category === "module"
-          ) as CourseAssessment[])
+              (assessment: any) => assessment.assessment_category === "module"
+            ) as CourseAssessment[])
           : [];
 
         const filteredCourseAssessment = Array.isArray(
           responseData.data.course_assessment_main
         )
           ? (responseData.data.course_assessment_main.filter(
-            (assessment: any) => assessment.assessment_category === "course"
-          ) as CourseAssessment[])
+              (assessment: any) => assessment.assessment_category === "course"
+            ) as CourseAssessment[])
           : [];
 
         setCourseAssessment(filteredModuleAssessment);
@@ -1509,14 +1488,12 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
   const updateCourse = async () => {
     console.log("api hit");
 
-
     try {
-
       const data = {
         course_basic: { ...course_basic },
         course_designation: { ...course_designation },
         course_assessment: [...course_assessment],
-        course_module: { ...course_module }
+        course_module: { ...course_module },
       };
 
       const response = await fetch(
@@ -1536,10 +1513,8 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
         setCheck(true);
         setTimeout(() => {
           setCheck(false);
-
         }, 2000);
         return { success: true, data: responseData }; // Send data in response
-
       } else {
         setCheck(false);
 
@@ -1549,8 +1524,6 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
       return { success: false, error: error.message }; // Send error in response
     }
   };
-
-
 
   // ***********************************************************************************************
 
@@ -1597,7 +1570,7 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
   // ***********************************************************************************************
   const course_values = {
     //date
-    uploadDate,
+    upload_Date,
 
     //common
     searchTerm,

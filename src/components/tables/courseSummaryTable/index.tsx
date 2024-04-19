@@ -4,7 +4,8 @@ import { DropdownIcon } from "@/components/icons/dropdown-icon";
 
 interface CourseSummaryTableProps {}
 interface CourseSummary {
-  courseCodeAndName: string;
+  courseCode: string;
+  courseName: string;
   completionDate: string;
   category: string;
   status: string;
@@ -14,42 +15,48 @@ interface CourseSummary {
 const CourseSummaryTable: FunctionComponent<CourseSummaryTableProps> = () => {
   const courseSummaries: CourseSummary[] = [
     {
-      courseCodeAndName: "PD2 - Critical Thinking",
+      courseCode: "PD2 ",
+      courseName:"Critical Thinking",
       completionDate: "2023-01-15",
       category: "Competency Based Skills",
       status: "Pending",
       score: null,
     },
     {
-      courseCodeAndName: "PD2 - Critical Thinking",
+      courseCode: "PD2 ",
+      courseName:"Critical Thinking",
       completionDate: "2023-01-15",
       category: "Competency Based Skills",
       status: "Pending",
       score: null,
     },
     {
-      courseCodeAndName: "BO5 - Innovative Thinking",
+      courseCode: "BO5 ",
+      courseName:"Innovative Thinking",
       completionDate: "2023-03-20",
       category: "Competency Based Skills",
       status: "In Progress",
       score: null,
     },
     {
-      courseCodeAndName: "BO5 - Innovative Thinking",
+      courseCode: "BO5 ",
+      courseName:"Innovative Thinking",
       completionDate: "2023-03-20",
       category: "Competency Based Skills",
       status: "In Progress",
       score: null,
     },
     {
-      courseCodeAndName: "MA2 - Brand Detailing",
+      courseCode: "MA2 ",
+      courseName:"Brand Detailing",
       completionDate: "2023-03-20",
       category: "Brand Detailing",
       status: "Completed",
       score: 92,
     },
     {
-      courseCodeAndName: "MA2 - Brand Detailing",
+      courseCode: "MA2 ",
+      courseName:"Brand Detailing",
       completionDate: "2023-03-20",
       category: "Brand Detailing",
       status: "Completed",
@@ -61,7 +68,8 @@ const CourseSummaryTable: FunctionComponent<CourseSummaryTableProps> = () => {
       <table className="course-summary-table">
         <thead className="course-summary-thead">
           <tr>
-            <th className="course-summary-table-head">Course Code & Name</th>
+            <th className="course-summary-table-head">Course Code</th>
+            <th className="course-summary-table-head">Course Name</th>
             <th className="course-summary-table-head">Completion Date</th>
             <th className="course-summary-table-head">Category</th>
             <th className="course-summary-table-head ">Status</th>
@@ -73,7 +81,10 @@ const CourseSummaryTable: FunctionComponent<CourseSummaryTableProps> = () => {
           {courseSummaries.map((course, index) => (
             <tr key={index}>
               <td className="course-summary-table-data">
-                {course.courseCodeAndName}
+                {course.courseCode}
+              </td>
+              <td className="course-summary-table-data">
+                {course.courseName}
               </td>
               <td className="course-summary-table-data course-summary-table-numbers-data">
                 {course.completionDate}
