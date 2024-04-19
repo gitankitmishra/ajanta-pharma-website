@@ -1,11 +1,11 @@
-.assigned-course-card-main-section {
+.assigned-completed-course-card-main-section {
   width: 342px;
   height: 198px;
   border-radius: 12px;
   border: 1px solid rgba(254, 129, 0, 0.5);
   box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.16);
 }
-.assigned-course-card-top-part {
+.assigned-completed-course-card-top-part {
   background-image: url("../../../public/images/orange-texture.svg");
   background-repeat: no-repeat;
   height: 57px;
@@ -17,58 +17,64 @@
   font-weight: 600;
   padding: 16px 0 0 20px;
 }
-.assigned-courses-card-title-span{
-  margin: 16px 0 0 20px;
-}
-.assigned-course-card-bottom-part {
+.assigned-completed-course-card-bottom-part {
   padding: 0 20px 27px 20px;
   display: flex;
   flex-direction: column;
   gap: 20px;
 }
-.assigned-course-card-bottom-part1 {
+.assigned-completed-course-card-bottom-part1 {
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
-.assigned-course-card-bold-text {
+.assigned-completed-course-card-bold-text {
   font-size: 18px;
   font-weight: 600;
   line-height: 21.13px;
 }
-.assigned-course-card-duration-text {
+.assigned-completed-course-card-duration-text {
   font-family: Open Sans;
   font-size: 16px;
   font-weight: 400;
   line-height: 21.79px;
   color: #1c1d1d80;
 }
-.assigned-course-card-bottom-circle-label-span {
+.assigned-completed-course-card-bottom-circle-label-span {
   font-family: Raleway;
   font-size: 18px;
   font-weight: 400;
   line-height: 21.13px;
   color: #1c1d1d80;
 }
-.assigned-course-card-bottom-course-progressbar-div {
+.assigned-completed-course-card-bottom-circle-green-label-span {
+  font-family: Raleway;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 21.13px;
+  color: #008000;
+}
+.assigned-completed-course-card-bottom-course-description-div {
   width: 100%;
-  height: 10px;
-  border-radius: 12px;
-  background: rgba(254, 129, 0, 0.1);
-  overflow: hidden;
+  height: 20px;
+  
 }
 
-.assigned-course-card-bottom-progress {
+.assigned-completed-course-card-bottom-description {
   height: 100%;
-  background-color: #fe8100;
+  width: 100%;
+  white-space: nowrap; 
+  text-overflow: ellipsis;
+  overflow: hidden;
+  color: #1c1d1d80;
 }
-.assigned-course-card-bottom-div {
+.assigned-completed-course-card-bottom-div {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
 }
-.assigned-course-card-bottom-circle-div {
+.assigned-completed-course-card-bottom-circle-div {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -76,5 +82,16 @@
   height: 34px;
   border-radius: 50%;
   background-color: #fe81001a;
+  cursor: pointer;
+}
+
+.assigned-completed-course-card-bottom-circle-green-div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background-color: #63b43c1a;
   cursor: pointer;
 }

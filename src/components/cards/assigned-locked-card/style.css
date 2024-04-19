@@ -1,0 +1,130 @@
+.assigned-locked-course-card-main-section {
+  width: 342px;
+  height: 198px;
+  border-radius: 12px;
+  border: 1px solid rgba(254, 129, 0, 0.5);
+  box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.16);
+  position: relative;
+}
+.assigned-locked-course-card-overlay {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  opacity: 1;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  transition: opacity 0.3s ease;
+  border-radius: 12px;
+  /* text style */
+
+  color: #fff;
+}
+.assigned-locked-course-card-overlay-big-text-span {
+  font-size: 24px;
+  font-weight: 800;
+  line-height: 28.18px;
+  letter-spacing: 0.02em;
+}
+.assigned-locked-course-card-overlay-small-text-span {
+  font-family: Open Sans;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 27.24px;
+  letter-spacing: 0.02em;
+}
+.assigned-locked-course-card-top-part {
+  background-image: url("../../../public/images/orange-texture.svg");
+  background-repeat: no-repeat;
+  height: 57px;
+  width: 100%;
+  /* text style */
+  color: #fff;
+  text-shadow: 0px 3px 3px rgba(255, 255, 255, 0.16);
+  font-size: 18px;
+  font-weight: 600;
+  padding: 16px 0 0 20px;
+}
+.assigned-locked-course-card-bottom-part {
+  padding: 0 20px 27px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.assigned-locked-course-card-bottom-part1 {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.assigned-locked-course-card-bold-text {
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 21.13px;
+}
+.assigned-locked-course-card-duration-text {
+  font-family: Open Sans;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 21.79px;
+  color: #1c1d1d80;
+}
+.assigned-locked-course-card-bottom-circle-label-span {
+  font-family: Raleway;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 21.13px;
+  color: #1c1d1d80;
+}
+.assigned-locked-course-card-bottom-circle-green-label-span {
+  font-family: Raleway;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 21.13px;
+  color: #008000;
+}
+.assigned-locked-course-card-bottom-course-description-div {
+  width: 100%;
+  height: 20px;
+}
+
+.assigned-locked-course-card-bottom-description {
+  height: 100%;
+  width: 100%;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  color: #1c1d1d80;
+}
+.assigned-locked-course-card-bottom-div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.assigned-locked-course-card-bottom-circle-div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background-color: #fe81001a;
+  cursor: pointer;
+}
+
+.assigned-locked-course-card-bottom-circle-green-div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background-color: #63b43c1a;
+  cursor: pointer;
+}

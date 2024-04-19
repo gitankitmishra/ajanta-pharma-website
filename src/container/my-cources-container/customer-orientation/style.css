@@ -1,0 +1,18 @@
+.customer-orientation-profile-main-section {
+  margin: 0 40px;
+}
+.customer-orientation-profile-heading-section {
+  margin-top: 20px;
+}
+.customer-orientation-profile-heading-text {
+  color: #1c1d1d;
+  font-size: 24px;
+  font-weight: 500;
+  text-decoration: underline;
+}
+.customer-orientation-profile-cards-section {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  margin-top: 32px;
+  row-gap: 24px;
+}
