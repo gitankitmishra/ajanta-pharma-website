@@ -1,0 +1,18 @@
+.communication-profile-main-section {
+  margin: 0 40px;
+}
+.communication-profile-heading-section {
+  margin-top: 20px;
+}
+.communication-profile-heading-text {
+  color: #1c1d1d;
+  font-size: 24px;
+  font-weight: 500;
+  text-decoration: underline;
+}
+.communication-profile-cards-section {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  margin-top: 32px;
+  row-gap: 24px;
+}
