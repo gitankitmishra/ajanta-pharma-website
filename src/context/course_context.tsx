@@ -107,7 +107,7 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
 }) => {
   const router = useRouter();
 
-  const [active_step, setActiveStep] = useState<number>(3);
+  const [active_step, setActiveStep] = useState<number>(0);
 
   const handleStepOneDone = async () => {
     let errors = {};
@@ -303,34 +303,8 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
   });
   const [upload_Date, setUploadDate] = useState<string[]>([]);
 
-  //date conversion
-  // let uploadDate = "";
-
-  // if (upload_Date instanceof Date) {
-  //   // Check if course_upload_date is a Date object
-  //   const uploadDateObj = upload_Date;
-
-  //   // Check if the date object is valid
-  //   if (!isNaN(uploadDateObj.getTime())) {
-  //     // If uploadDateObj is a valid Date object
-  //     const formattedDate = uploadDateObj.toLocaleDateString("en-GB", {
-  //       day: "numeric",
-  //       month: "numeric",
-  //       year: "numeric",
-  //     });
-  //     uploadDate = formattedDate;
-  //     console.log("date", uploadDate);
-  //   } else {
-  //     // If uploadDateObj is not a valid Date object
-  //     console.log("Invalid upload date format:", upload_Date);
-  //   }
-  // } else {
-  //   // If course_upload_date is not a Date object
-  //   console.log("Upload date is not a Date object:", upload_Date);
-  // }
-
   const generateCourseCode = (
-    training: string,
+    training: string | undefined,
     prevID: number | null = null
   ): string => {
     const categoryTable: { [key: string]: string } = {
@@ -373,6 +347,7 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
       "Medical Representative": "MER",
       Managers: "MGR",
     };
+
     const currentDate: Date = new Date();
     const month: string = String(currentDate.getMonth() + 1).padStart(2, "0");
     const year: string = String(currentDate.getFullYear()).slice(-2);
@@ -383,9 +358,14 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
       id = "01";
     }
 
-    const courseCode: string = `${
-      categoryTable[course_basic.course_category]
-    }-${trainingTable[training]}-${month}${year}-${id}`;
+    const categoryCode = course_basic.course_category
+      ? categoryTable[course_basic.course_category]
+      : "";
+    const trainingCode = training ? trainingTable[training] : "";
+    const courseCode: string =
+      categoryCode && trainingCode
+        ? `${categoryCode}-${trainingCode}-${month}${year}-${id}`
+        : "";
 
     console.log("testtt", courseCode);
 
@@ -750,7 +730,7 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     updatedFilesUploaded[index] = false;
     setFilesUploaded(updatedFilesUploaded);
     setFileSize([0]);
-    setFileExtension(["NA"]);
+    setFileExtension(["File"]);
   };
   const handleCancelIconAssessment = (id: string | null, index: number) => {
     if (id == "pre" || id == "post") {
@@ -1067,7 +1047,7 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
   // const [fileName, setFileName] = useState<string>("Not selected");
   // const [fileSize, setFileSize] = useState<number>(0);
   const [fileSize, setFileSize] = useState<number[]>([0]);
-  const [fileExtension, setFileExtension] = useState<string[]>(["NA"]);
+  const [fileExtension, setFileExtension] = useState<string[]>(["File"]);
 
   const handleFileSelect = (selectedFile: File, index: number) => {
     console.log("Selecting files for module...");
