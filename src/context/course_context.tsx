@@ -439,9 +439,9 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
       setCourseBasic((prev) => ({ ...prev, [field]: value }));
     }
   };
-  useEffect(() => {
-    handleChange;
-  }, []);
+  // useEffect(() => {
+  //   handleChange;
+  // }, []);
   // ***********************************************************************************************
 
   // ***********************************************************************************************

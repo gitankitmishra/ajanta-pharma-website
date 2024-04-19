@@ -8,7 +8,7 @@ import { DropdownIcon } from "@/components/icons/dropdown-icon";
 import { CourseContext, CourseContextType } from "@/context/course_context";
 import { ArrowDown } from "@/components/icons/arrow-down";
 
-interface AdminCoursesTableSectionProps {}
+interface AdminCoursesTableSectionProps { }
 
 const AdminCoursesTableSection: FC<AdminCoursesTableSectionProps> = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -31,7 +31,8 @@ const AdminCoursesTableSection: FC<AdminCoursesTableSectionProps> = () => {
 
         <div className="admin-courses-add-course-btn">
           <div className="admin-courses-dropdown">
-            <p className="admin-courses-filter-dropdown">{filterCourse}</p>
+            <p className="admin-courses-filter-dropdown">{filterCourse === "course" ? "Course" : "Course Draft"}</p>
+
             <span
               onClick={toggleCourseDropDown}
               className="admin-courses-dropdown-icon-span"
