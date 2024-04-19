@@ -1365,7 +1365,7 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
       });
 
       if (response.code === 200) {
-        console.log("response data:", response.data.data.data);
+        console.log("response data:", response.data.data);
         const courseData = response.data.data.data;
         const uploadDates = courseData.map(
           (course: any) => course.course_basic?.course_upload_date
@@ -1373,7 +1373,8 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
         console.log("Upload Dates:", uploadDates);
         setCourseData(courseData);
         setUploadDate(uploadDates);
-        setTotalPages(response.data.totalPages);
+        setTotalPages(response.data.data.totalPages);
+
         setLoading(false);
       } else {
         console.log("error");
@@ -1384,6 +1385,8 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
   }, [pageNo, pageSize, filterCategory, filterCourse, filterStatus, check]);
 
   console.log("date check ", upload_Date);
+
+
 
   //*/****************************************************************************************** */
 
