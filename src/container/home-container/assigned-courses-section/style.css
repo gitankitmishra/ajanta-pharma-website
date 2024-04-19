@@ -5,12 +5,19 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  margin-bottom: 34px;
 }
 .home-assigned-courses-text-part {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 10px;
+}
+.home-assigned-courses-card-section {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  row-gap: 24px;
+  column-gap: 24px;
 }
 .home-assigned-courses-text-part img {
   cursor: pointer;
@@ -60,4 +67,14 @@
 
 .home-assigned-courses-tooltip:hover .home-assigned-courses-tooltip-text {
   visibility: visible;
+}
+.home-assigned-courses-tooltip-text::after {
+  content: "";
+  position: absolute;
+  right: 100%;
+  top: 30%;
+  border-width: 10px;
+  border-style: solid;
+  border-color: transparent #fff transparent transparent;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }

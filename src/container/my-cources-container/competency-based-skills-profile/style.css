@@ -15,3 +15,6 @@
   grid-template-columns: repeat(3, 1fr);
   margin-top: 32px;
 }
+.competency-based-skill-cards-section a{
+  text-decoration: none;
+}

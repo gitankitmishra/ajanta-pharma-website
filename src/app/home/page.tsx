@@ -17,7 +17,6 @@ const Home: FunctionComponent<HomeProps> = () => {
       <HomeProfileSection />
       <HomeContinueLearningSection/>
       <HomeAssignedCoursesSection/>
-      <AssignedCourseCard percentage={70}/>
      
     </main>
   );
