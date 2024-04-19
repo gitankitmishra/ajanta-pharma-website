@@ -1359,11 +1359,9 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
       setLoading(true);
       const response = await fetchService({
         method: "GET",
-        endpoint: `api/admin/dashboard/filter?category=${
-          filterCategory || ""
-        }&status=${filterStatus || ""}&key=${
-          filterCourse || ""
-        }&page=${pageNo}&pageSize=${pageSize}`,
+        endpoint: `api/admin/dashboard/filter?category=${filterCategory || ""
+          }&status=${filterStatus || ""}&key=${filterCourse || ""
+          }&page=${pageNo}&pageSize=${pageSize}`,
       });
 
       if (response.code === 200) {
@@ -1380,10 +1378,10 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
       } else {
         console.log("error");
       }
-    };
+    }
 
     fetchData();
-  }, [pageNo, pageSize, filterCategory, filterCourse, filterStatus]);
+  }, [pageNo, pageSize, filterCategory, filterCourse, filterStatus, check]);
 
   console.log("date check ", upload_Date);
 
@@ -1411,16 +1409,16 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
           responseData.data.course_assessment
         )
           ? (responseData.data.course_assessment.filter(
-              (assessment: any) => assessment.assessment_category === "module"
-            ) as CourseAssessment[])
+            (assessment: any) => assessment.assessment_category === "module"
+          ) as CourseAssessment[])
           : [];
 
         const filteredCourseAssessment = Array.isArray(
           responseData.data.course_assessment_main
         )
           ? (responseData.data.course_assessment_main.filter(
-              (assessment: any) => assessment.assessment_category === "course"
-            ) as CourseAssessment[])
+            (assessment: any) => assessment.assessment_category === "course"
+          ) as CourseAssessment[])
           : [];
 
         setCourseAssessment(filteredModuleAssessment);
@@ -1489,6 +1487,7 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     console.log("api hit");
 
     try {
+
       const data = {
         course_basic: { ...course_basic },
         course_designation: { ...course_designation },
@@ -1511,9 +1510,7 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
 
       if (response.ok) {
         setCheck(true);
-        setTimeout(() => {
-          setCheck(false);
-        }, 2000);
+
         return { success: true, data: responseData }; // Send data in response
       } else {
         setCheck(false);
@@ -1522,6 +1519,10 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
       }
     } catch (error: any) {
       return { success: false, error: error.message }; // Send error in response
+    } finally {
+      setTimeout(() => {
+        setCheck(false);
+      }, 3000);
     }
   };
 
