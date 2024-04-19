@@ -107,7 +107,7 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
 }) => {
   const router = useRouter();
 
-  const [active_step, setActiveStep] = useState<number>(1);
+  const [active_step, setActiveStep] = useState<number>(0);
 
   const handleStepOneDone = async () => {
     let errors = {};
@@ -517,9 +517,11 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     },
   ]);
   useEffect(() => {
-    console.log("Errorroororororor : ", course_assessment_main_error[0].assessment_type);
-
-  }, [course_assessment_main_error])
+    console.log(
+      "Errorroororororor : ",
+      course_assessment_main_error[0].assessment_type
+    );
+  }, [course_assessment_main_error]);
   const [visible, setVisible] = useState<boolean>(true);
 
   const [course_assessment_main, setCourseAssessmentMain] = useState<
@@ -801,6 +803,7 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     });
   };
 
+  const allowedExtensions = ["pdf", "ppt", "mp4"];
   const validateModuleFields = () => {
     const errors: CourseModule[] = course_module.map((module, index) => {
       const moduleErrors: CourseModule = { ...module };
@@ -1033,7 +1036,6 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     });
   };
 
-
   const [fileSize, setFileSize] = useState<number[]>([0]);
   const [fileExtension, setFileExtension] = useState<string[]>([""]);
 
@@ -1153,7 +1155,6 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
       });
     }
   };
-
 
   const [check, setCheck] = useState<boolean>(false);
   useEffect(() => {
@@ -1289,7 +1290,6 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     }
   };
 
-
   //api call for designation
   const publishDesignation = async () => {
     try {
@@ -1367,9 +1367,11 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
       setLoading(true);
       const response = await fetchService({
         method: "GET",
-        endpoint: `api/admin/dashboard/filter?category=${filterCategory || ""
-          }&status=${filterStatus || ""}&key=${filterCourse || ""
-          }&page=${pageNo}&pageSize=${pageSize}`,
+        endpoint: `api/admin/dashboard/filter?category=${
+          filterCategory || ""
+        }&status=${filterStatus || ""}&key=${
+          filterCourse || ""
+        }&page=${pageNo}&pageSize=${pageSize}`,
       });
 
       if (response.code === 200) {
@@ -1387,14 +1389,12 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
       } else {
         console.log("error");
       }
-    }
+    };
 
     fetchData();
   }, [pageNo, pageSize, filterCategory, filterCourse, filterStatus, check]);
 
   console.log("date check ", upload_Date);
-
-
 
   //*/****************************************************************************************** */
 
@@ -1420,16 +1420,16 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
           responseData.data.course_assessment
         )
           ? (responseData.data.course_assessment.filter(
-            (assessment: any) => assessment.assessment_category === "module"
-          ) as CourseAssessment[])
+              (assessment: any) => assessment.assessment_category === "module"
+            ) as CourseAssessment[])
           : [];
 
         const filteredCourseAssessment = Array.isArray(
           responseData.data.course_assessment_main
         )
           ? (responseData.data.course_assessment_main.filter(
-            (assessment: any) => assessment.assessment_category === "course"
-          ) as CourseAssessment[])
+              (assessment: any) => assessment.assessment_category === "course"
+            ) as CourseAssessment[])
           : [];
 
         setCourseAssessment(filteredModuleAssessment);
@@ -1445,7 +1445,6 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
   //update course
   const updateCourse = async () => {
     try {
-
       const data = {
         course_basic: { ...course_basic },
         course_designation: { ...course_designation },
