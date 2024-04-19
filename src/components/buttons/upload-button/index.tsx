@@ -55,20 +55,22 @@ const UploadButton: React.FC<UploadButtonProps> = ({
         onChange={handleFileSelect}
         style={{ display: "none" }}
       />
-      
+
       <button className={`upload-btn ${className}`} onClick={handleClick}>
         {upload}
       </button>
       {error.length > 0 ? (
-         <div
-         className={`upload-btn-error-message ${
-           error.length !== 0 && "upload-btn-error-display"
-         }`}
-       >
-         {error}
-       </div>
-      ):<span className="upload-btn-format-type-text">{formatText} </span>}
-     
+        <div
+          className={`upload-btn-error-message ${
+            error.length !== 0 && "upload-btn-error-display"
+          }`}
+        >
+          {error}
+        </div>
+      ) : (
+        <span className="upload-btn-format-type-text">{formatText} </span>
+      )}
+
       {/* <span className="upload-btn-format-type-text">{formatText} </span> */}
     </div>
   );
