@@ -22,12 +22,13 @@ import SuccessPopup from "@/components/popups/success-popup";
 import { useRouter } from "next/navigation";
 
 import Link from "next/link";
+import { OrangePlusIcon } from "@/components/icons/orange-plus-icon";
 
-interface AdminCourseDeatilContainerProps {}
+interface AdminCourseDeatilContainerProps { }
 
 const AdminCourseDeatilContainer: FC<
   AdminCourseDeatilContainerProps
-> = ({}) => {
+> = ({ }) => {
   //context
   const {
     course_basic,
@@ -320,9 +321,8 @@ const AdminCourseDeatilContainer: FC<
                   <div className="admin-course-detail-section2-admin-course-detailed-file">
                     {filesUploaded[index] && isEditable ? ( // addes isEditable functinality removed onclick by ankita
                       <div
-                        className={`admin-course-detailed-video-file ${
-                          isClicked ? "clicked" : "unClicked"
-                        }`}
+                        className={`admin-course-detailed-video-file ${isClicked ? "clicked" : "unClicked"
+                          }`}
                       >
                         {/* <input type="text" className="admin-course-detailed-mp4" /> */}
                         <span
@@ -335,16 +335,15 @@ const AdminCourseDeatilContainer: FC<
                       </div>
                     ) : (
                       <div
-                        className={`admin-course-detailed-video-file ${
-                          isClicked ? "clicked" : "unClicked"
-                        }`}
+                        className={`admin-course-detailed-video-file ${isClicked ? "clicked" : "unClicked"
+                          }`}
                       >
                         {/* <input type="text" className="admin-course-detailed-mp4" /> */}
 
                         <span
                           key={index}
                           className="admin-course-detailed-file-name"
-                          // onClick={() => openLink(index)}
+                        // onClick={() => openLink(index)}
                         >
                           File
                         </span>
@@ -370,9 +369,8 @@ const AdminCourseDeatilContainer: FC<
 
                   <div className="admin-course-detail-upload-btns">
                     <button
-                      className={`admin-course-detail-upload-btn ${
-                        isClicked ? "clicked" : "unClicked"
-                      }`}
+                      className={`admin-course-detail-upload-btn ${isClicked ? "clicked" : "unClicked"
+                        }`}
                       onClick={() => {
                         if (isEditable) {
                           const fileInput = document.createElement("input");
@@ -454,9 +452,8 @@ const AdminCourseDeatilContainer: FC<
                     <div className="admin-course-detail-section2-admin-course-detailed-file">
                       <div
                         onClick={(e) => writeIntoFile(null, index)}
-                        className={`admin-course-detailed-video-file ${
-                          isClicked ? "clicked" : "unClicked"
-                        }`}
+                        className={`admin-course-detailed-video-file ${isClicked ? "clicked" : "unClicked"
+                          }`}
                       >
                         {course_assessment[index]?.assessment_data.length > 0 &&
                         isEditable ? (
@@ -501,9 +498,8 @@ const AdminCourseDeatilContainer: FC<
                     </div>
                     <div className="admin-course-detail-upload-btns">
                       <button
-                        className={`admin-course-detail-upload-btn ${
-                          isClicked ? "clicked" : "unClicked"
-                        }`}
+                        className={`admin-course-detail-upload-btn ${isClicked ? "clicked" : "unClicked"
+                          }`}
                         onClick={() => {
                           // Check if the button is clickable based on isEditable state
                           if (isEditable) {
@@ -537,9 +533,8 @@ const AdminCourseDeatilContainer: FC<
           })}
 
           <button
-            className={`admin-course-detail-sec-add-module-btn ${
-              isClicked ? "clicked" : "unClicked"
-            }`}
+            className={`admin-course-detail-sec-add-module-btn ${isClicked ? "clicked" : "unClicked"
+              }`}
             onClick={() => {
               // Check if the button is clickable based on isEditable state
               if (isEditable) {
@@ -547,11 +542,10 @@ const AdminCourseDeatilContainer: FC<
               }
             }}
           >
-            {isClicked ? <PlusIcon /> : <GreyPlusIcon />}
+            {isClicked ? <OrangePlusIcon /> : <GreyPlusIcon />}
             <span
-              className={`admin-course-detail-add-module-span-text ${
-                isClicked ? "clicked" : "unClicked"
-              }`}
+              className={`admin-course-detail-add-module-span-text ${isClicked ? "clicked" : "unClicked"
+                }`}
             >
               Add Module
             </span>
@@ -617,9 +611,8 @@ const AdminCourseDeatilContainer: FC<
                   <div className="admin-course-detail-section2-admin-course-detailed-file">
                     <div
                       onClick={() => writeIntoFile("pre", 0)}
-                      className={`admin-course-detailed-video-file ${
-                        isClicked ? "clicked" : "unClicked"
-                      }`}
+                      className={`admin-course-detailed-video-file ${isClicked ? "clicked" : "unClicked"
+                        }`}
                     >
                       <span
                         onClick={() => {
@@ -658,9 +651,8 @@ const AdminCourseDeatilContainer: FC<
                   </div>
                   <div className="admin-course-detail-upload-btns">
                     <button
-                      className={`admin-course-detail-upload-btn ${
-                        isClicked ? "clicked" : "unClicked"
-                      }`}
+                      className={`admin-course-detail-upload-btn ${isClicked ? "clicked" : "unClicked"
+                        }`}
                       onClick={() => {
                         // Check if the button is clickable based on isEditable state
                         if (isEditable) {
@@ -737,9 +729,8 @@ const AdminCourseDeatilContainer: FC<
                     <div className="admin-course-detail-section2-admin-course-detailed-file">
                       <div
                         onClick={() => writeIntoFile("post", 1)}
-                        className={`admin-course-detailed-video-file ${
-                          isClicked ? "clicked" : "unClicked"
-                        }`}
+                        className={`admin-course-detailed-video-file ${isClicked ? "clicked" : "unClicked"
+                          }`}
                       >
                         <span
                           onClick={() => {
@@ -778,9 +769,8 @@ const AdminCourseDeatilContainer: FC<
                     </div>
                     <div className="admin-course-detail-upload-btns">
                       <button
-                        className={`admin-course-detail-upload-btn ${
-                          isClicked ? "clicked" : "unClicked"
-                        }`}
+                        className={`admin-course-detail-upload-btn ${isClicked ? "clicked" : "unClicked"
+                          }`}
                         onClick={() => {
                           if (isEditable) {
                             const fileInput = document.createElement("input");
@@ -911,7 +901,7 @@ const AdminCourseDeatilContainer: FC<
               id="status"
               value={course_basic.course_status}
               onValueChange={(value) => handleChange("course_status", value)}
-              options={["active", "inactive"]}
+              options={["Active", "Inactive"]}
               valueLabel={["active", "inactive"]}
               isEditable={!isEditable}
             />

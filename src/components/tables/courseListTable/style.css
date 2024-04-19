@@ -88,8 +88,8 @@
 .admin-course-list-table-head-dropdown-icon-span,
 .admin-course-list-table-category-dropdown-icon-span {
   cursor: pointer;
+  margin-right: 15px;
 }
-
 .admin-course-list-table-head-dropdown-main-div,
 .admin-course-list-table-category-dropdown-main-div {
   position: relative;

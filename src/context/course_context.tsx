@@ -507,7 +507,19 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
       assessment_type: "",
       assessment_data: [],
     },
+    {
+      assessment_no: 1,
+      assessment_name: "",
+      assessment_category: "",
+      assessment_position: "",
+      assessment_type: "",
+      assessment_data: [],
+    },
   ]);
+  useEffect(() => {
+    console.log("Errorroororororor : ", course_assessment_main_error[0].assessment_type);
+
+  }, [course_assessment_main_error])
   const [visible, setVisible] = useState<boolean>(true);
 
   const [course_assessment_main, setCourseAssessmentMain] = useState<
@@ -996,53 +1008,31 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     );
     return !hasErrors;
   };
-
   const handleAssessmentNameChange = (event: ChangeEvent<HTMLInputElement>) => {
-    if (event.target.id === "pre" || event.target.id === "post") {
-      console.log("assessment main check");
-      const temp: CourseAssessment[] = [...course_assessment_main];
-      const index: number = event.target.id === "pre" ? 0 : 1;
-      temp[index].assessment_name = event.target.value;
-      setCourseAssessmentMain(temp);
-      setCourseAssessmentmainError((prevErrors) => {
-        const newErrors = [...prevErrors];
-        if (!event.target.value.trim()) {
-          newErrors[index] = {
-            ...newErrors[index],
-            assessment_name: "Enter assessment name.",
-          };
-        } else {
-          newErrors[index] = {
-            ...newErrors[index],
-            assessment_name: "",
-          };
-        }
-        return newErrors;
-      });
-    } else {
-      console.log("assessment check");
+    const assessmentPosition = event.target.id; // Assuming "pre" or "post"
+    const index = assessmentPosition === "pre" ? 0 : 1;
 
-      const temp: CourseAssessment[] = [...course_assessment];
-      const index: number = parseInt(event.target.id.split("-")[1]);
-      temp[index].assessment_name = event.target.value;
-      setCourseAssessment(temp);
-      setCourseAssessmentError((prevErrors) => {
-        const newErrors = [...prevErrors];
-        if (!event.target.value.trim()) {
-          newErrors[index] = {
-            ...newErrors[index],
-            assessment_name: "Enter assessment name.",
-          };
-        } else {
-          newErrors[index] = {
-            ...newErrors[index],
-            assessment_name: "",
-          };
-        }
-        return newErrors;
-      });
-    }
+    const temp: CourseAssessment[] = [...course_assessment_main];
+    temp[index].assessment_name = event.target.value;
+    setCourseAssessmentMain(temp);
+
+    setCourseAssessmentmainError((prevErrors) => {
+      const newErrors = [...prevErrors];
+      if (!event.target.value.trim()) {
+        newErrors[index] = {
+          ...newErrors[index],
+          assessment_name: "Enter assessment name.",
+        };
+      } else {
+        newErrors[index] = {
+          ...newErrors[index],
+          assessment_name: "",
+        };
+      }
+      return newErrors;
+    });
   };
+
 
   const [fileSize, setFileSize] = useState<number[]>([0]);
   const [fileExtension, setFileExtension] = useState<string[]>([""]);
@@ -1110,20 +1100,21 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     if (event.target.id === "pre" || event.target.id === "post") {
       const temp: CourseAssessment[] = [...course_assessment_main];
       const index: number = event.target.id === "pre" ? 0 : 1;
-      temp[index].assessment_type = event.target.value as
+      const selectedType = event.target.value as
         | ""
         | "single"
         | "multiple"
         | "boolean"
         | "short"
         | "N/A";
+      temp[index].assessment_type = selectedType;
       setCourseAssessmentMain(temp);
       setCourseAssessmentmainError((prevErrors) => {
         const newErrors = [...prevErrors];
-        if (!event.target.value.trim()) {
+        if (!selectedType.trim()) {
           newErrors[index] = {
             ...newErrors[index],
-            assessment_type: "",
+            assessment_type: "", // Empty string for error message
           };
         } else {
           newErrors[index] = {
@@ -1136,20 +1127,21 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     } else {
       const temp: CourseAssessment[] = [...course_assessment];
       const index: number = parseInt(event.target.id.split("-")[1]);
-      temp[index].assessment_type = event.target.value as
+      const selectedType = event.target.value as
         | ""
         | "single"
         | "multiple"
         | "boolean"
         | "short"
         | "N/A";
+      temp[index].assessment_type = selectedType;
       setCourseAssessment(temp);
       setCourseAssessmentError((prevErrors) => {
         const newErrors = [...prevErrors];
-        if (!event.target.value.trim()) {
+        if (!selectedType.trim()) {
           newErrors[index] = {
             ...newErrors[index],
-            assessment_type: "",
+            assessment_type: "", // Empty string for error message
           };
         } else {
           newErrors[index] = {
@@ -1161,6 +1153,7 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
       });
     }
   };
+
 
   const [check, setCheck] = useState<boolean>(false);
   useEffect(() => {
@@ -1296,6 +1289,7 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     }
   };
 
+
   //api call for designation
   const publishDesignation = async () => {
     try {
@@ -1373,15 +1367,13 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
       setLoading(true);
       const response = await fetchService({
         method: "GET",
-        endpoint: `api/admin/dashboard/filter?category=${
-          filterCategory || ""
-        }&status=${filterStatus || ""}&key=${
-          filterCourse || ""
-        }&page=${pageNo}&pageSize=${pageSize}`,
+        endpoint: `api/admin/dashboard/filter?category=${filterCategory || ""
+          }&status=${filterStatus || ""}&key=${filterCourse || ""
+          }&page=${pageNo}&pageSize=${pageSize}`,
       });
 
       if (response.code === 200) {
-        console.log("response data:", response.data.data.data);
+        console.log("response data:", response.data.data);
         const courseData = response.data.data.data;
         const uploadDates = courseData.map(
           (course: any) => course.course_basic?.course_upload_date
@@ -1389,17 +1381,20 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
         console.log("Upload Dates:", uploadDates);
         setCourseData(courseData);
         setUploadDate(uploadDates);
-        setTotalPages(response.data.totalPages);
+        setTotalPages(response.data.data.totalPages);
+
         setLoading(false);
       } else {
         console.log("error");
       }
-    };
+    }
 
     fetchData();
-  }, [pageNo, pageSize, filterCategory, filterCourse, filterStatus]);
+  }, [pageNo, pageSize, filterCategory, filterCourse, filterStatus, check]);
 
   console.log("date check ", upload_Date);
+
+
 
   //*/****************************************************************************************** */
 
@@ -1425,16 +1420,16 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
           responseData.data.course_assessment
         )
           ? (responseData.data.course_assessment.filter(
-              (assessment: any) => assessment.assessment_category === "module"
-            ) as CourseAssessment[])
+            (assessment: any) => assessment.assessment_category === "module"
+          ) as CourseAssessment[])
           : [];
 
         const filteredCourseAssessment = Array.isArray(
           responseData.data.course_assessment_main
         )
           ? (responseData.data.course_assessment_main.filter(
-              (assessment: any) => assessment.assessment_category === "course"
-            ) as CourseAssessment[])
+            (assessment: any) => assessment.assessment_category === "course"
+          ) as CourseAssessment[])
           : [];
 
         setCourseAssessment(filteredModuleAssessment);
@@ -1450,6 +1445,7 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
   //update course
   const updateCourse = async () => {
     try {
+
       const data = {
         course_basic: { ...course_basic },
         course_designation: { ...course_designation },
@@ -1472,9 +1468,7 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
 
       if (response.ok) {
         setCheck(true);
-        setTimeout(() => {
-          setCheck(false);
-        }, 2000);
+
         return { success: true, data: responseData }; // Send data in response
       } else {
         setCheck(false);
@@ -1483,6 +1477,10 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
       }
     } catch (error: any) {
       return { success: false, error: error.message }; // Send error in response
+    } finally {
+      setTimeout(() => {
+        setCheck(false);
+      }, 3000);
     }
   };
 

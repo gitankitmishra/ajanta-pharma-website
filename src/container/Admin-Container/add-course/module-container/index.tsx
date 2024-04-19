@@ -12,8 +12,9 @@ import EyeIcon from "@/components/icons/eye-icon";
 import { CancelIcon } from "@/components/icons/cancel-icon";
 import { DownloadIcon } from "@/components/icons/download-icon";
 import { WhiteCancelIcon } from "@/components/icons/whiteCancelIcon";
+import { OrangePlusIcon } from "@/components/icons/orange-plus-icon";
 
-interface ModuleQuizStepSectionProps {}
+interface ModuleQuizStepSectionProps { }
 
 const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
   const {
@@ -319,7 +320,7 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
 
         <button className="module-sec-add-module-btn" onClick={handleAddModule}>
           <span className="module-sec-add-module-btn-add-module">
-            <PlusIcon /> Add Module
+            <OrangePlusIcon /> Add Module
           </span>
         </button>
       </div>
