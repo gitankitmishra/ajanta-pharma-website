@@ -147,22 +147,37 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
                         <WhiteCancelIcon />
                       </span>
                     )}
-
-                    <span
+                    {files.length !== 0 && (
+                      <span
+                        className="module-view-btn-xls-text"
+                        onClick={() => openLink(index)}
+                      >
+                        {fileExtension[index]}
+                      </span>
+                    )}
+                    {/* <span
                       className="module-view-btn-xls-text"
                       onClick={() => openLink(index)}
                     >
-                      MP4
-                    </span>
+                      {fileExtension[index]}
+                    </span> */}
                   </div>
 
                   <div className="module-input-view-text-area">
                     <span className="module-input-view-btn-file-name-text">
-                      {fileExtension[index]}
+                      File
                     </span>
-                    <span className="module-input-view-btn-file-size-text">
-                      {(fileSize[index] / (1024 * 1024)).toFixed(2)}MB
-                    </span>
+                    {files.length !== 0 &&
+                    fileSize[index] !== undefined &&
+                    fileSize[index] !== null ? (
+                      <span className="module-input-view-btn-file-size-text">
+                        {(fileSize[index] / (1024 * 1024)).toFixed(2)}MB
+                      </span>
+                    ) : (
+                      <span className="module-input-view-btn-file-size-text">
+                        0.00MB
+                      </span>
+                    )}
                   </div>
                 </div>
                 <div>
@@ -269,12 +284,24 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
                     </span>
                   </div>
                   <div className="module-input-view-text-area">
-                    <span className="module-input-view-btn-file-name-text">
-                      excel.xls
-                    </span>
-                    <span className="module-input-view-btn-file-size-text">
-                      2.2MB
-                    </span>
+                    {course_assessment[index]?.assessment_data.length > 0 ? (
+                      <span className="module-input-view-btn-file-name-text">
+                        excel.xls
+                      </span>
+                    ) : (
+                      <span className="module-input-view-btn-file-name-text">
+                        File
+                      </span>
+                    )}
+                    {course_assessment[index]?.assessment_data.length > 0 ? (
+                      <span className="module-input-view-btn-file-size-text">
+                        2.2MB
+                      </span>
+                    ) : (
+                      <span className="module-input-view-btn-file-size-text">
+                        0.00MB
+                      </span>
+                    )}
                   </div>
                 </div>
                 <div>
@@ -287,21 +314,6 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
                   )}
                 </div>
               </div>
-              {/* {visible && (
-                <div
-                  onClick={() => writeIntoFile(index)}
-                  className="module-input-view-btn"
-                >
-                  <span
-                    onClick={() => {
-                      handleCancelIcon();
-                    }}
-                  >
-                    <CancelIcon />
-                  </span>
-                  XLS
-                </div>
-              )} */}
             </div>
           </>
         ))}
@@ -403,12 +415,24 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
                   </span>
                 </div>
                 <div className="module-input-view-text-area">
-                  <span className="module-input-view-btn-file-name-text">
-                    excel.xls
-                  </span>
-                  <span className="module-input-view-btn-file-size-text">
-                    2.2MB
-                  </span>
+                  {course_assessment_main[0]?.assessment_data.length > 0 ? (
+                    <span className="module-input-view-btn-file-name-text">
+                      excel.xls
+                    </span>
+                  ) : (
+                    <span className="module-input-view-btn-file-name-text">
+                      File
+                    </span>
+                  )}
+                  {course_assessment_main[0]?.assessment_data.length > 0 ? (
+                    <span className="module-input-view-btn-file-size-text">
+                      2.2MB
+                    </span>
+                  ) : (
+                    <span className="module-input-view-btn-file-size-text">
+                      0.00MB
+                    </span>
+                  )}
                 </div>
               </div>
               <div>
@@ -421,22 +445,6 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
                 )}
               </div>
             </div>
-
-            {/* {course_assessment_main[0]?.assessment_data.length !== 0 ? (
-              <div className="module-eye-icon">
-                <EyeIcon files={[]} />
-              </div>
-            ) : (
-              <td className="module-download-image">
-                <Image
-                  src={DownloadImg}
-                  alt="Download"
-                  width={27}
-                  height={24}
-                  onClick={() => handleDownloadExcel(0)}
-                />
-              </td>
-            )} */}
           </div>
 
           <div className="module-input">
@@ -519,12 +527,24 @@ const ModuleQuizStepSection: FC<ModuleQuizStepSectionProps> = () => {
                   </span>
                 </div>
                 <div className="module-input-view-text-area">
-                  <span className="module-input-view-btn-file-name-text">
-                    excel.xls
-                  </span>
-                  <span className="module-input-view-btn-file-size-text">
-                    2.2MB
-                  </span>
+                  {course_assessment_main[1]?.assessment_data.length > 0 ? (
+                    <span className="module-input-view-btn-file-name-text">
+                      excel.xls
+                    </span>
+                  ) : (
+                    <span className="module-input-view-btn-file-name-text">
+                      File
+                    </span>
+                  )}
+                  {course_assessment_main[1]?.assessment_data.length > 0 ? (
+                    <span className="module-input-view-btn-file-size-text">
+                      2.2MB
+                    </span>
+                  ) : (
+                    <span className="module-input-view-btn-file-size-text">
+                      0.00MB
+                    </span>
+                  )}
                 </div>
               </div>
               <div>
