@@ -1499,7 +1499,7 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
       };
 
       const response = await fetch(
-        `http://localhost:8000/api/admin/dashboard/editCourse/${course_basic.course_code}`,
+        `https://ajanta-pharma-server.vercel.app/api/admin/dashboard/editCourse/${course_basic.course_code}`,
         {
           method: "PUT",
           headers: {
