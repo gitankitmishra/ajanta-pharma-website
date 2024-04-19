@@ -107,7 +107,7 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
 }) => {
   const router = useRouter();
 
-  const [active_step, setActiveStep] = useState<number>(0);
+  const [active_step, setActiveStep] = useState<number>(1);
 
   const handleStepOneDone = async () => {
     let errors = {};
@@ -730,7 +730,7 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     updatedFilesUploaded[index] = false;
     setFilesUploaded(updatedFilesUploaded);
     setFileSize([0]);
-    setFileExtension(["File"]);
+    setFileExtension([""]);
   };
   const handleCancelIconAssessment = (id: string | null, index: number) => {
     if (id == "pre" || id == "post") {
@@ -1044,10 +1044,8 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     }
   };
 
-  // const [fileName, setFileName] = useState<string>("Not selected");
-  // const [fileSize, setFileSize] = useState<number>(0);
   const [fileSize, setFileSize] = useState<number[]>([0]);
-  const [fileExtension, setFileExtension] = useState<string[]>(["File"]);
+  const [fileExtension, setFileExtension] = useState<string[]>([""]);
 
   const handleFileSelect = (selectedFile: File, index: number) => {
     console.log("Selecting files for module...");
@@ -1270,22 +1268,34 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
   const handleChangeDesignation = (event: ChangeEvent<HTMLInputElement>) => {
     const { id, value } = event.target;
 
-    if (id === "division") {
-      setCourseDesignation((prevState) => ({
-        ...prevState,
-        division: prevState?.division?.includes(value)
-          ? prevState.division.filter((item) => item !== value)
-          : [...prevState.division, value],
-      }));
+    if (id.startsWith("division")) {
+      // Check if the id starts with "division"
+      setCourseDesignation((prevState) => {
+        const newDivision = Array.isArray(prevState?.division)
+          ? [...prevState.division]
+          : [];
+        return {
+          ...prevState,
+          division: newDivision.includes(value)
+            ? newDivision.filter((item) => item !== value)
+            : [...newDivision, value],
+        };
+      });
     } else {
-      setCourseDesignation((prevState) => ({
-        ...prevState,
-        designation: prevState?.designation.includes(value)
-          ? prevState.designation.filter((item) => item !== value)
-          : [...prevState.designation, value],
-      }));
+      setCourseDesignation((prevState) => {
+        const newDesignation = Array.isArray(prevState?.designation)
+          ? [...prevState.designation]
+          : [];
+        return {
+          ...prevState,
+          designation: newDesignation?.includes(value)
+            ? newDesignation.filter((item) => item !== value)
+            : [...newDesignation, value],
+        };
+      });
     }
   };
+
   //api call for designation
   const publishDesignation = async () => {
     try {
@@ -1437,61 +1447,8 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({
     }
   };
 
-  // const getCourseData = async (course_id: string): Promise<void> => {
-  //   try {
-  //     const response = await fetch(
-  //       `${ process.env.SERVER_URL } api / admin / dashboard / getCourseByCode / ${ course_id } `,
-  //       {
-  //         method: "GET",
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //         },
-  //       }
-  //     );
-  //     if (!response.ok) {
-  //       throw new Error("Network response was not ok");
-  //     }
-  //     const responseData = await response.json();
-
-  //     // Check if the response data contains 'data' and 'course_basic' properties
-  //     if (responseData && responseData.data && responseData.data.course_basic) {
-  //       setCourseBasic(responseData.data.course_basic);
-  //       // setCourseAssessment(Object.values(responseData.data.course_assessment));
-
-  //       //condition
-  //       const filteredCourseAssessment = Object.values(
-  //         responseData.data.course_assessment
-  //       ).filter(
-  //         (assessment: any) => assessment.assessment_category === "course"
-  //       ) as CourseAssessment[];
-
-  //       const filteredModuleAssessment = Object.values(
-  //         responseData.data.course_assessment
-  //       ).filter(
-  //         (assessment: any) => assessment.assessment_category === "module"
-  //       ) as CourseAssessment[];
-
-  //       setCourseAssessment(filteredCourseAssessment);
-  //       setCourseAssessmentMain(filteredModuleAssessment);
-  //       setCourseModule(responseData.data.course_module);
-  //       setCourseDesignation(responseData.data.course_designation);
-
-  //       console.log("responssssssss", responseData.data);
-  //       console.log("assessment main", course_assessment_main);
-  //     } else {
-  //       console.error("Invalid response format:", responseData);
-  //     }
-  //   } catch (error) {
-  //     console.error("Error fetching data:", error);
-  //   }
-  // };
-
-  // ***********************************************************************************************
-
-  //api to update the data or edit
+  //update course
   const updateCourse = async () => {
-    console.log("api hit");
-
     try {
       const data = {
         course_basic: { ...course_basic },
